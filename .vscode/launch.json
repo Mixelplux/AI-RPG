@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run Game",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/play_game.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Run Scene Test",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/run_scene_test.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+# ==========================================
+# AI Narrative RPG Engine
+# ==========================================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+
+# VS Code
+.vscode/*.log
+
+# Temporary archives
+*.zip
+
+# OS files
+Thumbs.db
+.DS_Store
+Desktop.ini

@@ -1,0 +1,231 @@
+{
+  "region_id": "icewind_dale_bryn_shander",
+  "region_name": "Bryn Shander",
+  "setting": "Icewind Dale",
+  "canon_source": "Dungeons & Dragons Forgotten Realms",
+  "version": "0.2",
+  "time": {
+    "calendar_system": "standard_fantasy",
+    "current_date": "1489 DR - Midwinter",
+    "season": "winter",
+    "time_of_day": "dawn"
+  },
+  "region_state": {
+    "weather": {
+      "type": "blizzard",
+      "severity": 0.65,
+      "temperature_c": -28,
+      "wind_speed_kmh": 42,
+      "visibility_m": 300
+    },
+    "economy_state": {
+      "stability": 0.45,
+      "primary_trade": [
+        "whale oil",
+        "furs",
+        "food imports"
+      ],
+      "import_dependency": 0.85
+    },
+    "security_state": {
+      "threat_level": 0.55,
+      "watch_presence": 0.8,
+      "wall_condition": 0.9
+    },
+    "population_state": {
+      "total_estimated": 1200,
+      "density_level": "moderate",
+      "active_distribution": {
+        "bryn_shander_gate_north": 3,
+        "bryn_shander_main_street": 18
+      }
+    }
+  },
+  "locations": [
+    {
+      "location_id": "bryn_shander_gate_north",
+      "name": "North Gate",
+      "type": "city_gate",
+      "description_seed": "Main northern entry point into Bryn Shander, exposed to harsh winds and constant cold.",
+      "state": {
+        "open": true,
+        "traffic_level": 0.2,
+        "activity_level": 0.3
+      },
+      "spawn_rules": {
+        "guards": {
+          "count": 2,
+          "template": "city_guard",
+          "persistence": "dynamic"
+        }
+      },
+      "connected_locations": [
+        {
+          "direction": "north",
+          "location_id": "outside_tundra_route_north"
+        },
+        {
+          "direction": "south",
+          "location_id": "bryn_shander_main_street"
+        }
+      ]
+    },
+    {
+      "location_id": "bryn_shander_main_street",
+      "name": "Main Street",
+      "type": "urban_road",
+      "description_seed": "Central artery lined with trade halls and reinforced wooden structures.",
+      "state": {
+        "crowd_density": 0.25,
+        "activity_level": 0.4
+      },
+      "spawn_rules": {
+        "merchants": {
+          "count_range": [
+            2,
+            5
+          ],
+          "template": "merchant",
+          "persistence": "dynamic"
+        },
+        "citizens": {
+          "count_range": [
+            5,
+            12
+          ],
+          "template": "civilian",
+          "persistence": "transient"
+        }
+      },
+      "connected_locations": [
+        {
+          "direction": "north",
+          "location_id": "bryn_shander_gate_north"
+        },
+        {
+          "direction": "east",
+          "location_id": "traders_hall"
+        },
+        {
+          "direction": "west",
+          "location_id": "inn_four_candles"
+        }
+      ]
+    },
+    {
+      "location_id": "bryn_shander_gate_west",
+      "name": "West Gate",
+      "type": "city_gate",
+      "description_seed": "Secondary gate used for caravans and supply routes.",
+      "state": {
+        "open": true,
+        "traffic_level": 0.1,
+        "activity_level": 0.2
+      },
+      "spawn_rules": {
+        "guards": {
+          "count": 1,
+          "template": "city_guard",
+          "persistence": "dynamic"
+        }
+      },
+      "connected_locations": [
+        {
+          "direction": "west",
+          "location_id": "outside_trade_road_west"
+        },
+        {
+          "direction": "east",
+          "location_id": "bryn_shander_main_street"
+        }
+      ]
+    }
+  ],
+  "entities": [
+    {
+      "entity_id": "captain_darvin_grey",
+      "name": "Captain Darvin Grey",
+      "type": "guard_commander",
+      "persistence": "static",
+      "location": "bryn_shander_gate_north",
+      "state": {
+        "alertness": 0.5,
+        "trust_toward_strangers": 0.4,
+        "current_activity": "gate_inspection"
+      },
+      "knowledge": [
+        "recent_bandit_activity_on_west_road",
+        "supply_shortage_preparing_for_winter_peak"
+      ],
+      "relationships": {
+        "town_watch_bryn_shander": {
+          "authority": 1.0,
+          "loyalty": 0.9
+        }
+      }
+    },
+    {
+      "entity_id": "guard_elin_voss",
+      "name": "Elin Voss",
+      "type": "city_guard",
+      "persistence": "static",
+      "location": "bryn_shander_gate_north",
+      "state": {
+        "alertness": 0.3,
+        "fatigue": 0.6,
+        "current_activity": "watch_duty"
+      },
+      "knowledge": [
+        "familiar_with_local_travelers",
+        "rotating_shift_schedule"
+      ],
+      "relationships": {
+        "captain_darvin_grey": {
+          "respect": 0.7,
+          "authority": 1.0
+        }
+      }
+    }
+  ],
+  "factions": [
+    {
+      "faction_id": "town_watch_bryn_shander",
+      "name": "Bryn Shander Town Watch",
+      "type": "security",
+      "influence_level": 0.8,
+      "stance_toward_player": 0.5,
+      "state": {
+        "readiness": 0.7,
+        "morale": 0.6
+      },
+      "objectives": [
+        "maintain_order",
+        "protect_trade_routes",
+        "control_gate_access"
+      ]
+    }
+  ],
+  "event_history": [
+    {
+      "event_id": "initialization_event_001",
+      "type": "world_seed",
+      "timestamp": "1489 DR - Midwinter Dawn",
+      "summary": "World state initialized for simulation.",
+      "participants": [],
+      "outcomes": [
+        "region_loaded",
+        "simulation_ready"
+      ]
+    }
+  ],
+  "simulation_hooks": {
+    "current_phase": "pre_entry_gate_interaction",
+    "entry_location": "bryn_shander_gate_north",
+    "allowed_systems": {
+      "combat": false,
+      "inventory": false,
+      "magic": false,
+      "skills": false
+    }
+  }
+}
