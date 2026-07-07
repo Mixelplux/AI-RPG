@@ -8,33 +8,33 @@ from engine.world_update import apply_interaction
 from engine.region_validator import validate_region
 from engine.world_state import (
     create_initial_world_state,
-    get_player_location_id,
-    set_player_location_id
+    set_player_location_id,
+    copy_world_state,
+    validate_world_state
 )
 
 
 class GameEngine:
     """
     Orchestrates the core AI Narrative RPG Engine pipeline.
-
-    Runtime flow:
-    Player Input
-        -> Interaction Kernel
-        -> Interaction Result
-        -> World Update
-        -> World State
-        -> Scene Builder
-        -> Scene Snapshot
-        -> Narration / UI
     """
 
-    def __init__(self, region_path: str, entry_location_id: str | None = None):
+    def __init__(
+        self,
+        region_path: str,
+        entry_location_id: str | None = None,
+        initial_world_state: Dict[str, Any] | None = None
+    ):
         self.region_path = region_path
         self.region = load_region(region_path)
 
         validate_region(self.region)
 
-        self.world_state = create_initial_world_state(self.region)
+        if initial_world_state is None:
+            self.world_state = create_initial_world_state(self.region)
+        else:
+            validate_world_state(initial_world_state)
+            self.world_state = copy_world_state(initial_world_state)
 
         if entry_location_id is not None:
             self.world_state = set_player_location_id(
@@ -47,35 +47,23 @@ class GameEngine:
             self.world_state
         )
 
-    def get_scene_snapshot(self) -> Dict[str, Any]:
-        """
-        Return the current Scene Snapshot.
-        """
+    def get_region_path(self) -> str:
+        return self.region_path
 
+    def get_world_state(self) -> Dict[str, Any]:
+        return copy_world_state(self.world_state)
+
+    def get_scene_snapshot(self) -> Dict[str, Any]:
         return self.scene_snapshot
 
     def get_player_perception(self) -> Dict[str, Any]:
-        """
-        Build and return the current Player Perception.
-        """
-
         return build_perception(self.scene_snapshot)
 
     def get_narration(self) -> Dict[str, Any]:
-        """
-        Build and return the current Narration Output.
-        """
-
         perception = self.get_player_perception()
         return narrate_scene(perception)
 
     def process_command(self, player_input: str) -> Dict[str, Any]:
-        """
-        Process a player command.
-
-        Returns the Interaction Result.
-        """
-
         interaction_result = process_player_input(
             player_input,
             self.scene_snapshot

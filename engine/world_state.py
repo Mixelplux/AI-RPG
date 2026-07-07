@@ -5,12 +5,6 @@ from typing import Any, Dict
 def create_initial_world_state(region: Dict[str, Any]) -> Dict[str, Any]:
     """
     Create the initial persistent World State.
-
-    Sprint 6.3:
-    - Tracks the player's current location.
-    - Owns mutable runtime weather state.
-    - Owns mutable runtime time state.
-    - Uses the Region Pack only for initial weather and time values.
     """
 
     locations = region.get("locations", [])
@@ -41,6 +35,36 @@ def create_initial_world_state(region: Dict[str, Any]) -> Dict[str, Any]:
         "weather": deepcopy(initial_weather),
         "time": deepcopy(initial_time)
     }
+
+
+def validate_world_state(world_state: Dict[str, Any]) -> None:
+    """
+    Validate the minimum required World State shape for runtime use.
+    """
+
+    if not isinstance(world_state, dict):
+        raise ValueError("World State must be a dictionary.")
+
+    if "player" not in world_state:
+        raise ValueError("World State is missing player.")
+
+    if "current_location_id" not in world_state["player"]:
+        raise ValueError("World State player is missing current_location_id.")
+
+    if "weather" not in world_state:
+        raise ValueError("World State is missing weather.")
+
+    if "time" not in world_state:
+        raise ValueError("World State is missing time.")
+
+
+def copy_world_state(world_state: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Return a defensive copy of World State.
+    """
+
+    validate_world_state(world_state)
+    return deepcopy(world_state)
 
 
 def get_player_location_id(world_state: Dict[str, Any]) -> str:
