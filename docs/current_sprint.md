@@ -1,57 +1,58 @@
 # Current Sprint
 
-Version: 0.6.3
-Last Updated: 2026-07-05
+## Sprint 7.4 — Game Session Lifecycle
 
-Sprint: 6
-Status: Active
+Status: Complete
 
-## Previous Sprint
+## Goal
 
-Sprint 5 — Simulation Foundation (Complete)
+Introduce a `GameSession` layer responsible for starting, loading, and resetting gameplay sessions while keeping `GameEngine` focused on runtime orchestration.
 
-Completed:
-- Deterministic player movement
-- Region validation
-- GameEngine startup validation
-- Placeholder connected locations for incomplete Region Packs
-- Stable active Region Pack filename (`bryn_shander.json`)
-- Support for `in` / `out` movement aliases
+This sprint should clarify session lifecycle ownership without changing existing gameplay behavior.
 
-## Active Sprint
+## Expected Files
 
-Sprint 6 — Persistent World
+- `engine/game_session.py`
+- `engine/game_engine.py`
+- `play_game.py`
+- `docs/architecture.md`
+- `docs/sprint_log.md`
+- `docs/decisions.md`
+- `docs/current_sprint.md`
+- `docs/current_sprint.yaml`
+- `docs/current_sprint.json`
 
-Goal: Make mutable simulation state live in `world_state` instead of derived scene snapshots or static Region Pack data.
+## Acceptance Criteria
 
-## Completed Tasks
+- `GameSession` is introduced as the owner of session lifecycle behavior.
+- A new game session can be initialized through the session layer.
+- A saved game session can be loaded through the session layer.
+- A session reset or fresh-start path is supported.
+- `GameEngine` delegates session lifecycle responsibility instead of owning all startup/load/reset behavior directly.
+- `play_game.py` continues to interact with the engine-facing API rather than low-level persistence or session internals.
+- Existing movement, interaction, save, and load behavior remains unchanged.
+- No unrelated systems, features, or refactors are introduced.
 
-### Sprint 6 – Task 6.1
+## Verification
 
-Completed:
-- `world_state` became the persistent source of truth.
-- Player location moved to `world_state.player.current_location_id`.
-- Scene Snapshots became derived views.
-- The Interaction Kernel validates movement.
-- `world_update.py` applies validated interaction results to persistent state.
-- `build_scene()` rebuilds Scene Snapshots from World State.
+Primary verification command:
 
-### Sprint 6 – Task 6.2
+```powershell
+.\.venv\Scripts\python.exe play_game.py
+```
 
-Completed:
-- Weather ownership moved into `world_state`.
-- Region Pack weather is treated as initial weather only.
-- Scene Builder reads weather from `world_state.weather`.
-- No weather simulation, clocks, seasons, random weather, save/load, or extra persistence systems were added.
+Manual verification:
 
-### Sprint 6 – Task 6.3
+- Start a new game.
+- Confirm the opening scene displays normally.
+- Move or interact to change state.
+- Save the game through the existing command flow.
+- Exit and restart the game.
+- Load the saved game through the existing command flow.
+- Confirm restored state matches the saved state.
+- Confirm normal gameplay commands still work after loading.
+- Confirm a fresh-start or reset path starts a clean session.
 
-Completed:
-- Time ownership moved into `world_state`.
-- Region Pack time is treated as initial local time only.
-- Scene Builder reads time from `world_state.time`.
-- No clock advancement, calendars, schedules, NPC routines, or time simulation systems were added.
+Codex runtime note:
 
-## Next Task
-
-Sprint 6 – Task 6.4 has not started.
+If Codex cannot launch the project virtual environment but the user successfully runs the documented verification command manually from PowerShell, Codex may use the reported manual result for sprint closeout. This only applies to tool/runtime execution failures, not application failures.

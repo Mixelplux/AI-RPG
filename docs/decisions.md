@@ -69,3 +69,24 @@ Region Pack time is an initial local value, not runtime state.
 During engine startup, initial time is copied into `world_state.time`. Scene Builder reads time from `world_state.time` when building Scene Snapshots.
 
 This keeps mutable runtime state in one persistent object without introducing clock advancement, calendar simulation, schedules, NPC routines, or realm-level world files prematurely.
+
+
+---
+
+## ADR-012
+
+**Title:** Save Files Persist World State Only
+
+**Status:** Accepted
+
+Save files serialize only World State. Region Packs are immutable assets. Scene Snapshots, Player Perception, and Narration are regenerated after load.
+
+---
+
+## ADR-013
+
+**Title:** GameSession Owns Session Lifecycle
+
+**Status:** Accepted
+
+`GameSession` constructs new, loaded, and reset gameplay sessions. `GameEngine` remains the public gameplay orchestration facade and delegates lifecycle construction to the session layer.

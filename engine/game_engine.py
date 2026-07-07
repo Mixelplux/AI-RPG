@@ -47,6 +47,16 @@ class GameEngine:
             self.world_state
         )
 
+    @classmethod
+    def start_new(
+        cls,
+        region_path: str,
+        entry_location_id: str | None = None
+    ) -> "GameEngine":
+        from engine.game_session import GameSession
+
+        return GameSession.start_new(region_path, entry_location_id)
+
     def get_region_path(self) -> str:
         return self.region_path
 
@@ -62,6 +72,46 @@ class GameEngine:
     def get_narration(self) -> Dict[str, Any]:
         perception = self.get_player_perception()
         return narrate_scene(perception)
+
+    def save(self, save_path: str) -> None:
+        """
+        Persist the current engine state using the save system.
+
+        Import is local to avoid a circular import:
+        save_system depends on GameEngine for load reconstruction.
+        """
+
+        from engine.save_system import save_game
+
+        save_game(self, save_path)
+
+    def load(self, save_path: str) -> None:
+        """
+        Load saved engine state into this GameEngine instance.
+        """
+
+        from engine.game_session import GameSession
+
+        loaded_engine = GameSession.load(save_path)
+
+        self._replace_runtime_state(loaded_engine)
+
+    def reset(self) -> None:
+        """Replace the current runtime state with a fresh session."""
+
+        from engine.game_session import GameSession
+
+        fresh_engine = GameSession.reset(self.region_path)
+
+        self._replace_runtime_state(fresh_engine)
+
+    def _replace_runtime_state(self, other: "GameEngine") -> None:
+        """Adopt canonical and derived runtime state from another engine."""
+
+        self.region_path = other.region_path
+        self.region = other.region
+        self.world_state = other.get_world_state()
+        self.scene_snapshot = other.get_scene_snapshot()
 
     def process_command(self, player_input: str) -> Dict[str, Any]:
         interaction_result = process_player_input(

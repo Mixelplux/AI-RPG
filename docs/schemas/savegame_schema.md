@@ -2,51 +2,24 @@
 
 ## Purpose
 
-Defines serialized engine state for saving and loading the game.
-
-This schema is planned but not yet implemented.
-
----
-
-## Producer
-
-Future Save System
-
----
-
-## Consumer
-
-Future Load System
-
----
+Defines the serialized runtime state used by the deterministic save/load system.
 
 ## JSON Structure
 
 ```json
 {
-  "save_version": "string",
-  "created_at": "string",
-  "active_region_id": "string",
-  "current_scene_snapshot": {},
-  "world_state": {},
-  "player_state": {}
+  "save_version": 1,
+  "region_path": "data/regions/bryn_shander.json",
+  "world_state": {}
 }
 ```
 
----
-
 ## Required Fields
 
-To be defined when Save/Load begins.
-
----
-
-## Optional Fields
-
-To be defined when Save/Load begins.
-
----
+- save_version
+- region_path
+- world_state
 
 ## Notes
 
-Save/Load should serialize deterministic state, not AI prose.
+Only World State is serialized. Scene Snapshots, Player Perception, and Narration are regenerated after loading.

@@ -65,3 +65,14 @@ Architecture describes systems that exist now or are scheduled for implementatio
 Broader world-behavior ideas belong in `docs/simulation_principles.md`.
 
 Ideas that are important but not ready for implementation belong in `docs/future_design.md`.
+
+
+## Persistence
+
+Only `world_state` is persisted. Region Packs remain immutable assets. Scene Snapshots, Perception, and Narration are regenerated after loading.
+
+`GameEngine` exposes save and load operations to gameplay front ends. Persistence serialization and reconstruction remain implemented by the save system behind that engine API.
+
+## Session Lifecycle
+
+`GameSession` owns construction of new, loaded, and reset gameplay sessions. `GameEngine` remains the gameplay-facing orchestration facade and delegates lifecycle construction to the session layer.

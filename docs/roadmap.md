@@ -9,3 +9,6 @@
 -   Sprint 7 Save / Load
 -   Sprint 8 Skills
 -   Sprint 9 Combat
+
+
+Active sprint should list Expected Files (Modify/Create/Reference/Tests).

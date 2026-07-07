@@ -1,0 +1,1 @@
+This package contains the documentation updates to establish the permanent sprint closeout process before Sprint 7.3.
