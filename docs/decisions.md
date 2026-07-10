@@ -313,3 +313,21 @@ The narrator can describe. The engine decides what is true.
 Future narration may use known scene facts for safe atmospheric prose, but it must not invent unstated specifics. It must not invent player equipment, clothing, memories, emotions, physical conditions, owned items, NPC attitudes, relationships, hidden observers, threats, clues, exits, or durable world facts unless those details are present in the narration context.
 
 Atmospheric prose does not become durable world truth unless the engine records it. If the scene contains a blizzard, narration may describe cold weather, but may not mention the player's gloves unless gloves are present in player state or context.
+
+---
+
+## ADR-028
+
+**Title:** Narration Output Is Presentational, Not Simulation Authority
+
+**Status:** Accepted
+
+Future narration output should pass through an explicit structural contract before it can be shown or otherwise consumed.
+
+Sprint 9.8 defines narration output as presentational prose only. A valid output contains schema/version metadata and a `narration_text` string. The contract rejects unsupported structured fields and structured attempts to mutate world state, mutate history, advance time, create quests, create rumors, create pressures, update actor knowledge, add NPC schedules, add evidence, add consequences, add entities, add locations, add exits, alter inventory, add player conditions, or update NPC relationship state.
+
+This decision preserves the existing rule: the narrator can describe, and the engine decides what is true. Narration output may be shown later, but it is not accepted world truth.
+
+The contract does not attempt to fully prove whether freeform prose contains invented details. Freeform narration drift is controlled by context limits, prompt rules, output contract structure, and later review or validation layers. If the context contains a blizzard, narration may describe cold weather, but should not mention gloves unless gloves are present in context.
+
+This decision does not introduce AI model calls, final AI narration generation, replacement of existing gameplay output, semantic prose analysis, embeddings, world evolution, equipment, clothing, exposure, fatigue, condition systems, or durable facts created by narration output.

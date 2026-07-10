@@ -1,32 +1,39 @@
 # Current Sprint
 
-## Sprint 9.7 - Narration Context Boundary
+## Sprint 9.8 - Narration Output Contract
 
 Status: Complete
 
 ## Goal
 
-Create a deterministic, read-only narration context packet that combines player input, current scene state, current time, player location, and bounded history context for future AI-assisted narration.
+Define a deterministic, read-only contract for future narration output before any AI model is called.
 
-The packet must define what a future narrator is allowed to see without allowing narration to mutate world state, create history, advance time, summarize history, interpret events, or call an AI model.
+The contract should specify what a narration response may contain, reject structured attempts to mutate world state or history, and document narration drift limits.
+
+This prepares for AI-assisted narration while preserving the rule that the engine owns truth and narration owns presentation.
 
 ## Design Intent
 
-Sprint 9.1 made world history durable. Sprint 9.2 made time advancement explicit. Sprint 9.3 made history queryable. Sprint 9.4 made normal history queries bounded by default. Sprint 9.5 made individual accepted history events safely referenceable with stable identifiers. Sprint 9.6 created a bounded history context packet.
+Sprint 9.7 created the narration context boundary: what a future narrator may see.
 
-Sprint 9.7 introduces the first safe consumer-facing boundary for that context: a narration context packet.
+Sprint 9.8 defines the other side of that boundary: what a future narrator may return.
 
-This is not the narrator, not AI integration, and not world evolution. It is the deterministic input contract that future narration may use.
+This is not AI integration and not final narration generation. It is a schema and validation foundation so future narrator output is treated as presentational prose only, not simulation authority.
 
-The rule for this sprint is:
+The design rule remains:
 
 > The narrator can describe. The engine decides what is true.
 
-Narration context may support atmospheric prose, but future narration must not invent unstated specifics. The narrator may describe sensory conditions grounded in known scene facts, but must not invent player equipment, clothing, memories, emotions, physical conditions, owned items, NPC attitudes, relationships, hidden observers, threats, clues, exits, or durable world facts unless those details are present in the narration context.
+Sprint 9.8 adds:
 
-Sprint 9.7 only defines what future narration may see.
+> Narration output may be shown later, but it is not accepted world truth.
 
 ## Expected Files
+
+Likely created:
+
+- `engine/narration_output.py`
+- `test_narration_output.py`
 
 Likely modified:
 
@@ -40,48 +47,38 @@ Likely modified:
 - `docs/current_sprint.json`
 - `docs/next_chat_handoff.md`
 
-Likely created:
+Possibly modified:
 
 - `engine/narration_context.py`
 - `test_narration_context.py`
 
-Possibly modified:
-
-- `engine/history_context.py`
-- `test_history_context.py`
-- `test_history_query.py`
-- `test_save_load.py`
-
 ## Acceptance Criteria
 
-- A deterministic narration context builder exists in a narrow engine module.
-- GameEngine exposes a read-only narration context method, such as get_narration_context(...).
-- The narration context packet includes schema/version metadata.
-- The narration context packet includes the raw player input provided for narration context construction.
-- The narration context packet includes current player location.
-- The narration context packet includes current world time.
-- The narration context packet includes the current scene or scene snapshot needed for narration.
-- The narration context packet includes a bounded history context packet from Sprint 9.6.
-- History entries inside the narration context include stable history_id values.
-- Narration context construction is deterministic for the same world state and same player input.
-- Narration context construction returns read-only copies and cannot mutate durable world state.
-- Narration context construction does not advance time.
-- Narration context construction does not create history entries.
-- Narration context construction does not alter history identifiers.
-- Narration context construction does not trigger world evolution.
-- Narration context construction does not summarize, reinterpret, rank, or semantically analyze history entries.
-- Narration context construction does not call an AI model or introduce AI-generated narration.
-- A narrow CLI/debug command is available for inspecting narration context.
-- Existing gameplay commands still work.
-- Existing history context CLI commands still work.
-- Existing history id lookup still works.
+- A narrow narration output contract exists in an engine module.
+- The contract defines narration output as presentational prose only.
+- The contract includes schema/version metadata.
+- The contract requires narration text to be a string.
+- The contract can accept a simple valid narration output object for future use.
+- The contract rejects narration output that contains structured world-state mutations.
+- The contract rejects narration output that contains structured history mutations.
+- The contract rejects narration output that attempts to advance time.
+- The contract rejects narration output that attempts to create quests, rumors, pressures, actor knowledge, NPC schedules, evidence, or consequences.
+- The contract rejects narration output that attempts to add new entities, locations, exits, inventory, player conditions, or NPC relationship state.
+- The contract does not attempt to fully prove whether freeform prose contains invented details.
+- Documentation explicitly states that freeform narration drift is controlled by context limits, prompt rules, output contract, and later review/validation layers, not by this sprint alone.
+- Documentation includes an example: narration may describe a blizzard if the context contains a blizzard, but should not mention gloves unless gloves are present in context.
+- GameEngine exposes a narrow method for validating or wrapping narration output without mutating world state.
+- A narrow CLI/debug command is available for inspecting the narration output contract or validating a fixed sample output.
+- Narration output validation does not mutate world state.
+- Narration output validation does not advance time.
+- Narration output validation does not create history entries.
+- Narration output validation does not alter history identifiers.
+- Narration output validation does not call an AI model.
+- Existing narration context behavior still works.
+- Existing history context behavior still works.
+- Existing history query and history id behavior still work.
 - Save/load behavior remains unchanged.
-- Documentation explains that narration context is an input boundary, not narration output and not simulation authority.
-- Documentation distinguishes grounded facts from safe atmospheric description.
-- Documentation states that future narration must not make atmospheric prose durable world truth.
-- Documentation includes an example: if the scene contains a blizzard, narration may describe cold weather, but may not mention the player's gloves unless gloves are present in player state or context.
-- Narration context remains an input boundary only.
-- No AI narration, narration validator, equipment system, or exposure mechanics are implemented in Sprint 9.7.
+- Documentation explains that narration output is not accepted world truth.
 
 ## Verification
 
@@ -94,15 +91,22 @@ Run:
 Run:
 
 ```powershell
-.\.venv\Scripts\python.exe test_narration_context.py
+.\.venv\Scripts\python.exe test_narration_output.py
 ```
 
 Regression checks:
 
 ```powershell
+.\.venv\Scripts\python.exe test_narration_context.py
 .\.venv\Scripts\python.exe test_history_context.py
 .\.venv\Scripts\python.exe test_history_query.py
 .\.venv\Scripts\python.exe test_save_load.py
+```
+
+Validate JSON:
+
+```powershell
+.\.venv\Scripts\python.exe -m json.tool docs/current_sprint.json
 ```
 
 Manual verification should confirm:
@@ -110,28 +114,25 @@ Manual verification should confirm:
 1. Start a new game with .\.venv\Scripts\python.exe play_game.py.
 2. Create at least one movement history entry.
 3. Use wait to create a time-advancement history entry.
-4. Run the narration context debug command with a sample player input.
-5. Confirm the packet includes schema/version metadata.
-6. Confirm the packet includes the supplied player input.
-7. Confirm the packet includes current player location and current world time.
-8. Confirm the packet includes current scene context.
-9. Confirm the packet includes bounded history context with stable history_id values.
-10. Confirm repeated narration context inspection does not advance time.
-11. Confirm repeated narration context inspection does not create history entries.
-12. Confirm normal history, history context, and history id commands still work.
-13. Confirm normal gameplay still works after the debug command.
+4. Inspect narration context to confirm Sprint 9.7 behavior still works.
+5. Inspect the narration output contract or run the fixed sample validation debug command.
+6. Confirm valid prose-only narration output is accepted by the contract.
+7. Confirm structured mutation attempts are rejected by the contract.
+8. Confirm narration output validation does not advance time.
+9. Confirm narration output validation does not create history entries.
+10. Confirm normal history, history context, history id, and narration context commands still work.
+11. Confirm normal gameplay still works after the debug command.
 
 ## Non-Goals
 
-- Do not implement AI model integration.
+- Do not call an AI model.
 - Do not generate final AI narration.
-- Do not implement a narration validator.
-- Do not replace existing command output with narration output.
-- Do not implement an equipment system.
-- Do not implement exposure mechanics.
+- Do not replace existing gameplay output with AI narration.
+- Do not implement a full natural-language hallucination detector.
+- Do not implement semantic prose analysis.
+- Do not implement embeddings.
 - Do not implement world evolution.
-- Do not implement pressures.
-- Do not implement pressure drift.
+- Do not implement pressures or pressure drift.
 - Do not implement rumors.
 - Do not implement actor knowledge.
 - Do not implement autonomous NPC behavior.
@@ -141,31 +142,22 @@ Manual verification should confirm:
 - Do not implement opportunity surfacing.
 - Do not implement procedural quests.
 - Do not implement combat.
-- Do not implement semantic memory.
-- Do not implement embeddings.
-- Do not implement history summarization.
-- Do not implement history pruning.
-- Do not pass full durable history into narration context.
-- Do not allow narration context construction to mutate world state.
-- Do not allow narration to assign, alter, or reinterpret history identifiers.
-- Do not begin Sprint 9.8.
+- Do not implement inventory, equipment, clothing, exposure, fatigue, or condition systems.
+- Do not pass full durable history into narration output validation.
+- Do not allow narration output to mutate world state.
+- Do not allow narration output to create durable facts.
+- Do not begin Sprint 9.9.
 
-## Closeout Instructions
+## Closeout
 
-Sprint 9.7 is complete.
+Sprint 9.8 is complete.
 
-Official `.venv` verification passed:
+Official `.venv` verification passed.
 
-```powershell
-.\.venv\Scripts\python.exe test_narration_context.py
-.\.venv\Scripts\python.exe test_history_context.py
-.\.venv\Scripts\python.exe test_history_query.py
-.\.venv\Scripts\python.exe test_save_load.py
-.\.venv\Scripts\python.exe -m json.tool docs/current_sprint.json
-```
+Bundled Python was not used.
 
-The primary CLI flow was verified with the official `.venv` using a scripted `play_game.main()` smoke flow covering movement, wait, history, history context, history id lookup, narration context inspection, and quit.
+Sprint 9.9 has not started.
 
-Bundled Python was not used for Sprint 9.7 verification.
+`docs/architecture.md` and `docs/decisions.md` record the narration output contract and ADR-028.
 
-Sprint 9.8 has not started.
+`docs/sprint_log.md`, `docs/current_sprint.yaml`, `docs/current_sprint.json`, and `docs/next_chat_handoff.md` were updated to reflect completion.

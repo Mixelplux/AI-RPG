@@ -1,6 +1,6 @@
 # Architecture
 
-Version: 0.9.7
+Version: 0.9.8
 
 ## Current Engine Pipeline
 
@@ -81,6 +81,7 @@ Major feature systems such as combat, companions, economy, and faction warfare a
 - Stable history entry identity
 - Bounded history context packet
 - Narration context boundary
+- Narration output contract
 - Deterministic structured skill checks
 - Structured skill-check command routing
 - Scene-bound target resolution
@@ -140,6 +141,19 @@ The narration context packet defines what a future narrator may see. It is not n
 
 Future narration may use known scene facts for grounded atmospheric description, but atmospheric prose must not become durable world truth unless the engine records it. For example, if the scene contains a blizzard, narration may describe cold weather, but may not mention the player's gloves unless gloves are present in player state or context. The narrator can describe; the engine decides what is true.
 
+`GameEngine.validate_narration_output(...)` exposes a deterministic, read-only contract for future narration output. Sprint 9.8 packet shape is:
+
+- `schema`: `ai_rpg.narration_output_packet`
+- `version`: `1`
+- `narration_text`: presentational prose string
+- `contract`: a copy of the narration output contract, including authority and drift limits
+
+The narration output contract defines what a future narrator may return before any AI model is called. It accepts only schema/version metadata and a `narration_text` string, then returns a copy-safe packet with contract metadata. It rejects unsupported structured fields and structured attempts to mutate world state, mutate history, advance time, create quests, create rumors, create pressures, update actor knowledge, add NPC schedules, add evidence, add consequences, add entities, add locations, add exits, alter inventory, add player conditions, or update NPC relationship state.
+
+Narration output is presentational prose only. It is not accepted world truth, not simulation authority, not history, not time advancement, not world evolution, and not AI integration. Validating narration output does not mutate durable world state, advance time, create history entries, alter history identifiers, call an AI model, or make freeform prose durable.
+
+This contract is structural rather than semantic. It does not attempt to fully prove whether freeform narration contains invented details. Freeform narration drift is controlled by context limits, prompt rules, this output contract, and later review or validation layers. For example, narration may describe a blizzard if the context contains a blizzard, but should not mention gloves unless gloves are present in context. Narration output may be shown later, but it is not accepted world truth.
+
 `world_state.time` can be advanced by an explicit simulation-owned operation. Sprint 9.2 supports a narrow fixed-duration `wait` command that increments durable elapsed time by one hour and records the previous and new time in history. This operation does not trigger world evolution, pressures, schedules, travel duration, recovery, decay, escalation, opportunity loss, or autonomous NPC behavior.
 
 ## Session Lifecycle
@@ -164,6 +178,8 @@ Sprint 9.5 adds stable history entry identity. The CLI may expose a narrow `hist
 Sprint 9.6 adds a narrow `history context` review path for the bounded history context packet. Front ends may display the packet for manual review, but they must not treat it as full memory, reinterpret history, summarize history, omit identifiers, or trigger world evolution.
 
 Sprint 9.7 adds a narrow `narration context <player input>` review path for the narration context packet. Front ends may inspect the packet for debugging, but they must not treat it as final narration, create durable facts from atmospheric prose, call an AI model, validate generated narration, add equipment or exposure mechanics, or trigger world evolution.
+
+Sprint 9.8 adds a narrow `narration output` review path for the narration output contract and fixed sample validation. Front ends may inspect the contract or confirm that a structured mutation sample is rejected, but they must not call an AI model, generate final AI narration, replace existing gameplay output with narration output, create durable facts from prose, implement semantic prose analysis, or trigger world evolution.
 
 ## Skills
 

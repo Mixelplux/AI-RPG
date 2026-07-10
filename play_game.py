@@ -35,6 +35,8 @@ def print_help() -> None:
     print("- history context: Show a bounded history context packet.")
     print("- history context <count>: Show a bounded history context packet.")
     print("- narration context <player input>: Show narration context.")
+    print("- narration output: Inspect the narration output contract.")
+    print("- narration output invalid: Check a rejected mutation sample.")
     print("- wait: Let 1 hour pass.")
     print("- check <name>: Run a deterministic skill check.")
     print("- head to <place>: Identify a known destination without traveling.")
@@ -141,6 +143,46 @@ def print_narration_context(packet: dict) -> None:
             f"{index}. {history_id}[{entry['event_type']}] "
             f"{entry['summary']}"
         )
+
+
+def print_narration_output_contract(
+    contract: dict,
+    validation_result: dict | None = None,
+    validation_error: str | None = None
+) -> None:
+    print("\n=== NARRATION OUTPUT CONTRACT ===")
+    print(f"schema: {contract['schema']}")
+    print(f"version: {contract['version']}")
+    print(f"type: {contract['type']}")
+    print(f"rule: {contract['rule']}")
+    print(f"authority: {contract['authority']}")
+    print(f"drift limit: {contract['drift_limit']}")
+    print(f"example: {contract['atmosphere_example']}")
+    print("required fields:")
+    for field_name in contract["required_fields"]:
+        print(f"- {field_name}")
+
+    if validation_result is not None:
+        print("sample validation: accepted")
+        print(f"sample text: {validation_result['narration_text']}")
+
+    if validation_error is not None:
+        print("sample validation: rejected")
+        print(f"reason: {validation_error}")
+
+
+def parse_narration_output_command(player_input: str) -> dict:
+    normalized_input = player_input.strip().lower()
+
+    if normalized_input == "narration output":
+        return {"sample": "valid"}
+
+    if normalized_input == "narration output invalid":
+        return {"sample": "invalid"}
+
+    return {
+        "error": "Usage: narration output or narration output invalid."
+    }
 
 
 def parse_narration_context_command(player_input: str) -> dict:
@@ -328,6 +370,62 @@ def main() -> None:
                     narration_context_query["player_input"]
                 )
             )
+            continue
+
+        if normalized_input == "narration output" or normalized_input.startswith(
+            "narration output "
+        ):
+            narration_output_query = parse_narration_output_command(
+                player_input
+            )
+
+            if narration_output_query.get("error"):
+                print()
+                print(narration_output_query["error"])
+                continue
+
+            contract = engine.get_narration_output_contract()
+            valid_sample = {
+                "schema": contract["schema"],
+                "version": contract["version"],
+                "narration_text": "The street remains quiet."
+            }
+
+            if narration_output_query["sample"] == "valid":
+                try:
+                    print_narration_output_contract(
+                        contract,
+                        validation_result=engine.validate_narration_output(
+                            valid_sample
+                        )
+                    )
+                except ValueError as error:
+                    print_narration_output_contract(
+                        contract,
+                        validation_error=str(error)
+                    )
+            else:
+                invalid_sample = {
+                    **valid_sample,
+                    "world_state": {
+                        "player": {
+                            "inventory": ["gloves"]
+                        }
+                    }
+                }
+                try:
+                    validation_result = engine.validate_narration_output(
+                        invalid_sample
+                    )
+                    print_narration_output_contract(
+                        contract,
+                        validation_result=validation_result
+                    )
+                except ValueError as error:
+                    print_narration_output_contract(
+                        contract,
+                        validation_error=str(error)
+                    )
             continue
 
         interaction_result = engine.process_command(player_input)

@@ -16,6 +16,10 @@ from engine.target_resolver import TargetResolution, resolve_scene_target
 from engine.timekeeper import advance_time_by_hours
 from engine.history_context import build_history_context_packet
 from engine.narration_context import build_narration_context_packet
+from engine.narration_output import (
+    build_narration_output_contract,
+    validate_narration_output_packet,
+)
 from engine.world_state import (
     DEFAULT_HISTORY_QUERY_COUNT,
     add_history_entry,
@@ -123,6 +127,15 @@ class GameEngine:
             player_input,
             history_count=history_count
         )
+
+    def get_narration_output_contract(self) -> Dict[str, Any]:
+        return build_narration_output_contract()
+
+    def validate_narration_output(
+        self,
+        narration_output: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        return validate_narration_output_packet(narration_output)
 
     def advance_time(self, duration_hours: int = 1) -> Dict[str, Any]:
         previous_time = get_time(self.world_state)

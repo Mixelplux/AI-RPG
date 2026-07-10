@@ -138,3 +138,14 @@
 - Preserved non-goals: no AI narration, narration validator, equipment system, exposure mechanics, semantic history interpretation, history summarization, state mutation, or Sprint 9.8 work.
 - Verified with the official project virtual environment: `test_narration_context.py`, `test_history_context.py`, `test_history_query.py`, `test_save_load.py`, JSON manifest validation, and a scripted CLI smoke flow invoking `play_game.main()`.
 - Bundled Python was not used for Sprint 9.7 verification.
+
+## Sprint 9.8 - Narration Output Contract
+- Status: Complete.
+- Added `engine/narration_output.py` with a deterministic, read-only narration output contract.
+- Added `GameEngine.get_narration_output_contract()` and `GameEngine.validate_narration_output(...)`.
+- Added CLI/debug commands `narration output` and `narration output invalid`.
+- Added `test_narration_output.py` covering prose-only acceptance, structured mutation rejection, copy safety, and no world-state mutation.
+- Preserved narration context behavior, history context behavior, history query behavior, history id lookup, save/load behavior, and gameplay flow.
+- Documented that narration output is presentational only and is not accepted world truth.
+- Verified with the official project virtual environment: `test_narration_output.py`, `test_narration_context.py`, `test_history_context.py`, `test_history_query.py`, `test_save_load.py`, `-m json.tool docs/current_sprint.json`, `play_game.py` startup, and a scripted `play_game.main()` smoke flow.
+- Bundled Python was not used for Sprint 9.8 verification.
