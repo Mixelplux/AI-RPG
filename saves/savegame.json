@@ -17,6 +17,20 @@
       "current_date": "1489 DR - Midwinter",
       "season": "winter",
       "time_of_day": "dawn"
-    }
+    },
+    "history": [
+      {
+        "history_id": "history_000001",
+        "event_type": "player_movement",
+        "summary": "Player moved from bryn_shander_gate_north to bryn_shander_main_street.",
+        "location": "bryn_shander_main_street",
+        "time": {
+          "calendar_system": "standard_fantasy",
+          "current_date": "1489 DR - Midwinter",
+          "season": "winter",
+          "time_of_day": "dawn"
+        }
+      }
+    ]
   }
 }

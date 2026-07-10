@@ -1,42 +1,119 @@
-sprint: '7.4'
-status: complete
-title: Game Session Lifecycle
-goal: Introduce a GameSession layer responsible for starting, loading, and resetting
-  gameplay sessions while keeping GameEngine focused on runtime orchestration.
+sprint: "9.7"
+status: "complete"
+title: "Narration Context Boundary"
+goal: >-
+  Create a deterministic, read-only narration context packet that combines
+  player input, current scene state, current time, player location, and bounded
+  history context for future AI-assisted narration. The packet must define what
+  a future narrator is allowed to see without allowing narration to mutate world
+  state, create history, advance time, summarize history, interpret events, or
+  call an AI model.
+design_intent: >-
+  Sprint 9.7 introduces the first safe consumer-facing boundary for bounded
+  history context: a narration context packet. This is not the narrator, not AI
+  integration, and not world evolution. It is the deterministic input contract
+  that future narration may use.
+design_rule: >-
+  The narrator can describe. The engine decides what is true. Narration context
+  may support atmospheric prose, but future narration must not invent unstated
+  specifics. The narrator may describe sensory conditions grounded in known
+  scene facts, but must not invent player equipment, clothing, memories,
+  emotions, physical conditions, owned items, NPC attitudes, relationships,
+  hidden observers, threats, clues, exits, or durable world facts unless those
+  details are present in the narration context.
 expected_files:
-- engine/game_session.py
-- engine/game_engine.py
-- play_game.py
-- docs/architecture.md
-- docs/sprint_log.md
-- docs/decisions.md
-- docs/current_sprint.md
-- docs/current_sprint.yaml
-- docs/current_sprint.json
+  likely_modified:
+    - "engine/game_engine.py"
+    - "play_game.py"
+    - "docs/architecture.md"
+    - "docs/decisions.md"
+    - "docs/sprint_log.md"
+    - "docs/current_sprint.md"
+    - "docs/current_sprint.yaml"
+    - "docs/current_sprint.json"
+    - "docs/next_chat_handoff.md"
+  likely_created:
+    - "engine/narration_context.py"
+    - "test_narration_context.py"
+  possibly_modified:
+    - "engine/history_context.py"
+    - "test_history_context.py"
+    - "test_history_query.py"
+    - "test_save_load.py"
 acceptance_criteria:
-- GameSession is introduced as the owner of session lifecycle behavior.
-- A new game session can be initialized through the session layer.
-- A saved game session can be loaded through the session layer.
-- A session reset or fresh-start path is supported.
-- GameEngine delegates session lifecycle responsibility instead of owning all startup/load/reset
-  behavior directly.
-- play_game.py continues to interact with the engine-facing API rather than low-level
-  persistence or session internals.
-- Existing movement, interaction, save, and load behavior remains unchanged.
-- No unrelated systems, features, or refactors are introduced.
+  - "A deterministic narration context builder exists in a narrow engine module."
+  - "GameEngine exposes a read-only narration context method, such as get_narration_context(...)."
+  - "The narration context packet includes schema/version metadata."
+  - "The narration context packet includes the raw player input provided for narration context construction."
+  - "The narration context packet includes current player location."
+  - "The narration context packet includes current world time."
+  - "The narration context packet includes the current scene or scene snapshot needed for narration."
+  - "The narration context packet includes a bounded history context packet from Sprint 9.6."
+  - "History entries inside the narration context include stable history_id values."
+  - "Narration context construction is deterministic for the same world state and same player input."
+  - "Narration context construction returns read-only copies and cannot mutate durable world state."
+  - "Narration context construction does not advance time."
+  - "Narration context construction does not create history entries."
+  - "Narration context construction does not alter history identifiers."
+  - "Narration context construction does not trigger world evolution."
+  - "Narration context construction does not summarize, reinterpret, rank, or semantically analyze history entries."
+  - "Narration context construction does not call an AI model or introduce AI-generated narration."
+  - "A narrow CLI/debug command is available for inspecting narration context."
+  - "Existing gameplay commands still work."
+  - "Existing history context CLI commands still work."
+  - "Existing history id lookup still works."
+  - "Save/load behavior remains unchanged."
+  - "Documentation explains that narration context is an input boundary, not narration output and not simulation authority."
+  - "Documentation distinguishes grounded facts from safe atmospheric description."
+  - "Documentation states that future narration must not make atmospheric prose durable world truth."
+  - "Documentation includes an example: if the scene contains a blizzard, narration may describe cold weather, but may not mention the player's gloves unless gloves are present in player state or context."
+  - "Narration context remains an input boundary only."
+  - "No AI narration, narration validator, equipment system, or exposure mechanics are implemented in Sprint 9.7."
 verification:
-  primary_command: .\.venv\Scripts\python.exe play_game.py
-  manual_steps:
-  - Start a new game.
-  - Confirm the opening scene displays normally.
-  - Move or interact to change state.
-  - Save the game through the existing command flow.
-  - Exit and restart the game.
-  - Load the saved game through the existing command flow.
-  - Confirm restored state matches the saved state.
-  - Confirm normal gameplay commands still work after loading.
-  - Confirm a fresh-start or reset path starts a clean session.
-  codex_runtime_note: If Codex cannot launch the project virtual environment but the
-    user successfully runs the documented verification command manually from PowerShell,
-    Codex may use the reported manual result for sprint closeout. This only applies
-    to tool/runtime execution failures, not application failures.
+  primary_command: ".\\.venv\\Scripts\\python.exe play_game.py"
+  required_automated_command: ".\\.venv\\Scripts\\python.exe test_narration_context.py"
+  regression_commands:
+    - ".\\.venv\\Scripts\\python.exe test_history_context.py"
+    - ".\\.venv\\Scripts\\python.exe test_history_query.py"
+    - ".\\.venv\\Scripts\\python.exe test_save_load.py"
+  json_validation_command: ".\\.venv\\Scripts\\python.exe -m json.tool docs/current_sprint.json"
+verification_results:
+  official_venv_passed: true
+  bundled_python_used: false
+  commands_passed:
+    - ".\\.venv\\Scripts\\python.exe test_narration_context.py"
+    - ".\\.venv\\Scripts\\python.exe test_history_context.py"
+    - ".\\.venv\\Scripts\\python.exe test_history_query.py"
+    - ".\\.venv\\Scripts\\python.exe test_save_load.py"
+    - ".\\.venv\\Scripts\\python.exe -m json.tool docs/current_sprint.json"
+    - "Scripted .\\.venv play_game.main() CLI smoke flow."
+non_goals:
+  - "Do not implement AI model integration."
+  - "Do not generate final AI narration."
+  - "Do not implement a narration validator."
+  - "Do not replace existing command output with narration output."
+  - "Do not implement an equipment system."
+  - "Do not implement exposure mechanics."
+  - "Do not implement world evolution."
+  - "Do not implement pressures."
+  - "Do not implement pressure drift."
+  - "Do not implement rumors."
+  - "Do not implement actor knowledge."
+  - "Do not implement autonomous NPC behavior."
+  - "Do not implement schedules."
+  - "Do not implement evidence detection."
+  - "Do not implement consequence selection."
+  - "Do not implement opportunity surfacing."
+  - "Do not implement procedural quests."
+  - "Do not implement combat."
+  - "Do not implement semantic memory."
+  - "Do not implement embeddings."
+  - "Do not implement history summarization."
+  - "Do not implement history pruning."
+  - "Do not pass full durable history into narration context."
+  - "Do not allow narration context construction to mutate world state."
+  - "Do not allow narration to assign, alter, or reinterpret history identifiers."
+  - "Do not begin Sprint 9.8."
+closeout:
+  status: "complete"
+  sprint_9_8_started: false

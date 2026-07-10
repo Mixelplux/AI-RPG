@@ -1,0 +1,62 @@
+{
+  "save_version": 1,
+  "region_path": "data/regions/bryn_shander.json",
+  "world_state": {
+    "player": {
+      "current_location_id": "bryn_shander_main_street"
+    },
+    "weather": {
+      "type": "blizzard",
+      "severity": 0.65,
+      "temperature_c": -28,
+      "wind_speed_kmh": 42,
+      "visibility_m": 300
+    },
+    "time": {
+      "calendar_system": "standard_fantasy",
+      "current_date": "1489 DR - Midwinter",
+      "season": "winter",
+      "time_of_day": "dawn",
+      "elapsed_hours": 1
+    },
+    "history": [
+      {
+        "event_type": "time_advanced",
+        "summary": "Player waited for 1 hour.",
+        "location": "bryn_shander_gate_north",
+        "time": {
+          "calendar_system": "standard_fantasy",
+          "current_date": "1489 DR - Midwinter",
+          "season": "winter",
+          "time_of_day": "dawn",
+          "elapsed_hours": 1
+        },
+        "previous_time": {
+          "calendar_system": "standard_fantasy",
+          "current_date": "1489 DR - Midwinter",
+          "season": "winter",
+          "time_of_day": "dawn"
+        },
+        "new_time": {
+          "calendar_system": "standard_fantasy",
+          "current_date": "1489 DR - Midwinter",
+          "season": "winter",
+          "time_of_day": "dawn",
+          "elapsed_hours": 1
+        }
+      },
+      {
+        "event_type": "player_movement",
+        "summary": "Player moved from bryn_shander_gate_north to bryn_shander_main_street.",
+        "location": "bryn_shander_main_street",
+        "time": {
+          "calendar_system": "standard_fantasy",
+          "current_date": "1489 DR - Midwinter",
+          "season": "winter",
+          "time_of_day": "dawn",
+          "elapsed_hours": 1
+        }
+      }
+    ]
+  }
+}

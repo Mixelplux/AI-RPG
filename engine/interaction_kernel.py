@@ -29,6 +29,48 @@ def process_player_input(
     intent = classify_intent(cleaned_input)
     action = build_action(cleaned_input, intent)
 
+    if intent == "skill_check":
+        check_name = action.get("target")
+        if not check_name:
+            return build_interaction_result(
+                success=False,
+                intent=intent,
+                message="Usage: check <name>",
+                action=action
+            )
+
+        return build_interaction_result(
+            success=True,
+            intent=intent,
+            message=f"You attempt a {check_name} check.",
+            action=action
+        )
+
+    if intent == "destination":
+        destination_text = action.get("target")
+        if not destination_text:
+            return build_interaction_result(
+                success=False,
+                intent=intent,
+                message="Usage: head to <destination>",
+                action=action
+            )
+
+        return build_interaction_result(
+            success=True,
+            intent=intent,
+            message=f"You identify {destination_text} as a destination.",
+            action=action
+        )
+
+    if intent == "wait":
+        return build_interaction_result(
+            success=True,
+            intent=intent,
+            message="You wait for 1 hour.",
+            action=action
+        )
+
     if intent == "movement":
         return resolve_movement(action, scene_snapshot)
 
@@ -66,28 +108,68 @@ def process_player_input(
 
 def classify_intent(player_input: str) -> str:
     lowered = player_input.lower()
+    words = lowered.split()
+
+    if lowered == "check" or lowered.startswith("check "):
+        return "skill_check"
+
+    destination_prefixes = ["head to", "go to"]
+    if any(
+        lowered == prefix or lowered.startswith(f"{prefix} ")
+        for prefix in destination_prefixes
+    ):
+        return "destination"
+
+    if lowered == "wait":
+        return "wait"
 
     movement_words = ["go", "walk", "move", "travel", "enter", "leave"]
     look_words = ["look", "inspect", "examine", "search", "study"]
     talk_words = ["talk", "speak", "ask", "greet", "tell"]
     action_words = ["take", "grab", "open", "close", "use", "push", "pull"]
 
-    if any(word in lowered for word in movement_words):
+    if any(word in words for word in movement_words):
         return "movement"
 
-    if any(word in lowered for word in look_words):
+    if any(word in words for word in look_words):
         return "observation"
 
-    if any(word in lowered for word in talk_words):
+    if any(word in words for word in talk_words):
         return "conversation"
 
-    if any(word in lowered for word in action_words):
+    if any(word in words for word in action_words):
         return "action"
 
     return "unknown"
 
 
 def build_action(player_input: str, intent: str) -> Dict[str, Any]:
+    if intent == "skill_check":
+        return {
+            "type": "skill_check",
+            "target": player_input[5:].strip() or None,
+            "parameters": {},
+            "confidence": 1.0
+        }
+
+    if intent == "destination":
+        return {
+            "type": "resolve_destination",
+            "target": extract_destination_target(player_input),
+            "parameters": {},
+            "confidence": 1.0
+        }
+
+    if intent == "wait":
+        return {
+            "type": "advance_time",
+            "target": None,
+            "parameters": {
+                "duration_hours": 1
+            },
+            "confidence": 1.0
+        }
+
     if intent == "movement":
         return {
             "type": "move",
@@ -199,6 +281,24 @@ def extract_conversation_target(player_input: str) -> str | None:
     if "captain" in lowered:
         return "captain"
 
+    words = player_input.strip().split()
+    if words and words[0].lower() in ["talk", "speak", "ask", "greet", "tell"]:
+        target_words = words[1:]
+        if target_words and target_words[0].lower() == "to":
+            target_words = target_words[1:]
+        return " ".join(target_words) or None
+
+    return None
+
+
+def extract_destination_target(player_input: str) -> str | None:
+    lowered = player_input.lower()
+    for prefix in ["head to", "go to"]:
+        if lowered == prefix or lowered.startswith(f"{prefix} "):
+            target = player_input[len(prefix):].strip()
+            if target.lower().startswith("the "):
+                target = target[4:].strip()
+            return target or None
     return None
 
 
