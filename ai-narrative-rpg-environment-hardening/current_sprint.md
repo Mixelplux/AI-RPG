@@ -1,6 +1,6 @@
-﻿# Current Sprint: Windows Development Environment Hardening
+# Current Sprint: Windows Development Environment Hardening
 
-This file is the human-facing view of the single active maintenance sprint. The JSON block below is canonical machine data and must remain structurally identical to `docs/current_sprint.json` and `docs/current_sprint.yaml`.
+This file is the human-facing view of the single active maintenance sprint. The JSON block below is canonical machine data and must remain structurally identical to `current_sprint.json` and `current_sprint.yaml`.
 
 The `.yaml` manifest intentionally uses JSON syntax. JSON is valid YAML 1.2, which allows exact validation with built-in PowerShell and no bootstrap dependency on Python or a YAML package.
 
@@ -23,7 +23,7 @@ The `.yaml` manifest intentionally uses JSON syntax. JSON is valid YAML 1.2, whi
     "title": "Windows Development Environment Hardening",
     "type": "bounded-maintenance",
     "mode": "single-sprint",
-    "status": "complete",
+    "status": "ready",
     "objective": "Make repository setup, validation, packaging, and Codex execution predictable on Windows without changing game behavior or provider abstractions.",
     "platform": {
       "operating_system": "Windows",
@@ -63,19 +63,19 @@ The `.yaml` manifest intentionally uses JSON syntax. JSON is valid YAML 1.2, whi
         "purpose": "Step-by-step installation and execution guide."
       },
       {
-        "path": "docs/current_sprint.md",
+        "path": "current_sprint.md",
         "purpose": "Human-readable canonical sprint manifest with embedded machine data."
       },
       {
-        "path": "docs/current_sprint.yaml",
+        "path": "current_sprint.yaml",
         "purpose": "YAML 1.2-compatible canonical sprint manifest."
       },
       {
-        "path": "docs/current_sprint.json",
+        "path": "current_sprint.json",
         "purpose": "JSON canonical sprint manifest."
       },
       {
-        "path": "docs/next_chat_handoff.md",
+        "path": "next_chat_handoff.md",
         "purpose": "Continuation contract for the next Codex task."
       },
       {
@@ -115,7 +115,7 @@ The `.yaml` manifest intentionally uses JSON syntax. JSON is valid YAML 1.2, whi
       "The three current_sprint manifests normalize to the same data structure.",
       "The manifest declares exactly one bounded maintenance sprint.",
       "The preflight invokes only .\\.venv\\Scripts\\python.exe for Python checks.",
-      "Direct interpreter, -c, and file-based Python probes pass in the target repository through Codex execution or clearly labeled user execution using the same official interpreter.",
+      "Direct interpreter, -c, and file-based Python probes pass in the target repository.",
       "Git status, required workflow files, writable generated-file locations, JSON support, and Compress-Archive are checked.",
       "PowerShell syntax validation reports no parser errors for package scripts.",
       "Repository-defined tests run through the official interpreter and their exact commands and results are recorded.",
@@ -137,7 +137,7 @@ The `.yaml` manifest intentionally uses JSON syntax. JSON is valid YAML 1.2, whi
         },
         {
           "id": "project_tests",
-          "command": "$testExit = 0; Get-ChildItem -File -Filter 'test_*.py' | Sort-Object Name | ForEach-Object { & .\\.venv\\Scripts\\python.exe $_.FullName; if ($LASTEXITCODE -ne 0) { $testExit = $LASTEXITCODE }; Write-Output \"TEST_FILE=$($_.Name) EXIT=$LASTEXITCODE\" }; Write-Output \"TEST_EXIT=$testExit\"",
+          "command": ".\\.venv\\Scripts\\python.exe <arguments from the repository's canonical test command>",
           "required": true,
           "resolve_before_execution": true
         }
@@ -150,12 +150,11 @@ The `.yaml` manifest intentionally uses JSON syntax. JSON is valid YAML 1.2, whi
         "Artifact path when applicable"
       ],
       "failure_policy": [
-        "Codex must first attempt the official command; an access-denied or process-creation failure is recorded as an agent execution-context limitation, not evidence that the virtual environment is unhealthy.",
-        "User-provided output may satisfy a Codex-blocked check when it clearly identifies the same official interpreter, command result, and exit status where applicable, and is labeled user-executed.",
+        "If the official interpreter cannot launch, official verification is blocked.",
         "Do not use another Python executable to turn a blocked check into a pass.",
         "Diagnose and record the exact failure before changing the environment.",
         "Packaging may use documented PowerShell behavior, but the archive must be independently inspected and validated.",
-        "A required failed check or a Codex-blocked check without sufficient user-executed evidence prevents successful sprint closeout."
+        "A required blocked or failed check prevents successful sprint closeout."
       ]
     },
     "execution_phases": [
@@ -189,7 +188,7 @@ The `.yaml` manifest intentionally uses JSON syntax. JSON is valid YAML 1.2, whi
         "Update all three current_sprint manifests together.",
         "Re-run package validation after status or evidence changes.",
         "Summarize changed files and retained user changes.",
-        "Record exact verification evidence in docs/next_chat_handoff.md.",
+        "Record exact verification evidence in next_chat_handoff.md.",
         "Do not define a next sprint during this maintenance sprint."
       ],
       "next_sprint": null
@@ -198,6 +197,3 @@ The `.yaml` manifest intentionally uses JSON syntax. JSON is valid YAML 1.2, whi
 }
 ```
 <!-- CANONICAL-MANIFEST-END -->
-
-
-

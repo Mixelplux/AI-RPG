@@ -21,3 +21,5 @@ venv/
 Thumbs.db
 .DS_Store
 Desktop.ini
+.build/
+.artifacts/
