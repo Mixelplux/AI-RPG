@@ -25,6 +25,12 @@ def apply_interaction(
 
     action = interaction_result.get("action", {})
 
+    if action.get("type") == "talk":
+        return apply_conversation_interaction(
+            updated_world_state,
+            interaction_result
+        )
+
     if action.get("type") != "move":
         return updated_world_state
 
@@ -52,3 +58,40 @@ def apply_interaction(
         )
 
     return updated_world_state
+
+
+def apply_conversation_interaction(
+    world_state: Dict[str, Any],
+    interaction_result: Dict[str, Any]
+) -> Dict[str, Any]:
+    if not interaction_result.get("success"):
+        return world_state
+
+    target_resolution = interaction_result.get("target_resolution", {})
+
+    if target_resolution.get("status") != "resolved":
+        return world_state
+
+    if target_resolution.get("target_type") != "entity":
+        return world_state
+
+    target_entity_id = target_resolution.get("identifier")
+    target_display_name = target_resolution.get("display_name")
+
+    if not target_entity_id or not target_display_name:
+        return world_state
+
+    return add_history_entry(
+        world_state,
+        event_type="player_conversation",
+        summary=(
+            "Player initiated a conversation with "
+            f"{target_display_name}."
+        ),
+        location=get_player_location_id(world_state),
+        time=get_time(world_state),
+        extra={
+            "target_entity_id": target_entity_id,
+            "target_display_name": target_display_name
+        }
+    )

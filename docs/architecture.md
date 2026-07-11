@@ -1,6 +1,6 @@
 # Architecture
 
-Version: 0.9.12
+Version: 0.9.13
 
 ## Current Engine Pipeline
 
@@ -24,6 +24,28 @@ Player Perception
 ↓
 Narrator / UI
 
+## Narration Preview Boundary
+
+The implemented deterministic preview path is:
+
+```text
+Bounded Narration Context
+    ↓
+Validated Narration Request
+    ↓
+Validated Provider-Neutral Prompt
+    ↓
+Untrusted Candidate Source
+    ↓
+Strict Source-Result Validation
+    ↓
+Independent Candidate-Output Validation
+    ↓
+Preview Display Text
+```
+
+This is a presentation-only path. It has no simulation authority, does not persist narration artifacts, and does not replace normal deterministic gameplay narration.
+
 ## Source of Truth
 
 `world_state` is the persistent runtime source of truth for mutable state.
@@ -36,6 +58,8 @@ Currently owned by `world_state`:
 - World history entries
 
 Region Packs provide static world data and initial values only.
+
+Region Pack fields that appear mutable in meaning, including entity state, entity knowledge, relationships, economy, security, and population, remain immutable seeds or static data until a future sprint explicitly migrates their runtime ownership into `world_state` or another persistent simulation-owned structure. They must not be treated as mutable runtime truth merely because they are projected into a Scene Snapshot.
 
 Scene Snapshots are derived views built from Region Pack data plus `world_state`. Scene Snapshots are not persistent state.
 
@@ -53,11 +77,17 @@ Concepts in `docs/simulation_model.md` do not become implementation requirements
 
 ## Phase 2 Direction
 
-After Sprint 8, the recommended next major phase is World Evolution Foundations.
+Phase 2 remains **World Evolution Foundations**.
 
-Phase 1 established world representation. Phase 2 should establish the minimum structures required for the world to remember, evolve, and present meaningful opportunities without relying on AI invention.
+Phase 1 established world representation. Sprint 9 completed the first Phase 2 milestone by establishing durable world memory, explicit simulation-owned time advancement, bounded historical context, and safe narration boundaries.
 
-Major feature systems such as combat, companions, economy, and faction warfare are deferred until the underlying world-evolution foundations exist.
+Sprint 9 is closed as **World Memory and Safe Narration Foundations**. It completed history and time prerequisites but did not complete World Evolution Foundations as a whole. Persistent pressures or threads, pressure change, time-based drift, runtime actor state, actor knowledge, evidence, consequences, schedules, affordances, and opportunity surfacing remain future capabilities.
+
+Sprint 10.1 closed the first Phase 2B capability: **Persistent Resolved Conversation Memory**. Phase 2B has begun, and the next likely capability remains persistent scoped pressures or unresolved threads.
+
+The implementation keeps the existing `GameEngine` command path intact: `Interaction Kernel -> GameEngine -> current-scene target resolution -> World Update -> world_state.history`. A successful resolved conversation becomes a durable accepted event only when the normal command path succeeds and target resolution returns a resolved entity with stable identity.
+
+Major feature systems such as combat, companions, economy simulation, faction warfare, full NPC AI, and full travel simulation remain deferred until the underlying world-evolution foundations exist.
 
 ## Completed
 
@@ -86,13 +116,40 @@ Major feature systems such as combat, companions, economy, and faction warfare a
 - Deterministic narration candidate-source boundary
 - Deterministic narration request packet contract
 - Deterministic narration prompt packet contract
+- Strict narration source-result validation contract
 - Deterministic structured skill checks
 - Structured skill-check command routing
 - Scene-bound target resolution
+- Known-destination resolution without travel execution
 
 ## In Progress
 
-- Persistent world state
+- Phase 2 - World Evolution Foundations
+- Reactive world-state capability selection through a playable vertical-slice review
+
+## Post-Sprint-9 Architecture Review
+
+The post-Sprint-9 architecture review reached these decisions:
+
+- Sprint 9 is complete. Do not assume or define Sprint 9.14.
+- The completed milestone is **World Memory and Safe Narration Foundations**.
+- The narration context, request, prompt, source, source-result, output, and preview boundaries are sufficient for the current deterministic preview.
+- Narration infrastructure should remain frozen except for defect correction or changes required by an immediate bounded consumer.
+- Real AI provider integration is deferred. It is not required for history, time, pressures, actor state, evidence, consequences, schedules, travel, or other simulation-owned capabilities.
+- The immediate next project activity is a focused playable vertical-slice review, not a feature sprint.
+- After that review, the next implementation should begin a new Phase 2B milestone rather than extending Sprint 9. Persistent scoped pressures or unresolved threads are the leading candidate, subject to the vertical-slice findings.
+
+`GameEngine` remains the appropriate gameplay-facing facade. Its command routing should continue to grow only through bounded capabilities. Do not introduce a command bus, provider registry, plugin framework, dependency-injection framework, or broad handler abstraction without an immediate consumer.
+
+## Known Architectural Debt
+
+The following issues are real but do not block the playable vertical-slice review or the first reactive world-state capability:
+
+- The untrusted narration candidate and the enriched validated narration result currently use the same narration-output schema and version despite having different supported shapes. Separate or version these contracts before real provider integration.
+- Narration preview packets repeat substantial context through request, prompt, source-result, candidate, validated-output, and display fields. Preserve the current tested boundary for now and simplify only when a real provider or runtime consumer demonstrates the required shape.
+- Request and prompt validation are not uniformly exact at every nested level. Reassess exact-field behavior before external packet producers are introduced.
+- Runtime ownership of actor state, actor knowledge, relationships, economy, security, and population remains unresolved. Resolve ownership before implementing actor knowledge, schedules, or pressure-driven mutation of those values.
+- The current elapsed-hours clock is sufficient for narrow deterministic pressure drift but not for schedules, calendar-sensitive behavior, or substantive travel duration.
 
 ## Architecture Boundary
 
@@ -106,6 +163,8 @@ Ideas that are important but not ready for implementation belong in `docs/future
 ## Persistence
 
 Only `world_state` is persisted. Region Packs remain immutable assets. Scene Snapshots, Perception, and Narration are regenerated after loading.
+
+Every future persistent world-state expansion must define default initialization and compatibility for saves created before the new field existed. A broad migration framework is not required in advance, but compatibility must be explicit in the sprint that adds the field.
 
 `GameEngine` exposes save and load operations to gameplay front ends. Persistence serialization and reconstruction remain implemented by the save system behind that engine API.
 
@@ -129,6 +188,10 @@ Normal history access is bounded by default using a single safe recent-entry cou
 - `history_entries`: bounded recent accepted history entries, including stable `history_id` values
 
 The context packet defaults to the same safe recent history count as normal bounded history queries and rejects explicit counts above its documented maximum. It never returns full durable history by default. Included entries preserve existing event type, summary, location, time, and other accepted entry fields without interpretation, summarization, relevance scoring, or AI narration. The packet is a copy-safe handoff structure; callers cannot mutate durable `world_state.history` through it.
+
+`world_state.history` now also records resolved-conversation events when the normal command path succeeds and scene target resolution identifies a resolved entity. Sprint 10.1 conversation entries use the existing engine-owned `history_id`, record the resolved target identity from deterministic target resolution rather than raw player text, and store only the durable fact that a conversation was initiated.
+
+Those entries add `target_entity_id` and `target_display_name` alongside the existing history fields. They do not establish dialogue content, topics, claims, promises, actor knowledge, beliefs, relationships, emotional state, consequences, pressures, or time advancement.
 
 `GameEngine.get_narration_context(...)` exposes a deterministic, read-only narration context packet for future narration handoff boundaries. Sprint 9.7 packet shape is:
 

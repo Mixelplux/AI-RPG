@@ -1,26 +1,13 @@
-# Documentation Package
+# Documentation Update Summary
 
-This package contains the post-Sprint-8 documentation baseline for the AI Narrative RPG Engine.
+This package records the accepted post-Sprint-9 architecture review.
 
-Sprint 8 is complete.
+Canonical replacements included:
 
-Sprint 9 is not defined in this package.
+- `docs/architecture.md`
+- `docs/decisions.md`
+- `docs/sprint_log.md`
+- `docs/roadmap.md`
+- `docs/next_chat_handoff.md`
 
-The package establishes the Phase 2 direction:
-
-```text
-Phase 2 — World Evolution Foundations
-```
-
-Key additions and updates:
-
-- `docs/simulation_model.md` — conceptual model for how the simulated world behaves
-- `docs/simulation_principles.md` — updated high-level simulation principles
-- `docs/roadmap.md` — revised away from Sprint 9 Combat and toward Phase 2 foundations
-- `docs/project_review_phase2_0.md` — summit closeout summary
-- `docs/decisions.md` — ADRs for simulation-owned truth, Phase 2 direction, and simulation-model governance
-- `docs/architecture.md` — added simulation model boundary and Phase 2 direction
-
-Existing sprint workflow rules remain in force.
-
-Do not begin Sprint 9 until a current sprint definition is created with Goal, Expected Files, Acceptance Criteria, and Verification.
+No active sprint manifest is included because Sprint 9.13 remains complete and no following sprint has been defined. No implementation code is included.

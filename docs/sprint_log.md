@@ -1,5 +1,47 @@
 # Sprint Log
 
+## Sprint 10.1 Closeout
+- Status: Complete.
+- Files created: `test_interaction_history.py`.
+- Files modified: `engine/world_update.py`.
+- Implemented behavior: successful conversation commands now create one durable `player_conversation` history entry only when current-scene target resolution identifies a resolved entity.
+- Resolved-entity requirement: stable target identity comes from deterministic target resolution, not raw player text.
+- Durable fields recorded: deterministic summary, current location, current durable time, `target_entity_id`, `target_display_name`, and the existing engine-owned `history_id`.
+- No-history failure cases: failed, unresolved, ambiguous, and non-actor conversation targets do not create history.
+- Save/load preservation: conversation history and identifiers survive save/load without reuse or regeneration.
+- No time advancement: conversation does not move the player, advance time, or mutate unrelated world state.
+- No new top-level world-state field: none was added.
+- Save version unchanged: confirmed.
+- Verification passed with the official project virtual environment: `test_interaction_history.py`, `test_history_query.py`, `test_history_context.py`, `test_narration_context.py`, `test_save_load.py`, `test_narration_pipeline.py`, and `-m json.tool docs/current_sprint.json`.
+- Parsed JSON/YAML deep comparison passed.
+- Scripted smoke result: covered North Gate start, `talk to captain`, Captain Darvin Grey resolution, history display, `history type player_conversation`, repeated conversations with distinct history IDs, unresolved/ambiguous/non-actor no-history cases, save/load preservation, movement, wait, destination resolution, skill check, narration preview, reset, and quit.
+- Non-interactive launch note: `play_game.py` rendered the opening scene and then reached the expected `EOFError` in the non-interactive terminal session.
+- Bundled Python status: not used for verification.
+- Pressure work and Sprint 10.2 were not started.
+
+## Sprint 10.1 Setup and Review-Record Maintenance
+- Status: Complete.
+- Promoted the Sprint 10.1 planning package into the canonical sprint and handoff files under `docs/`.
+- Confirmed the playable vertical-slice review result: movement and waiting are remembered, but resolved conversations are not yet durable history.
+- Recorded the decision to begin Phase 2B with persistent resolved conversation memory before persistent scoped pressures.
+- Updated the roadmap to reflect Sprint 9 completion, the post-Sprint-9 architecture review, the playable vertical-slice review, and the deferred provider integration stance.
+- Confirmed Sprint 10.1 is defined but implementation has not started.
+- No application code was changed.
+
+## Post-Sprint-9 Architecture Review
+- Status: Complete.
+- Reviewed the canonical architecture, decisions, roadmap, simulation model, simulation principles, Sprint 9 documentation, implemented history/time/narration modules, gameplay facade, persistence path, command routing, Region Pack, and focused tests.
+- Determined that Sprint 9 is complete and that no Sprint 9.14 is required.
+- Named the completed milestone **World Memory and Safe Narration Foundations**.
+- Confirmed that `world_state`, save/load ownership, `GameSession`, and the `GameEngine` facade remain coherent and do not require a major refactor.
+- Confirmed that the narration preview boundary is sufficiently fail-closed for its current deterministic source and should stop expanding until an immediate bounded consumer exists.
+- Deferred real AI provider integration because it is not required for simulation-owned world evolution.
+- Confirmed that World Evolution Foundations remain incomplete: pressures or threads, pressure change, drift, runtime actor state, actor knowledge, evidence, consequences, schedules, affordances, opportunity surfacing, and travel execution remain unimplemented.
+- Selected a focused playable vertical-slice review as the next project-level activity.
+- Proposed **Phase 2B - Reactive World State Foundations** as the next implementation milestone after that review, with persistent scoped pressures or unresolved threads as the leading candidate rather than a committed sprint.
+- Added ADR-034 to record the phase-completion and transition decision.
+- No application code was changed, no sprint manifests were staged, and no following sprint was defined or started.
+
 ## Sprint 9.12 - Deterministic Narration Prompt Packet Contract
 - Status: Complete.
 - Implemented `engine/narration_prompt.py` and `test_narration_prompt.py` for the deterministic, copy-safe, provider-neutral narration prompt packet contract.

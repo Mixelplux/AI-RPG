@@ -421,3 +421,52 @@ Valid source-result structure does not validate candidate prose. The candidate m
 - Continue partial validation inside candidate extraction. Rejected because it leaves the envelope boundary porous and lets malformed source results reach preview inspection data.
 - Copy malformed source results into diagnostic packets. Rejected because raw invalid source payloads should not be surfaced in preview paths.
 - Treat a structurally valid source result as implicitly validating its candidate. Rejected because envelope validity and prose validity are separate contracts.
+
+---
+
+## ADR-034
+
+**Title:** Sprint 9 Closes as World Memory and Safe Narration Foundations
+
+**Status:** Accepted
+
+Sprint 9 is complete and no Sprint 9.14 is required.
+
+The milestone is named **World Memory and Safe Narration Foundations**. It established durable accepted-event history, stable history identity, bounded history access and context, explicit simulation-owned time advancement, and a deterministic fail-closed narration preview boundary.
+
+Sprint 9 completed important World Evolution prerequisites but did not complete World Evolution Foundations as a whole. Persistent pressures or threads, pressure change, time-based drift, runtime actor state, actor knowledge, evidence, consequences, schedules, affordances, opportunity surfacing, and travel execution remain future capabilities.
+
+The existing narration context, request, prompt, source, source-result, output, and preview boundaries are sufficient for the current deterministic fixed-source preview. Narration infrastructure should not expand further until a real provider or other immediate bounded consumer demonstrates a concrete need. Real AI provider integration is deferred and is not a prerequisite for simulation-owned world evolution.
+
+The immediate next project activity is a focused playable vertical-slice review. After that review, the next feature work should begin a new milestone within Phase 2, proposed as **Phase 2B - Reactive World State Foundations**, rather than extending Sprint 9. Persistent scoped pressures or unresolved threads are the leading next implementation candidate, subject to the vertical-slice findings.
+
+**Consequences**
+
+- The roadmap must mark Sprint 9 complete and remove language stating that Sprint 9 is undefined.
+- No following sprint is defined by this decision.
+- The active Sprint 9.13 manifests remain closed and are not replaced until a future sprint is explicitly staged.
+- Provider integration, provider registries, retries, streaming, semantic narration validation, and additional narration packet layers remain deferred.
+- Documentation should distinguish immutable Region Pack seeds from mutable runtime state before actor knowledge, schedules, or regional-state mutation are implemented.
+
+**Alternatives Considered**
+
+- Continue with Sprint 9.14 narration infrastructure. Rejected because the deterministic preview is already fail-closed and further work lacks an immediate consumer.
+- Add a real AI provider next. Rejected because generated prose would improve presentation without advancing simulation-owned world evolution.
+- Declare all World Evolution Foundations complete. Rejected because the engine still lacks reactive pressures, knowledge, evidence, consequences, schedules, affordances, and opportunity surfacing.
+- Begin a pressure sprint immediately. Rejected in favor of first conducting a focused playable vertical-slice review so the next bounded capability is selected from observed gameplay needs.
+
+---
+
+## ADR-035
+
+**Title:** Resolved Conversations Become Durable Accepted Events
+
+**Status:** Accepted
+
+A conversation becomes durable history only after the normal gameplay path accepts the command and deterministic current-scene target resolution identifies a resolved entity.
+
+The resulting history event records the occurrence and grounded target identity only. It stores the existing engine-owned history identifier, the current location, the current durable time, `target_entity_id`, and `target_display_name`. It does not establish dialogue, topics, claims, promises, actor knowledge, beliefs, relationships, emotional state, consequences, pressures, or time advancement.
+
+Failed, unresolved, ambiguous, and non-actor conversation targets do not create history.
+
+Conversation history remains inside the existing durable history system and keeps the same bounded history context, narration context, persistence, and save/load ownership boundaries. Conversation does not grant narration authority.

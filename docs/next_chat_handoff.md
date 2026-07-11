@@ -1,54 +1,53 @@
-# Sprint 9.13 Planning Handoff
+# Sprint 10.1 Handoff
 
-## Current Status
+## Status
 
-- Sprint 9.13 - Strict Narration Source Result Validation Contract is complete and closed out.
-- No following sprint has been started.
+Sprint 10.1 is complete and closed out. Sprint 10.2 has not been defined or started.
 
-## What Was Implemented
+## What Changed
 
-- Added `validate_narration_source_result_packet(...)` to enforce the exact narration source-result envelope.
-- Validated source results immediately after source invocation in the narration pipeline.
-- Kept candidate extraction behind validated source-result packets only.
-- Preserved the fixed sample prose: `The street remains quiet.`
-- Preserved fail-closed behavior for malformed source results and invalid candidates.
+- Implemented persistent resolved conversation memory as durable history.
+- Conversation history now records resolved entity identity, current location, current durable time, and the existing engine-owned history ID.
+- Failed, unresolved, ambiguous, and non-actor conversation targets do not create history.
 
 ## Files Changed
 
-- `engine/narration_source.py`
-- `engine/narration_pipeline.py`
-- `test_narration_source.py`
-- `test_narration_pipeline.py`
+- `engine/world_update.py`
+- `test_interaction_history.py`
 - `docs/architecture.md`
 - `docs/decisions.md`
+- `docs/roadmap.md`
 - `docs/sprint_log.md`
 - `docs/current_sprint.md`
 - `docs/current_sprint.yaml`
 - `docs/current_sprint.json`
-
-## ADRs
-
-- ADR-033: Narration Source Results Are Untrusted Until Strictly Validated
+- `docs/next_chat_handoff.md`
 
 ## Verification
 
-- `test_narration_source.py`: passed
-- `test_narration_pipeline.py`: passed
-- `test_narration_prompt.py`: passed
-- `test_narration_request.py`: passed
-- `test_narration_output.py`: passed
-- `test_narration_context.py`: passed
-- `test_history_context.py`: passed
-- `test_history_query.py`: passed
-- `test_save_load.py`: passed
-- `-m json.tool docs/current_sprint.json`: passed
-- Parsed YAML/JSON deep comparison: passed
-- Scripted `play_game.main()` smoke through `narration preview look around` and quit: passed
-- `play_game.py`: rendered the opening scene and then hit the expected non-interactive `EOFError`
+Passed with the official project virtual environment:
 
-## Notes
+- `.\.venv\Scripts\python.exe test_interaction_history.py`
+- `.\.venv\Scripts\python.exe test_history_query.py`
+- `.\.venv\Scripts\python.exe test_history_context.py`
+- `.\.venv\Scripts\python.exe test_narration_context.py`
+- `.\.venv\Scripts\python.exe test_save_load.py`
+- `.\.venv\Scripts\python.exe test_narration_pipeline.py`
+- `.\.venv\Scripts\python.exe -m json.tool docs/current_sprint.json`
+- Parsed JSON/YAML deep comparison
 
-- The fixed source remains deterministic and returns only `The street remains quiet.`
-- The current preview sequence is `context -> request -> prompt -> source -> strict source-result validation -> candidate validation -> display`.
-- Bundled Python was not used.
+The scripted smoke flow covered North Gate start, `talk to captain`, Captain Darvin Grey resolution, history display, `history type player_conversation`, repeated conversations with distinct history IDs, unresolved/ambiguous/non-actor no-history cases, save/load preservation, movement, wait, destination resolution, skill check, narration preview, reset, and quit.
 
+The launch check rendered the opening scene and then reached the expected non-interactive `EOFError` in the terminal session. Bundled Python was not used for verification.
+
+## ADR-035
+
+Resolved conversations become durable accepted events only after the normal gameplay path accepts the command and current-scene target resolution identifies a resolved entity.
+
+## Current Constraints
+
+- Provider integration remains deferred.
+- Persistent scoped pressures or unresolved threads are the likely next capability.
+- Conversation does not advance time or grant narration authority.
+- No new top-level world-state field was introduced.
+- Save version remained unchanged.

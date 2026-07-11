@@ -1,130 +1,108 @@
 # Current Sprint
 
-## Sprint 9.13 - Strict Narration Source Result Validation Contract
+## Sprint 10.1 - Persistent Resolved Conversation Memory
 
 Status: Complete
 
+Phase: Phase 2B - Reactive World State Foundations
+
 ## Goal
 
-Add a deterministic, exact, copy-safe validation and sanitization boundary for untrusted narration source-result packets after source invocation and before candidate extraction, narration-output validation, or preview exposure. The pipeline must accept only the documented fixed-source result shape, verify that it corresponds to the validated narration prompt, and fail closed without copying raw invalid source output into preview packets or display text.
+Record a successful conversation initiation with a deterministically resolved current-scene actor as one durable, simulation-owned history event. The event must preserve the resolved actor identity, display name, current location, and current durable time through the existing history and save/load systems without creating dialogue content, actor knowledge, relationship changes, time advancement, or AI narration.
 
 ## Design Intent
 
-Sprint 9.12 completed the deterministic pre-source path from bounded narration context through validated request and prompt packets. The remaining narrow gap is the return envelope from the untrusted candidate source. The current pipeline checks selected source-result fields while extracting the candidate, but it has no dedicated strict source-result validator and may retain raw malformed source-result content in preview inspection data. Sprint 9.13 closes that existing boundary before any provider integration. The fixed source remains deterministic and continues returning only 'The street remains quiet.' The pipeline must validate the complete source-result packet against the originating validated prompt, expose only a validated copy, then separately validate the candidate through the existing narration-output contract. This sprint hardens the present preview path only; it does not add generation, a provider, semantic prose analysis, or simulation authority.
+The post-Sprint-9 playable vertical-slice review found that the engine can resolve a conversation target but does not remember that the interaction occurred. Sprint 10.1 closes that smallest player-facing gap and begins Phase 2B. It must reuse the existing Interaction Kernel -> GameEngine -> World Update -> World State path and the existing durable history system. The accepted fact is only that the player initiated a conversation with a resolved actor. The sprint must not infer what was said, what either participant learned, whether trust changed, or whether the actor agreed to anything.
 
-The governing rules remain:
+The accepted fact is deliberately narrow:
 
-> The narrator can describe. The engine decides what is true.
+> The player initiated a conversation with this resolved current-scene actor.
 
-> Narration candidate sources and their return envelopes are untrusted.
-
-> Raw invalid source output must not cross into preview inspection data or display text.
-
-The intended preview sequence is:
-
-1. Build bounded narration context.
-2. Build and validate the narration request packet.
-3. Build and validate the narration prompt packet.
-4. Invoke the deterministic fixed candidate source.
-5. Validate the complete source-result packet against the originating validated prompt.
-6. Extract the candidate only from the validated source result.
-7. Validate the candidate through the narration-output contract.
-8. Expose display text only after successful validation.
+It does not establish what was said, learned, promised, believed, or changed.
 
 ## Expected ADR
 
-Add **ADR-033: Narration Source Results Are Untrusted Until Strictly Validated** during closeout.
+Add **ADR-035: Resolved Conversations Become Durable Accepted Events** during closeout.
 
-Every narration source-result envelope is untrusted. After source invocation, the pipeline must validate the exact supported source-result schema, version, source identity, echoed prompt, candidate object, and bounded metadata before candidate extraction or preview exposure. The echoed prompt must match the originating validated prompt. Unsupported, malformed, or mismatched source results fail closed with empty display text, bounded diagnostics, and no copied raw source payload. A validated source-result envelope does not validate the candidate prose; the candidate must still pass independently through the narration-output contract.
+A conversation becomes durable history only after the existing gameplay path accepts the command and deterministic current-scene target resolution identifies an actor. The resulting history entry records only the occurrence and grounded target identity. Raw narration, invented dialogue, actor knowledge, relationships, dispositions, and consequences remain outside this event. Failed, unresolved, ambiguous, or non-actor conversation targets do not create history.
 
 ## Expected Files
 
 Likely created:
 
-- None.
+- `test_interaction_history.py`
 
 Likely modified:
 
-- `engine/narration_source.py`
-- `engine/narration_pipeline.py`
-- `test_narration_source.py`
-- `test_narration_pipeline.py`
+- `engine/game_engine.py`
+- `engine/world_update.py`
 - `docs/architecture.md`
 - `docs/decisions.md`
+- `docs/roadmap.md`
 - `docs/sprint_log.md`
 - `docs/current_sprint.md`
 - `docs/current_sprint.yaml`
 - `docs/current_sprint.json`
 - `docs/next_chat_handoff.md`
 
-Possibly modified only if required by the existing facade or CLI:
+Possibly modified only if required by the existing target identity or regression path:
 
-- `engine/game_engine.py`
+- `engine/target_resolver.py`
+- `test_target_resolver.py`
 - `play_game.py`
+- `test_history_query.py`
+- `test_history_context.py`
+- `test_narration_context.py`
+- `test_save_load.py`
 
 ## Acceptance Criteria
 
-- A dedicated narration source-result validation function exists in the narration-source boundary.
-- The existing source-result schema remains ai_rpg.narration_source_result.
-- The existing source-result version remains 1.
-- The validator accepts only an object with the exact supported top-level fields: schema, version, source, source_prompt, candidate, and metadata.
-- Missing required source-result fields are rejected deterministically.
-- Unsupported extra source-result fields are rejected deterministically.
-- The source-result schema, version, and source identity must match the supported fixed source.
-- The source_prompt field must be an object accepted by the existing narration-prompt validator.
-- The validated source_prompt must equal the originating validated prompt supplied to the source.
-- A substituted, stale, mutated, or otherwise mismatched source_prompt is rejected.
-- The metadata field must be an object with the exact supported metadata keys.
-- Metadata must preserve candidate_trust as untrusted.
-- Metadata must preserve generation as fixed_sample_only.
-- Missing, extra, or altered metadata is rejected.
-- The candidate field must be an object before it can be extracted.
-- Source-result validation does not treat the candidate as trusted narration output.
-- The candidate still passes independently through validate_narration_output_packet(...) before display.
-- The source-result validator returns a deep copy and exposes no live mutable reference from its input.
-- Equivalent valid source results produce equivalent validated source-result packets.
-- Source-result validation does not mutate the supplied source result or originating prompt.
-- The narration pipeline validates the complete source result immediately after source invocation.
-- Candidate extraction occurs only from the validated source-result packet.
-- An accepted preview packet exposes only a validated, copy-safe source-result packet.
-- A source-result validation failure returns an unsuccessful preview packet with empty display text.
-- Source-result validation failure uses a distinct bounded failure stage such as source_result_validation.
-- A failed source-result validation does not copy the raw source result into preview inspection fields.
-- A failed source-result validation does not copy a raw candidate into preview inspection fields.
-- Failure diagnostics remain bounded and do not include raw unvalidated narration prose or arbitrary source payload content.
-- Candidate-output validation failure remains distinct from source-result validation failure.
-- The fixed narration source remains deterministic.
-- The fixed narration source continues returning only The street remains quiet.
-- The fixed source continues receiving only a validated copy-safe narration prompt packet.
-- Existing narration context, request, prompt, and output contracts remain materially compatible.
-- GameEngine.get_narration_preview(...) remains the gameplay-facing preview entry point.
-- Existing CLI syntax narration preview <player input> remains supported.
-- No new player-facing source-result command is added.
-- Normal gameplay output is not replaced or altered.
-- Source-result validation and narration preview do not mutate world state.
-- Source-result validation and narration preview do not advance time.
-- Source-result validation and narration preview do not create history or alter history identifiers.
-- Narration prompts, source results, candidates, validated output, and preview text are not persisted.
-- No AI model, external service, provider SDK, or network call is used.
-- Documentation describes strict validation and sanitization of untrusted source-result envelopes.
-- ADR-033 is added during closeout.
-- Sprint 9.13 is marked complete only after all documented verification passes.
-- No following sprint is defined or started.
+- The existing conversation command path remains Interaction Kernel -> GameEngine target resolution -> World Update -> World State.
+- A successful conversation command creates history only when current-scene target resolution returns one resolved actor or entity target.
+- The durable event type is player_conversation.
+- Exactly one history entry is created for each accepted resolved conversation command.
+- The history entry receives its history_id through the existing engine-owned history identifier mechanism.
+- The history entry contains a deterministic summary stating that the player initiated a conversation with the resolved actor.
+- The history entry records the current player location.
+- The history entry records the current durable world time.
+- The history entry records a stable target_entity_id copied from deterministic target resolution rather than inferred from raw player text.
+- The history entry records the resolved target_display_name.
+- If the current target-resolution result does not expose enough stable entity identity to meet this contract, it is extended narrowly without broadening target resolution beyond the current scene.
+- The event records only that conversation was initiated; it does not record invented dialogue, topics, claims, promises, outcomes, knowledge changes, relationship changes, or emotional state.
+- Failed conversation commands do not create history.
+- Unresolved conversation targets do not create history.
+- Ambiguous conversation targets do not create history.
+- A resolved exit or other non-actor target does not create a conversation history entry.
+- Repeated accepted conversations create separate history entries with distinct stable history_id values.
+- Recording a conversation does not advance time.
+- Recording a conversation does not move the player.
+- Recording a conversation does not change weather, actor state, knowledge, relationships, schedules, pressures, evidence, consequences, or other world state.
+- The new history entry is returned through existing history queries, including event_type filtering.
+- The new history entry appears naturally in existing bounded history context and narration context when it falls within the selected history window.
+- Conversation history survives save/load without regenerating or altering its history_id.
+- New history created after loading does not reuse an existing history_id.
+- No new top-level world_state field is introduced.
+- The existing save version remains unchanged and existing saves without conversation events remain valid.
+- Existing movement history and wait-created time history remain materially unchanged.
+- Existing destination resolution, skill checks, narration context, narration preview, and normal deterministic scene narration remain materially unchanged.
+- No new player-facing command is required.
+- The existing history command can display the conversation event through its event type and deterministic summary.
+- No AI model, provider, SDK, external service, or network call is added.
+- Documentation records the playable vertical-slice review result, Phase 2B transition, the bounded conversation-memory rule, and ADR-035.
+- Sprint 10.1 is marked complete only after all documented verification passes.
+- No Sprint 10.2 work is defined or started during implementation or closeout.
 
 ## Verification
 
 Primary automated checks:
 
 ```powershell
-.\.venv\Scripts\python.exe test_narration_source.py
-.\.venv\Scripts\python.exe test_narration_pipeline.py
-.\.venv\Scripts\python.exe test_narration_prompt.py
-.\.venv\Scripts\python.exe test_narration_request.py
-.\.venv\Scripts\python.exe test_narration_output.py
-.\.venv\Scripts\python.exe test_narration_context.py
-.\.venv\Scripts\python.exe test_history_context.py
+.\.venv\Scripts\python.exe test_interaction_history.py
 .\.venv\Scripts\python.exe test_history_query.py
+.\.venv\Scripts\python.exe test_history_context.py
+.\.venv\Scripts\python.exe test_narration_context.py
 .\.venv\Scripts\python.exe test_save_load.py
+.\.venv\Scripts\python.exe test_narration_pipeline.py
 ```
 
 Launch check:
@@ -133,7 +111,7 @@ Launch check:
 .\.venv\Scripts\python.exe play_game.py
 ```
 
-Manifest and regression checks:
+Manifest checks:
 
 ```powershell
 .\.venv\Scripts\python.exe -m json.tool docs/current_sprint.json
@@ -142,107 +120,76 @@ Manifest and regression checks:
 
 Manual or scripted checks:
 
-1. Confirm narration context <player input> still works.
-2. Confirm narration output still works.
-3. Confirm narration preview <player input> still displays the validated fixed sample.
-4. Repeat the same preview and confirm deterministic output.
-5. Confirm a valid source result is accepted only after complete source-result validation.
-6. Confirm an unexpected top-level source-result field fails closed.
-7. Confirm missing or wrong source-result schema, version, or source identity fails closed.
-8. Confirm a malformed or mismatched source_prompt fails closed.
-9. Confirm missing, extra, or altered source metadata fails closed.
-10. Confirm a non-object candidate fails at source-result validation.
-11. Confirm invalid candidate output still fails separately at candidate validation.
-12. Confirm raw invalid source-result fields and raw candidate prose are absent from failure inspection fields and display text.
-13. Confirm accepted preview inspection data contains only a validated copy-safe source result.
-14. Confirm preview does not alter time, history, scene state, history identifiers, or saved state.
-15. Confirm normal gameplay output remains unchanged.
-16. Run the established scripted play_game.main() smoke flow through narration preview and quit.
-
-## Actual Files
-
-Created:
-
-- None
-
-Modified:
-
-- `engine/narration_source.py`
-- `engine/narration_pipeline.py`
-- `test_narration_source.py`
-- `test_narration_pipeline.py`
-
-## Verification Results
-
-- `test_narration_source.py`: passed
-- `test_narration_pipeline.py`: passed
-- `test_narration_prompt.py`: passed
-- `test_narration_request.py`: passed
-- `test_narration_output.py`: passed
-- `test_narration_context.py`: passed
-- `test_history_context.py`: passed
-- `test_history_query.py`: passed
-- `test_save_load.py`: passed
-- `-m json.tool docs/current_sprint.json`: passed
-- Parsed YAML/JSON deep comparison: passed
-- Scripted `play_game.main()` smoke through `narration preview look around` and `quit`: passed
-- `play_game.py`: rendered the opening scene and then hit expected `EOFError` in the non-interactive session
-
-Sprint 9.13 is complete and closed out. No following sprint has been started.
+1. Start a new game at the Bryn Shander North Gate.
+2. Use talk to captain and confirm the conversation target resolves to Captain Darvin Grey.
+3. Confirm the accepted command creates exactly one player_conversation history entry.
+4. Confirm the entry includes a stable history_id, target_entity_id, target_display_name, current location, and current durable time.
+5. Confirm history and history type player_conversation display the new event.
+6. Confirm history context includes the event when it falls within the bounded window.
+7. Confirm narration context includes the event only through its bounded history context.
+8. Repeat the accepted conversation and confirm a second entry with a distinct history_id.
+9. Attempt an unresolved or ambiguous conversation and confirm no history entry is created.
+10. Confirm conversation does not advance time, move the player, or alter unrelated world state.
+11. Save, load, and confirm conversation history and identifiers are preserved.
+12. After loading, create another accepted conversation and confirm its history_id is not reused.
+13. Confirm movement, wait, destination resolution, skill checks, narration preview, save/load, reset, and quit still work.
+14. Run a scripted play_game.main() smoke flow through talk to captain, history, save/load where practical, and quit.
 
 ## Non-Goals
 
-- Do not call an AI model.
-- Do not add an external API, SDK, or network dependency.
-- Do not add provider implementations, provider selection, a provider registry, or a plugin framework.
-- Do not add provider-specific request or response payloads.
-- Do not add API keys, secrets, environment-variable loading, model configuration, or provider configuration.
-- Do not add prompt rendering for a specific provider.
-- Do not add model names, temperature, top-p, seed, token settings, token budgets, context-window management, or cost tracking.
-- Do not add retries, timeouts, streaming, asynchronous execution, fallback providers, or caching.
-- Do not generate prose from narration context, request data, or prompt data.
-- Do not change the fixed sample prose.
-- Do not replace normal gameplay narration.
-- Do not persist narration artifacts.
-- Do not treat a validated source envelope, source metadata, candidate prose, or preview text as world truth.
-- Do not add semantic hallucination detection, lore verification, embeddings, relevance scoring, or prose fact extraction.
-- Do not broaden narration context or pass full durable history to the prompt or source.
-- Do not add a new player-facing source-result inspection command.
-- Do not implement world evolution, pressures, rumors, actor knowledge, schedules, evidence, consequences, opportunities, quests, combat, inventory, conditions, or travel execution.
-- Do not add or repair dependency-management files or development-environment documentation unless an implementation blocker is discovered and reported first.
+- Do not generate or persist dialogue content.
+- Do not add dialogue trees, topics, conversation sessions, or turn-taking.
+- Do not add AI narration or provider integration.
+- Do not update actor knowledge, beliefs, memories, relationships, trust, hostility, disposition, or emotional state.
+- Do not add mutable runtime actor state.
+- Do not add evidence, consequences, rumors, opportunities, quests, or world pressures.
+- Do not add pressure representation, pressure change, or time-based pressure drift.
+- Do not advance time for conversation.
+- Do not add schedules, autonomous NPC behavior, travel execution, inventory, conditions, combat, or character progression.
+- Do not add a generic event bus, command bus, plugin framework, handler registry, or broad interaction framework.
+- Do not change narration request, prompt, source-result, output, or pipeline contracts unless a regression defect is discovered and reported.
+- Do not change the save version or add a general migration framework.
+- Do not persist raw player input as canonical dialogue.
 - Do not refactor unrelated systems.
-- Do not define or begin a following sprint.
-
-## Closeout Requirement
-
-Closeout has been completed for Sprint 9.13. The canonical current-sprint manifests record the sprint as complete, the actual files and verification results are recorded, and no following sprint has been defined or started.
+- Do not define or begin Sprint 10.2.
 
 ## Closeout State
 
-Sprint 9.13 is complete and closed out.
+Sprint 10.1 is complete and closed out.
+
+### Closeout Summary
+
+- Files created: `test_interaction_history.py`
+- Files modified: `engine/world_update.py`
+- Verification: `test_interaction_history.py`, `test_history_query.py`, `test_history_context.py`, `test_narration_context.py`, `test_save_load.py`, `test_narration_pipeline.py`, `-m json.tool docs/current_sprint.json`
+- Parsed JSON/YAML deep comparison: passed
+- Scripted smoke flow: passed
+- Launch check: rendered the opening scene and then reached the expected non-interactive `EOFError`
+- Bundled Python: not used
+- Sprint 10.2: not started
 
 ## Codex Task Routing
 
-### Run 1 - Setup / Staging
+### Run 1 - Setup / Staging and Review-Record Maintenance
 
 Recommended: **mini or lighter model with low reasoning**
 
-Promote the four Sprint 9.13 numbered staging files into the canonical docs paths. Confirm the Markdown, YAML, and JSON sprint definitions materially agree. Parse the canonical JSON and YAML with the official project runtime and confirm exact deep agreement on keys, nesting, data types, ordered lists, values, and complete structure. Validate docs/current_sprint.json, confirm all four canonical files exist, delete only the temporary Sprint 9.13 staging files after successful promotion and validation, then stop. Do not modify application code or tests and do not begin implementation.
+Promote the four Sprint 10.1 numbered planning files into the canonical documentation paths. Confirm the Markdown, YAML, and JSON sprint definitions materially agree. Parse the canonical JSON and YAML with the official project runtime and confirm exact deep agreement on keys, nesting, data types, ordered lists, values, and complete structure. Validate docs/current_sprint.json. Update docs/roadmap.md to mark the playable vertical-slice review complete, record persistent resolved conversation memory as the first Phase 2B capability, and place persistent pressures next. Add a concise playable vertical-slice review decision entry to docs/sprint_log.md. Confirm all canonical files exist, delete only the temporary Sprint 10.1 staging files after successful promotion and validation, then stop. Do not modify application code or begin implementation.
 
 ### Run 2 - Bounded Sprint Implementation
 
 Recommended: **standard Codex with medium reasoning**
 
-Perform Startup Review, implement only Sprint 9.13, update the focused source and pipeline tests, run every documented official .venv verification command, report results, then stop. Do not perform closeout and do not begin another sprint.
+Perform Startup Review and implement only Sprint 10.1. Reuse the existing conversation routing, target resolution, world-update, history, and save/load paths. Add focused tests and run every documented official .venv verification command. Report results, then stop. Do not perform closeout and do not begin pressure work or Sprint 10.2.
 
 ### Run 3 - Closeout Documentation
 
 Recommended: **mini or lighter model with low reasoning**
 
-Only after implementation verification passes, update architecture documentation, add ADR-033, update the sprint log, record actual files and verification results, mark all canonical Sprint 9.13 manifests complete, update the compact handoff, validate JSON, deep-compare parsed YAML and JSON, confirm no following sprint has started, then stop. Do not add features.
+After implementation verification passes, update architecture documentation, add ADR-035, update the roadmap and sprint log with the actual implementation, record actual files and verification results, mark all canonical Sprint 10.1 manifests complete, update the compact handoff, validate JSON, deep-compare parsed YAML and JSON, confirm Sprint 10.2 has not started, then stop. Do not add features.
 
 ### Run 4 - Debugging If Needed
 
 Recommended: **high reasoning only after a focused medium-reasoning pass fails**
 
-Use only for an unclear verification failure involving source-result exact-shape validation, prompt correspondence, raw-payload sanitization, candidate-stage separation, copy safety, or state isolation. Keep investigation within Sprint 9.13 scope.
+Use only for unclear failures involving actor-versus-exit target identity, duplicate or missing conversation history, history identifier reuse, save/load preservation, or unintended state/time mutation. Keep investigation within Sprint 10.1 scope.

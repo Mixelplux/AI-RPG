@@ -17,16 +17,6 @@
 
 ---
 
-## Current Transition
-
-Sprint 8 is complete.
-
-Sprint 9 is not yet defined.
-
-The project is currently in a post-Sprint-8 review and Phase 2 design transition.
-
----
-
 ## Phase 2 — World Evolution Foundations
 
 ### Goal
@@ -35,119 +25,155 @@ Establish the minimum simulation structures required for the world to remember, 
 
 Phase 1 taught the engine to represent the world.
 
-Phase 2 should teach the engine to evolve the world.
+Phase 2 teaches the engine to remember and evolve the world while preserving simulation-owned truth.
+
+### Phase 2.0 — Simulation Model Baseline ✅
+
+Completed through the post-Sprint-8 Project Review and Simulation Design Summit.
+
+Established:
+
+- `docs/simulation_model.md`
+- Updated simulation principles
+- AI/simulation authority boundaries
+- Phase 2 direction
+- Governance that conceptual design does not become implementation until scheduled
+
+### Phase 2A — World Memory and Safe Narration Foundations ✅
+
+Completed through Sprint 9.13.
+
+#### World memory and time
+
+- Sprint 9.1 — World History Skeleton ✅
+- Sprint 9.2 — Time Advancement Operation ✅
+- Sprint 9.3 — Read-Only History Query ✅
+- Sprint 9.4 — Bounded History Query Guardrails ✅
+- Sprint 9.5 — Stable History Entry Identity ✅
+- Sprint 9.6 — Bounded History Context Packet ✅
+
+#### Safe narration boundaries
+
+- Sprint 9.7 — Narration Context Boundary ✅
+- Sprint 9.8 — Narration Output Contract ✅
+- Sprint 9.9 — Deterministic Narration Pipeline Stub ✅
+- Sprint 9.10 — Deterministic Narration Candidate Source Boundary ✅
+- Sprint 9.11 — Deterministic Narration Request Packet Contract ✅
+- Sprint 9.12 — Deterministic Narration Prompt Packet Contract ✅
+- Sprint 9.13 — Strict Narration Source Result Validation Contract ✅
+
+Sprint 9 is complete. No Sprint 9.14 is required.
 
 ---
 
-## Phase 2.0 — Simulation Model Baseline
+## Current Transition
 
-**Status:** Recommended before Sprint 9
+Sprint 9 is complete as **World Memory and Safe Narration Foundations**.
 
-Purpose:
+The post-Sprint-9 architecture review is complete.
 
-- Create `docs/simulation_model.md`.
-- Update `docs/simulation_principles.md`.
-- Record ADRs that protect the AI/simulation boundary and Phase 2 direction.
-- Preserve summit outcomes without beginning implementation prematurely.
+The playable vertical-slice review is complete. It confirmed that movement and waiting are remembered, and Sprint 10.1 confirmed that resolved conversations are now remembered as durable world history.
 
-No implementation code should be generated during Phase 2.0 unless a later sprint explicitly schedules it.
+Phase 2B has begun with **Persistent Resolved Conversation Memory** complete as Sprint 10.1.
+
+Persistent scoped pressures or unresolved threads remain the next likely capability after Sprint 10.1.
+
+Real AI provider integration remains deferred. It is not required for the next simulation capabilities and should not lead the roadmap merely because the provider-neutral narration boundary exists.
 
 ---
 
-## Candidate Phase 2 Implementation Sequence
+## Proposed Phase 2B - Reactive World State Foundations
 
-This sequence is directional, not a sprint commitment.
+**Status:** In progress
 
-Each sprint should introduce one durable concept, one narrow behavior, and one verification path.
+### Goal
 
-### 2.1 — World History Skeleton
+Teach accepted events and elapsed time to produce persistent, scoped, simulation-owned change.
 
-Capability:
+### Proposed capability sequence
 
-- The world can record that something happened.
+This sequence is directional, not a sprint commitment. The playable vertical-slice review may adjust the first implementation choice.
 
-Possible scope:
+1. **Persistent resolved conversation memory**
+   - Complete in Sprint 10.1.
+   - The world records that a resolved conversation occurred without inventing dialogue or changing unrelated state.
 
-- player action creates a history entry
-- history persists through save/load
-- no autonomous world evolution yet
+2. **Persistent scoped pressures or unresolved threads**
+   - The world can store an ongoing condition with identity, scope, state, and provenance.
+   - Initial implementation should be representational and persistent only.
+   - No global simulation sweep or AI-generated pressure creation.
 
-### 2.2 — Time Advancement as Operation
+3. **Explicit pressure change operation**
+   - One deterministic engine-owned operation changes one pressure.
+   - The accepted change is recorded in durable history.
 
-Capability:
+4. **Pressure change from one accepted gameplay event**
+   - One bounded player or simulation action affects one known pressure.
 
-- Time can advance intentionally and be recorded.
+5. **Narrow time-based pressure drift**
+   - One explicitly configured pressure can increase, decay, or remain stable after elapsed time.
+   - No generalized scheduler or world tick framework.
 
-Possible scope:
+6. **Pressure projection into scene or perception**
+   - Relevant scoped pressure state becomes observable where the simulation permits it.
 
-- wait-like or travel-like command advances time
-- history records when events occur
-- save/load preserves time
+7. **Runtime actor-state baseline**
+   - Establish persistent ownership for mutable actor location or state without implementing full NPC AI.
 
-### 2.3 — Abstract Threads / Pressures Skeleton
+8. **Actor knowledge baseline**
+   - One actor can know, not know, or hold an outdated or false belief about a referenced event.
 
-Capability:
+9. **Evidence and consequence chain**
+   - One bounded action leaves one persistent trace that one eligible actor can discover and respond to.
 
-- The world can track an unresolved or ongoing condition.
+10. **Opportunity surfacing**
+   - Relevant world state can become player-facing without being converted into a procedural quest.
 
-Possible examples:
+## Prerequisites and Ownership Decisions
 
-- winter pressure
-- local unrest
-- missing caravan
-- livestock attacks
+Before actor knowledge, schedules, or pressure-driven mutation of economy, security, population, relationships, or actor activity:
 
-Initial scope should be representation only. No global simulation sweep.
+- Distinguish immutable Region Pack seeds from mutable runtime state.
+- Define persistent runtime ownership for the affected data.
+- Define save compatibility and default initialization for every new persisted field.
 
-### 2.4 — Pressure Change Through Player Action
+Before NPC routines or schedules:
 
-Capability:
+- Add a canonical clock representation beyond elapsed hours.
+- Establish persistent actor location and activity ownership.
 
-- Player action can change a local or scoped pressure.
+Before real AI provider integration:
 
-Possible examples:
+- Separate or version untrusted candidate-output and enriched validated-output shapes.
+- Reassess exact request and prompt validation for external producers.
+- Introduce a bounded provider adapter rather than generalizing the fixed-sample source contract prematurely.
 
-- reduce local danger
-- worsen local suspicion
-- increase unrest
+---
 
-### 2.5 — Time-Based Pressure Drift
+## Narration Infrastructure Policy
 
-Capability:
+The current deterministic narration preview boundary is complete enough for now.
 
-- Some pressures can decay, intensify, or remain stable when time passes.
+Do not add another narration infrastructure sprint solely to introduce:
 
-Initial scope should be narrow and explicitly modeled.
+- provider registries
+- plugin frameworks
+- provider-specific payloads
+- model configuration
+- retries or fallback providers
+- streaming
+- caching
+- token or cost accounting
+- semantic hallucination detection
+- additional packet layers
 
-### 2.6 — Knowledge / Belief Skeleton
-
-Capability:
-
-- The engine distinguishes objective truth from known, believed, rumored, or false information.
-
-Initial scope should support simple public belief or actor knowledge without full rumor propagation.
-
-### 2.7 — Affordance Baseline
-
-Capability:
-
-- Locations or entities can express what kinds of developments they plausibly support.
-
-Initial scope should be representational, not generative.
-
-### 2.8 — Player-Facing Opportunity Surfacing
-
-Capability:
-
-- Relevant world state can surface to the player when it intersects with location, knowledge, relationship, and sustained engagement.
-
-This is not procedural quest generation.
+Narration infrastructure may resume when a real provider or another immediate bounded consumer is explicitly selected.
 
 ---
 
 ## Deferred Systems
 
-The following systems remain important but should not lead Phase 2:
+The following systems remain important but should not lead the current Phase 2 transition:
 
 - combat
 - full NPC AI
@@ -160,7 +186,7 @@ The following systems remain important but should not lead Phase 2:
 - large-scale rumor networks
 - procedural quest generation
 
-These are future applications of Phase 2 foundations, not the foundations themselves.
+These are future applications of World Evolution Foundations, not the foundations themselves.
 
 ---
 
@@ -173,4 +199,5 @@ Active sprint definitions must include:
 - Acceptance Criteria
 - Verification
 
-Do not begin the next sprint automatically.
+Work on only one sprint at a time. Do not begin the next sprint automatically.
+
