@@ -10,8 +10,7 @@
    - `next_chat_handoff_<sprint>.md`
 3. Codex performs a setup/staging pass:
    - Copy the sprint-numbered planning content into the canonical documentation files.
-   - Confirm the Markdown, YAML, and JSON sprint manifests materially agree.
-   - Confirm the canonical JSON and YAML sprint manifests both parse successfully, represent the same data types, contain the same keys and nesting, preserve equivalent ordered list values, and deeply agree after parsing. JSON syntax validation alone is not sufficient.
+   - Confirm the Markdown materially agrees with the machine-readable manifests, and confirm the YAML and JSON manifests parse to deeply equivalent structures.
    - Validate `docs/current_sprint.json`.
    - Confirm the canonical files remain present.
    - Delete only the temporary staging files after successful promotion and validation.
@@ -57,16 +56,35 @@ Before sprint implementation begins, Codex must:
    - `current_sprint_<sprint>.json` to `docs/current_sprint.json`
    - `next_chat_handoff_<sprint>.md` to `docs/next_chat_handoff.md`
 2. Confirm the three sprint manifests materially agree.
-3. Confirm the canonical JSON and YAML sprint manifests both parse successfully, represent the same data types, contain the same keys and nesting, preserve equivalent ordered list values, and deeply agree after parsing. JSON syntax validation alone is not sufficient.
-4. Validate:
+3. Validate:
 
 ```powershell
 .\.venv\Scripts\python.exe -m json.tool docs/current_sprint.json
 ```
 
-5. Confirm all four canonical files exist.
-6. Delete the temporary sprint-numbered files only after all prior steps succeed.
-7. Stop and report a blocker if promotion or validation fails. Do not begin implementation from partially promoted manifests.
+4. Confirm all four canonical files exist.
+5. Delete the temporary sprint-numbered files only after all prior steps succeed.
+6. Stop and report a blocker if promotion or validation fails. Do not begin implementation from partially promoted manifests.
+
+## Sprint Manifest Structural Equivalence Rule
+
+`docs/current_sprint.json` and `docs/current_sprint.yaml` are machine-readable twins. They must parse to the same nested data structure, including:
+
+- the same keys and nesting;
+- the same list ordering;
+- the same scalar types;
+- the same string values;
+- the same status, files, acceptance criteria, verification commands, verification results, non-goals, and task-routing data.
+
+JSON syntax validation alone is not sufficient. YAML validity alone is not sufficient.
+
+YAML values containing a colon followed by a space must remain strings when the JSON value is a string. They must be safely quoted or emitted by a serializer so entries such as `test_name.py: passed` do not become unintended YAML mappings.
+
+The preferred method is to generate JSON and YAML from one shared canonical data structure. If either file is edited independently, both must be parsed and deeply compared before promotion, implementation, or closeout may proceed.
+
+`docs/current_sprint.md` remains the human-readable manifest. It must materially represent the same sprint number, status, goal, expected and actual files, acceptance criteria, verification, non-goals, and next-sprint boundary, but it is not required to have the same structural shape as JSON and YAML.
+
+A structural mismatch blocks staging promotion and sprint closeout. Do not report that the manifests agree until the deep comparison succeeds.
 
 ## Verification Policy
 
@@ -105,8 +123,7 @@ No sprint may begin unless `docs/current_sprint.md` contains:
 - Acceptance Criteria
 - Verification
 
-The Markdown, YAML, and JSON current-sprint manifests must materially agree before implementation begins.
-The canonical JSON and YAML current-sprint manifests must both parse successfully, represent the same data types, contain the same keys and nesting, preserve equivalent ordered list values, and deeply agree after parsing. JSON syntax validation alone is not sufficient.
+The Markdown current-sprint manifest must materially agree with the machine-readable manifests, and the YAML and JSON current-sprint manifests must parse to deeply equivalent structures before implementation begins.
 
 ## User-Effort Minimization Rule
 
@@ -238,6 +255,7 @@ Use for:
 
 - Copying sprint planning files into canonical `docs/` files.
 - Validating `docs/current_sprint.json`.
+- Parsing and deeply comparing `docs/current_sprint.json` and `docs/current_sprint.yaml`.
 - Deleting temporary staging files after validation.
 - Simple documentation formatting.
 - Confirming expected files are present.
@@ -270,6 +288,7 @@ Use for:
 - Marking current sprint manifests complete.
 - Updating `docs/next_chat_handoff.md`.
 - Validating `docs/current_sprint.json`.
+- Parsing and deeply comparing `docs/current_sprint.json` and `docs/current_sprint.yaml`.
 
 Closeout tasks must not add new features.
 

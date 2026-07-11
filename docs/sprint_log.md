@@ -1,5 +1,35 @@
 # Sprint Log
 
+## Sprint 9.12 - Deterministic Narration Prompt Packet Contract
+- Status: Complete.
+- Implemented `engine/narration_prompt.py` and `test_narration_prompt.py` for the deterministic, copy-safe, provider-neutral narration prompt packet contract.
+- Updated `engine/narration_source.py` and `engine/narration_pipeline.py` so preview flow now sequences narration context, narration request, narration prompt, fixed source, and narration-output validation before display.
+- Preserved the fixed sample prose: `The street remains quiet.`
+- Preserved fail-closed behavior for prompt construction, prompt validation, source exceptions, malformed source results, and invalid candidates.
+- Preserved state isolation: no world-state mutation, no time advancement, no history creation, no scene-state mutation, no history-identifier mutation, and no narration-artifact persistence.
+- Files created: `engine/narration_prompt.py`, `test_narration_prompt.py`.
+- Files modified: `engine/narration_source.py`, `engine/narration_pipeline.py`, `test_narration_source.py`, `test_narration_pipeline.py`.
+- Verification passed with the official project virtual environment: `test_narration_prompt.py`, `test_narration_request.py`, `test_narration_source.py`, `test_narration_pipeline.py`, `test_narration_output.py`, `test_narration_context.py`, `test_history_context.py`, `test_history_query.py`, `test_save_load.py`, and `-m json.tool docs/current_sprint.json`.
+- Launch check rendered the opening scene and then hit expected `EOFError` in the non-interactive session.
+- Scripted `play_game.main()` smoke passed through narration context, narration output, repeated narration preview, and quit.
+- Bundled Python was not used.
+- Sprint 9.13 was not started.
+
+## Sprint 9.13 - Strict Narration Source Result Validation Contract
+- Status: Complete.
+- Implemented `validate_narration_source_result_packet(...)` and tightened the narration preview pipeline so source results are validated immediately after source invocation.
+- Enforced the exact source-result schema, version, source identity, top-level fields, matched prompt, object-shaped candidate, and exact metadata contract.
+- Preserved the fixed sample prose: `The street remains quiet.`
+- Preserved fail-closed behavior with `source_result_validation` for malformed source-result envelopes, bounded diagnostics, empty display text, empty candidate, and empty source-result inspection data.
+- Preserved the separate `candidate_validation` stage for invalid candidate prose.
+- Preserved state isolation: no world-state mutation, no time advancement, no history creation, no scene-state mutation, no history-identifier mutation, and no narration-artifact persistence.
+- Files created: None.
+- Files modified: `engine/narration_source.py`, `engine/narration_pipeline.py`, `test_narration_source.py`, `test_narration_pipeline.py`.
+- Verification passed with the official project virtual environment: `test_narration_source.py`, `test_narration_pipeline.py`, `test_narration_prompt.py`, `test_narration_request.py`, `test_narration_output.py`, `test_narration_context.py`, `test_history_context.py`, `test_history_query.py`, `test_save_load.py`, `-m json.tool docs/current_sprint.json`, parsed YAML/JSON deep comparison, and a scripted `play_game.main()` smoke flow through `narration preview look around` and quit.
+- Launch check rendered the opening scene and then hit expected `EOFError` in the non-interactive session.
+- Bundled Python was not used.
+- Sprint 9.13 was closed out after verification, and no following sprint was started.
+
 ## Sprint 7.2
 - Integrated save/load commands into CLI.
 - Verified deterministic persistence.
@@ -149,3 +179,35 @@
 - Documented that narration output is presentational only and is not accepted world truth.
 - Verified with the official project virtual environment: `test_narration_output.py`, `test_narration_context.py`, `test_history_context.py`, `test_history_query.py`, `test_save_load.py`, `-m json.tool docs/current_sprint.json`, `play_game.py` startup, and a scripted `play_game.main()` smoke flow.
 - Bundled Python was not used for Sprint 9.8 verification.
+
+## Sprint 9.9 - Deterministic Narration Pipeline Stub
+- Status: Complete.
+- Added `engine/narration_pipeline.py` with a deterministic, read-only narration pipeline stub.
+- Added `GameEngine.get_narration_preview(...)` to bridge narration context and narration output through a fixed sample candidate.
+- Added the CLI/debug command `narration preview <player input>`.
+- Added `test_narration_pipeline.py` covering deterministic preview packets, invalid candidate rejection, copy safety, and no world-state mutation.
+- Preserved narration context behavior, narration output contract behavior, history context behavior, history query behavior, history id lookup, save/load behavior, and gameplay flow.
+- Documented that the preview path validates fixed sample prose before display and does not make narration world truth.
+- Verified with the official project virtual environment: `test_narration_pipeline.py`, `test_narration_output.py`, `test_narration_context.py`, `test_history_context.py`, `test_history_query.py`, `test_save_load.py`, `-m json.tool docs/current_sprint.json`, `play_game.py` startup, and a scripted `play_game.main()` smoke flow.
+- Bundled Python was not used for Sprint 9.9 verification.
+
+## Sprint 9.10 - Deterministic Narration Candidate Source Boundary
+- Status: Complete.
+- Added `engine/narration_source.py` as the deterministic fixed-sample narration candidate source.
+- Updated `engine/narration_pipeline.py` to obtain narration candidates through the source boundary before output validation.
+- Preserved the fixed prose sample, copy-safe packet behavior, and fail-closed handling for malformed source results, source exceptions, and invalid candidates.
+- Preserved CLI compatibility for `narration context`, `narration output`, and `narration preview`.
+- Verified with the official project virtual environment: `test_narration_source.py`, `test_narration_pipeline.py`, `test_narration_output.py`, `test_narration_context.py`, `test_history_context.py`, `test_history_query.py`, `test_save_load.py`, `-m json.tool docs/current_sprint.json`, `play_game.py` startup, and a scripted `play_game.main()` smoke flow covering narration context, narration output, repeated narration preview, and quit.
+- Bundled Python was not used for Sprint 9.10 verification.
+- Sprint 9.11 was not started.
+
+## Sprint 9.11 - Deterministic Narration Request Packet Contract
+- Status: Complete.
+- Added `engine/narration_request.py` and `test_narration_request.py` for the deterministic request packet contract.
+- Updated `engine/narration_pipeline.py` to build and validate a narration request before candidate-source invocation.
+- Updated `engine/narration_source.py` to consume the request packet instead of raw narration context.
+- Preserved the fixed sample prose, copy-safe preview packets, and fail-closed handling for malformed context, malformed request, request-construction failure, source exceptions, malformed source results, and invalid candidates.
+- Preserved CLI compatibility for `narration context`, `narration output`, and `narration preview`.
+- Verified with the official project virtual environment: `test_narration_request.py`, `test_narration_source.py`, `test_narration_pipeline.py`, `test_narration_output.py`, `test_narration_context.py`, `test_history_context.py`, `test_history_query.py`, `test_save_load.py`, `-m json.tool docs/current_sprint.json`, `play_game.py` startup, and a scripted `play_game.main()` smoke flow covering narration context, narration output, repeated narration preview, and quit.
+- Bundled Python was not used for Sprint 9.11 verification.
+- Sprint 9.12 was not started.

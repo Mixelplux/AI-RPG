@@ -20,6 +20,7 @@ from engine.narration_output import (
     build_narration_output_contract,
     validate_narration_output_packet,
 )
+from engine.narration_pipeline import build_narration_preview_packet
 from engine.world_state import (
     DEFAULT_HISTORY_QUERY_COUNT,
     add_history_entry,
@@ -136,6 +137,13 @@ class GameEngine:
         narration_output: Dict[str, Any]
     ) -> Dict[str, Any]:
         return validate_narration_output_packet(narration_output)
+
+    def get_narration_preview(
+        self,
+        player_input: str
+    ) -> Dict[str, Any]:
+        narration_context = self.get_narration_context(player_input)
+        return build_narration_preview_packet(narration_context)
 
     def advance_time(self, duration_hours: int = 1) -> Dict[str, Any]:
         previous_time = get_time(self.world_state)

@@ -1,44 +1,54 @@
 # Current Sprint
 
-## Sprint 9.8 - Narration Output Contract
+## Sprint 9.13 - Strict Narration Source Result Validation Contract
 
 Status: Complete
 
 ## Goal
 
-Define a deterministic, read-only contract for future narration output before any AI model is called.
-
-The contract should specify what a narration response may contain, reject structured attempts to mutate world state or history, and document narration drift limits.
-
-This prepares for AI-assisted narration while preserving the rule that the engine owns truth and narration owns presentation.
+Add a deterministic, exact, copy-safe validation and sanitization boundary for untrusted narration source-result packets after source invocation and before candidate extraction, narration-output validation, or preview exposure. The pipeline must accept only the documented fixed-source result shape, verify that it corresponds to the validated narration prompt, and fail closed without copying raw invalid source output into preview packets or display text.
 
 ## Design Intent
 
-Sprint 9.7 created the narration context boundary: what a future narrator may see.
+Sprint 9.12 completed the deterministic pre-source path from bounded narration context through validated request and prompt packets. The remaining narrow gap is the return envelope from the untrusted candidate source. The current pipeline checks selected source-result fields while extracting the candidate, but it has no dedicated strict source-result validator and may retain raw malformed source-result content in preview inspection data. Sprint 9.13 closes that existing boundary before any provider integration. The fixed source remains deterministic and continues returning only 'The street remains quiet.' The pipeline must validate the complete source-result packet against the originating validated prompt, expose only a validated copy, then separately validate the candidate through the existing narration-output contract. This sprint hardens the present preview path only; it does not add generation, a provider, semantic prose analysis, or simulation authority.
 
-Sprint 9.8 defines the other side of that boundary: what a future narrator may return.
-
-This is not AI integration and not final narration generation. It is a schema and validation foundation so future narrator output is treated as presentational prose only, not simulation authority.
-
-The design rule remains:
+The governing rules remain:
 
 > The narrator can describe. The engine decides what is true.
 
-Sprint 9.8 adds:
+> Narration candidate sources and their return envelopes are untrusted.
 
-> Narration output may be shown later, but it is not accepted world truth.
+> Raw invalid source output must not cross into preview inspection data or display text.
+
+The intended preview sequence is:
+
+1. Build bounded narration context.
+2. Build and validate the narration request packet.
+3. Build and validate the narration prompt packet.
+4. Invoke the deterministic fixed candidate source.
+5. Validate the complete source-result packet against the originating validated prompt.
+6. Extract the candidate only from the validated source result.
+7. Validate the candidate through the narration-output contract.
+8. Expose display text only after successful validation.
+
+## Expected ADR
+
+Add **ADR-033: Narration Source Results Are Untrusted Until Strictly Validated** during closeout.
+
+Every narration source-result envelope is untrusted. After source invocation, the pipeline must validate the exact supported source-result schema, version, source identity, echoed prompt, candidate object, and bounded metadata before candidate extraction or preview exposure. The echoed prompt must match the originating validated prompt. Unsupported, malformed, or mismatched source results fail closed with empty display text, bounded diagnostics, and no copied raw source payload. A validated source-result envelope does not validate the candidate prose; the candidate must still pass independently through the narration-output contract.
 
 ## Expected Files
 
 Likely created:
 
-- `engine/narration_output.py`
-- `test_narration_output.py`
+- None.
 
 Likely modified:
 
-- `engine/game_engine.py`
-- `play_game.py`
+- `engine/narration_source.py`
+- `engine/narration_pipeline.py`
+- `test_narration_source.py`
+- `test_narration_pipeline.py`
 - `docs/architecture.md`
 - `docs/decisions.md`
 - `docs/sprint_log.md`
@@ -47,117 +57,192 @@ Likely modified:
 - `docs/current_sprint.json`
 - `docs/next_chat_handoff.md`
 
-Possibly modified:
+Possibly modified only if required by the existing facade or CLI:
 
-- `engine/narration_context.py`
-- `test_narration_context.py`
+- `engine/game_engine.py`
+- `play_game.py`
 
 ## Acceptance Criteria
 
-- A narrow narration output contract exists in an engine module.
-- The contract defines narration output as presentational prose only.
-- The contract includes schema/version metadata.
-- The contract requires narration text to be a string.
-- The contract can accept a simple valid narration output object for future use.
-- The contract rejects narration output that contains structured world-state mutations.
-- The contract rejects narration output that contains structured history mutations.
-- The contract rejects narration output that attempts to advance time.
-- The contract rejects narration output that attempts to create quests, rumors, pressures, actor knowledge, NPC schedules, evidence, or consequences.
-- The contract rejects narration output that attempts to add new entities, locations, exits, inventory, player conditions, or NPC relationship state.
-- The contract does not attempt to fully prove whether freeform prose contains invented details.
-- Documentation explicitly states that freeform narration drift is controlled by context limits, prompt rules, output contract, and later review/validation layers, not by this sprint alone.
-- Documentation includes an example: narration may describe a blizzard if the context contains a blizzard, but should not mention gloves unless gloves are present in context.
-- GameEngine exposes a narrow method for validating or wrapping narration output without mutating world state.
-- A narrow CLI/debug command is available for inspecting the narration output contract or validating a fixed sample output.
-- Narration output validation does not mutate world state.
-- Narration output validation does not advance time.
-- Narration output validation does not create history entries.
-- Narration output validation does not alter history identifiers.
-- Narration output validation does not call an AI model.
-- Existing narration context behavior still works.
-- Existing history context behavior still works.
-- Existing history query and history id behavior still work.
-- Save/load behavior remains unchanged.
-- Documentation explains that narration output is not accepted world truth.
+- A dedicated narration source-result validation function exists in the narration-source boundary.
+- The existing source-result schema remains ai_rpg.narration_source_result.
+- The existing source-result version remains 1.
+- The validator accepts only an object with the exact supported top-level fields: schema, version, source, source_prompt, candidate, and metadata.
+- Missing required source-result fields are rejected deterministically.
+- Unsupported extra source-result fields are rejected deterministically.
+- The source-result schema, version, and source identity must match the supported fixed source.
+- The source_prompt field must be an object accepted by the existing narration-prompt validator.
+- The validated source_prompt must equal the originating validated prompt supplied to the source.
+- A substituted, stale, mutated, or otherwise mismatched source_prompt is rejected.
+- The metadata field must be an object with the exact supported metadata keys.
+- Metadata must preserve candidate_trust as untrusted.
+- Metadata must preserve generation as fixed_sample_only.
+- Missing, extra, or altered metadata is rejected.
+- The candidate field must be an object before it can be extracted.
+- Source-result validation does not treat the candidate as trusted narration output.
+- The candidate still passes independently through validate_narration_output_packet(...) before display.
+- The source-result validator returns a deep copy and exposes no live mutable reference from its input.
+- Equivalent valid source results produce equivalent validated source-result packets.
+- Source-result validation does not mutate the supplied source result or originating prompt.
+- The narration pipeline validates the complete source result immediately after source invocation.
+- Candidate extraction occurs only from the validated source-result packet.
+- An accepted preview packet exposes only a validated, copy-safe source-result packet.
+- A source-result validation failure returns an unsuccessful preview packet with empty display text.
+- Source-result validation failure uses a distinct bounded failure stage such as source_result_validation.
+- A failed source-result validation does not copy the raw source result into preview inspection fields.
+- A failed source-result validation does not copy a raw candidate into preview inspection fields.
+- Failure diagnostics remain bounded and do not include raw unvalidated narration prose or arbitrary source payload content.
+- Candidate-output validation failure remains distinct from source-result validation failure.
+- The fixed narration source remains deterministic.
+- The fixed narration source continues returning only The street remains quiet.
+- The fixed source continues receiving only a validated copy-safe narration prompt packet.
+- Existing narration context, request, prompt, and output contracts remain materially compatible.
+- GameEngine.get_narration_preview(...) remains the gameplay-facing preview entry point.
+- Existing CLI syntax narration preview <player input> remains supported.
+- No new player-facing source-result command is added.
+- Normal gameplay output is not replaced or altered.
+- Source-result validation and narration preview do not mutate world state.
+- Source-result validation and narration preview do not advance time.
+- Source-result validation and narration preview do not create history or alter history identifiers.
+- Narration prompts, source results, candidates, validated output, and preview text are not persisted.
+- No AI model, external service, provider SDK, or network call is used.
+- Documentation describes strict validation and sanitization of untrusted source-result envelopes.
+- ADR-033 is added during closeout.
+- Sprint 9.13 is marked complete only after all documented verification passes.
+- No following sprint is defined or started.
 
 ## Verification
 
-Run:
+Primary automated checks:
 
 ```powershell
-.\.venv\Scripts\python.exe play_game.py
-```
-
-Run:
-
-```powershell
+.\.venv\Scripts\python.exe test_narration_source.py
+.\.venv\Scripts\python.exe test_narration_pipeline.py
+.\.venv\Scripts\python.exe test_narration_prompt.py
+.\.venv\Scripts\python.exe test_narration_request.py
 .\.venv\Scripts\python.exe test_narration_output.py
-```
-
-Regression checks:
-
-```powershell
 .\.venv\Scripts\python.exe test_narration_context.py
 .\.venv\Scripts\python.exe test_history_context.py
 .\.venv\Scripts\python.exe test_history_query.py
 .\.venv\Scripts\python.exe test_save_load.py
 ```
 
-Validate JSON:
+Launch check:
+
+```powershell
+.\.venv\Scripts\python.exe play_game.py
+```
+
+Manifest and regression checks:
 
 ```powershell
 .\.venv\Scripts\python.exe -m json.tool docs/current_sprint.json
+.\.venv\Scripts\python.exe -c "import json, yaml; from pathlib import Path; j=json.loads(Path('docs/current_sprint.json').read_text(encoding='utf-8')); y=yaml.safe_load(Path('docs/current_sprint.yaml').read_text(encoding='utf-8')); assert j == y"
 ```
 
-Manual verification should confirm:
+Manual or scripted checks:
 
-1. Start a new game with .\.venv\Scripts\python.exe play_game.py.
-2. Create at least one movement history entry.
-3. Use wait to create a time-advancement history entry.
-4. Inspect narration context to confirm Sprint 9.7 behavior still works.
-5. Inspect the narration output contract or run the fixed sample validation debug command.
-6. Confirm valid prose-only narration output is accepted by the contract.
-7. Confirm structured mutation attempts are rejected by the contract.
-8. Confirm narration output validation does not advance time.
-9. Confirm narration output validation does not create history entries.
-10. Confirm normal history, history context, history id, and narration context commands still work.
-11. Confirm normal gameplay still works after the debug command.
+1. Confirm narration context <player input> still works.
+2. Confirm narration output still works.
+3. Confirm narration preview <player input> still displays the validated fixed sample.
+4. Repeat the same preview and confirm deterministic output.
+5. Confirm a valid source result is accepted only after complete source-result validation.
+6. Confirm an unexpected top-level source-result field fails closed.
+7. Confirm missing or wrong source-result schema, version, or source identity fails closed.
+8. Confirm a malformed or mismatched source_prompt fails closed.
+9. Confirm missing, extra, or altered source metadata fails closed.
+10. Confirm a non-object candidate fails at source-result validation.
+11. Confirm invalid candidate output still fails separately at candidate validation.
+12. Confirm raw invalid source-result fields and raw candidate prose are absent from failure inspection fields and display text.
+13. Confirm accepted preview inspection data contains only a validated copy-safe source result.
+14. Confirm preview does not alter time, history, scene state, history identifiers, or saved state.
+15. Confirm normal gameplay output remains unchanged.
+16. Run the established scripted play_game.main() smoke flow through narration preview and quit.
+
+## Actual Files
+
+Created:
+
+- None
+
+Modified:
+
+- `engine/narration_source.py`
+- `engine/narration_pipeline.py`
+- `test_narration_source.py`
+- `test_narration_pipeline.py`
+
+## Verification Results
+
+- `test_narration_source.py`: passed
+- `test_narration_pipeline.py`: passed
+- `test_narration_prompt.py`: passed
+- `test_narration_request.py`: passed
+- `test_narration_output.py`: passed
+- `test_narration_context.py`: passed
+- `test_history_context.py`: passed
+- `test_history_query.py`: passed
+- `test_save_load.py`: passed
+- `-m json.tool docs/current_sprint.json`: passed
+- Parsed YAML/JSON deep comparison: passed
+- Scripted `play_game.main()` smoke through `narration preview look around` and `quit`: passed
+- `play_game.py`: rendered the opening scene and then hit expected `EOFError` in the non-interactive session
+
+Sprint 9.13 is complete and closed out. No following sprint has been started.
 
 ## Non-Goals
 
 - Do not call an AI model.
-- Do not generate final AI narration.
-- Do not replace existing gameplay output with AI narration.
-- Do not implement a full natural-language hallucination detector.
-- Do not implement semantic prose analysis.
-- Do not implement embeddings.
-- Do not implement world evolution.
-- Do not implement pressures or pressure drift.
-- Do not implement rumors.
-- Do not implement actor knowledge.
-- Do not implement autonomous NPC behavior.
-- Do not implement schedules.
-- Do not implement evidence detection.
-- Do not implement consequence selection.
-- Do not implement opportunity surfacing.
-- Do not implement procedural quests.
-- Do not implement combat.
-- Do not implement inventory, equipment, clothing, exposure, fatigue, or condition systems.
-- Do not pass full durable history into narration output validation.
-- Do not allow narration output to mutate world state.
-- Do not allow narration output to create durable facts.
-- Do not begin Sprint 9.9.
+- Do not add an external API, SDK, or network dependency.
+- Do not add provider implementations, provider selection, a provider registry, or a plugin framework.
+- Do not add provider-specific request or response payloads.
+- Do not add API keys, secrets, environment-variable loading, model configuration, or provider configuration.
+- Do not add prompt rendering for a specific provider.
+- Do not add model names, temperature, top-p, seed, token settings, token budgets, context-window management, or cost tracking.
+- Do not add retries, timeouts, streaming, asynchronous execution, fallback providers, or caching.
+- Do not generate prose from narration context, request data, or prompt data.
+- Do not change the fixed sample prose.
+- Do not replace normal gameplay narration.
+- Do not persist narration artifacts.
+- Do not treat a validated source envelope, source metadata, candidate prose, or preview text as world truth.
+- Do not add semantic hallucination detection, lore verification, embeddings, relevance scoring, or prose fact extraction.
+- Do not broaden narration context or pass full durable history to the prompt or source.
+- Do not add a new player-facing source-result inspection command.
+- Do not implement world evolution, pressures, rumors, actor knowledge, schedules, evidence, consequences, opportunities, quests, combat, inventory, conditions, or travel execution.
+- Do not add or repair dependency-management files or development-environment documentation unless an implementation blocker is discovered and reported first.
+- Do not refactor unrelated systems.
+- Do not define or begin a following sprint.
 
-## Closeout
+## Closeout Requirement
 
-Sprint 9.8 is complete.
+Closeout has been completed for Sprint 9.13. The canonical current-sprint manifests record the sprint as complete, the actual files and verification results are recorded, and no following sprint has been defined or started.
 
-Official `.venv` verification passed.
+## Closeout State
 
-Bundled Python was not used.
+Sprint 9.13 is complete and closed out.
 
-Sprint 9.9 has not started.
+## Codex Task Routing
 
-`docs/architecture.md` and `docs/decisions.md` record the narration output contract and ADR-028.
+### Run 1 - Setup / Staging
 
-`docs/sprint_log.md`, `docs/current_sprint.yaml`, `docs/current_sprint.json`, and `docs/next_chat_handoff.md` were updated to reflect completion.
+Recommended: **mini or lighter model with low reasoning**
+
+Promote the four Sprint 9.13 numbered staging files into the canonical docs paths. Confirm the Markdown, YAML, and JSON sprint definitions materially agree. Parse the canonical JSON and YAML with the official project runtime and confirm exact deep agreement on keys, nesting, data types, ordered lists, values, and complete structure. Validate docs/current_sprint.json, confirm all four canonical files exist, delete only the temporary Sprint 9.13 staging files after successful promotion and validation, then stop. Do not modify application code or tests and do not begin implementation.
+
+### Run 2 - Bounded Sprint Implementation
+
+Recommended: **standard Codex with medium reasoning**
+
+Perform Startup Review, implement only Sprint 9.13, update the focused source and pipeline tests, run every documented official .venv verification command, report results, then stop. Do not perform closeout and do not begin another sprint.
+
+### Run 3 - Closeout Documentation
+
+Recommended: **mini or lighter model with low reasoning**
+
+Only after implementation verification passes, update architecture documentation, add ADR-033, update the sprint log, record actual files and verification results, mark all canonical Sprint 9.13 manifests complete, update the compact handoff, validate JSON, deep-compare parsed YAML and JSON, confirm no following sprint has started, then stop. Do not add features.
+
+### Run 4 - Debugging If Needed
+
+Recommended: **high reasoning only after a focused medium-reasoning pass fails**
+
+Use only for an unclear verification failure involving source-result exact-shape validation, prompt correspondence, raw-payload sanitization, candidate-stage separation, copy safety, or state isolation. Keep investigation within Sprint 9.13 scope.

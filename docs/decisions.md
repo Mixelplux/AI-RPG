@@ -331,3 +331,93 @@ This decision preserves the existing rule: the narrator can describe, and the en
 The contract does not attempt to fully prove whether freeform prose contains invented details. Freeform narration drift is controlled by context limits, prompt rules, output contract structure, and later review or validation layers. If the context contains a blizzard, narration may describe cold weather, but should not mention gloves unless gloves are present in context.
 
 This decision does not introduce AI model calls, final AI narration generation, replacement of existing gameplay output, semantic prose analysis, embeddings, world evolution, equipment, clothing, exposure, fatigue, condition systems, or durable facts created by narration output.
+
+---
+
+## ADR-029
+
+**Title:** Narration Must Be Validated Before Display
+
+**Status:** Accepted
+
+Sprint 9.9 introduces a deterministic narration pipeline stub that sits between narration context and preview display.
+
+The pipeline must take a copied narration context packet, supply a fixed prose-only sample, validate that candidate through the narration output contract, and return a preview packet whose display text is copied only from validated narration output. The pipeline does not generate prose from player input or world data, does not call an AI model, does not persist narration, and does not replace gameplay narration.
+
+The preview path is intentionally narrow and deterministic. It proves that the context boundary and output contract can be sequenced safely before any provider integration exists. The previewed text remains presentational only and does not become world truth, create history, advance time, or mutate the simulation.
+
+This decision does not introduce model providers, prompts, general narration generation, semantic prose analysis, embeddings, state persistence for narration, or any mechanism that treats preview text as simulation authority.
+
+---
+
+## ADR-030
+
+**Title:** Narration Candidate Sources Are Untrusted and Fail Closed
+
+**Status:** Accepted
+
+Candidate-producing components are not simulation authorities. They receive narration context, produce untrusted source output, and may not bypass narration-output validation.
+
+Only narration accepted by the existing output validator may enter preview display text. Malformed output, invalid candidates, and source failures produce no display text and fail closed.
+
+Narration-source failure does not alter simulation state, advance time, create history, persist narration, or interrupt normal deterministic gameplay.
+
+This decision does not introduce AI providers, prompts, retries, streaming, persistence, or semantic hallucination detection.
+
+---
+
+## ADR-031
+
+**Title:** Narration Requests Are Bounded, Deterministic, and Provider-Neutral
+
+**Status:** Accepted
+
+Narration sources receive a versioned, copy-safe request packet made only from the already bounded narration context and stable contract metadata.
+
+The request contains machine-readable constraints, but no provider-specific system messages, user messages, credentials, or payload formats. It grants no simulation authority.
+
+Request construction and validation fail closed. Request construction and preview do not mutate state, advance time, create history, alter history identifiers, or persist narration artifacts.
+
+This decision does not introduce an AI model, provider SDK, external service, or prompt system.
+
+---
+
+## ADR-032
+
+**Title:** Narration Prompts Are Deterministic Provider-Neutral Contracts
+
+**Status:** Accepted
+
+Narration prompt construction is a distinct validated contract boundary between the narration request packet and the untrusted candidate source.
+
+Prompt packets are built only from validated bounded requests. They are deterministic, copy-safe, and provider-neutral. Candidate sources receive prompt packets rather than raw simulation data or raw narration context. Prompt packets carry no simulation authority and do not expose provider-specific payload formats, model settings, credentials, or environment configuration.
+
+Prompt construction and validation fail closed. Prompt and source failures produce empty display text, and candidate prose remains untrusted until the existing narration-output contract accepts it.
+
+This decision keeps the engine contract provider-neutral without introducing provider payload formats, provider selection, retries, streaming, caching, or an AI model call.
+
+**Alternatives Considered**
+
+- Keep the request packet as the final pre-source boundary. Rejected because the next contract layer needed a distinct prompt representation without expanding source authority.
+- Allow provider-specific message payloads in the engine contract. Rejected because it would couple the engine to one provider shape and weaken the deterministic boundary.
+- Defer prompt validation until after the source. Rejected because source invocation must stay behind a validated prompt boundary and fail closed before any untrusted output is treated as meaningful.
+
+---
+
+## ADR-033
+
+**Title:** Narration Source Results Are Untrusted Until Strictly Validated
+
+**Status:** Accepted
+
+Every narration source-result envelope is untrusted until the engine validates it against the supported strict source-result contract.
+
+The pipeline validates the exact supported schema, version, source identity, echoed prompt, candidate object, and metadata immediately after source invocation. The echoed prompt must match the originating validated narration prompt. Unsupported, malformed, or mismatched source results fail closed. Raw invalid source payloads are not copied into preview packets or diagnostic inspection fields.
+
+Valid source-result structure does not validate candidate prose. The candidate must still pass independently through the narration-output contract before display. Source-result validation has no simulation authority and creates no durable facts.
+
+**Alternatives Considered**
+
+- Continue partial validation inside candidate extraction. Rejected because it leaves the envelope boundary porous and lets malformed source results reach preview inspection data.
+- Copy malformed source results into diagnostic packets. Rejected because raw invalid source payloads should not be surfaced in preview paths.
+- Treat a structurally valid source result as implicitly validating its candidate. Rejected because envelope validity and prose validity are separate contracts.

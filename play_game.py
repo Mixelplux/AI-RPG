@@ -37,6 +37,7 @@ def print_help() -> None:
     print("- narration context <player input>: Show narration context.")
     print("- narration output: Inspect the narration output contract.")
     print("- narration output invalid: Check a rejected mutation sample.")
+    print("- narration preview <player input>: Show a fixed narration preview.")
     print("- wait: Let 1 hour pass.")
     print("- check <name>: Run a deterministic skill check.")
     print("- head to <place>: Identify a known destination without traveling.")
@@ -171,6 +172,22 @@ def print_narration_output_contract(
         print(f"reason: {validation_error}")
 
 
+def print_narration_preview(packet: dict) -> None:
+    print("\n=== NARRATION PREVIEW ===")
+    print(f"schema: {packet['schema']}")
+    print(f"version: {packet['version']}")
+    print(f"accepted: {packet['accepted']}")
+    print(f"source: {packet['source']}")
+    print(f"display text: {packet['display_text']}")
+    print(
+        "context history entries: "
+        f"{len(packet['narration_context']['history_context']['history_entries'])}"
+    )
+
+    if packet.get("error"):
+        print(f"error: {packet['error']}")
+
+
 def parse_narration_output_command(player_input: str) -> dict:
     normalized_input = player_input.strip().lower()
 
@@ -182,6 +199,25 @@ def parse_narration_output_command(player_input: str) -> dict:
 
     return {
         "error": "Usage: narration output or narration output invalid."
+    }
+
+
+def parse_narration_preview_command(player_input: str) -> dict:
+    prefix = "narration preview"
+    stripped_input = player_input.strip()
+
+    if stripped_input.lower() == prefix:
+        return {
+            "error": "Usage: narration preview <player input>."
+        }
+
+    if not stripped_input.lower().startswith(f"{prefix} "):
+        return {
+            "error": "Usage: narration preview <player input>."
+        }
+
+    return {
+        "player_input": stripped_input[len(prefix):].strip()
     }
 
 
@@ -425,7 +461,26 @@ def main() -> None:
                     print_narration_output_contract(
                         contract,
                         validation_error=str(error)
-                    )
+            )
+            continue
+
+        if normalized_input == "narration preview" or normalized_input.startswith(
+            "narration preview "
+        ):
+            narration_preview_query = parse_narration_preview_command(
+                player_input
+            )
+
+            if narration_preview_query.get("error"):
+                print()
+                print(narration_preview_query["error"])
+                continue
+
+            print_narration_preview(
+                engine.get_narration_preview(
+                    narration_preview_query["player_input"]
+                )
+            )
             continue
 
         interaction_result = engine.process_command(player_input)

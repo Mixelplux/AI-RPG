@@ -1,6 +1,6 @@
 # Architecture
 
-Version: 0.9.8
+Version: 0.9.12
 
 ## Current Engine Pipeline
 
@@ -82,6 +82,10 @@ Major feature systems such as combat, companions, economy, and faction warfare a
 - Bounded history context packet
 - Narration context boundary
 - Narration output contract
+- Narration pipeline stub
+- Deterministic narration candidate-source boundary
+- Deterministic narration request packet contract
+- Deterministic narration prompt packet contract
 - Deterministic structured skill checks
 - Structured skill-check command routing
 - Scene-bound target resolution
@@ -154,6 +158,88 @@ Narration output is presentational prose only. It is not accepted world truth, n
 
 This contract is structural rather than semantic. It does not attempt to fully prove whether freeform narration contains invented details. Freeform narration drift is controlled by context limits, prompt rules, this output contract, and later review or validation layers. For example, narration may describe a blizzard if the context contains a blizzard, but should not mention gloves unless gloves are present in context. Narration output may be shown later, but it is not accepted world truth.
 
+`GameEngine.get_narration_preview(...)` exposes a deterministic narration pipeline stub that sequences the narration context and narration output boundaries through a fixed sample candidate. Sprint 9.9 packet shape is:
+
+- `schema`: `ai_rpg.narration_pipeline_packet`
+- `version`: `1`
+- `accepted`: whether the fixed sample candidate validated successfully
+- `source`: `fixed_sample_prose`
+- `narration_context`: a copied narration context packet
+- `candidate`: the fixed candidate that was validated
+- `validated_output`: the validated narration output packet when accepted
+- `display_text`: validated text copied from the narration output contract
+
+The pipeline stub consumes narration context, supplies fixed sample prose only, validates that prose through the narration output contract, and returns a dedicated preview/display packet. It does not generate prose from player input or world data, does not call an AI model, does not replace gameplay narration, and does not persist narration output. The preview display is a copy-safe stub boundary, not a narration authority. If the fixed candidate is rejected, the packet reports the failure before any display text is returned.
+
+The preview command may display the validated fixed sample text, but the displayed text is not accepted world truth. It remains presentational only and does not create history, advance time, mutate state, or alter saved data.
+
+`GameEngine.get_narration_preview(...)` now routes candidate production through a deterministic narration candidate-source boundary. Sprint 9.10 packet shape is:
+
+- `schema`: `ai_rpg.narration_pipeline_packet`
+- `version`: `1`
+- `accepted`: whether the candidate source produced a valid candidate and the output validator accepted it
+- `source`: `fixed_sample_prose`
+- `narration_context`: a copied narration context packet passed to the source
+- `source_result`: the untrusted source result copied from the candidate boundary
+- `candidate`: the untrusted narration-output candidate copied from the source result
+- `validated_output`: the validated narration output packet when accepted
+- `display_text`: validated text copied from the narration output contract, or empty text on failure
+- `failure_stage`: bounded failure category when the source or validation fails
+- `error`: bounded diagnostic text when the source or validation fails
+
+The candidate source receives narration context rather than mutable world state. Source output is untrusted and must pass through `validate_narration_output_packet(...)` before any display text is returned. Raw source text is never displayed directly. If the source raises, returns a malformed result, or produces an invalid candidate, the pipeline fails closed with empty display text.
+
+Failed candidate production does not mutate state, advance time, create history, persist narration, or interrupt normal deterministic gameplay. The deterministic fixed-sample source remains the only implemented source. No AI provider, prompt system, or external service exists yet.
+
+`GameEngine.get_narration_preview(...)` now also routes the fixed source through a deterministic narration request packet. Sprint 9.11 packet shape is:
+
+- `schema`: `ai_rpg.narration_request_packet`
+- `version`: `1`
+- `mode`: `preview`
+- `narration_context`: a copied narration context packet
+- `expected_output`: the expected narration-output schema/version and output contract metadata
+- `constraints`: stable machine-readable narration constraints
+
+The request packet is provider-neutral, read-only, and copy-safe. It is built only from the already bounded narration context and fixed contract metadata. It contains no provider-specific system messages, user messages, credentials, or payload formats, and it grants no simulation authority. The pipeline validates request structure before invoking the source, then validates the returned candidate through the existing output contract before display. Request-construction or request-validation failure fails closed with empty display text. The request does not access mutable world state directly, does not add full durable history, and does not persist requests or source results.
+
+`GameEngine.get_narration_preview(...)` now also routes the validated request through a deterministic narration prompt packet before the fixed source. Sprint 9.12 packet shape is:
+
+- `schema`: `ai_rpg.narration_prompt_packet`
+- `version`: `1`
+- `mode`: `preview`
+- `originating_request`: the validated narration-request packet schema, version, and mode
+- `expected_output`: the expected narration-output schema/version and prose-only format guidance
+- `instructions`: provider-neutral narration rules that preserve simulation authority, prose-only output, and fail-closed behavior
+- `deterministic_input`: a copy-safe deterministic representation of the bounded narration request input
+
+The prompt packet sits between the validated narration request and the untrusted fixed source. It is constructed only from the validated request packet, remains copy-safe, and preserves deterministic request data without retaining live mutable references. Prompt validation occurs before source invocation. The fixed source receives the prompt packet rather than raw context, raw world state, or raw request data. The source remains deterministic and continues returning only the existing sample prose.
+
+Prompt construction or validation failure fails closed with empty display text. The source output still passes through `validate_narration_output_packet(...)` before display, so prompt failure and source failure remain distinct from output validation. The preview sequence is therefore:
+
+1. Build bounded narration context.
+2. Build and validate the narration request packet.
+3. Build and validate the narration prompt packet.
+4. Pass the prompt packet to the fixed candidate source.
+5. Validate the returned candidate through the narration-output contract.
+6. Expose display text only after successful validation.
+
+The prompt packet does not introduce simulation authority, persistence, provider integration, model settings, retries, streaming, or raw world-state access. If the prompt or source path fails, display text stays empty and the preview remains non-authoritative.
+
+`GameEngine.get_narration_preview(...)` now also routes the validated prompt through a strict narration source-result validation boundary before candidate extraction. Sprint 9.13 packet shape is:
+
+- `schema`: `ai_rpg.narration_source_result`
+- `version`: `1`
+- `source`: `fixed_sample_prose`
+- `source_prompt`: the validated narration-prompt packet that was supplied to the source
+- `candidate`: the untrusted narration-output candidate copied from the validated source result
+- `metadata`: exact fixed metadata containing `candidate_trust: untrusted` and `generation: fixed_sample_only`
+
+The source-result envelope is untrusted until it passes strict validation immediately after source invocation. Validation accepts only the documented top-level fields, rejects unsupported extras, requires the source prompt to validate and match the originating validated prompt, and enforces exact metadata values. Validation returns a deep copy so callers cannot mutate the supplied source result or originating prompt through the validated packet.
+
+Candidate extraction occurs only from the validated source-result packet. That means the pipeline first validates the complete source-result envelope, then extracts the candidate, and only then validates candidate prose through the existing narration-output contract. Source-result validation failure is distinct from candidate-output validation failure.
+
+Failed source-result validation uses a bounded `source_result_validation` stage, returns empty display text, and does not copy malformed raw source payloads into preview inspection fields. Raw invalid candidate prose is not copied into source-result-validation failures. The fixed source remains deterministic and still returns only `The street remains quiet.` The source-result boundary does not add simulation authority, durable facts, provider integration, or world-state mutation.
+
 `world_state.time` can be advanced by an explicit simulation-owned operation. Sprint 9.2 supports a narrow fixed-duration `wait` command that increments durable elapsed time by one hour and records the previous and new time in history. This operation does not trigger world evolution, pressures, schedules, travel duration, recovery, decay, escalation, opportunity loss, or autonomous NPC behavior.
 
 ## Session Lifecycle
@@ -180,6 +266,12 @@ Sprint 9.6 adds a narrow `history context` review path for the bounded history c
 Sprint 9.7 adds a narrow `narration context <player input>` review path for the narration context packet. Front ends may inspect the packet for debugging, but they must not treat it as final narration, create durable facts from atmospheric prose, call an AI model, validate generated narration, add equipment or exposure mechanics, or trigger world evolution.
 
 Sprint 9.8 adds a narrow `narration output` review path for the narration output contract and fixed sample validation. Front ends may inspect the contract or confirm that a structured mutation sample is rejected, but they must not call an AI model, generate final AI narration, replace existing gameplay output with narration output, create durable facts from prose, implement semantic prose analysis, or trigger world evolution.
+
+Sprint 9.9 adds a narrow `narration preview <player input>` review path for the deterministic narration pipeline stub. Front ends may inspect the preview packet or display the fixed sample prose returned by the pipeline, but they must not treat it as generated narration, introduce provider integration, persist narration, or trigger world evolution.
+
+Sprint 9.10 adds a deterministic narration candidate-source boundary beneath the preview path. Front ends may still inspect the preview packet or display the validated fixed sample prose, but source output is now treated as untrusted until the existing narration output contract accepts it. Source failures, malformed results, and invalid candidates fail closed without display text, state mutation, history creation, or time advancement.
+
+Sprint 9.11 adds a deterministic narration request packet between narration context and the candidate source. Front ends may still inspect the preview packet or display the validated fixed sample prose, but the candidate source now receives the request packet rather than raw narration context. Request-construction and request-validation failures fail closed without display text, state mutation, history creation, or time advancement.
 
 ## Skills
 

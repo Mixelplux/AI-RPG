@@ -26,7 +26,14 @@ Stop if current_sprint.md does not contain:
 - Expected Files
 - Acceptance Criteria
 - Verification
-Also confirm the canonical current-sprint JSON and YAML manifests both parse successfully, represent the same data types, contain the same keys and nesting, preserve equivalent ordered list values, and deeply agree after parsing.
+
+## Manifest Consistency Gate
+Before implementation and before closeout:
+- Confirm `docs/current_sprint.json` is valid JSON.
+- Confirm `docs/current_sprint.yaml` is valid YAML.
+- Parse both machine-readable manifests and confirm their nested structures deeply agree.
+- Treat a JSON/YAML structural mismatch as a blocker.
+- Do not rely on visual similarity or JSON validation alone.
 
 ## Verification
 Treat application failures and tooling/runtime failures differently.
@@ -34,6 +41,3 @@ Treat application failures and tooling/runtime failures differently.
 Application failures block the sprint.
 
 If the only blocker is Codex's inability to execute the project's local runtime, request manual verification from the user. A successful manual verification is sufficient for sprint closeout.
-
-## Closeout
-Before marking a sprint complete, confirm the canonical current-sprint JSON and YAML manifests both parse successfully, represent the same data types, contain the same keys and nesting, preserve equivalent ordered list values, and deeply agree after parsing. JSON syntax validation alone is not sufficient.

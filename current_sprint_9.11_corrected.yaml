@@ -1,0 +1,191 @@
+sprint: '9.11'
+status: complete
+title: Deterministic Narration Request Packet Contract
+goal: Introduce a deterministic, versioned, provider-neutral narration request packet between narration
+  context construction and the untrusted narration candidate-source boundary. The request packet must
+  remain read-only, copy-safe, preview-only, and limited to the existing bounded narration context plus
+  explicit machine-readable narration constraints. It must not call an AI model or external service.
+design_intent: Sprint 9.10 isolated candidate production behind an untrusted, fail-closed source boundary.
+  Sprint 9.11 defines the exact deterministic input contract that a future provider-backed source may
+  consume without receiving direct world-state access or provider-specific payloads. The pipeline builds
+  the existing narration context, converts it into a versioned request packet, passes a copy-safe request
+  to the fixed candidate source, validates the returned candidate through the existing narration output
+  contract, and exposes display text only after successful validation. The fixed source continues returning
+  only the existing sample prose and does not generate prose from the request.
+architectural_decision:
+  adr: ADR-031
+  title: Narration Requests Are Bounded, Deterministic, and Provider-Neutral
+  policy: Narration sources receive a versioned request packet rather than direct world-state access or
+    an unrestricted narration context object. The request contains only a copy-safe snapshot of the already
+    bounded narration context, preview-mode metadata, expected output-contract metadata, and stable machine-readable
+    constraints. It contains no provider-specific message format, credentials, mutable references, or
+    simulation authority. Request construction or validation failure must fail closed and must not affect
+    normal deterministic gameplay.
+expected_files:
+  likely_created:
+  - engine/narration_request.py
+  - test_narration_request.py
+  likely_modified:
+  - engine/narration_source.py
+  - engine/narration_pipeline.py
+  - test_narration_source.py
+  - test_narration_pipeline.py
+  - docs/architecture.md
+  - docs/decisions.md
+  - docs/sprint_log.md
+  - docs/current_sprint.md
+  - docs/current_sprint.yaml
+  - docs/current_sprint.json
+  - docs/next_chat_handoff.md
+  possibly_modified: []
+actual_files:
+  created:
+  - engine/narration_request.py
+  - test_narration_request.py
+  modified:
+  - engine/narration_source.py
+  - engine/narration_pipeline.py
+  - test_narration_source.py
+  - test_narration_pipeline.py
+  - docs/architecture.md
+  - docs/decisions.md
+  - docs/sprint_log.md
+  - docs/current_sprint.md
+  - docs/current_sprint.yaml
+  - docs/current_sprint.json
+  - docs/next_chat_handoff.md
+acceptance_criteria:
+- A dedicated narration-request module exists.
+- The narration-request packet has explicit schema and version metadata.
+- The packet identifies preview mode explicitly.
+- The packet identifies the expected narration-output schema and version without embedding provider-specific
+  payloads.
+- The packet contains stable machine-readable narration constraints rather than provider-specific system
+  or user messages.
+- The constraints preserve the rule that narration may describe but may not decide simulation truth.
+- The constraints require prose-only candidate output.
+- The constraints forbid state mutation, time advancement, history creation, and persistence claims.
+- The request is built only from the existing narration context packet and fixed contract metadata.
+- The request does not access world state directly.
+- The request does not broaden narration context or add full durable history.
+- The request builder does not mutate the supplied narration context.
+- The request packet does not expose live mutable references from the supplied narration context.
+- Returned request packets are copy-safe.
+- Repeated construction from equivalent narration context produces equivalent request packets.
+- The request builder validates required context shape or otherwise rejects malformed input deterministically.
+- Malformed narration context cannot produce a source-visible request packet.
+- The narration pipeline constructs a narration request after context construction and before candidate-source
+  invocation.
+- The candidate source receives the narration request packet rather than the raw narration context packet.
+- The fixed candidate source remains deterministic.
+- The fixed candidate source continues returning only the existing fixed sample prose.
+- The fixed candidate source does not generate prose from player input, scene data, history, request constraints,
+  or world state.
+- The candidate returned by the source still passes through validate_narration_output_packet(...) before
+  display.
+- Request-construction failure fails closed with unsuccessful preview output and empty display text.
+- Malformed request handling fails closed.
+- Source exceptions, malformed source results, and invalid candidates continue to fail closed.
+- Failure diagnostics remain bounded and do not copy raw unvalidated prose into display text.
+- GameEngine.get_narration_preview(...) remains the gameplay-facing preview entry point.
+- Existing CLI syntax narration preview <player input> remains supported.
+- Existing CLI behavior for narration context and narration output remains supported.
+- Normal gameplay output is not replaced or altered.
+- Narration request construction and preview do not mutate world state.
+- Narration request construction and preview do not advance time.
+- Narration request construction and preview do not create history or alter existing history identifiers.
+- Narration requests, source results, candidates, and preview text are not persisted.
+- No AI model, external service, provider SDK, or network call is used.
+- Existing narration context and narration output contracts remain materially unchanged.
+- Existing history context, history query, identity, and save/load behavior remain unchanged.
+- Documentation describes the bounded provider-neutral narration request boundary.
+- ADR-031 is added during closeout.
+- Sprint 9.11 is marked complete only after all documented verification passes.
+- Sprint 9.12 is not started.
+verification:
+  primary_commands:
+  - .\.venv\Scripts\python.exe test_narration_request.py
+  - .\.venv\Scripts\python.exe test_narration_source.py
+  - .\.venv\Scripts\python.exe test_narration_pipeline.py
+  - .\.venv\Scripts\python.exe test_narration_output.py
+  - .\.venv\Scripts\python.exe test_narration_context.py
+  - .\.venv\Scripts\python.exe test_history_context.py
+  - .\.venv\Scripts\python.exe test_history_query.py
+  - .\.venv\Scripts\python.exe test_save_load.py
+  startup_command: .\.venv\Scripts\python.exe play_game.py
+  regression_commands:
+  - .\.venv\Scripts\python.exe -m json.tool docs/current_sprint.json
+  manual_or_scripted_steps:
+  - Confirm narration context <player input> still works.
+  - Confirm narration output still works.
+  - Confirm narration preview <player input> still displays the validated fixed sample.
+  - Repeat the same preview and confirm deterministic output.
+  - Confirm preview does not alter time, history, scene state, or saved state.
+  - Confirm normal gameplay output remains unchanged.
+  - Run a scripted play_game.main() flow through narration preview and quit if supported.
+  - Cover request copy safety, malformed context, malformed request, request-construction failure, source
+    exception, malformed source result, and invalid candidate behavior automatically rather than adding
+    player-facing failure commands.
+  verification_results:
+  - 'test_narration_request.py: passed'
+  - 'test_narration_source.py: passed'
+  - 'test_narration_pipeline.py: passed'
+  - 'test_narration_output.py: passed'
+  - 'test_narration_context.py: passed'
+  - 'test_history_context.py: passed'
+  - 'test_history_query.py: passed'
+  - 'test_save_load.py: passed'
+  - '-m json.tool docs/current_sprint.json: passed'
+  - 'play_game.py: rendered the opening scene and then hit EOF in the non-interactive session'
+  - 'scripted play_game.main() smoke: passed'
+non_goals:
+- Do not call an AI model.
+- Do not add an external API, SDK, or network dependency.
+- Do not add model-provider implementations, provider selection, a provider registry, or a plugin framework.
+- Do not add API keys, secrets, environment-variable loading, or provider configuration.
+- Do not add model-ready natural-language prompt templates, system messages, user messages, chat-completion
+  payloads, or provider-specific serialization.
+- Do not add tokenization, token budgets, context-window management, cost tracking, or model parameters.
+- Do not generate prose from narration context or narration request data.
+- Do not add retries, timeouts, streaming, asynchronous execution, fallback providers, or caching.
+- Do not replace normal gameplay narration.
+- Do not persist narration requests, source results, candidates, or output.
+- Do not treat request metadata, source metadata, or prose as world truth.
+- Do not create history or world-state mutations from narration.
+- Do not add semantic hallucination detection or lore verification.
+- Do not broaden narration context or pass full durable history to the request or source.
+- Do not add a new player-facing narration request command unless required to satisfy an already documented
+  repository convention discovered during Startup Review; report that need before expanding scope.
+- Do not implement world evolution, pressures, rumors, actor knowledge, schedules, evidence, consequences,
+  opportunities, quests, combat, inventory, conditions, or travel execution.
+- Do not refactor unrelated systems.
+- Do not begin Sprint 9.12.
+closeout_state: complete
+current_sprint_status: Sprint 9.11 complete
+codex_task_routing:
+- run: 1
+  task_type: Setup / staging
+  recommended_model: mini or lighter model with low reasoning
+  instructions: Promote the four Sprint 9.11 numbered staging files into the canonical docs paths, confirm
+    the Markdown, YAML, and JSON manifests materially agree, validate docs/current_sprint.json, confirm
+    all four canonical files exist, delete only the temporary Sprint 9.11 staging files after successful
+    promotion and validation, then stop. Do not implement sprint code.
+- run: 2
+  task_type: Bounded sprint implementation
+  recommended_model: standard Codex with medium reasoning
+  instructions: Perform Startup Review, implement only Sprint 9.11, add focused tests, run every documented
+    official .venv verification command, report results, then stop. Do not perform closeout and do not
+    begin Sprint 9.12.
+- run: 3
+  task_type: Closeout documentation
+  recommended_model: mini or lighter model with low reasoning
+  instructions: Only after implementation verification passes, update architecture documentation, add
+    ADR-031, update the sprint log, mark all canonical Sprint 9.11 manifests complete, update the compact
+    handoff, remove or update stale active-run wording as appropriate, validate docs/current_sprint.json,
+    confirm Sprint 9.12 has not started, then stop. Do not add features.
+- run: 4
+  task_type: Debugging / architecture investigation if needed
+  recommended_model: high reasoning only if a focused medium-reasoning pass cannot resolve the failure
+  instructions: Use only for an unclear verification failure involving request copy safety, context-to-request
+    sequencing, source invocation, output validation, or state isolation. Keep investigation within Sprint
+    9.11 scope.
