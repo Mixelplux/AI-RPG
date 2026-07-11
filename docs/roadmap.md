@@ -76,7 +76,7 @@ The playable vertical-slice review is complete. It confirmed that movement and w
 
 Phase 2B has begun with **Persistent Resolved Conversation Memory** complete as Sprint 10.1.
 
-Persistent scoped pressures or unresolved threads remain the next likely capability after Sprint 10.1.
+The architecture and scope review selected persistent scoped pressure representation as Sprint 10.2. Sprint 10.2 is defined and staged but implementation has not started.
 
 Real AI provider integration remains deferred. It is not required for the next simulation capabilities and should not lead the roadmap merely because the provider-neutral narration boundary exists.
 
@@ -98,10 +98,14 @@ This sequence is directional, not a sprint commitment. The playable vertical-sli
    - Complete in Sprint 10.1.
    - The world records that a resolved conversation occurred without inventing dialogue or changing unrelated state.
 
-2. **Persistent scoped pressures or unresolved threads**
-   - The world can store an ongoing condition with identity, scope, state, and provenance.
-   - Initial implementation should be representational and persistent only.
+2. **Persistent scoped pressure representation**
+   - Defined as Sprint 10.2; implementation not started.
+   - The world can store a pressure with identity, region or location scope, bounded level, and Region Pack provenance.
+   - Initial seeds use the exact optional top-level Region Pack field `initial_pressures`; provenance identifies the containing `region_id`.
+   - Canonical runtime state requires `pressures`; version-1 legacy saves receive load-only empty normalization rather than retroactive seeding.
+   - Initial implementation is representational, persistent, validated, and read-only through exact `GameEngine` methods plus the required `pressures` inspection command.
    - No global simulation sweep or AI-generated pressure creation.
+   - Unresolved threads remain a distinct future concept rather than part of a generic combined abstraction.
 
 3. **Explicit pressure change operation**
    - One deterministic engine-owned operation changes one pressure.

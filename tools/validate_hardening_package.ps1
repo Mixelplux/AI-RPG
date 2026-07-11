@@ -151,11 +151,11 @@ if ($script:Failures.Count -eq 0) {
         Add-Failure "Manifest must declare sprint_count 1 and mode single-sprint."
     }
 
-    if ($jsonManifest.sprint.type -eq "bounded-maintenance") {
-        Add-Pass "Sprint is bounded maintenance."
+    if (@("bounded-maintenance", "bounded-feature") -contains $jsonManifest.sprint.type) {
+        Add-Pass "Sprint type is bounded."
     }
     else {
-        Add-Failure "Sprint type must be bounded-maintenance."
+        Add-Failure "Sprint type must be bounded-maintenance or bounded-feature."
     }
 
     $expectedInterpreter = ".\.venv\Scripts\python.exe"
@@ -197,14 +197,19 @@ if ($script:Failures.Count -eq 0) {
         Add-Failure "next_sprint must be null for this one-sprint package."
     }
 
-    foreach ($deliverable in @($jsonManifest.sprint.deliverables)) {
-        $deliverablePath = Join-Path $root $deliverable.path
-        if (Test-Path -LiteralPath $deliverablePath -PathType Leaf) {
-            Add-Pass "Found deliverable $($deliverable.path)."
+    if ($jsonManifest.sprint.id -eq "ENV-HARDENING-001") {
+        foreach ($deliverable in @($jsonManifest.sprint.deliverables)) {
+            $deliverablePath = Join-Path $root $deliverable.path
+            if (Test-Path -LiteralPath $deliverablePath -PathType Leaf) {
+                Add-Pass "Found deliverable $($deliverable.path)."
+            }
+            else {
+                Add-Failure "Missing deliverable $($deliverable.path)."
+            }
         }
-        else {
-            Add-Failure "Missing deliverable $($deliverable.path)."
-        }
+    }
+    else {
+        Add-Pass "Hardening deliverable checks are not applicable to this product sprint."
     }
 }
 

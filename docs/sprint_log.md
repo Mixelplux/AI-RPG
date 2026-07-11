@@ -1,5 +1,22 @@
 # Sprint Log
 
+## Sprint 10.2 Planning and Staging
+
+- Status: Defined and staged; implementation not started.
+- Selected capability: Persistent Scoped Pressure Representation.
+- Architecture review: Complete; pressure representation was selected over unresolved-thread representation or a combined generic abstraction.
+- Ownership decision: current pressure state belongs in `world_state`; Region Packs provide immutable new-game seeds only.
+- Persistence decision: loaded games retain persisted pressure state; legacy saves without pressures normalize to an empty collection and are not retroactively seeded.
+- Boundary: representation, validation, persistence, and read-only copy-safe inspection only.
+- Contract clarification: Region Pack seeds use the exact optional top-level `initial_pressures` list, and Region Pack provenance must match the containing `region_id`.
+- Facade clarification: exact methods are `GameEngine.get_pressures()` and `GameEngine.get_pressure(pressure_id)`, with defensive deep copies and `None` for unknown IDs.
+- CLI clarification: `pressures` is required and routes only through `GameEngine.get_pressures()`.
+- Legacy clarification: canonical runtime state requires `pressures`; copied version-1 legacy saves missing the field normalize to empty during loading only, while malformed present values fail validation.
+- Added ADR-036: Scoped Pressures Are Persistent Current State.
+- Canonical Sprint 10.2 Markdown, YAML, JSON, and handoff files staged and synchronized.
+- Application code and tests were not modified; implementation verification was not run.
+- Sprint 10.3 was not defined or started.
+
 ## Sprint 10.1 Closeout
 - Status: Complete.
 - Files created: `test_interaction_history.py`.

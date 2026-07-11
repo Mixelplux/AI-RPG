@@ -83,11 +83,17 @@ Phase 1 established world representation. Sprint 9 completed the first Phase 2 m
 
 Sprint 9 is closed as **World Memory and Safe Narration Foundations**. It completed history and time prerequisites but did not complete World Evolution Foundations as a whole. Persistent pressures or threads, pressure change, time-based drift, runtime actor state, actor knowledge, evidence, consequences, schedules, affordances, and opportunity surfacing remain future capabilities.
 
-Sprint 10.1 closed the first Phase 2B capability: **Persistent Resolved Conversation Memory**. Phase 2B has begun, and the next likely capability remains persistent scoped pressures or unresolved threads.
+Sprint 10.1 closed the first Phase 2B capability: **Persistent Resolved Conversation Memory**. The subsequent architecture and scope review selected **Persistent Scoped Pressure Representation** as Sprint 10.2. Sprint 10.2 is defined and staged but implementation has not started.
 
 The implementation keeps the existing `GameEngine` command path intact: `Interaction Kernel -> GameEngine -> current-scene target resolution -> World Update -> world_state.history`. A successful resolved conversation becomes a durable accepted event only when the normal command path succeeds and target resolution returns a resolved entity with stable identity.
 
 Major feature systems such as combat, companions, economy simulation, faction warfare, full NPC AI, and full travel simulation remain deferred until the underlying world-evolution foundations exist.
+
+Sprint 10.2 establishes a representation-only ownership boundary. Current pressure state will belong in a persistent `world_state.pressures` dictionary keyed by stable pressure identity. `initial_pressures` is the exact optional top-level Region Pack field for immutable seeds. If present, it is a validated list of exact pressure records; Region Pack provenance must identify the containing pack's exact `region_id`. Seeds are deep-copied only during new-game construction.
+
+Canonical runtime World State always requires the pressure dictionary. During loading only, copied version-1 legacy save data missing `pressures` normalizes to an empty dictionary before strict validation and engine construction. This normalization does not modify or reapply Region Pack seeds. A present malformed pressure value fails validation, and save version 1 remains unchanged.
+
+The initial pressure contract supports region and location scopes, an integer level from 0 through 100, and Region Pack provenance. The exact read boundary is `GameEngine.get_pressures()` for the complete keyed dictionary and `GameEngine.get_pressure(pressure_id)` for one copied record or `None`. Both return defensive deep copies without state, time, history, or scene-rebuild effects. The required `pressures` CLI command routes through `get_pressures()` and never accesses durable state directly. Mutation, history of pressure changes, time drift, projection, AI creation, unresolved-thread representation, and generic ongoing-condition frameworks remain outside Sprint 10.2.
 
 ## Completed
 

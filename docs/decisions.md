@@ -470,3 +470,21 @@ The resulting history event records the occurrence and grounded target identity 
 Failed, unresolved, ambiguous, and non-actor conversation targets do not create history.
 
 Conversation history remains inside the existing durable history system and keeps the same bounded history context, narration context, persistence, and save/load ownership boundaries. Conversation does not grant narration authority.
+
+---
+
+## ADR-036
+
+**Title:** Scoped Pressures Are Persistent Current State
+
+**Status:** Accepted
+
+Current scoped pressure state is simulation-owned mutable truth and belongs in `world_state`. A pressure is not represented solely as a history event. History may later record accepted pressure changes, but history does not replace the current pressure value.
+
+Region Packs may provide immutable initial pressure seeds through the exact optional top-level field `initial_pressures`. When present it is a list of exact pressure records, and Region Pack provenance `source_id` must equal the containing pack's exact `region_id`. New-game construction validates and deep-copies those seeds into persistent `world_state.pressures`.
+
+Canonical runtime World State requires `pressures`. During loading only, a copied version-1 legacy save missing the field normalizes to an empty dictionary before strict validation and engine construction; it is not seeded from the Region Pack. A present malformed value fails validation. Save version 1 is preserved without a general migration framework.
+
+The initial persistent collection is a dictionary keyed by stable `pressure_id`. Each exact record contains pressure identity and type, a region or location scope, an integer level from 0 through 100, and Region Pack provenance. Read access is exposed exactly through copy-safe `GameEngine.get_pressures()` and `GameEngine.get_pressure(pressure_id)`, with unknown identifiers returning `None`. The required `pressures` CLI command routes through `get_pressures()` and has no direct state access or mutation authority.
+
+Sprint 10.2 is representation-only. Pressure mutation, pressure-change history, time drift, projection into scene or narration, AI-created pressures, unresolved threads, and generic ongoing-condition frameworks remain future capabilities.

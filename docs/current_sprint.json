@@ -1,4 +1,4 @@
-﻿{
+{
   "schema_version": "1.0.0",
   "document_type": "current_sprint",
   "sprint_count": 1,
@@ -7,187 +7,238 @@
     "principles": [
       "provider-neutral",
       "deterministic-core",
-      "reproducible-verification"
+      "simulation-owned-truth"
     ]
   },
   "sprint": {
-    "id": "ENV-HARDENING-001",
-    "title": "Windows Development Environment Hardening",
-    "type": "bounded-maintenance",
+    "id": "10.2",
+    "title": "Persistent Scoped Pressure Representation",
+    "phase": "Phase 2B - Reactive World State Foundations",
+    "type": "bounded-feature",
     "mode": "single-sprint",
-    "status": "complete",
-    "objective": "Make repository setup, validation, packaging, and Codex execution predictable on Windows without changing game behavior or provider abstractions.",
+    "status": "defined",
+    "goal": "Add a deterministic, validated, copy-safe, persistent representation of scoped pressures. New games may initialize pressures from immutable Region Pack seeds, pressure state survives save/load, and callers may inspect it through a read-only GameEngine boundary.",
+    "design_intent": "A pressure is current mutable world truth, not merely a history event. Sprint 10.2 is representation-only and deliberately does not introduce pressure mutation, drift, projection, consequences, or a generic ongoing-condition abstraction.",
     "platform": {
       "operating_system": "Windows",
       "shell": "PowerShell",
-      "official_interpreter": ".\\.venv\\Scripts\\python.exe",
-      "python_invocation_policy": "Direct executable calls using -c or checked-in script files; no Python programs supplied through stdin.",
-      "packaging_command": "Compress-Archive"
+      "official_interpreter": ".\\.venv\\Scripts\\python.exe"
     },
-    "governance": [
-      "Exactly one sprint is active.",
-      "Do not add product features or change runtime game behavior.",
-      "Do not substitute bundled, system, Windows Store, or alternate Python for official verification.",
-      "A packaging fallback may change implementation only when artifact contents are unchanged and independently validated.",
-      "Preserve provider-neutral interfaces and deterministic project behavior.",
-      "Do not close the sprint with unverified required checks."
+    "architectural_decision": {
+      "adr": "ADR-036",
+      "title": "Scoped Pressures Are Persistent Current State",
+      "policy": "Current scoped pressure state is simulation-owned mutable truth stored in world_state. Region Packs may provide immutable initial pressure seeds copied only during new-game construction. History may later record accepted pressure changes, but history does not replace current pressure state."
+    },
+    "pressure_contract": {
+      "storage": "world_state.pressures dictionary keyed by pressure_id",
+      "exact_record_fields": [
+        "pressure_id",
+        "pressure_type",
+        "scope_type",
+        "scope_id",
+        "level",
+        "provenance"
+      ],
+      "record_example": {
+        "pressure_id": "bryn_shander_winter",
+        "pressure_type": "winter",
+        "scope_type": "region",
+        "scope_id": "icewind_dale_bryn_shander",
+        "level": 65,
+        "provenance": {
+          "kind": "region_pack",
+          "source_id": "icewind_dale_bryn_shander"
+        }
+      },
+      "supported_scope_types": [
+        "region",
+        "location"
+      ],
+      "supported_provenance_kinds": [
+        "region_pack"
+      ],
+      "level_minimum": 0,
+      "level_maximum": 100,
+      "boolean_is_integer": false,
+      "region_pack_seed_field": {
+        "name": "initial_pressures",
+        "location": "top-level Region Pack field",
+        "optional": true,
+        "absent_means": "no initial pressure seeds",
+        "present_type": "list",
+        "item_contract": "exact pressure record",
+        "runtime_authority": false
+      },
+      "provenance_source_rule": "For kind region_pack, source_id must equal the containing Region Pack's exact region_id. A non-empty mismatched source_id is invalid."
+    },
+    "ownership_and_initialization": [
+      "Region Pack pressure definitions are immutable initial seeds.",
+      "New-game construction validates and deep-copies seeds into world_state.pressures.",
+      "Runtime pressure state must never share mutable references with Region Pack data.",
+      "Loaded games use persisted pressure state and do not reapply Region Pack seeds.",
+      "Canonical runtime World State always contains a pressures dictionary, including for new games.",
+      "During loading only, copied version-1 legacy save data without pressures is normalized to an empty pressure dictionary before strict runtime validation and engine construction.",
+      "A present but malformed pressures value fails validation rather than being normalized.",
+      "Older saves do not receive Region Pack pressures retroactively.",
+      "Save files produced after Sprint 10.2 contain pressures and preserve save version 1.",
+      "No general migration framework is introduced."
     ],
-    "in_scope": [
-      "Add and document a canonical Windows toolchain and invocation policy.",
-      "Add a PowerShell preflight that checks the repository, official interpreter, Git, writable artifact locations, required documents, and ZIP support.",
-      "Validate the Markdown, YAML, and JSON sprint manifests for exact structural agreement.",
-      "Define approved generated-file locations: .build, .artifacts, and handoffs.",
-      "Patch AGENTS.md and workflow guidance with official verification and failure-handling rules.",
-      "Create setup, implementation, verification, and closeout prompts.",
-      "Record evidence and prepare a deterministic handoff."
-    ],
-    "out_of_scope": [
-      "Gameplay, narrative, model-provider, UI, content, or persistence features.",
-      "Dependency upgrades unrelated to making the existing environment runnable.",
-      "A destructive repository rebuild or migration.",
-      "Disabling antivirus, endpoint protection, or Windows security controls broadly.",
-      "Changing canonical tests to accommodate an alternate interpreter.",
-      "Starting or defining a second sprint."
-    ],
-    "deliverables": [
-      {
-        "path": "README_HARDENING.md",
-        "purpose": "Step-by-step installation and execution guide."
-      },
-      {
-        "path": "docs/current_sprint.md",
-        "purpose": "Human-readable canonical sprint manifest with embedded machine data."
-      },
-      {
-        "path": "docs/current_sprint.yaml",
-        "purpose": "YAML 1.2-compatible canonical sprint manifest."
-      },
-      {
-        "path": "docs/current_sprint.json",
-        "purpose": "JSON canonical sprint manifest."
-      },
-      {
-        "path": "docs/next_chat_handoff.md",
-        "purpose": "Continuation contract for the next Codex task."
-      },
-      {
-        "path": "docs/workflow/ENVIRONMENT_HARDENING_SPRINT.md",
-        "purpose": "Bounded maintenance sprint definition."
-      },
-      {
-        "path": "docs/workflow/AGENTS_WORKFLOW_PATCH.md",
-        "purpose": "Merge instructions and replacement policy snippets."
-      },
-      {
-        "path": "docs/codex_prompts/01_setup.md",
-        "purpose": "Setup-phase Codex prompt."
-      },
-      {
-        "path": "docs/codex_prompts/02_implementation.md",
-        "purpose": "Implementation-phase Codex prompt."
-      },
-      {
-        "path": "docs/codex_prompts/03_verification.md",
-        "purpose": "Verification-phase Codex prompt."
-      },
-      {
-        "path": "docs/codex_prompts/04_closeout.md",
-        "purpose": "Closeout-phase Codex prompt."
-      },
-      {
-        "path": "tools/preflight.ps1",
-        "purpose": "Official environment preflight."
-      },
-      {
-        "path": "tools/validate_hardening_package.ps1",
-        "purpose": "No-dependency package, manifest, and PowerShell syntax validator."
-      }
-    ],
+    "read_only_game_engine_contract": {
+      "methods": [
+        "GameEngine.get_pressures() -> dict[str, dict]",
+        "GameEngine.get_pressure(pressure_id: str) -> dict | None"
+      ],
+      "get_pressures": "Returns the complete current pressure dictionary keyed by pressure_id as a defensive deep copy.",
+      "get_pressure": "Returns one pressure record as a defensive deep copy, or None for an unknown pressure_id.",
+      "nested_copy_safety": "Mutating returned dictionaries or nested provenance data cannot mutate durable state.",
+      "side_effects": "Neither method creates history, advances time, rebuilds the scene, or alters world state."
+    },
+    "cli_inspection": {
+      "command": "pressures",
+      "required": true,
+      "route": "GameEngine.get_pressures()",
+      "behavior": "Displays current pressure state deterministically without direct world_state access, mutation authority, history creation, or time advancement.",
+      "individual_pressure_command_required": false
+    },
+    "legacy_save_normalization": {
+      "save_version": 1,
+      "boundary": "loading only",
+      "input": "copied loaded save data whose world_state lacks pressures",
+      "result": "pressures is added as an empty dictionary before strict runtime World State validation and engine construction",
+      "prohibitions": [
+        "Do not mutate the Region Pack.",
+        "Do not seed the legacy save from initial_pressures.",
+        "Do not treat pressures as optional in canonical runtime World State.",
+        "Do not normalize a present malformed pressures value.",
+        "Do not introduce a general migration framework."
+      ]
+    },
+    "expected_files": {
+      "likely_created": [
+        "engine/pressure_state.py",
+        "test_pressure_state.py"
+      ],
+      "likely_modified": [
+        "engine/world_state.py",
+        "engine/game_engine.py",
+        "engine/region_validator.py",
+        "engine/save_system.py",
+        "data/regions/bryn_shander.json",
+        "test_save_load.py",
+        "play_game.py",
+        "docs/architecture.md",
+        "docs/decisions.md",
+        "docs/roadmap.md",
+        "docs/sprint_log.md",
+        "docs/current_sprint.md",
+        "docs/current_sprint.yaml",
+        "docs/current_sprint.json",
+        "docs/next_chat_handoff.md"
+      ],
+      "possibly_modified_if_ownership_requires": [
+        "engine/game_session.py"
+      ],
+      "staging_infrastructure_modified": [
+        "tools/validate_hardening_package.ps1",
+        "review_context.md"
+      ]
+    },
     "acceptance_criteria": [
-      "The three current_sprint manifests normalize to the same data structure.",
-      "The manifest declares exactly one bounded maintenance sprint.",
-      "The preflight invokes only .\\.venv\\Scripts\\python.exe for Python checks.",
-      "Direct interpreter, -c, and file-based Python probes pass in the target repository through Codex execution or clearly labeled user execution using the same official interpreter.",
-      "Git status, required workflow files, writable generated-file locations, JSON support, and Compress-Archive are checked.",
-      "PowerShell syntax validation reports no parser errors for package scripts.",
-      "Repository-defined tests run through the official interpreter and their exact commands and results are recorded.",
-      "No product behavior, provider binding, or deterministic runtime behavior changes.",
-      "AGENTS.md and workflow documentation contain the official verification and fallback policies.",
-      "Closeout records failures honestly and leaves no required check represented as passed when it did not run."
+      "The supported pressure record has exactly pressure_id, pressure_type, scope_type, scope_id, level, and provenance fields, with provenance containing exactly kind and source_id.",
+      "pressure_id and pressure_type are stable non-empty strings, and pressure_id values are unique.",
+      "scope_type accepts only region and location, and scope_id resolves to the declared region or a valid location in the Region Pack.",
+      "level accepts integers from 0 through 100 inclusive and rejects booleans.",
+      "provenance accepts only kind region_pack, and source_id must exactly equal the containing Region Pack's region_id.",
+      "initial_pressures is the exact optional top-level Region Pack seed field; absence means no seeds, while a present value must be a list of exact pressure records.",
+      "Unsupported, malformed, duplicate, extra-field, or invalid pressure seeds fail validation deterministically.",
+      "New-game pressure state is deep-copied from valid Region Pack seeds into a dictionary keyed by pressure_id.",
+      "Mutating runtime pressure state cannot mutate Region Pack data.",
+      "Pressure records are stored in persistent world_state and survive save/load without material change.",
+      "Canonical runtime World State always requires pressures, and new-game construction always creates it.",
+      "During loading only, copied version-1 legacy save data without pressures is normalized to an empty dictionary before strict runtime validation and engine construction.",
+      "A present malformed pressures value fails strict validation and is not normalized.",
+      "Loading does not reapply or overwrite pressure state from Region Pack seeds.",
+      "Save files produced after Sprint 10.2 include pressures and preserve save version 1.",
+      "GameEngine implements exactly get_pressures() returning dict[str, dict] and get_pressure(pressure_id: str) returning dict or None.",
+      "Unknown pressure identifiers return None.",
+      "Pressure access returns deterministic copy-safe data, and mutating returned data cannot mutate durable state.",
+      "The required pressures CLI/debug command routes through GameEngine.get_pressures(), displays deterministically, and never accesses world_state directly.",
+      "Pressure inspection does not create history, advance time, move the player, or alter other world state.",
+      "Existing movement, waiting, resolved-conversation history, history identifiers, narration boundaries, target resolution, destination resolution, and save/load behavior remain materially unchanged.",
+      "Documentation records ADR-036 and the representation-only boundary.",
+      "Sprint 10.2 is marked complete only after every documented required check passes.",
+      "Sprint 10.3 is neither defined nor started."
+    ],
+    "non_goals": [
+      "Pressure-level mutation or runtime pressure creation.",
+      "Pressure creation from player actions or history.",
+      "Pressure-change history events.",
+      "Time-based pressure drift, world ticks, or schedulers.",
+      "Scene, perception, or narration projection.",
+      "AI-created pressures.",
+      "Unresolved-thread representation or a generic ongoing-condition framework.",
+      "Actor state, actor knowledge, evidence, consequences, opportunities, or quests.",
+      "Travel execution, combat, economy simulation, or faction simulation.",
+      "Unrelated refactoring or broad cleanup."
     ],
     "verification": {
-      "commands": [
-        {
-          "id": "package_validation",
-          "command": "pwsh -NoProfile -File .\\tools\\validate_hardening_package.ps1 -PackageRoot .",
-          "required": true
-        },
-        {
-          "id": "environment_preflight",
-          "command": "pwsh -NoProfile -File .\\tools\\preflight.ps1 -RepoRoot .",
-          "required": true
-        },
-        {
-          "id": "project_tests",
-          "command": "$testExit = 0; Get-ChildItem -File -Filter 'test_*.py' | Sort-Object Name | ForEach-Object { & .\\.venv\\Scripts\\python.exe $_.FullName; if ($LASTEXITCODE -ne 0) { $testExit = $LASTEXITCODE }; Write-Output \"TEST_FILE=$($_.Name) EXIT=$LASTEXITCODE\" }; Write-Output \"TEST_EXIT=$testExit\"",
-          "required": true,
-          "resolve_before_execution": true
-        }
+      "primary_commands": [
+        ".\\.venv\\Scripts\\python.exe test_pressure_state.py",
+        ".\\.venv\\Scripts\\python.exe engine/region_validator.py",
+        ".\\.venv\\Scripts\\python.exe test_save_load.py",
+        ".\\.venv\\Scripts\\python.exe test_interaction_history.py",
+        ".\\.venv\\Scripts\\python.exe test_history_query.py",
+        ".\\.venv\\Scripts\\python.exe test_history_context.py",
+        ".\\.venv\\Scripts\\python.exe test_narration_context.py",
+        ".\\.venv\\Scripts\\python.exe test_narration_pipeline.py"
       ],
-      "evidence": [
-        "Exact command line",
-        "Exit code",
-        "Pass, fail, or blocked status",
-        "Relevant output summary",
-        "Artifact path when applicable"
+      "manifest_commands": [
+        ".\\.venv\\Scripts\\python.exe -m json.tool docs/current_sprint.json",
+        ".\\.venv\\Scripts\\python.exe -c \"import json, yaml; from pathlib import Path; j=json.loads(Path('docs/current_sprint.json').read_text(encoding='utf-8')); y=yaml.safe_load(Path('docs/current_sprint.yaml').read_text(encoding='utf-8')); assert type(j) is type(y) and j == y\"",
+        "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tools\\validate_hardening_package.ps1 -PackageRoot ."
       ],
-      "failure_policy": [
-        "Codex must first attempt the official command; an access-denied or process-creation failure is recorded as an agent execution-context limitation, not evidence that the virtual environment is unhealthy.",
-        "User-provided output may satisfy a Codex-blocked check when it clearly identifies the same official interpreter, command result, and exit status where applicable, and is labeled user-executed.",
-        "Do not use another Python executable to turn a blocked check into a pass.",
-        "Diagnose and record the exact failure before changing the environment.",
-        "Packaging may use documented PowerShell behavior, but the archive must be independently inspected and validated.",
-        "A required failed check or a Codex-blocked check without sufficient user-executed evidence prevents successful sprint closeout."
+      "startup_command": ".\\.venv\\Scripts\\python.exe play_game.py",
+      "manual_or_scripted_steps": [
+        "Start a new game and inspect pressures through the narrow CLI/debug boundary.",
+        "Confirm the Bryn Shander winter pressure matches the validated Region Pack seed.",
+        "Mutate returned inspection data in a focused test and confirm durable pressure state is unchanged.",
+        "Save and load, then confirm pressure state is materially unchanged.",
+        "Load a legacy save payload without pressures and confirm pressures is empty rather than reseeded.",
+        "Confirm pressure inspection does not create history, advance time, move the player, or alter unrelated state.",
+        "Smoke movement, wait, conversation history, history queries, target and destination resolution, narration preview, reset, and quit."
       ]
     },
     "execution_phases": [
       {
         "id": "setup",
-        "goal": "Baseline the repository and confirm package integrity before merging files.",
-        "exit_criteria": "Existing work is preserved, package validation passes, and preflight failures are captured without substitution."
+        "goal": "Perform Startup Review and confirm the synchronized Sprint 10.2 definition before application changes."
       },
       {
         "id": "implementation",
-        "goal": "Merge the hardening assets and policy into the repository with minimal scoped changes.",
-        "exit_criteria": "Required files and policy sections exist, paths match repository conventions, and no product code changed."
+        "goal": "Implement only the bounded persistent pressure representation."
       },
       {
         "id": "verification",
-        "goal": "Run syntax, manifest, preflight, and repository-defined checks using the canonical toolchain.",
-        "exit_criteria": "Every required check has recorded evidence and no alternate Python was used."
+        "goal": "Run every documented required check through the official project environment."
       },
       {
         "id": "closeout",
-        "goal": "Reconcile documentation and handoff state without opening another sprint.",
-        "exit_criteria": "All three manifests agree, the handoff is current, and the sprint status accurately reflects verification."
+        "goal": "Record actual results, synchronize documentation, and stop without defining Sprint 10.3."
       }
+    ],
+    "governance": [
+      "Exactly one sprint is defined at a time.",
+      "Do not substitute bundled, system, Windows Store, or alternate Python for official verification.",
+      "Preserve provider neutrality, deterministic behavior, simulation-owned truth, and unrelated user changes.",
+      "Do not begin implementation during planning and staging.",
+      "Do not define or begin Sprint 10.3."
     ],
     "closeout": {
       "allowed_terminal_statuses": [
         "complete",
         "blocked"
       ],
-      "requirements": [
-        "Update all three current_sprint manifests together.",
-        "Re-run package validation after status or evidence changes.",
-        "Summarize changed files and retained user changes.",
-        "Record exact verification evidence in docs/next_chat_handoff.md.",
-        "Do not define a next sprint during this maintenance sprint."
-      ],
       "next_sprint": null
     }
   }
 }
-
-
-
