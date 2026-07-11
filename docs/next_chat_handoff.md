@@ -1,29 +1,57 @@
-# Next Chat Handoff: Sprint 10.3 Closeout
+# Next Chat Handoff: Sprint 10.4 Closeout
 
 ## Current State
 
-- Sprint 10.2 - Persistent Scoped Pressure Representation: complete and closed out.
-- The Phase 2B architecture-review recommendation was accepted.
-- Sprint 10.3 - Explicit Atomic Pressure-Level Change with Durable History: complete and closed out after corrected verification.
-- ADR-037, **Pressure-Level Changes Are Atomic Current-State Transitions**, is accepted.
-- Sprint 10.4 is not defined or started.
+- Sprint 10.3 - Explicit Atomic Pressure-Level Change with Durable History is complete, closed out, committed, and the repository working tree was reported clean.
+- The post-Sprint 10.3 architecture review is complete.
+- The recommendation was explicitly accepted.
+- Sprint 10.4 - Causally Referenced Pressure Transition is complete and closed out.
+- Sprint 10.4 implementation was completed and verified before closeout.
+- Sprint 10.5 is undefined and has not started.
 
-## Implemented Operation
+## Accepted Architecture Decision
 
-`GameEngine.set_pressure_level(pressure_id, new_level)` sets an exact level on one existing persistent pressure. It does not accept a delta. Pure pressure validation and mutation remain in or near `engine/pressure_state.py`; `GameEngine` prepares and validates a copied candidate world state and performs one final assignment.
+The linked pressure-transition capability adds one durable causal reference from a pressure consequence to one already accepted event.
 
-A material pressure mutation and its single engine-identified `pressure_changed` history entry commit atomically. Validation, history construction, or completed-candidate validation failure commits neither. A no-op creates no history and does not replace durable state. Current durable time is recorded but not advanced. Pressure scope is recorded instead of player location. Scene state and narration are not rebuilt or invoked. Region Pack `initial_pressures` remain immutable, and no pressure-mutation CLI command was added.
+Expected ADR:
 
-## Actual Application and Test Changes
+**ADR-038 - Pressure Consequences Reference One Accepted Source Event by Stable History ID**
 
-- `engine/pressure_state.py`
+The new operation is:
+
+```python
+GameEngine.set_pressure_level_from_event(
+    pressure_id: str,
+    new_level: int,
+    source_history_id: str,
+) -> dict
+```
+
+A material change preserves the Sprint 10.3 pressure mutation contract and adds `source_history_id` to the new `pressure_changed` history entry.
+
+## Critical Boundary
+
+The source event:
+
+- Already exists in durable history.
+- Is identified by its stable engine-owned `history_id`.
+- Must precede the new consequence.
+- Is read-only.
+- Is not part of the pressure/consequence atomic commit.
+- Must not be inferred from adjacency, summary text, event type, time, or player input.
+
+Existing history without `source_history_id` remains valid.
+
+## Closeout Summary
+
+Sprint 10.4 implemented the linked pressure-transition operation, the one-way stable history reference, backward-only referential-integrity validation, no-op handling, atomic pressure/history commit, and save/load preservation under the existing version-1 save path.
+
+Files changed during implementation and closeout:
+
 - `engine/game_engine.py`
+- `engine/world_state.py`
 - `test_pressure_state.py`
-
-`test_save_load.py` was verified and remained byte-identical to `HEAD`. Sprint 10.3 save/load coverage is exercised by `test_pressure_state.py`.
-
-## Closeout Documentation Changes
-
+- `test_save_load.py`
 - `docs/architecture.md`
 - `docs/decisions.md`
 - `docs/roadmap.md`
@@ -33,24 +61,12 @@ A material pressure mutation and its single engine-identified `pressure_changed`
 - `docs/current_sprint.json`
 - `docs/next_chat_handoff.md`
 
-## Corrected Verification
+Verification completed successfully with the official project environment, including the hardening package validator, environment preflight, focused pressure and save/load tests, the other required regression tests, the region validator, canonical manifest validation, the JSON/YAML/Markdown deep-agreement check, and `git diff --check`.
 
-All required commands completed successfully using the official project environment:
+The initial official `.venv` launch hit the documented restricted execution-context access-denied limitation and was then rerun successfully through the same official interpreter outside the restricted context.
 
-- `powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\validate_hardening_package.ps1 -PackageRoot .` - exit 0; 20 passed, 0 failed.
-- `powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\preflight.ps1 -RepoRoot .` - exit 0; 18 passed, 2 warnings, 0 blocked, 0 failed. Warnings were PowerShell 5.1 preference and the expected dirty working tree.
-- `.\.venv\Scripts\python.exe test_pressure_state.py` - exit 0; pressure state tests passed, including material change, no-op, invalid input, atomic failure, persistence, legacy normalization, and result copy safety.
-- `.\.venv\Scripts\python.exe test_save_load.py` - exit 0; save/load test passed.
-- `.\.venv\Scripts\python.exe test_interaction_history.py` - exit 0; interaction-history scripted smoke passed.
-- `.\.venv\Scripts\python.exe test_history_query.py` - exit 0; history query test passed.
-- `.\.venv\Scripts\python.exe test_history_context.py` - exit 0; history context test passed.
-- `.\.venv\Scripts\python.exe test_narration_context.py` - exit 0; narration context test passed.
-- `.\.venv\Scripts\python.exe test_narration_pipeline.py` - exit 0; narration pipeline test passed.
-- `.\.venv\Scripts\python.exe engine/region_validator.py` - exit 0.
-- `.\.venv\Scripts\python.exe -m json.tool docs/current_sprint.json` - required final check.
-- Official-interpreter JSON/YAML and Markdown canonical-block three-way deep comparison - required final check.
-- `git diff --check` - required final check.
+No excluded systems were added. The implementation did not add automatic pressure effects, causal graphs, replay, schedulers, event buses, narration projection, scene projection, unresolved threads, actor systems, or new CLI commands.
 
-## Next Activity
+The repository is not committed by Codex. Sprint 10.5 remains undefined and has not started.
 
-Review the next bounded Phase 2B capability before defining Sprint 10.4. Do not begin implementation until that architecture and scope decision is complete and a new sprint is explicitly staged.
+The next chat should conduct a focused post-Sprint 10.4 architecture and scope review before any next capability is selected.

@@ -502,3 +502,17 @@ Sprint 10.2 implementation and verification completed successfully in the offici
 An exact pressure-level change is prepared against a copied candidate world state. Pure pressure validation and record mutation remain in or near `engine/pressure_state.py`. `GameEngine` owns orchestration, durable history creation, final validation, and the single commit to `GameEngine.world_state`. A material change commits the pressure value and one `pressure_changed` history entry together. Any validation, mutation, history-construction, or final-validation failure commits neither. Setting the existing level is a successful no-op and creates no history.
 
 Sprint 10.3 is complete and closed out. The next feature work should move to the next bounded Phase 2B capability without introducing a generic mutation framework, rollback layer, or pressure CLI command.
+
+---
+
+## ADR-038
+
+**Title:** Pressure Consequences Reference One Accepted Source Event by Stable History ID
+
+**Status:** Accepted
+
+A linked pressure consequence references exactly one already durable history entry through a stable `source_history_id`. The source entry must already exist, must be a non-empty stable history identifier, and must precede the new consequence in durable history. Self references, forward references, malformed references, and dangling references fail closed.
+
+Existing durable history without `source_history_id` remains valid, including the unlinked Sprint 10.3 pressure history. Narrow referential-integrity validation belongs in `engine/world_state.py`. `GameEngine` owns source resolution, candidate-state orchestration, linked history construction, completed-candidate validation, and the final atomic commit. `engine/pressure_state.py` remains unaware of history.
+
+The pressure mutation and the new linked `pressure_changed` consequence entry commit atomically. The already accepted source event is read-only and is not part of that transaction. This decision does not introduce automatic event effects, a causal graph, reverse references, replay, effect policy, narration behavior, or combined event-acceptance and consequence atomicity.

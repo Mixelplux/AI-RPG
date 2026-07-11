@@ -19,6 +19,30 @@
 - Corrected verification passed with the official project environment: environment preflight, package validator, every required focused and regression test, Region Pack validator, canonical manifest parse and three-way deep-agreement checks, and `git diff --check`.
 - Sprint 10.4 was not defined or started.
 
+## Sprint 10.4 Architecture Review
+
+- Status: Accepted and staged.
+- Review result: Causally Referenced Pressure Transition was selected as the next bounded Phase 2B capability.
+- Scope decision: one pressure consequence may reference one already accepted durable history event by stable history ID.
+- Boundary decision: the source event remains read-only and is not part of the pressure/history atomic commit.
+- Staging decision: Sprint 10.4 was staged only after explicit acceptance.
+- Implementation status: complete and closed out.
+
+## Sprint 10.4 Closeout
+
+- Status: Complete.
+- Implemented capability: `GameEngine.set_pressure_level_from_event(pressure_id, new_level, source_history_id)` for a linked pressure consequence that records one stable source history ID.
+- Ownership boundary: `engine/world_state.py` validates backward-only `source_history_id` integrity; `GameEngine` resolves the source entry, prepares the candidate state, constructs the linked consequence, validates the finished candidate, and commits once.
+- History-reference semantics: the source entry is already durable, read-only, and outside the atomic commit; legacy history and unlinked Sprint 10.3 pressure history remain valid.
+- Atomicity behavior: one material change commits exactly one pressure mutation and one linked `pressure_changed` entry together; invalid source references, invalid pressure inputs, or injected validation/history failures commit nothing.
+- No-op behavior: a validated same-level call resolves the source entry, returns `changed: false`, and creates no durable history.
+- Save/load compatibility: linked history and `source_history_id` survive the existing save/load path, save version remains 1, and malformed loaded references fail closed.
+- Focused files changed: `engine/game_engine.py`, `engine/world_state.py`, `test_pressure_state.py`, `test_save_load.py`, `docs/architecture.md`, `docs/decisions.md`, `docs/roadmap.md`, `docs/sprint_log.md`, `docs/current_sprint.md`, `docs/current_sprint.yaml`, `docs/current_sprint.json`, `docs/next_chat_handoff.md`.
+- Verification results: the hardening package validator passed, the environment preflight passed, `test_pressure_state.py` passed, `test_save_load.py` passed, `test_interaction_history.py` passed, `test_history_query.py` passed, `test_history_context.py` passed, `test_narration_context.py` passed, `test_narration_pipeline.py` passed, the region validator passed, `python -m json.tool docs/current_sprint.json` passed, the JSON/YAML/Markdown deep-agreement check passed, and `git diff --check` passed.
+- Restricted execution-context issue: the initial official `.venv` launch hit the documented access-denied process-creation limitation, then the same official interpreter was rerun successfully outside the restricted context.
+- Excluded systems: automatic pressure effects, causal graphs, replay, schedulers, event buses, narration projection, scene projection, unresolved threads, actor systems, and new CLI commands were not added.
+- Sprint 10.5 status: undefined and not started.
+
 ## Sprint 10.2 Closeout
 
 - Status: Complete.

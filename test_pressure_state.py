@@ -414,6 +414,117 @@ def test_pressure_level_change_validation_and_atomic_failure() -> None:
     assert engine.get_scene_snapshot() == starting_scene_snapshot
 
 
+def test_causally_referenced_pressure_transition() -> None:
+    engine = build_engine()
+    conversation_result = engine.process_command("talk to captain")
+    assert conversation_result["success"]
+    source_entry = engine.get_history()[0]
+    source_before = deepcopy(source_entry)
+    state_before = engine.get_world_state()
+    scene_before = engine.get_scene_snapshot()
+    region_seeds_before = deepcopy(engine.region["initial_pressures"])
+
+    result = engine.set_pressure_level_from_event(
+        PRESSURE_ID,
+        70,
+        source_entry["history_id"],
+    )
+    assert result == {
+        "changed": True,
+        "pressure_id": PRESSURE_ID,
+        "previous_level": 65,
+        "new_level": 70,
+        "history_id": "history_000002",
+        "source_history_id": "history_000001",
+    }
+    state_after = engine.get_world_state()
+    consequence = state_after["history"][-1]
+    assert state_after["history"][0] == source_before
+    assert consequence["source_history_id"] == source_entry["history_id"]
+    assert consequence["time"] == state_before["time"]
+    assert consequence["summary"] == (
+        "Pressure bryn_shander_winter changed from 65 to 70."
+    )
+    assert state_after["pressures"][PRESSURE_ID]["level"] == 70
+    expected_pressure = deepcopy(state_before["pressures"][PRESSURE_ID])
+    expected_pressure["level"] = 70
+    assert state_after["pressures"][PRESSURE_ID] == expected_pressure
+    assert state_after["pressures"][SECOND_PRESSURE_ID] == SECOND_PRESSURE
+    assert state_after["time"] == state_before["time"]
+    assert state_after["player"] == state_before["player"]
+    assert state_after["weather"] == state_before["weather"]
+    assert engine.get_scene_snapshot() == scene_before
+    assert engine.region["initial_pressures"] == region_seeds_before
+
+    result["source_history_id"] = "history_999999"
+    result["history_id"] = "history_999999"
+    assert engine.get_history()[-1] == consequence
+
+
+def test_linked_pressure_validation_no_op_and_atomic_failures() -> None:
+    engine = build_engine()
+    engine.process_command("talk to captain")
+    source_id = engine.get_history()[0]["history_id"]
+    starting_state = engine.get_world_state()
+    starting_state_identity = engine.world_state
+
+    no_op = engine.set_pressure_level_from_event(PRESSURE_ID, 65, source_id)
+    assert no_op == {
+        "changed": False,
+        "pressure_id": PRESSURE_ID,
+        "previous_level": 65,
+        "new_level": 65,
+        "history_id": None,
+        "source_history_id": source_id,
+    }
+    assert engine.world_state is starting_state_identity
+    assert engine.get_world_state() == starting_state
+
+    for invalid_source in ("", True, 1, None, "history_999999"):
+        try:
+            engine.set_pressure_level_from_event(
+                PRESSURE_ID,
+                70,
+                invalid_source,
+            )
+        except ValueError:
+            pass
+        else:
+            raise AssertionError(f"Invalid source accepted: {invalid_source!r}")
+        assert engine.get_world_state() == starting_state
+
+    for pressure_id, level in (("missing", 70), (PRESSURE_ID, True)):
+        try:
+            engine.set_pressure_level_from_event(pressure_id, level, source_id)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("Invalid pressure transition was accepted.")
+        assert engine.get_world_state() == starting_state
+
+    import engine.game_engine as game_engine_module
+
+    for attribute, error_type in (
+        ("add_history_entry", RuntimeError),
+        ("validate_world_state", ValueError),
+    ):
+        original = getattr(game_engine_module, attribute)
+
+        def fail(*args, **kwargs):
+            raise error_type("injected linked transition failure")
+
+        setattr(game_engine_module, attribute, fail)
+        try:
+            try:
+                engine.set_pressure_level_from_event(PRESSURE_ID, 70, source_id)
+            except error_type:
+                pass
+            else:
+                raise AssertionError("Injected failure was swallowed.")
+        finally:
+            setattr(game_engine_module, attribute, original)
+        assert engine.get_world_state() == starting_state
+
 def test_save_load_and_legacy_normalization() -> None:
     engine = build_engine()
     starting_scene_snapshot = engine.get_scene_snapshot()
@@ -466,6 +577,8 @@ def main() -> None:
     test_runtime_representation_and_reads()
     test_pressure_level_change_atomicity()
     test_pressure_level_change_validation_and_atomic_failure()
+    test_causally_referenced_pressure_transition()
+    test_linked_pressure_validation_no_op_and_atomic_failures()
     test_save_load_and_legacy_normalization()
     print("Pressure state tests passed.")
 

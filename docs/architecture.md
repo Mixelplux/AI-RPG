@@ -100,6 +100,8 @@ Sprint 10.2 is complete. The verified implementation covered the representation-
 
 Sprint 10.3 adds the exact gameplay-facing operation `GameEngine.set_pressure_level(pressure_id, new_level)`. It accepts an exact level rather than a delta. Pure pressure mutation remains in or near `engine/pressure_state.py`, while `GameEngine` prepares a copied candidate world state, adds exactly one engine-identified `pressure_changed` history entry for a material change, validates the completed candidate, and commits pressure and history together through one final assignment. Validation or history failure commits neither. A no-op creates no history and does not replace durable state. The entry records current durable time without advancing it and records pressure scope rather than player location. The operation does not rebuild scene state or invoke narration.
 
+Sprint 10.4 adds the linked pressure-transition operation `GameEngine.set_pressure_level_from_event(pressure_id, new_level, source_history_id)`. The source history entry is already durable, is referenced by stable `history_id`, and remains read-only outside the pressure-consequence commit. `engine/world_state.py` performs narrow backward-only referential-integrity validation for `source_history_id`, while `GameEngine` resolves the source entry, orchestrates copied candidate state, reuses the exact pressure-mutation boundary, constructs the linked `pressure_changed` history entry, validates the completed candidate, and commits once. A material change mutates one pressure and records one linked consequence atomically. A validated no-op confirms the source reference, returns without durable mutation, and creates no history. Existing unlinked history, including Sprint 10.3 pressure history, remains valid through save/load. Pressure state still remains unprojected into scenes, perception, narration, and autonomous simulation.
+
 ## Completed
 
 - Region Pack
@@ -134,6 +136,7 @@ Sprint 10.3 adds the exact gameplay-facing operation `GameEngine.set_pressure_le
 - Known-destination resolution without travel execution
 - Persistent scoped pressure representation
 - Explicit atomic pressure-level change with durable history
+- Causally referenced pressure transition
 
 ## In Progress
 

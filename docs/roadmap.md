@@ -76,7 +76,7 @@ The playable vertical-slice review is complete. It confirmed that movement and w
 
 Phase 2B has begun with **Persistent Resolved Conversation Memory** complete as Sprint 10.1.
 
-The architecture and scope review selected persistent scoped pressure representation as Sprint 10.2. Sprint 10.2 is complete and closed out. Sprint 10.3, explicit atomic pressure-level change with durable history, is complete and closed out.
+The architecture and scope review selected persistent scoped pressure representation as Sprint 10.2. Sprint 10.2 is complete and closed out. Sprint 10.3, explicit atomic pressure-level change with durable history, is complete and closed out. Sprint 10.4, causally referenced pressure transition, is complete and closed out.
 
 Real AI provider integration remains deferred. It is not required for the next simulation capabilities and should not lead the roadmap merely because the provider-neutral narration boundary exists.
 
@@ -112,26 +112,31 @@ This sequence is directional, not a sprint commitment. The playable vertical-sli
    - One deterministic engine-owned operation changes one pressure.
    - The accepted change is recorded in durable history.
 
-4. **Pressure change from one accepted gameplay event**
+4. **Causally referenced pressure transition**
+   - One pressure consequence references one already accepted durable history event by stable history ID.
+   - The source event is read-only and remains outside the pressure/history atomic commit.
+   - Complete as Sprint 10.4.
+
+5. **Pressure change from one accepted gameplay event**
    - One bounded player or simulation action affects one known pressure.
 
-5. **Narrow time-based pressure drift**
+6. **Narrow time-based pressure drift**
    - One explicitly configured pressure can increase, decay, or remain stable after elapsed time.
    - No generalized scheduler or world tick framework.
 
-6. **Pressure projection into scene or perception**
+7. **Pressure projection into scene or perception**
    - Relevant scoped pressure state becomes observable where the simulation permits it.
 
-7. **Runtime actor-state baseline**
+8. **Runtime actor-state baseline**
    - Establish persistent ownership for mutable actor location or state without implementing full NPC AI.
 
-8. **Actor knowledge baseline**
+9. **Actor knowledge baseline**
    - One actor can know, not know, or hold an outdated or false belief about a referenced event.
 
-9. **Evidence and consequence chain**
+10. **Evidence and consequence chain**
    - One bounded action leaves one persistent trace that one eligible actor can discover and respond to.
 
-10. **Opportunity surfacing**
+11. **Opportunity surfacing**
    - Relevant world state can become player-facing without being converted into a procedural quest.
 
 ## Prerequisites and Ownership Decisions

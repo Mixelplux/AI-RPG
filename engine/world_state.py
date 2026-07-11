@@ -135,6 +135,18 @@ def validate_history_entry_ids(history: list[Dict[str, Any]]) -> None:
         if not isinstance(entry, dict):
             raise ValueError("World State history entries must be dictionaries.")
 
+        if "source_history_id" in entry:
+            source_history_id = entry["source_history_id"]
+            if not isinstance(source_history_id, str) or not source_history_id:
+                raise ValueError(
+                    "World State source_history_id must be a non-empty string."
+                )
+            if source_history_id not in seen_ids:
+                raise ValueError(
+                    "World State source_history_id must reference an earlier "
+                    "history entry."
+                )
+
         if "history_id" not in entry:
             continue
 

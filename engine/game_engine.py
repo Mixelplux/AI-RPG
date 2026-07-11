@@ -144,6 +144,63 @@ class GameEngine:
 
         return deepcopy(result)
 
+    def set_pressure_level_from_event(
+        self,
+        pressure_id: str,
+        new_level: int,
+        source_history_id: str,
+    ) -> Dict[str, Any]:
+        candidate_world_state = copy_world_state(self.world_state)
+
+        if not isinstance(source_history_id, str) or not source_history_id:
+            raise ValueError("source_history_id must be a non-empty string.")
+
+        source_entry = get_history_entry_by_id(
+            candidate_world_state,
+            source_history_id,
+        )
+        if source_entry is None:
+            raise ValueError("Unknown source_history_id.")
+
+        updated_pressures, result = prepare_pressure_level_change(
+            candidate_world_state["pressures"],
+            pressure_id,
+            new_level,
+        )
+        result["source_history_id"] = source_history_id
+
+        if not result["changed"]:
+            return deepcopy(result)
+
+        candidate_world_state["pressures"] = updated_pressures
+        target_pressure = updated_pressures[pressure_id]
+        candidate_world_state = add_history_entry(
+            candidate_world_state,
+            event_type="pressure_changed",
+            summary=(
+                f"Pressure {pressure_id} changed from "
+                f"{result['previous_level']} to {result['new_level']}."
+            ),
+            time=deepcopy(candidate_world_state["time"]),
+            extra={
+                "pressure_id": pressure_id,
+                "pressure_type": target_pressure["pressure_type"],
+                "scope_type": target_pressure["scope_type"],
+                "scope_id": target_pressure["scope_id"],
+                "previous_level": result["previous_level"],
+                "new_level": result["new_level"],
+                "source_history_id": source_history_id,
+            },
+        )
+
+        validate_world_state(candidate_world_state)
+        result["history_id"] = candidate_world_state["history"][-1][
+            "history_id"
+        ]
+        self.world_state = candidate_world_state
+
+        return deepcopy(result)
+
     def get_history(self) -> list[Dict[str, Any]]:
         return get_history(self.world_state)
 
