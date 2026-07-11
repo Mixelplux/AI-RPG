@@ -5,7 +5,7 @@
 - Sprint 10.1 - Persistent Resolved Conversation Memory: complete and closed out.
 - ENV-HARDENING-001: complete and closed out.
 - Architecture and scope review for the next Phase 2B capability: complete.
-- Sprint 10.2 - Persistent Scoped Pressure Representation: defined and staged, implementation not started.
+- Sprint 10.2 - Persistent Scoped Pressure Representation: complete and closed out.
 - Sprint 10.3: not defined or started.
 
 ## Sprint 10.2 Goal
@@ -61,4 +61,4 @@ Run every command and smoke step in `docs/current_sprint.md` through the officia
 
 ## Staging Outcome
 
-The canonical Markdown, YAML, and JSON Sprint 10.2 manifests were synchronized and validated. Required Markdown headings are present. Architecture, roadmap, decision, sprint-log, review-context, and handoff records were updated. No application code or tests were modified, and implementation did not begin.
+The canonical Markdown, YAML, and JSON Sprint 10.2 manifests were synchronized and validated. Required Markdown headings are present. Architecture, roadmap, decision, sprint-log, review-context, and handoff records were updated. No application code or tests were modified during closeout, and Sprint 10.2 is complete.

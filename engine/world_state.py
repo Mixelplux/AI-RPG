@@ -1,6 +1,11 @@
 from copy import deepcopy
 from typing import Any, Dict
 
+from engine.pressure_state import (
+    build_initial_pressure_state,
+    validate_pressure_state,
+)
+
 
 DEFAULT_HISTORY_QUERY_COUNT = 10
 HISTORY_ID_PREFIX = "history_"
@@ -38,7 +43,8 @@ def create_initial_world_state(region: Dict[str, Any]) -> Dict[str, Any]:
         },
         "weather": deepcopy(initial_weather),
         "time": deepcopy(initial_time),
-        "history": []
+        "history": [],
+        "pressures": build_initial_pressure_state(region),
     }
 
 
@@ -61,6 +67,11 @@ def validate_world_state(world_state: Dict[str, Any]) -> None:
 
     if "time" not in world_state:
         raise ValueError("World State is missing time.")
+
+    if "pressures" not in world_state:
+        raise ValueError("World State is missing pressures.")
+
+    validate_pressure_state(world_state["pressures"])
 
     if "history" in world_state and not isinstance(
         world_state["history"],

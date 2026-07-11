@@ -4,7 +4,7 @@
 
 Complete.
 
-The focused architecture and scope review selected **Persistent Scoped Pressure Representation** as Sprint 10.2. Sprint 10.2 is defined and staged but implementation has not started.
+The focused architecture and scope review selected **Persistent Scoped Pressure Representation** as Sprint 10.2. Sprint 10.2 implementation and closeout are complete.
 
 ## Decision
 
@@ -38,4 +38,4 @@ Pressure mutation, pressure-change history, event-driven change, time drift, wor
 
 ## Next Activity
 
-Run the mandatory Startup Review, then implement only Sprint 10.2 from the synchronized canonical manifests. Do not define or begin Sprint 10.3.
+Sprint 10.2 is complete. The next chat should begin the Phase 2B architecture and scope review for the next capability without defining or beginning Sprint 10.3 yet.

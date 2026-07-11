@@ -4,6 +4,19 @@
   "setting": "Icewind Dale",
   "canon_source": "Dungeons & Dragons Forgotten Realms",
   "version": "0.4",
+  "initial_pressures": [
+    {
+      "pressure_id": "bryn_shander_winter",
+      "pressure_type": "winter",
+      "scope_type": "region",
+      "scope_id": "icewind_dale_bryn_shander",
+      "level": 65,
+      "provenance": {
+        "kind": "region_pack",
+        "source_id": "icewind_dale_bryn_shander"
+      }
+    }
+  ],
   "time": {
     "calendar_system": "standard_fantasy",
     "current_date": "1489 DR - Midwinter",

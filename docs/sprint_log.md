@@ -2,7 +2,8 @@
 
 ## Sprint 10.2 Planning and Staging
 
-- Status: Defined and staged; implementation not started.
+- Status: Complete.
+- Implementation and verification completed using the official project environment.
 - Selected capability: Persistent Scoped Pressure Representation.
 - Architecture review: Complete; pressure representation was selected over unresolved-thread representation or a combined generic abstraction.
 - Ownership decision: current pressure state belongs in `world_state`; Region Packs provide immutable new-game seeds only.
@@ -14,7 +15,8 @@
 - Legacy clarification: canonical runtime state requires `pressures`; copied version-1 legacy saves missing the field normalize to empty during loading only, while malformed present values fail validation.
 - Added ADR-036: Scoped Pressures Are Persistent Current State.
 - Canonical Sprint 10.2 Markdown, YAML, JSON, and handoff files staged and synchronized.
-- Application code and tests were not modified; implementation verification was not run.
+- Application code and tests were unchanged during closeout.
+- Final validations passed: manifest parse/deep-agreement check, package validator, and `git diff --check`.
 - Sprint 10.3 was not defined or started.
 
 ## Sprint 10.1 Closeout

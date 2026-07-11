@@ -161,6 +161,7 @@ def main():
         with patch("play_game.SAVE_PATH", cli_save_path), patch(
             "builtins.input",
             side_effect=[
+                "pressures",
                 "talk to captain",
                 "history",
                 "save",

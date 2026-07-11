@@ -76,7 +76,7 @@ The playable vertical-slice review is complete. It confirmed that movement and w
 
 Phase 2B has begun with **Persistent Resolved Conversation Memory** complete as Sprint 10.1.
 
-The architecture and scope review selected persistent scoped pressure representation as Sprint 10.2. Sprint 10.2 is defined and staged but implementation has not started.
+The architecture and scope review selected persistent scoped pressure representation as Sprint 10.2. Sprint 10.2 is complete and closed out.
 
 Real AI provider integration remains deferred. It is not required for the next simulation capabilities and should not lead the roadmap merely because the provider-neutral narration boundary exists.
 
@@ -99,7 +99,7 @@ This sequence is directional, not a sprint commitment. The playable vertical-sli
    - The world records that a resolved conversation occurred without inventing dialogue or changing unrelated state.
 
 2. **Persistent scoped pressure representation**
-   - Defined as Sprint 10.2; implementation not started.
+   - Complete as Sprint 10.2.
    - The world can store a pressure with identity, region or location scope, bounded level, and Region Pack provenance.
    - Initial seeds use the exact optional top-level Region Pack field `initial_pressures`; provenance identifies the containing `region_id`.
    - Canonical runtime state requires `pressures`; version-1 legacy saves receive load-only empty normalization rather than retroactive seeding.

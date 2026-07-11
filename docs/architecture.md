@@ -89,11 +89,13 @@ The implementation keeps the existing `GameEngine` command path intact: `Interac
 
 Major feature systems such as combat, companions, economy simulation, faction warfare, full NPC AI, and full travel simulation remain deferred until the underlying world-evolution foundations exist.
 
-Sprint 10.2 establishes a representation-only ownership boundary. Current pressure state will belong in a persistent `world_state.pressures` dictionary keyed by stable pressure identity. `initial_pressures` is the exact optional top-level Region Pack field for immutable seeds. If present, it is a validated list of exact pressure records; Region Pack provenance must identify the containing pack's exact `region_id`. Seeds are deep-copied only during new-game construction.
+Sprint 10.2 establishes a representation-only ownership boundary. Current pressure state belongs in a persistent `world_state.pressures` dictionary keyed by stable pressure identity. `initial_pressures` is the exact optional top-level Region Pack field for immutable seeds. If present, it is a validated list of exact pressure records; Region Pack provenance must identify the containing pack's exact `region_id`. Seeds are deep-copied only during new-game construction.
 
 Canonical runtime World State always requires the pressure dictionary. During loading only, copied version-1 legacy save data missing `pressures` normalizes to an empty dictionary before strict validation and engine construction. This normalization does not modify or reapply Region Pack seeds. A present malformed pressure value fails validation, and save version 1 remains unchanged.
 
 The initial pressure contract supports region and location scopes, an integer level from 0 through 100, and Region Pack provenance. The exact read boundary is `GameEngine.get_pressures()` for the complete keyed dictionary and `GameEngine.get_pressure(pressure_id)` for one copied record or `None`. Both return defensive deep copies without state, time, history, or scene-rebuild effects. The required `pressures` CLI command routes through `get_pressures()` and never accesses durable state directly. Mutation, history of pressure changes, time drift, projection, AI creation, unresolved-thread representation, and generic ongoing-condition frameworks remain outside Sprint 10.2.
+
+Sprint 10.2 is complete. The verified implementation covered the representation-only boundary, the Region Pack seed contract, load-only legacy normalization, and read-only pressure inspection.
 
 ## Completed
 
@@ -127,6 +129,7 @@ The initial pressure contract supports region and location scopes, an integer le
 - Structured skill-check command routing
 - Scene-bound target resolution
 - Known-destination resolution without travel execution
+- Persistent scoped pressure representation
 
 ## In Progress
 

@@ -1,4 +1,5 @@
 import json
+from copy import deepcopy
 from pathlib import Path
 from typing import Any, Dict
 
@@ -41,7 +42,9 @@ def load_save_data(save_path: str) -> Dict[str, Any]:
     path = Path(save_path)
 
     with path.open("r", encoding="utf-8") as file:
-        save_data = json.load(file)
+        loaded_data = json.load(file)
+
+    save_data = deepcopy(loaded_data)
 
     if save_data.get("save_version") != SAVE_VERSION:
         raise ValueError(
@@ -53,6 +56,12 @@ def load_save_data(save_path: str) -> Dict[str, Any]:
 
     if "world_state" not in save_data:
         raise ValueError("Save file is missing world_state.")
+
+    if not isinstance(save_data["world_state"], dict):
+        raise ValueError("Save file world_state must be a dictionary.")
+
+    if "pressures" not in save_data["world_state"]:
+        save_data["world_state"]["pressures"] = {}
 
     validate_world_state(save_data["world_state"])
 

@@ -27,6 +27,7 @@ def print_help() -> None:
     print("- save: Save the current game.")
     print("- load: Load the saved game.")
     print("- reset: Start a fresh game session.")
+    print("- pressures: Show current scoped pressure state.")
     print("- history: Show recent recorded world history.")
     print("- history recent <count>: Show recent world history.")
     print("- history type <event_type>: Show history by event type.")
@@ -44,6 +45,24 @@ def print_help() -> None:
     print("- help: Show this help message.")
     print("- quit or exit: End the game.")
     print("- Any other input is treated as a player action.")
+
+
+def print_pressures(pressures: dict[str, dict]) -> None:
+    print("\n=== PRESSURES ===")
+
+    if not pressures:
+        print("No active pressures.")
+        return
+
+    for pressure_id in sorted(pressures):
+        pressure = pressures[pressure_id]
+        provenance = pressure["provenance"]
+        print(
+            f"{pressure_id}: type={pressure['pressure_type']}; "
+            f"scope={pressure['scope_type']}:{pressure['scope_id']}; "
+            f"level={pressure['level']}; "
+            f"provenance={provenance['kind']}:{provenance['source_id']}"
+        )
 
 
 def print_history(history: list[dict]) -> None:
@@ -353,6 +372,10 @@ def main() -> None:
         if normalized_input == "reset":
             engine.reset()
             print("\nGame reset.")
+            continue
+
+        if normalized_input == "pressures":
+            print_pressures(engine.get_pressures())
             continue
 
         if normalized_input == "history" or normalized_input.startswith(

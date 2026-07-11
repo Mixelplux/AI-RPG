@@ -21,6 +21,11 @@ from engine.narration_output import (
     validate_narration_output_packet,
 )
 from engine.narration_pipeline import build_narration_preview_packet
+from engine.pressure_state import (
+    get_pressure as get_world_pressure,
+    get_pressures as get_world_pressures,
+    validate_pressure_state,
+)
 from engine.world_state import (
     DEFAULT_HISTORY_QUERY_COUNT,
     add_history_entry,
@@ -57,6 +62,7 @@ class GameEngine:
             self.world_state = create_initial_world_state(self.region)
         else:
             validate_world_state(initial_world_state)
+            validate_pressure_state(initial_world_state["pressures"], self.region)
             self.world_state = copy_world_state(initial_world_state)
 
         if entry_location_id is not None:
@@ -85,6 +91,12 @@ class GameEngine:
 
     def get_world_state(self) -> Dict[str, Any]:
         return copy_world_state(self.world_state)
+
+    def get_pressures(self) -> dict[str, dict]:
+        return get_world_pressures(self.world_state)
+
+    def get_pressure(self, pressure_id: str) -> dict | None:
+        return get_world_pressure(self.world_state, pressure_id)
 
     def get_history(self) -> list[Dict[str, Any]]:
         return get_history(self.world_state)

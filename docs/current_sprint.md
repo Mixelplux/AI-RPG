@@ -2,7 +2,7 @@
 
 ## Sprint 10.2 - Persistent Scoped Pressure Representation
 
-Status: Defined, staged, and not started.
+Status: Complete.
 
 ## Goal
 
@@ -156,7 +156,7 @@ The JSON block below is canonical machine data and must remain structurally iden
     "phase": "Phase 2B - Reactive World State Foundations",
     "type": "bounded-feature",
     "mode": "single-sprint",
-    "status": "defined",
+    "status": "complete",
     "goal": "Add a deterministic, validated, copy-safe, persistent representation of scoped pressures. New games may initialize pressures from immutable Region Pack seeds, pressure state survives save/load, and callers may inspect it through a read-only GameEngine boundary.",
     "design_intent": "A pressure is current mutable world truth, not merely a history event. Sprint 10.2 is representation-only and deliberately does not introduce pressure mutation, drift, projection, consequences, or a generic ongoing-condition abstraction.",
     "platform": {
@@ -385,4 +385,3 @@ The JSON block below is canonical machine data and must remain structurally iden
 
 ```
 <!-- CANONICAL-MANIFEST-END -->
-

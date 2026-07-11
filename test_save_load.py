@@ -1,7 +1,7 @@
 from tempfile import TemporaryDirectory
 
 from engine.game_engine import GameEngine
-from engine.save_system import save_game, load_game
+from engine.save_system import SAVE_VERSION, build_save_data, save_game, load_game
 
 
 REGION_PATH = "data/regions/bryn_shander.json"
@@ -14,6 +14,8 @@ def main():
     print(f"Starting location: {starting_location}")
     starting_time = engine.get_world_state()["time"]
     print(f"Starting time: {starting_time}")
+    starting_pressures = engine.get_pressures()
+    assert starting_pressures
 
     wait_result = engine.process_command("wait")
     advanced_time = engine.get_world_state()["time"]
@@ -43,6 +45,9 @@ def main():
 
     with TemporaryDirectory() as temp_dir:
         save_path = f"{temp_dir}/test_save.json"
+        save_payload = build_save_data(engine)
+        assert save_payload["save_version"] == SAVE_VERSION == 1
+        assert save_payload["world_state"]["pressures"] == starting_pressures
         save_game(engine, save_path)
         loaded_engine = load_game(save_path)
 
@@ -55,6 +60,8 @@ def main():
     assert loaded_world_state["weather"] == engine.get_world_state()["weather"]
     assert loaded_world_state["time"] == advanced_time
     assert loaded_world_state["history"] == history_before_save
+    assert loaded_world_state["pressures"] == starting_pressures
+    assert loaded_engine.get_pressures() == starting_pressures
 
     loaded_history_ids = {
         entry["history_id"]

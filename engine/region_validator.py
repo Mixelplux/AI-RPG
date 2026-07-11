@@ -1,5 +1,10 @@
 from collections import Counter
 
+try:
+    from engine.pressure_state import validate_initial_pressures
+except ModuleNotFoundError:
+    from pressure_state import validate_initial_pressures
+
 
 def validate_region(region: dict) -> None:
     """
@@ -79,6 +84,11 @@ def validate_region(region: dict) -> None:
                 f"Entity '{entity['entity_id']}' has invalid location '{entity_location}'"
             )
 
+    try:
+        validate_initial_pressures(region)
+    except ValueError as error:
+        errors.append(str(error))
+
     if errors:
         raise ValueError(
             "Region validation failed:\n\n" +
@@ -92,4 +102,4 @@ if __name__ == "__main__":
     with open("data/regions/bryn_shander.json", "r") as f:
         region = json.load(f)
 
-    validate_region(region) 
+    validate_region(region)
