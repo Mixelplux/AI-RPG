@@ -43,6 +43,14 @@
 - Excluded systems: automatic pressure effects, causal graphs, replay, schedulers, event buses, narration projection, scene projection, unresolved threads, actor systems, and new CLI commands were not added.
 - Sprint 10.5 status: undefined and not started.
 
+## Sprint 10.5 Architecture Review
+
+- Status: Accepted and staged.
+- Review result: One Declared Resolved-Conversation Pressure Consequence was selected as the next bounded Phase 2B capability.
+- Scope decision: one strict Region Pack declaration may map one exactly resolved conversation target to one seeded pressure and one exact resulting level.
+- Boundary decision: the source conversation event, linked pressure consequence, and resulting commit stay atomic inside one candidate world state.
+- Staging decision: Sprint 10.5 was staged only after the declaration package was verified and promoted.
+
 ## Sprint 10.2 Closeout
 
 - Status: Complete.

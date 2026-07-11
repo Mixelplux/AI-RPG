@@ -1,72 +1,136 @@
-# Next Chat Handoff: Sprint 10.4 Closeout
+# Next Chat Handoff: Sprint 10.5 Staging
 
 ## Current State
 
-- Sprint 10.3 - Explicit Atomic Pressure-Level Change with Durable History is complete, closed out, committed, and the repository working tree was reported clean.
-- The post-Sprint 10.3 architecture review is complete.
+- Sprint 10.4 - Causally Referenced Pressure Transition is complete, closed out, and committed.
+- The post-Sprint 10.4 architecture review is complete.
 - The recommendation was explicitly accepted.
-- Sprint 10.4 - Causally Referenced Pressure Transition is complete and closed out.
-- Sprint 10.4 implementation was completed and verified before closeout.
-- Sprint 10.5 is undefined and has not started.
+- Sprint 10.5 - One Declared Resolved-Conversation Pressure Consequence is defined for staging.
+- Sprint 10.5 implementation has not started.
+- Sprint 10.6 is undefined and has not started.
 
 ## Accepted Architecture Decision
 
-The linked pressure-transition capability adds one durable causal reference from a pressure consequence to one already accepted event.
+The first automatic reactive-world path should be one strict Region Pack declaration connecting a successful conversation with one exact resolved entity to one exact pressure level.
 
 Expected ADR:
 
-**ADR-038 - Pressure Consequences Reference One Accepted Source Event by Stable History ID**
+**ADR-039 - One Region-Declared Resolved Conversation and Its Pressure Consequence Commit Atomically**
 
-The new operation is:
+The declaration shape is:
 
-```python
-GameEngine.set_pressure_level_from_event(
-    pressure_id: str,
-    new_level: int,
-    source_history_id: str,
-) -> dict
+```json
+{
+  "effect_id": "north_gate_captain_scrutiny",
+  "target_entity_id": "captain_darvin_grey",
+  "pressure_id": "bryn_shander_gate_scrutiny",
+  "new_level": 25
+}
 ```
 
-A material change preserves the Sprint 10.3 pressure mutation contract and adds `source_history_id` to the new `pressure_changed` history entry.
+The canonical Bryn Shander pack should seed `bryn_shander_gate_scrutiny` as a location-scoped `guard_attention` pressure at level 10. The existing winter pressure must not be used as the consequence of initiating a conversation.
 
-## Critical Boundary
+## Critical Atomicity Boundary
 
-The source event:
+For a matching material conversation:
 
-- Already exists in durable history.
-- Is identified by its stable engine-owned `history_id`.
-- Must precede the new consequence.
-- Is read-only.
-- Is not part of the pressure/consequence atomic commit.
-- Must not be inferred from adjacency, summary text, event type, time, or player input.
+```text
+resolved conversation
+    -> candidate player_conversation source entry
+    -> candidate exact pressure mutation
+    -> candidate linked pressure_changed consequence
+    -> completed-state validation
+    -> required candidate-scene construction
+    -> one live world-state commit
+```
 
-Existing history without `source_history_id` remains valid.
+The source event must precede the consequence in candidate history, but neither becomes durable until the full matched operation succeeds.
 
-## Closeout Summary
+The existing public `GameEngine.set_pressure_level_from_event(...)` keeps its Sprint 10.4 contract requiring an already durable source. Reuse should occur through a non-committing internal candidate helper, not by chaining two public commits.
 
-Sprint 10.4 implemented the linked pressure-transition operation, the one-way stable history reference, backward-only referential-integrity validation, no-op handling, atomic pressure/history commit, and save/load preservation under the existing version-1 save path.
+## Staging Pass
 
-Files changed during implementation and closeout:
+**Task type:** Setup/staging
+**Recommended:** mini or lighter model with low reasoning
+
+Promote:
+
+- `current_sprint_10_5.md` -> `docs/current_sprint.md`
+- `current_sprint_10_5.yaml` -> `docs/current_sprint.yaml`
+- `current_sprint_10_5.json` -> `docs/current_sprint.json`
+- `next_chat_handoff_10_5.md` -> `docs/next_chat_handoff.md`
+
+During staging:
+
+1. Confirm the repository is at the committed Sprint 10.4 source state.
+2. Confirm the four temporary Sprint 10.5 files are present.
+3. Confirm the three manifests materially agree before promotion.
+4. Promote them into the canonical paths.
+5. Parse canonical JSON and YAML with the official `.venv` interpreter and confirm exact deep agreement.
+6. Confirm the Markdown canonical block exactly matches the machine manifests.
+7. Validate `docs/current_sprint.json`.
+8. Update `docs/roadmap.md` narrowly to record the accepted conversation-to-pressure consequence as the next Phase 2B capability.
+9. Add a concise post-Sprint 10.4 architecture-review decision entry to `docs/sprint_log.md`.
+10. Do not add ADR-039 during staging unless an existing repository convention explicitly requires planned ADR text before implementation. The expected default is to add and accept ADR-039 during successful closeout.
+11. Confirm all four canonical files remain present.
+12. Delete only the four temporary Sprint 10.5 staging files after successful promotion and validation.
+13. Stop before implementation.
+
+Do not modify application code or tests during staging.
+
+## Implementation Boundary
+
+**Task type:** Bounded implementation
+**Recommended:** standard model with medium reasoning
+
+Primary expected files:
 
 - `engine/game_engine.py`
-- `engine/world_state.py`
-- `test_pressure_state.py`
+- `engine/world_update.py`
+- `engine/region_validator.py`
+- `data/regions/bryn_shander.json`
+- `test_conversation_pressure_effect.py`
+- `test_interaction_history.py`
 - `test_save_load.py`
-- `docs/architecture.md`
-- `docs/decisions.md`
-- `docs/roadmap.md`
-- `docs/sprint_log.md`
-- `docs/current_sprint.md`
-- `docs/current_sprint.yaml`
-- `docs/current_sprint.json`
-- `docs/next_chat_handoff.md`
 
-Verification completed successfully with the official project environment, including the hardening package validator, environment preflight, focused pressure and save/load tests, the other required regression tests, the region validator, canonical manifest validation, the JSON/YAML/Markdown deep-agreement check, and `git diff --check`.
+`engine/pressure_state.py` may change only to expose a concrete non-committing reuse seam. `engine/world_state.py`, Interaction Kernel, target resolution, save format, scene projection, perception, and narration should remain materially unchanged unless a focused acceptance requirement proves otherwise.
 
-The initial official `.venv` launch hit the documented restricted execution-context access-denied limitation and was then rerun successfully through the same official interpreter outside the restricted context.
+## Required Behavior
 
-No excluded systems were added. The implementation did not add automatic pressure effects, causal graphs, replay, schedulers, event buses, narration projection, scene projection, unresolved threads, actor systems, or new CLI commands.
+- Captain Darvin Grey conversation: source entry plus one linked material pressure consequence.
+- Elin Voss conversation: existing source-only behavior.
+- Repeated Captain conversation at level 25: new source entry, no consequence history, `changed: false`.
+- Failed or unresolved conversation: no source and no consequence.
+- Any matched preparation failure: no partial world-state or scene commit.
+- Save/load: preserve result, do not replay effect, do not reuse history IDs.
 
-The repository is not committed by Codex. Sprint 10.5 remains undefined and has not started.
+## Verification
 
-The next chat should conduct a focused post-Sprint 10.4 architecture and scope review before any next capability is selected.
+Run all commands recorded in the canonical Sprint 10.5 manifest through:
+
+```powershell
+.\.venv\Scripts\python.exe
+```
+
+Treat application failures and agent execution-context limitations according to `WORKFLOW.md`. Do not substitute another Python.
+
+## Routing
+
+- Setup/staging: mini or lighter, low reasoning.
+- Bounded implementation: standard model, medium reasoning.
+- Closeout documentation: mini or lighter, low reasoning.
+- High reasoning: only for an architecture conflict or unclear focused failure.
+
+## Stop Conditions
+
+Staging must stop after promotion, narrow roadmap/sprint-log maintenance, validation, and cleanup.
+
+Do not:
+
+- Begin Sprint 10.5 implementation during staging.
+- Add a generic effect framework.
+- Add another event type or multiple effects.
+- Add time progression, projection, narration coupling, unresolved threads, or AI mutation.
+- Repair packet-generation workflow as part of this sprint.
+- Define Sprint 10.6.
+- Commit unless the repository owner explicitly requests it.
