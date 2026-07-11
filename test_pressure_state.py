@@ -39,6 +39,18 @@ SECOND_PRESSURE = {
         "source_id": REGION_ID,
     },
 }
+GATE_PRESSURE_ID = "bryn_shander_gate_scrutiny"
+GATE_PRESSURE = {
+    "pressure_id": GATE_PRESSURE_ID,
+    "pressure_type": "guard_attention",
+    "scope_type": "location",
+    "scope_id": "bryn_shander_gate_north",
+    "level": 10,
+    "provenance": {
+        "kind": "region_pack",
+        "source_id": REGION_ID,
+    },
+}
 
 
 def load_region() -> dict:
@@ -79,6 +91,7 @@ def test_region_seed_validation() -> None:
 
     without_seeds = deepcopy(region)
     del without_seeds["initial_pressures"]
+    del without_seeds["conversation_pressure_effects"]
     validate_region(without_seeds)
     assert create_initial_world_state(without_seeds)["pressures"] == {}
     with TemporaryDirectory() as temp_dir:
@@ -89,7 +102,7 @@ def test_region_seed_validation() -> None:
     copied_state = create_initial_world_state(region)
     copied_state["pressures"][PRESSURE_ID]["level"] = 0
     copied_state["pressures"][PRESSURE_ID]["provenance"]["source_id"] = "changed"
-    assert region["initial_pressures"] == [EXPECTED_PRESSURE]
+    assert region["initial_pressures"] == load_region()["initial_pressures"]
 
     malformed_field = deepcopy(region)
     malformed_field["initial_pressures"] = {}
@@ -193,7 +206,10 @@ def test_runtime_representation_and_reads() -> None:
     engine = GameEngine(REGION_PATH)
     pressures = engine.get_pressures()
 
-    assert pressures == {PRESSURE_ID: EXPECTED_PRESSURE}
+    assert pressures == {
+        PRESSURE_ID: EXPECTED_PRESSURE,
+        GATE_PRESSURE_ID: GATE_PRESSURE,
+    }
     assert engine.get_world_state()["pressures"] == pressures
     assert engine.get_pressure(PRESSURE_ID) == EXPECTED_PRESSURE
     assert engine.get_pressure("unknown_pressure") is None
@@ -302,7 +318,7 @@ def test_pressure_level_change_atomicity() -> None:
     assert world_state_after_change["pressures"][PRESSURE_ID]["scope_id"] == REGION_ID
     assert world_state_after_change["pressures"][PRESSURE_ID]["provenance"] == EXPECTED_PRESSURE["provenance"]
     assert world_state_after_change["pressures"][SECOND_PRESSURE_ID] == SECOND_PRESSURE
-    assert engine.region["initial_pressures"] == [EXPECTED_PRESSURE]
+    assert engine.region["initial_pressures"] == load_region()["initial_pressures"]
     assert engine.get_scene_snapshot() == starting_scene_snapshot
 
     history = engine.get_history()
@@ -416,7 +432,7 @@ def test_pressure_level_change_validation_and_atomic_failure() -> None:
 
 def test_causally_referenced_pressure_transition() -> None:
     engine = build_engine()
-    conversation_result = engine.process_command("talk to captain")
+    conversation_result = engine.process_command("talk to elin")
     assert conversation_result["success"]
     source_entry = engine.get_history()[0]
     source_before = deepcopy(source_entry)
@@ -463,7 +479,7 @@ def test_causally_referenced_pressure_transition() -> None:
 
 def test_linked_pressure_validation_no_op_and_atomic_failures() -> None:
     engine = build_engine()
-    engine.process_command("talk to captain")
+    engine.process_command("talk to elin")
     source_id = engine.get_history()[0]["history_id"]
     starting_state = engine.get_world_state()
     starting_state_identity = engine.world_state
@@ -556,7 +572,9 @@ def test_save_load_and_legacy_normalization() -> None:
 
         assert "pressures" in legacy_engine.get_world_state()
         assert legacy_engine.get_pressures() == {}
-        assert legacy_engine.region["initial_pressures"] == [EXPECTED_PRESSURE]
+        assert legacy_engine.region["initial_pressures"] == load_region()[
+            "initial_pressures"
+        ]
         assert legacy_engine.get_scene_snapshot() == starting_scene_snapshot
 
         next_history_result = loaded_engine.set_pressure_level(

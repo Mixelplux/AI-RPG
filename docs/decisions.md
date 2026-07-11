@@ -516,3 +516,33 @@ A linked pressure consequence references exactly one already durable history ent
 Existing durable history without `source_history_id` remains valid, including the unlinked Sprint 10.3 pressure history. Narrow referential-integrity validation belongs in `engine/world_state.py`. `GameEngine` owns source resolution, candidate-state orchestration, linked history construction, completed-candidate validation, and the final atomic commit. `engine/pressure_state.py` remains unaware of history.
 
 The pressure mutation and the new linked `pressure_changed` consequence entry commit atomically. The already accepted source event is read-only and is not part of that transaction. This decision does not introduce automatic event effects, a causal graph, reverse references, replay, effect policy, narration behavior, or combined event-acceptance and consequence atomicity.
+
+---
+
+## ADR-039
+
+**Title:** One Region-Declared Resolved Conversation and Its Pressure Consequence Commit Atomically
+
+**Status:** Accepted
+
+The engine already had durable resolved-conversation events, persistent scoped pressures, exact atomic pressure mutation, and stable backward causal references. It lacked one automatic deterministic path from an accepted gameplay event to a persistent pressure consequence.
+
+Region-specific effect policy belongs in strict immutable Region Pack data. Sprint 10.5 supports one conversation-specific declaration shape mapping one exactly resolved entity to one existing seeded pressure and one exact target level. `GameEngine` owns runtime declaration lookup and candidate-state orchestration. It prepares the accepted conversation source first and any material linked pressure consequence in one candidate world state, validates the completed state, and builds the candidate scene before committing world state once. The source precedes the consequence and both become durable only after preparation succeeds.
+
+The public Sprint 10.4 `set_pressure_level_from_event(...)` operation retains its already-durable-source contract. A private non-committing helper provides bounded internal reuse. Unmatched conversations remain source-only. A matching pressure no-op commits the new conversation source but creates no consequence history. Save/load persists resulting state and causal history without persisting or replaying declarations.
+
+**Consequences**
+
+- The first deterministic player-event-to-world-consequence path is complete using existing conversation, pressure, history, and causal-reference seams.
+- Candidate-state composition provides an atomic source-and-consequence pattern without a transaction framework.
+- Immutable content policy remains outside generic engine code.
+- The declaration is intentionally conversation-specific, supports one consequence per target, and uses exact levels rather than deltas or expressions.
+- Scene projection, autonomous progression, and general effect infrastructure remain deferred. A second genuine effect family may justify later review, but no generalized framework is approved now.
+
+**Alternatives Considered**
+
+- Hardcode Captain-specific policy in `GameEngine`. Rejected because immutable region policy belongs in Region Pack data.
+- Commit the conversation and then call the public Sprint 10.4 method. Rejected because a failure could leave a partial durable commit.
+- Add a generic rule engine, event or command bus, or transaction framework. Rejected as premature infrastructure.
+- Add pressure projection or time-based progression first. Rejected because the simpler atomic composition seam was the immediate bounded capability.
+- Add persistent unresolved threads in parallel. Rejected as a separate future subsystem.

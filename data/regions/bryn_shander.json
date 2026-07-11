@@ -15,6 +15,25 @@
         "kind": "region_pack",
         "source_id": "icewind_dale_bryn_shander"
       }
+    },
+    {
+      "pressure_id": "bryn_shander_gate_scrutiny",
+      "pressure_type": "guard_attention",
+      "scope_type": "location",
+      "scope_id": "bryn_shander_gate_north",
+      "level": 10,
+      "provenance": {
+        "kind": "region_pack",
+        "source_id": "icewind_dale_bryn_shander"
+      }
+    }
+  ],
+  "conversation_pressure_effects": [
+    {
+      "effect_id": "north_gate_captain_scrutiny",
+      "target_entity_id": "captain_darvin_grey",
+      "pressure_id": "bryn_shander_gate_scrutiny",
+      "new_level": 25
     }
   ],
   "time": {

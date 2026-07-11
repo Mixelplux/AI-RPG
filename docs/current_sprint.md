@@ -2,7 +2,7 @@
 
 ## Sprint 10.5 - One Declared Resolved-Conversation Pressure Consequence
 
-Status: Planned.
+Status: Complete.
 
 ## Goal
 
@@ -108,6 +108,10 @@ The canonical machine manifest below is the complete acceptance contract. Core r
 
 Use the official project interpreter only. Run every command in the canonical manifest, including focused conversation-effect, interaction-history, pressure, save/load, target, world-update, time, history, narration, Region Pack, manifest, and diff checks.
 
+## Closeout Result
+
+Sprint 10.5 implemented and verified the strict Region Pack-owned conversation-to-pressure consequence, atomic candidate-state composition, material, unmatched, and matching-no-op behavior, Sprint 10.4 compatibility, copy safety, and save/load preservation. The implementation review corrected entity cross-reference validation to require exactly one matching Region Pack entity. ADR-039 is accepted. Sprint 10.6 remains undefined.
+
 ## Non-Goals
 
 No generic event effects, extra event types, multiple consequences, deltas, predicates, ordering, scripts, transactions, event buses, schedulers, autonomous simulation, time drift, applicability resolver, projection, narration context, runtime pressure creation, actor systems, unresolved threads, evidence, AI mutation, new CLI commands, broad cleanup, packet-workflow repair, or Sprint 10.6 planning.
@@ -136,7 +140,7 @@ The JSON block below is canonical machine data and must remain structurally iden
     "phase": "Phase 2B - Reactive World State Foundations",
     "type": "bounded-feature",
     "mode": "single-sprint",
-    "status": "planned",
+    "status": "complete",
     "goal": "Add one strict Region Pack declaration that maps a successful conversation with one exactly resolved entity to one exact level for one existing seeded pressure. When the declaration matches, the player_conversation source event, material pressure mutation, and linked pressure_changed consequence must be prepared in one candidate world state and committed atomically.",
     "design_intent": "Sprint 10.5 completes the first deterministic gameplay-event-to-world-consequence path by reusing the Sprint 10.1 conversation event, Sprint 10.2 persistent pressure state, Sprint 10.3 exact pressure mutation, and Sprint 10.4 stable causal reference. It introduces one conversation-specific declarative effect shape, not a generic rule engine, and does not project pressure into scenes, perception, narration, or autonomous simulation.",
     "platform": {
@@ -561,6 +565,38 @@ The JSON block below is canonical machine data and must remain structurally iden
       "Use one explicit conversation-specific declaration rather than a generic effect framework.",
       "Do not define or begin Sprint 10.6."
     ],
+    "closeout_results": {
+      "review_verdict": "Ready for Sprint 10.5 closeout",
+      "actual_changed_files": [
+        "data/regions/bryn_shander.json",
+        "engine/game_engine.py",
+        "engine/region_validator.py",
+        "test_conversation_pressure_effect.py",
+        "test_interaction_history.py",
+        "test_pressure_state.py",
+        "test_save_load.py",
+        "docs/architecture.md",
+        "docs/decisions.md",
+        "docs/roadmap.md",
+        "docs/sprint_log.md",
+        "docs/current_sprint.md",
+        "docs/current_sprint.yaml",
+        "docs/current_sprint.json",
+        "docs/next_chat_handoff.md"
+      ],
+      "review_correction": "Entity cross-reference validation now counts matching entity identifiers and requires exactly one Region Pack entity; focused tests cover duplicate identifiers, declaration-extraction atomicity, exact source preservation, and complete no-op pressure-record preservation.",
+      "verification_summary": {
+        "hardening_validation": "20 passed, 0 failed",
+        "preflight": "Exit 1: 15 passed, 2 warnings, 3 restricted-context interpreter probes blocked, 0 application failures",
+        "official_tests": "All required available Sprint 10.5 focused and regression tests passed with the approved official interpreter.",
+        "missing_test_files": [
+          "test_target_resolver.py",
+          "test_time_advance.py"
+        ],
+        "manifest_validation": "JSON syntax and Markdown/YAML/JSON exact parsed deep agreement passed.",
+        "diff_check": "Passed"
+      }
+    },
     "closeout": {
       "allowed_terminal_statuses": [
         "complete",

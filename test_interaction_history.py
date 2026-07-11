@@ -36,7 +36,7 @@ def main():
     )
 
     first_history = engine.get_history()
-    assert len(first_history) == 1
+    assert len(first_history) == 2
     first_entry = first_history[0]
     assert first_entry["history_id"] == "history_000001"
     assert first_entry["event_type"] == "player_conversation"
@@ -47,15 +47,21 @@ def main():
     assert first_entry["time"] == starting_time
     assert first_entry["target_entity_id"] == "captain_darvin_grey"
     assert first_entry["target_display_name"] == "Captain Darvin Grey"
+    assert first_result["pressure_consequence"]["source_history_id"] == (
+        first_entry["history_id"]
+    )
+    assert first_history[1]["event_type"] == "pressure_changed"
 
     after_first_state = engine.get_world_state()
     assert after_first_state["player"]["current_location_id"] == (
         starting_location
     )
     assert after_first_state["time"] == starting_time
-    assert without_history(after_first_state) == without_history(
-        starting_state
-    )
+    expected_after_first = without_history(starting_state)
+    expected_after_first["pressures"]["bryn_shander_gate_scrutiny"][
+        "level"
+    ] = 25
+    assert without_history(after_first_state) == expected_after_first
 
     second_result = engine.process_command("talk to captain")
     assert second_result["success"]
@@ -64,7 +70,7 @@ def main():
     )
     assert len(conversation_entries) == 2
     assert conversation_entries[0]["history_id"] == "history_000001"
-    assert conversation_entries[1]["history_id"] == "history_000002"
+    assert conversation_entries[1]["history_id"] == "history_000003"
     assert conversation_entries[1]["target_entity_id"] == (
         "captain_darvin_grey"
     )
@@ -89,9 +95,9 @@ def main():
         starting_location
     )
     assert engine.get_world_state()["time"] == starting_time
-    assert without_history(engine.get_world_state()) == without_history(
-        starting_state
-    )
+    expected_final = without_history(starting_state)
+    expected_final["pressures"]["bryn_shander_gate_scrutiny"]["level"] = 25
+    assert without_history(engine.get_world_state()) == expected_final
 
     history_context = engine.get_history_context(count=2)
     assert history_context["history_entries"] == engine.get_history()[-2:]
@@ -119,8 +125,8 @@ def main():
     post_load_result = loaded_engine.process_command("talk to captain")
     assert post_load_result["success"]
     post_load_history = loaded_engine.get_history()
-    assert len(post_load_history) == 3
-    assert post_load_history[-1]["history_id"] == "history_000003"
+    assert len(post_load_history) == 4
+    assert post_load_history[-1]["history_id"] == "history_000004"
     assert post_load_history[-1]["history_id"] not in loaded_history_ids
     assert post_load_history[-1]["target_entity_id"] == (
         "captain_darvin_grey"

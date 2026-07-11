@@ -1,6 +1,6 @@
 # Architecture
 
-Version: 0.10.3
+Version: 0.10.5
 
 ## Current Engine Pipeline
 
@@ -101,6 +101,12 @@ Sprint 10.2 is complete. The verified implementation covered the representation-
 Sprint 10.3 adds the exact gameplay-facing operation `GameEngine.set_pressure_level(pressure_id, new_level)`. It accepts an exact level rather than a delta. Pure pressure mutation remains in or near `engine/pressure_state.py`, while `GameEngine` prepares a copied candidate world state, adds exactly one engine-identified `pressure_changed` history entry for a material change, validates the completed candidate, and commits pressure and history together through one final assignment. Validation or history failure commits neither. A no-op creates no history and does not replace durable state. The entry records current durable time without advancing it and records pressure scope rather than player location. The operation does not rebuild scene state or invoke narration.
 
 Sprint 10.4 adds the linked pressure-transition operation `GameEngine.set_pressure_level_from_event(pressure_id, new_level, source_history_id)`. The source history entry is already durable, is referenced by stable `history_id`, and remains read-only outside the pressure-consequence commit. `engine/world_state.py` performs narrow backward-only referential-integrity validation for `source_history_id`, while `GameEngine` resolves the source entry, orchestrates copied candidate state, reuses the exact pressure-mutation boundary, constructs the linked `pressure_changed` history entry, validates the completed candidate, and commits once. A material change mutates one pressure and records one linked consequence atomically. A validated no-op confirms the source reference, returns without durable mutation, and creates no history. Existing unlinked history, including Sprint 10.3 pressure history, remains valid through save/load. Pressure state still remains unprojected into scenes, perception, narration, and autonomous simulation.
+
+Sprint 10.5 adds the strict optional Region Pack field `conversation_pressure_effects`. Each exact declaration maps one `target_entity_id` that resolves to exactly one Region Pack entity to one existing seeded `pressure_id` and one integer `new_level` from 0 through 100. Region Pack data owns this immutable policy; Region validation owns exact shape, uniqueness, identifier, range, and cross-reference validation before gameplay. The Interaction Kernel, World Update, Pressure State, and World State remain unaware of effect policy.
+
+For a matching resolved conversation, `GameEngine` copies durable world state, adds the normal `player_conversation` source first, captures its engine-owned `history_id`, resolves the one declaration, and uses a private non-committing form of the Sprint 10.4 linked-transition logic to prepare the exact pressure mutation and linked `pressure_changed` consequence in the same candidate. It validates the completed candidate and builds the required candidate scene before assigning live world state once and replacing `scene_snapshot`. An unmatched conversation remains source-only. A matching same-level conversation commits its new source but creates no consequence history. Save version 1 persists the resulting pressure and causal history without persisting or replaying Region Pack declarations.
+
+This first automatic gameplay-event-to-pressure-consequence path remains deliberately bounded. It does not add generic effect rules, multiple consequences, deltas, predicates, ordering, event replay, schedulers, autonomous progression, pressure projection, narration coupling, runtime pressure creation, actor state, unresolved threads, or new commands.
 
 ## Completed
 

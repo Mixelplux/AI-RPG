@@ -51,6 +51,23 @@
 - Boundary decision: the source conversation event, linked pressure consequence, and resulting commit stay atomic inside one candidate world state.
 - Staging decision: Sprint 10.5 was staged only after the declaration package was verified and promoted.
 
+## Sprint 10.5 Closeout
+
+- Status: Complete.
+- Goal: implement one strict Region Pack declaration mapping one exactly resolved conversation target to one existing seeded pressure and one exact resulting level.
+- Files changed: `data/regions/bryn_shander.json`, `engine/game_engine.py`, `engine/region_validator.py`, `test_conversation_pressure_effect.py`, `test_interaction_history.py`, `test_pressure_state.py`, `test_save_load.py`, and the required closeout documentation.
+- Region content: added location-scoped `bryn_shander_gate_scrutiny` at level 10 and `north_gate_captain_scrutiny`, which maps Captain Darvin Grey to level 25 without repurposing the winter pressure.
+- Atomicity: `GameEngine` prepares the source conversation, exact pressure mutation, linked consequence, completed-state validation, and candidate scene before one live world-state assignment and scene replacement.
+- Behavior: the first Captain conversation creates source plus consequence; Elin Voss remains source-only; a repeated Captain conversation commits a new source but no consequence history and preserves the pressure record.
+- Compatibility: the Sprint 10.4 public linked-transition API retains its already-durable-source material and no-op contracts through a private non-committing candidate helper.
+- Persistence: save version 1 preserves pressure state, source and consequence entries, stable IDs, and `source_history_id` without persisting or replaying declarations; legacy pressure normalization remains intact.
+- Review correction: entity cross-reference validation originally used set membership and could accept duplicate entities sharing one identifier. The correction counts matching entity IDs and requires exactly one; focused coverage also proves declaration-extraction atomicity, exact source preservation, and complete no-op pressure-record preservation.
+- Verification: hardening validation passed 20 checks with 0 failures. Preflight exited 1 with 15 passes, 2 warnings, 3 restricted-context interpreter probes blocked, and 0 application failures; the approved official interpreter subsequently ran all required available tests successfully.
+- Official checks passed: `test_conversation_pressure_effect.py`, `test_interaction_history.py`, `test_pressure_state.py`, `test_save_load.py`, `test_interaction_kernel.py`, `test_world_update.py`, `test_history_query.py`, `test_history_context.py`, `test_narration_context.py`, `test_narration_pipeline.py`, `engine/region_validator.py`, JSON validation, canonical manifest deep agreement, and `git diff --check`.
+- Missing files: `test_target_resolver.py` and `test_time_advance.py` do not exist and were not reported as failures. Target resolution is covered by conversation-effect and interaction-history tests; time preservation is covered by conversation-effect, interaction-history, save/load, and history-context tests.
+- Execution context: PowerShell 5.1 and the intentionally dirty review tree produced warnings; restricted preflight probes were tooling limitations rather than application failures. No alternate Python was used.
+- Governance: ADR-039 was accepted, Sprint 10.6 remains undefined and not started, and no next capability was selected.
+
 ## Sprint 10.2 Closeout
 
 - Status: Complete.

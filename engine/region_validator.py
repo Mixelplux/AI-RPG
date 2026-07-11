@@ -89,11 +89,91 @@ def validate_region(region: dict) -> None:
     except ValueError as error:
         errors.append(str(error))
 
+    try:
+        validate_conversation_pressure_effects(region)
+    except ValueError as error:
+        errors.append(str(error))
+
     if errors:
         raise ValueError(
             "Region validation failed:\n\n" +
             "\n".join(f"- {error}" for error in errors)
         )
+
+
+def validate_conversation_pressure_effects(region: dict) -> None:
+    if "conversation_pressure_effects" not in region:
+        return
+
+    effects = region["conversation_pressure_effects"]
+    if not isinstance(effects, list):
+        raise ValueError("conversation_pressure_effects must be a list.")
+
+    required_fields = {
+        "effect_id",
+        "target_entity_id",
+        "pressure_id",
+        "new_level",
+    }
+    entity_id_counts = Counter(
+        entity.get("entity_id")
+        for entity in region.get("entities", [])
+        if isinstance(entity, dict)
+    )
+    pressure_ids = {
+        pressure.get("pressure_id")
+        for pressure in region.get("initial_pressures", [])
+        if isinstance(pressure, dict)
+    }
+    seen_effect_ids = set()
+    seen_target_ids = set()
+
+    for index, effect in enumerate(effects):
+        prefix = f"conversation_pressure_effects[{index}]"
+        if not isinstance(effect, dict):
+            raise ValueError(f"{prefix} must be a dictionary.")
+
+        fields = set(effect)
+        if fields != required_fields:
+            missing = sorted(required_fields - fields)
+            extra = sorted(fields - required_fields)
+            raise ValueError(
+                f"{prefix} fields are invalid; missing={missing}, extra={extra}."
+            )
+
+        for field in ("effect_id", "target_entity_id", "pressure_id"):
+            value = effect[field]
+            if not isinstance(value, str) or not value:
+                raise ValueError(f"{prefix}.{field} must be a non-empty string.")
+
+        effect_id = effect["effect_id"]
+        target_entity_id = effect["target_entity_id"]
+        pressure_id = effect["pressure_id"]
+        new_level = effect["new_level"]
+
+        if effect_id in seen_effect_ids:
+            raise ValueError(f"Duplicate conversation pressure effect_id: {effect_id}.")
+        if target_entity_id in seen_target_ids:
+            raise ValueError(
+                "Multiple conversation pressure effects target entity: "
+                f"{target_entity_id}."
+            )
+        if entity_id_counts[target_entity_id] != 1:
+            raise ValueError(
+                "Conversation effect target_entity_id must reference exactly "
+                f"one Region Pack entity: {target_entity_id}."
+            )
+        if pressure_id not in pressure_ids:
+            raise ValueError(f"Unknown conversation effect pressure: {pressure_id}.")
+        if isinstance(new_level, bool) or not isinstance(new_level, int):
+            raise ValueError(
+                f"{prefix}.new_level must be an integer and not a boolean."
+            )
+        if new_level < 0 or new_level > 100:
+            raise ValueError(f"{prefix}.new_level must be from 0 through 100.")
+
+        seen_effect_ids.add(effect_id)
+        seen_target_ids.add(target_entity_id)
 
 if __name__ == "__main__":
 

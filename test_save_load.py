@@ -20,7 +20,7 @@ def main():
     starting_pressures = engine.get_pressures()
     assert starting_pressures
 
-    conversation_result = engine.process_command("talk to captain")
+    conversation_result = engine.process_command("talk to elin")
     assert conversation_result["success"]
     source_entry = deepcopy(engine.get_history()[-1])
     linked_result = engine.set_pressure_level_from_event(

@@ -76,7 +76,9 @@ The playable vertical-slice review is complete. It confirmed that movement and w
 
 Phase 2B has begun with **Persistent Resolved Conversation Memory** complete as Sprint 10.1.
 
-The architecture and scope review selected persistent scoped pressure representation as Sprint 10.2. Sprint 10.2 is complete and closed out. Sprint 10.3, explicit atomic pressure-level change with durable history, is complete and closed out. Sprint 10.4, causally referenced pressure transition, is complete and closed out. Sprint 10.5, one declared resolved-conversation pressure consequence, is the accepted next bounded Phase 2B capability.
+The architecture and scope review selected persistent scoped pressure representation as Sprint 10.2. Sprint 10.2 is complete and closed out. Sprint 10.3, explicit atomic pressure-level change with durable history, is complete and closed out. Sprint 10.4, causally referenced pressure transition, is complete and closed out. Sprint 10.5, one declared resolved-conversation pressure consequence, is complete and closed out.
+
+Phase 2B now includes one deterministic gameplay event automatically causing one linked pressure consequence through a strict Region Pack-owned declaration and atomic source-and-consequence candidate-state composition. The next Phase 2B capability requires a focused post-Sprint 10.5 architecture review; no next capability or sprint has been selected.
 
 Real AI provider integration remains deferred. It is not required for the next simulation capabilities and should not lead the roadmap merely because the provider-neutral narration boundary exists.
 
@@ -120,7 +122,7 @@ This sequence is directional, not a sprint commitment. The playable vertical-sli
 5. **One declared resolved-conversation pressure consequence**
    - One strict Region Pack declaration maps one exactly resolved conversation target to one seeded pressure and one exact resulting level.
    - The source conversation event, linked pressure consequence, and resulting state commit atomically in one candidate world state.
-   - Accepted as Sprint 10.5.
+   - Complete as Sprint 10.5.
 
 6. **Narrow time-based pressure drift**
    - One explicitly configured pressure can increase, decay, or remain stable after elapsed time.

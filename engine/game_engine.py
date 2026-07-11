@@ -151,6 +151,30 @@ class GameEngine:
         source_history_id: str,
     ) -> Dict[str, Any]:
         candidate_world_state = copy_world_state(self.world_state)
+        candidate_world_state, result = (
+            self._prepare_pressure_level_from_event_candidate(
+                candidate_world_state,
+                pressure_id,
+                new_level,
+                source_history_id,
+            )
+        )
+
+        if not result["changed"]:
+            return deepcopy(result)
+
+        validate_world_state(candidate_world_state)
+        self.world_state = candidate_world_state
+
+        return deepcopy(result)
+
+    def _prepare_pressure_level_from_event_candidate(
+        self,
+        candidate_world_state: Dict[str, Any],
+        pressure_id: str,
+        new_level: int,
+        source_history_id: str,
+    ) -> tuple[Dict[str, Any], Dict[str, Any]]:
 
         if not isinstance(source_history_id, str) or not source_history_id:
             raise ValueError("source_history_id must be a non-empty string.")
@@ -170,7 +194,7 @@ class GameEngine:
         result["source_history_id"] = source_history_id
 
         if not result["changed"]:
-            return deepcopy(result)
+            return candidate_world_state, deepcopy(result)
 
         candidate_world_state["pressures"] = updated_pressures
         target_pressure = updated_pressures[pressure_id]
@@ -193,13 +217,10 @@ class GameEngine:
             },
         )
 
-        validate_world_state(candidate_world_state)
         result["history_id"] = candidate_world_state["history"][-1][
             "history_id"
         ]
-        self.world_state = candidate_world_state
-
-        return deepcopy(result)
+        return candidate_world_state, deepcopy(result)
 
     def get_history(self) -> list[Dict[str, Any]]:
         return get_history(self.world_state)
@@ -438,14 +459,61 @@ class GameEngine:
                         "No matching target is present in the current scene."
                     )
 
-        self.world_state = apply_interaction(
+        candidate_world_state = apply_interaction(
             self.world_state,
             interaction_result
         )
 
-        self.scene_snapshot = build_scene(
+        if (
+            interaction_result["intent"] == "conversation"
+            and interaction_result["success"]
+            and interaction_result.get("target_resolution", {}).get(
+                "target_type"
+            ) == "entity"
+        ):
+            target_entity_id = interaction_result["target_resolution"][
+                "identifier"
+            ]
+            effect = next(
+                (
+                    item
+                    for item in self.region.get(
+                        "conversation_pressure_effects", []
+                    )
+                    if item["target_entity_id"] == target_entity_id
+                ),
+                None,
+            )
+            if effect is not None:
+                source_history_id = candidate_world_state["history"][-1][
+                    "history_id"
+                ]
+                candidate_world_state, consequence = (
+                    self._prepare_pressure_level_from_event_candidate(
+                        candidate_world_state,
+                        effect["pressure_id"],
+                        effect["new_level"],
+                        source_history_id,
+                    )
+                )
+                consequence["effect_id"] = effect["effect_id"]
+                interaction_result["pressure_consequence"] = {
+                    "effect_id": consequence["effect_id"],
+                    "changed": consequence["changed"],
+                    "pressure_id": consequence["pressure_id"],
+                    "previous_level": consequence["previous_level"],
+                    "new_level": consequence["new_level"],
+                    "history_id": consequence["history_id"],
+                    "source_history_id": consequence["source_history_id"],
+                }
+
+        validate_world_state(candidate_world_state)
+        candidate_scene_snapshot = build_scene(
             self.region,
-            self.world_state
+            candidate_world_state
         )
 
-        return interaction_result
+        self.world_state = candidate_world_state
+        self.scene_snapshot = candidate_scene_snapshot
+
+        return deepcopy(interaction_result)
