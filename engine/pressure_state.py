@@ -161,3 +161,37 @@ def get_pressure(
 ) -> dict | None:
     pressure = world_state["pressures"].get(pressure_id)
     return deepcopy(pressure) if pressure is not None else None
+
+
+def prepare_pressure_level_change(
+    pressures: Any,
+    pressure_id: str,
+    new_level: int,
+) -> tuple[dict[str, dict], dict[str, Any]]:
+    validate_pressure_state(pressures)
+
+    if pressure_id not in pressures:
+        raise ValueError("Unknown pressure_id.")
+
+    if isinstance(new_level, bool) or not isinstance(new_level, int):
+        raise ValueError("Pressure level must be an integer and not a boolean.")
+    if new_level < 0 or new_level > 100:
+        raise ValueError("Pressure level must be from 0 through 100.")
+
+    previous_pressure = pressures[pressure_id]
+    previous_level = previous_pressure["level"]
+    result = {
+        "changed": previous_level != new_level,
+        "pressure_id": pressure_id,
+        "previous_level": previous_level,
+        "new_level": new_level,
+        "history_id": None,
+    }
+
+    if previous_level == new_level:
+        return deepcopy(pressures), result
+
+    updated_pressures = deepcopy(pressures)
+    updated_pressures[pressure_id]["level"] = new_level
+
+    return updated_pressures, result

@@ -490,3 +490,15 @@ The initial persistent collection is a dictionary keyed by stable `pressure_id`.
 Sprint 10.2 is representation-only. Pressure mutation, pressure-change history, time drift, projection into scene or narration, AI-created pressures, unresolved threads, and generic ongoing-condition frameworks remain future capabilities.
 
 Sprint 10.2 implementation and verification completed successfully in the official project environment, and the closeout preserved the representation-only boundary.
+
+---
+
+## ADR-037
+
+**Title:** Pressure-Level Changes Are Atomic Current-State Transitions
+
+**Status:** Accepted
+
+An exact pressure-level change is prepared against a copied candidate world state. Pure pressure validation and record mutation remain in or near `engine/pressure_state.py`. `GameEngine` owns orchestration, durable history creation, final validation, and the single commit to `GameEngine.world_state`. A material change commits the pressure value and one `pressure_changed` history entry together. Any validation, mutation, history-construction, or final-validation failure commits neither. Setting the existing level is a successful no-op and creates no history.
+
+Sprint 10.3 is complete and closed out. The next feature work should move to the next bounded Phase 2B capability without introducing a generic mutation framework, rollback layer, or pressure CLI command.

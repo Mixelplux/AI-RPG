@@ -24,6 +24,7 @@ from engine.narration_pipeline import build_narration_preview_packet
 from engine.pressure_state import (
     get_pressure as get_world_pressure,
     get_pressures as get_world_pressures,
+    prepare_pressure_level_change,
     validate_pressure_state,
 )
 from engine.world_state import (
@@ -97,6 +98,51 @@ class GameEngine:
 
     def get_pressure(self, pressure_id: str) -> dict | None:
         return get_world_pressure(self.world_state, pressure_id)
+
+    def set_pressure_level(
+        self,
+        pressure_id: str,
+        new_level: int,
+    ) -> Dict[str, Any]:
+        candidate_world_state = copy_world_state(self.world_state)
+        updated_pressures, result = prepare_pressure_level_change(
+            candidate_world_state["pressures"],
+            pressure_id,
+            new_level,
+        )
+
+        if not result["changed"]:
+            return deepcopy(result)
+
+        candidate_world_state["pressures"] = updated_pressures
+        current_time = deepcopy(candidate_world_state["time"])
+        target_pressure = updated_pressures[pressure_id]
+        candidate_world_state = add_history_entry(
+            candidate_world_state,
+            event_type="pressure_changed",
+            summary=(
+                f"Pressure {pressure_id} changed from "
+                f"{result['previous_level']} to {result['new_level']}."
+            ),
+            time=current_time,
+            extra={
+                "pressure_id": pressure_id,
+                "pressure_type": target_pressure["pressure_type"],
+                "scope_type": target_pressure["scope_type"],
+                "scope_id": target_pressure["scope_id"],
+                "previous_level": result["previous_level"],
+                "new_level": result["new_level"],
+            },
+        )
+
+        validate_world_state(candidate_world_state)
+
+        history_entry = candidate_world_state["history"][-1]
+        result["history_id"] = history_entry["history_id"]
+
+        self.world_state = candidate_world_state
+
+        return deepcopy(result)
 
     def get_history(self) -> list[Dict[str, Any]]:
         return get_history(self.world_state)

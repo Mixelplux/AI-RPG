@@ -1,67 +1,194 @@
 # Current Sprint
 
-## Sprint 10.2 - Persistent Scoped Pressure Representation
+## Sprint 10.3 - Explicit Atomic Pressure-Level Change with Durable History
 
 Status: Complete.
 
 ## Goal
 
-Add a deterministic, validated, copy-safe, persistent representation of scoped pressures. New games may initialize pressures from immutable Region Pack seeds, pressure state must survive save/load, and callers may inspect it through a read-only `GameEngine` boundary.
+Add one deterministic, engine-owned operation that sets the exact level of one existing persistent pressure and records each material change in durable world history. The operation must validate input, preserve pressure identity, scope, type, and provenance, prepare the complete transition against a copied candidate world state, and commit pressure and history together only after the complete operation succeeds.
 
-This sprint is representation-only.
+This sprint is a bounded atomic-transition sprint.
 
 ## Design Intent
 
-A pressure is current mutable world truth and belongs in `world_state`; it is not merely a history event. Region Packs may contain immutable initial pressure seeds that are validated and deep-copied only during new-game construction. Loaded games use persisted pressure state. Sprint 10.2 does not combine pressures with unresolved threads, quests, conditions, or opportunities.
+Sprint 10.3 proves the first explicit transition of persistent reactive world state. It changes only the level of an existing pressure. It does not create pressures, derive changes from gameplay, advance time, project pressure into scenes or narration, or introduce generalized transaction or event infrastructure.
 
-## Expected ADR
+## Accepted ADR
 
-**ADR-036 - Scoped Pressures Are Persistent Current State**
+**ADR-037 - Pressure-Level Changes Are Atomic Current-State Transitions**
 
-Current scoped pressure state is simulation-owned mutable truth stored in `world_state`. Region Packs may provide immutable initial pressure seeds copied only during new-game construction. History may later record accepted pressure changes, but history does not replace current pressure state. Pressure mutation, drift, projection, and opportunity surfacing remain future capabilities.
+An exact pressure-level change is prepared against a copied candidate world state. Pure pressure validation and record mutation remain in or near `engine/pressure_state.py`. `GameEngine` owns orchestration, durable history creation, final validation, and the single commit to `GameEngine.world_state`. A material change commits the pressure value and one `pressure_changed` history entry together. Any validation, mutation, history-construction, or final-validation failure commits neither. Setting the existing level is a successful no-op and creates no history.
 
-## Pressure Contract
+## Operation Contract
 
-The exact supported record contains `pressure_id`, `pressure_type`, `scope_type`, `scope_id`, `level`, and `provenance`. Provenance contains exactly `kind` and `source_id`. Initial scope types are `region` and `location`; initial provenance kind is `region_pack`; level is an integer from 0 through 100, excluding booleans.
+The exact gameplay-facing method is:
 
-Persistent storage is a dictionary at `world_state.pressures`, keyed by `pressure_id`.
+```python
+GameEngine.set_pressure_level(
+    pressure_id: str,
+    new_level: int,
+) -> dict
+```
 
-### Region Pack Seed Contract
+Input rules:
 
-`initial_pressures` is the exact optional top-level Region Pack field. If absent, it means there are no initial pressure seeds. If present, it must be a list whose items use the exact pressure-record shape. Duplicate IDs, invalid types or records, extra fields, invalid scope references, invalid levels, or invalid provenance fail Region Pack validation deterministically.
+- `pressure_id` must identify exactly one pressure already present in `world_state.pressures`.
+- Unknown pressure IDs raise `ValueError`.
+- `new_level` must be an integer from `0` through `100`, inclusive.
+- Booleans are invalid even though Python treats them as integers.
+- Non-integers raise `ValueError`.
+- Values below `0` or above `100` raise `ValueError`.
+- Do not clamp values.
+- Do not interpret the input as a delta.
 
-For `provenance.kind: region_pack`, `provenance.source_id` must exactly equal the containing Region Pack's `region_id`. A merely non-empty mismatched value is invalid. The field contains immutable initialization seeds only and is not runtime pressure state.
+Result shape:
 
-### Read-Only GameEngine and CLI Contract
+```json
+{
+  "changed": true,
+  "pressure_id": "bryn_shander_winter",
+  "previous_level": 65,
+  "new_level": 70,
+  "history_id": "history_000001"
+}
+```
 
-- `GameEngine.get_pressures() -> dict[str, dict]` returns the complete current pressure dictionary keyed by `pressure_id`.
-- `GameEngine.get_pressure(pressure_id: str) -> dict | None` returns one record or `None` for an unknown identifier.
-- Both methods return defensive deep copies, including nested provenance data, and have no history, time, scene-rebuild, or world-state side effects.
-- The required `pressures` CLI/debug command routes through `GameEngine.get_pressures()`, displays deterministically, and never accesses `engine.world_state` directly.
-- No individual-pressure CLI command or mutation command is required.
+No-op result shape:
 
-### Legacy-Save Normalization
+```json
+{
+  "changed": false,
+  "pressure_id": "bryn_shander_winter",
+  "previous_level": 65,
+  "new_level": 65,
+  "history_id": null
+}
+```
 
-Canonical runtime World State always contains `"pressures": {}` or a populated pressure dictionary. New games always create the field, and saves produced after Sprint 10.2 include it.
+## Pure Pressure-Mutation Boundary
 
-During loading only, copied version-1 legacy save data whose `world_state` lacks `pressures` is normalized to an empty dictionary before strict runtime validation and engine construction. It is not seeded from `initial_pressures`. A present malformed value fails validation. Save version 1 is preserved, and no general migration framework is introduced.
+Pure pressure-state logic must remain in or near `engine/pressure_state.py`.
+
+That logic must:
+
+- Validate the exact requested level.
+- Require the targeted pressure to exist.
+- Change only the targeted record’s `level`.
+- Preserve `pressure_id`.
+- Preserve `pressure_type`.
+- Preserve `scope_type`.
+- Preserve `scope_id`.
+- Preserve the complete existing `provenance` object without replacement or alteration.
+- Preserve every non-targeted pressure without material change.
+- Operate on copied candidate data rather than live durable state.
+- Return sufficient deterministic change data for `GameEngine` orchestration.
+- Create no history.
+- Read or advance no time.
+- Access no scene, narration, player, or Region Pack mutation authority.
+
+## Atomicity Contract
+
+`GameEngine` owns the complete operation.
+
+For a material change:
+
+1. Validate the request through the narrow pressure mutation boundary.
+2. Prepare the operation against a defensive candidate copy of current `world_state`.
+3. Apply the level change only to the candidate.
+4. Read the current durable time without changing it.
+5. Add the corresponding history entry to the candidate through the existing engine-owned history mechanism.
+6. Validate the completed candidate state as appropriate.
+7. Assign the completed candidate to `GameEngine.world_state` exactly once.
+8. Return the copy-safe result packet.
+
+Do not assign partially changed state to `self.world_state`.
+
+A pressure-validation, mutation, history-construction, or completed-candidate validation failure must leave both the durable pressure dictionary and durable history unchanged.
+
+Propagate the bounded failure rather than swallowing it or returning a partial-success result.
+
+Do not introduce:
+
+- A transaction class
+- A transaction manager
+- Rollback infrastructure
+- An event bus
+- A command bus
+- A scheduler
+- Dependency injection
+- Generic mutation registration
+
+For a no-op:
+
+- Validate the pressure ID and level normally.
+- Detect that `new_level` equals the current level.
+- Create no history.
+- Do not replace or otherwise materially mutate durable world state.
+- Return the no-op result with `history_id: null`.
+
+## History Contract
+
+Each material change creates exactly one durable history entry with:
+
+- `history_id`
+- `event_type`
+- `summary`
+- `time`
+- `pressure_id`
+- `pressure_type`
+- `scope_type`
+- `scope_id`
+- `previous_level`
+- `new_level`
+
+Use:
+
+```json
+{
+  "event_type": "pressure_changed",
+  "summary": "Pressure bryn_shander_winter changed from 65 to 70."
+}
+```
+
+The exact deterministic summary template is:
+
+```text
+Pressure {pressure_id} changed from {previous_level} to {new_level}.
+```
+
+History rules:
+
+- Use the existing engine-owned history ID mechanism.
+- Do not accept a caller-supplied history ID.
+- Use a defensive copy of the current durable world time.
+- Do not advance time.
+- Do not attach the player’s current location.
+- The pressure’s explicit `scope_type` and `scope_id` are the relevant spatial data.
+- Do not record provenance in the history entry.
+- Do not add a reason, cause, causal event reference, mutation provenance, taxonomy, or `updated_at` field.
+- A no-op creates no history.
+- Invalid requests and failed operations create no history.
+
+## Persistence and Immutability
+
+- The changed pressure and new history entry must survive the existing save/load path.
+- Preserve save version 1.
+- Do not add a migration.
+- Do not change legacy pressure normalization.
+- Do not reapply Region Pack seeds during loading.
+- `data/regions/bryn_shander.json` remains an immutable initialization input.
+- Runtime mutation must not alter `region["initial_pressures"]` or any nested seed data.
+- No `engine/save_system.py` change is expected because it already persists the complete world state.
 
 ## Expected Files
 
-Likely created:
+Likely modified during implementation:
 
 - `engine/pressure_state.py`
-- `test_pressure_state.py`
-
-Likely modified:
-
-- `engine/world_state.py`
 - `engine/game_engine.py`
-- `engine/region_validator.py`
-- `engine/save_system.py`
-- `data/regions/bryn_shander.json`
+- `test_pressure_state.py`
 - `test_save_load.py`
-- `play_game.py`
 - `docs/architecture.md`
 - `docs/decisions.md`
 - `docs/roadmap.md`
@@ -71,37 +198,55 @@ Likely modified:
 - `docs/current_sprint.json`
 - `docs/next_chat_handoff.md`
 
-Possibly modified only if existing ownership requires it:
+Not expected to require modification:
 
-- `engine/game_session.py`
+- `engine/world_state.py`
+- `engine/world_update.py`
+- `engine/save_system.py`
+- `engine/region_validator.py`
+- `data/regions/bryn_shander.json`
+- `play_game.py`
 
-Planning infrastructure modified during staging:
-
-- `tools/validate_hardening_package.ps1`
-- `review_context.md`
+A file from the second list may be changed only if implementation reveals a concrete bounded necessity. Any such change must be reported and justified. Do not expand the sprint to refactor those files.
 
 ## Acceptance Criteria
 
-- The exact supported pressure shape is documented and deterministically validated.
-- Stable non-empty identifiers, unique pressure IDs, valid scope references, exact fields, and integer levels from 0 through 100 are enforced; booleans are rejected as levels.
-- `initial_pressures` is the exact optional top-level Region Pack seed field and a present value must be a list of exact pressure records.
-- Region Pack provenance requires `source_id` to exactly equal the containing pack's `region_id`.
-- Valid Region Pack seeds are deep-copied into a new game's `world_state.pressures` dictionary.
-- Runtime pressure state cannot mutate Region Pack seed data.
-- Pressure records survive save/load without material change.
-- Canonical runtime World State requires `pressures`; new games always create it.
-- During loading only, copied version-1 legacy saves missing `pressures` normalize to an empty dictionary before strict validation and are not retroactively seeded.
-- A present malformed `pressures` value fails validation.
-- Loading never reapplies or overwrites persisted pressure state from Region Pack seeds.
-- Saves produced after Sprint 10.2 contain `pressures` and preserve save version 1.
-- `GameEngine` implements exactly `get_pressures()` and `get_pressure(pressure_id)`, with unknown identifiers returning `None`.
-- Both reads return defensive deep copies and do not create history, advance time, rebuild scenes, or alter world state.
-- The required `pressures` CLI command routes only through `GameEngine.get_pressures()` and displays deterministically without direct world-state access.
-- Pressure inspection cannot mutate durable state, create history, advance time, move the player, or alter unrelated state.
-- Existing movement, waiting, conversation history, history identifiers, narration boundaries, target resolution, destination resolution, and save/load remain materially unchanged.
-- Documentation records ADR-036 and the representation-only boundary.
-- Sprint 10.2 closes only after all required verification passes.
-- Sprint 10.3 is not defined or started.
+1. `GameEngine.set_pressure_level(pressure_id, new_level)` exists with the exact gameplay-facing name and parameters.
+2. A valid material change succeeds.
+3. Exactly one existing pressure is targeted.
+4. Only the targeted pressure’s `level` changes.
+5. Every other field of the targeted pressure remains unchanged.
+6. Existing provenance remains exactly unchanged.
+7. Region Pack seed data remains exactly unchanged.
+8. Every non-target pressure remains exactly unchanged.
+9. Exactly one `pressure_changed` history entry is created for a material change.
+10. The history entry receives a stable engine-owned history ID.
+11. The operation result returns that history ID.
+12. The history entry contains current durable time.
+13. Durable time is not advanced.
+14. The entry records previous and new levels.
+15. The entry records pressure identity, type, and scope.
+16. The entry does not automatically include player location.
+17. Save/load preserves the changed pressure and its history entry.
+18. Unknown pressure IDs raise `ValueError`.
+19. Boolean levels raise `ValueError`.
+20. Non-integer levels raise `ValueError`.
+21. Values below `0` or above `100` raise `ValueError`.
+22. Validation failures commit no pressure mutation and no history.
+23. An injected history-construction failure commits no pressure mutation and no history.
+24. A completed-candidate validation failure, where practically testable without broad infrastructure, commits no partial state.
+25. Setting the existing level returns `changed: false`.
+26. A no-op returns `history_id: null`.
+27. A no-op creates no history.
+28. Returned operation data cannot mutate durable state.
+29. Player location remains unchanged.
+30. Weather remains unchanged.
+31. Current scene snapshot remains unchanged.
+32. Narration behavior and narration data remain unchanged.
+33. Unrelated world state remains unchanged.
+34. Existing movement, waiting, conversation history, history queries, history context, narration context, narration pipeline, target resolution, destination resolution, and save/load behavior remain materially unchanged.
+35. Sprint 10.3 closes only after every required verification passes.
+36. Sprint 10.4 remains undefined and not started.
 
 ## Verification
 
@@ -109,28 +254,73 @@ Official focused commands:
 
 ```powershell
 .\.venv\Scripts\python.exe test_pressure_state.py
-.\.venv\Scripts\python.exe engine/region_validator.py
 .\.venv\Scripts\python.exe test_save_load.py
 .\.venv\Scripts\python.exe test_interaction_history.py
 .\.venv\Scripts\python.exe test_history_query.py
 .\.venv\Scripts\python.exe test_history_context.py
 .\.venv\Scripts\python.exe test_narration_context.py
 .\.venv\Scripts\python.exe test_narration_pipeline.py
+.\.venv\Scripts\python.exe engine/region_validator.py
 .\.venv\Scripts\python.exe -m json.tool docs/current_sprint.json
 .\.venv\Scripts\python.exe -c "import json, yaml; from pathlib import Path; j=json.loads(Path('docs/current_sprint.json').read_text(encoding='utf-8')); y=yaml.safe_load(Path('docs/current_sprint.yaml').read_text(encoding='utf-8')); assert type(j) is type(y) and j == y"
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\validate_hardening_package.ps1 -PackageRoot .
+git diff --check
 ```
 
-Run `play_game.py` and a scripted or manual CLI smoke inspection covering pressures, save/load, legacy-save compatibility, copy safety, non-mutation, movement, wait, conversation history, history review, target and destination resolution, narration preview, reset, and quit.
+The implementation verification plan must also include:
+
+- A direct API smoke flow for one material pressure change.
+- A no-op pressure change.
+- Invalid pressure ID and invalid-level checks.
+- Save/load of the changed pressure and history.
+- Existing movement, wait, conversation, history review, target resolution, destination resolution, narration preview, reset, and quit smoke coverage.
+- No CLI pressure-mutation command.
+
+## Documentation Closeout Checks
+
+Completed documentation closeout results:
+
+1. Pressures were added to the current `world_state` ownership list in `docs/architecture.md`.
+2. The stale statement that Sprint 10.2 had not started was corrected.
+3. The architecture version was updated to `0.10.3`.
+4. The Sprint 10.2 closeout record was retained with a corrected closeout heading rather than being replaced by Sprint 10.3.
+
+These bounded checks were completed during Sprint 10.3 closeout correction.
 
 ## Non-Goals
 
-- Pressure mutation, player-created pressures, pressure-change history, drift, world ticks, or schedulers.
-- Scene, perception, or narration projection.
-- AI-created pressures.
-- Unresolved threads or a generic ongoing-condition abstraction.
-- Actor state or knowledge, evidence, consequences, opportunities, quests, travel execution, combat, economy, or faction simulation.
-- Broad cleanup or unrelated refactoring.
+- Runtime pressure creation
+- Runtime pressure deletion
+- Delta-based adjustment as the primitive API
+- Automatic clamping
+- Gameplay-event coupling
+- Interaction Kernel pressure commands
+- Player-facing pressure mutation
+- Debug pressure mutation
+- Time-based drift
+- Escalation policy
+- Decay policy
+- Pressure consequences
+- Pressure projection
+- Scene rebuilding
+- Narration integration
+- AI-generated pressure behavior
+- Causal event references
+- Change-reason taxonomies
+- Mutation provenance fields
+- `updated_at`
+- Persistent unresolved threads
+- Opportunities
+- Actor state
+- Actor knowledge
+- Evidence systems
+- Generic transactions
+- Event buses
+- Schedulers
+- Command buses
+- Dependency-injection infrastructure
+- Broad cleanup
+- Sprint 10.4 planning
 
 ## Canonical Manifest
 
@@ -151,121 +341,143 @@ The JSON block below is canonical machine data and must remain structurally iden
     ]
   },
   "sprint": {
-    "id": "10.2",
-    "title": "Persistent Scoped Pressure Representation",
+    "id": "10.3",
+    "title": "Explicit Atomic Pressure-Level Change with Durable History",
     "phase": "Phase 2B - Reactive World State Foundations",
     "type": "bounded-feature",
     "mode": "single-sprint",
     "status": "complete",
-    "goal": "Add a deterministic, validated, copy-safe, persistent representation of scoped pressures. New games may initialize pressures from immutable Region Pack seeds, pressure state survives save/load, and callers may inspect it through a read-only GameEngine boundary.",
-    "design_intent": "A pressure is current mutable world truth, not merely a history event. Sprint 10.2 is representation-only and deliberately does not introduce pressure mutation, drift, projection, consequences, or a generic ongoing-condition abstraction.",
+    "goal": "Add one deterministic, engine-owned operation that sets the exact level of one existing persistent pressure and records each material change in durable world history. The operation must validate input, preserve pressure identity, scope, type, and provenance, prepare the complete transition against a copied candidate world state, and commit pressure and history together only after the complete operation succeeds.",
+    "design_intent": "Sprint 10.3 proves the first explicit transition of persistent reactive world state. It changes only the level of an existing pressure. It does not create pressures, derive changes from gameplay, advance time, project pressure into scenes or narration, or introduce generalized transaction or event infrastructure.",
     "platform": {
       "operating_system": "Windows",
       "shell": "PowerShell",
       "official_interpreter": ".\\.venv\\Scripts\\python.exe"
     },
     "architectural_decision": {
-      "adr": "ADR-036",
-      "title": "Scoped Pressures Are Persistent Current State",
-      "policy": "Current scoped pressure state is simulation-owned mutable truth stored in world_state. Region Packs may provide immutable initial pressure seeds copied only during new-game construction. History may later record accepted pressure changes, but history does not replace current pressure state."
+      "adr": "ADR-037",
+      "title": "Pressure-Level Changes Are Atomic Current-State Transitions",
+      "policy": "An exact pressure-level change is prepared against a copied candidate world state. Pure pressure validation and record mutation remain in or near engine/pressure_state.py. GameEngine owns orchestration, durable history creation, final validation, and the single commit to GameEngine.world_state. A material change commits the pressure value and one pressure_changed history entry together. Any validation, mutation, history-construction, or final-validation failure commits neither. Setting the existing level is a successful no-op and creates no history."
     },
-    "pressure_contract": {
-      "storage": "world_state.pressures dictionary keyed by pressure_id",
-      "exact_record_fields": [
+    "operation_contract": {
+      "method": "GameEngine.set_pressure_level(pressure_id: str, new_level: int) -> dict",
+      "result_shape": {
+        "changed": true,
+        "pressure_id": "bryn_shander_winter",
+        "previous_level": 65,
+        "new_level": 70,
+        "history_id": "history_000001"
+      },
+      "no_op_result_shape": {
+        "changed": false,
+        "pressure_id": "bryn_shander_winter",
+        "previous_level": 65,
+        "new_level": 65,
+        "history_id": null
+      },
+      "input_rules": [
+        "pressure_id must identify exactly one pressure already present in world_state.pressures",
+        "Unknown pressure IDs raise ValueError",
+        "new_level must be an integer from 0 through 100 inclusive",
+        "Booleans are invalid even though Python treats them as integers",
+        "Non-integers raise ValueError",
+        "Values below 0 or above 100 raise ValueError",
+        "Do not clamp values",
+        "Do not interpret the input as a delta"
+      ]
+    },
+    "pressure_mutation_boundary": {
+      "location": "engine/pressure_state.py",
+      "requirements": [
+        "Validate the exact requested level",
+        "Require the targeted pressure to exist",
+        "Change only the targeted record's level",
+        "Preserve pressure_id, pressure_type, scope_type, scope_id, and provenance",
+        "Preserve every non-targeted pressure without material change",
+        "Operate on copied candidate data rather than live durable state",
+        "Return sufficient deterministic change data for GameEngine orchestration",
+        "Create no history",
+        "Read or advance no time",
+        "Access no scene, narration, player, or Region Pack mutation authority"
+      ]
+    },
+    "atomicity_contract": {
+      "material_change_flow": [
+        "Validate the request through the narrow pressure mutation boundary.",
+        "Prepare the operation against a defensive candidate copy of current world_state.",
+        "Apply the level change only to the candidate.",
+        "Read the current durable time without changing it.",
+        "Add the corresponding history entry to the candidate through the existing engine-owned history mechanism.",
+        "Validate the completed candidate state as appropriate.",
+        "Assign the completed candidate to GameEngine.world_state exactly once.",
+        "Return the copy-safe result packet."
+      ],
+      "no_partial_assignment": true,
+      "failure_property": "A pressure-validation, mutation, history-construction, or completed-candidate validation failure must leave both the durable pressure dictionary and durable history unchanged.",
+      "forbidden_infrastructure": [
+        "transaction class",
+        "transaction manager",
+        "rollback infrastructure",
+        "event bus",
+        "command bus",
+        "scheduler",
+        "dependency injection",
+        "generic mutation registration"
+      ],
+      "no_op_rules": [
+        "Validate the pressure ID and level normally.",
+        "Detect that new_level equals the current level.",
+        "Create no history.",
+        "Do not replace or otherwise materially mutate durable world state.",
+        "Return the no-op result with history_id null."
+      ]
+    },
+    "history_contract": {
+      "entry_fields": [
+        "history_id",
+        "event_type",
+        "summary",
+        "time",
         "pressure_id",
         "pressure_type",
         "scope_type",
         "scope_id",
-        "level",
-        "provenance"
+        "previous_level",
+        "new_level"
       ],
-      "record_example": {
-        "pressure_id": "bryn_shander_winter",
-        "pressure_type": "winter",
-        "scope_type": "region",
-        "scope_id": "icewind_dale_bryn_shander",
-        "level": 65,
-        "provenance": {
-          "kind": "region_pack",
-          "source_id": "icewind_dale_bryn_shander"
-        }
-      },
-      "supported_scope_types": [
-        "region",
-        "location"
-      ],
-      "supported_provenance_kinds": [
-        "region_pack"
-      ],
-      "level_minimum": 0,
-      "level_maximum": 100,
-      "boolean_is_integer": false,
-      "region_pack_seed_field": {
-        "name": "initial_pressures",
-        "location": "top-level Region Pack field",
-        "optional": true,
-        "absent_means": "no initial pressure seeds",
-        "present_type": "list",
-        "item_contract": "exact pressure record",
-        "runtime_authority": false
-      },
-      "provenance_source_rule": "For kind region_pack, source_id must equal the containing Region Pack's exact region_id. A non-empty mismatched source_id is invalid."
+      "event_type": "pressure_changed",
+      "summary_template": "Pressure {pressure_id} changed from {previous_level} to {new_level}.",
+      "rules": [
+        "Use the existing engine-owned history ID mechanism",
+        "Do not accept a caller-supplied history ID",
+        "Use a defensive copy of the current durable world time",
+        "Do not advance time",
+        "Do not attach the player's current location",
+        "The pressure's explicit scope_type and scope_id are the relevant spatial data",
+        "Do not record provenance in the history entry",
+        "Do not add a reason, cause, causal event reference, mutation provenance, taxonomy, or updated_at field",
+        "A no-op creates no history",
+        "Invalid requests and failed operations create no history"
+      ]
     },
-    "ownership_and_initialization": [
-      "Region Pack pressure definitions are immutable initial seeds.",
-      "New-game construction validates and deep-copies seeds into world_state.pressures.",
-      "Runtime pressure state must never share mutable references with Region Pack data.",
-      "Loaded games use persisted pressure state and do not reapply Region Pack seeds.",
-      "Canonical runtime World State always contains a pressures dictionary, including for new games.",
-      "During loading only, copied version-1 legacy save data without pressures is normalized to an empty pressure dictionary before strict runtime validation and engine construction.",
-      "A present but malformed pressures value fails validation rather than being normalized.",
-      "Older saves do not receive Region Pack pressures retroactively.",
-      "Save files produced after Sprint 10.2 contain pressures and preserve save version 1.",
-      "No general migration framework is introduced."
-    ],
-    "read_only_game_engine_contract": {
-      "methods": [
-        "GameEngine.get_pressures() -> dict[str, dict]",
-        "GameEngine.get_pressure(pressure_id: str) -> dict | None"
-      ],
-      "get_pressures": "Returns the complete current pressure dictionary keyed by pressure_id as a defensive deep copy.",
-      "get_pressure": "Returns one pressure record as a defensive deep copy, or None for an unknown pressure_id.",
-      "nested_copy_safety": "Mutating returned dictionaries or nested provenance data cannot mutate durable state.",
-      "side_effects": "Neither method creates history, advances time, rebuilds the scene, or alters world state."
-    },
-    "cli_inspection": {
-      "command": "pressures",
-      "required": true,
-      "route": "GameEngine.get_pressures()",
-      "behavior": "Displays current pressure state deterministically without direct world_state access, mutation authority, history creation, or time advancement.",
-      "individual_pressure_command_required": false
-    },
-    "legacy_save_normalization": {
-      "save_version": 1,
-      "boundary": "loading only",
-      "input": "copied loaded save data whose world_state lacks pressures",
-      "result": "pressures is added as an empty dictionary before strict runtime World State validation and engine construction",
-      "prohibitions": [
-        "Do not mutate the Region Pack.",
-        "Do not seed the legacy save from initial_pressures.",
-        "Do not treat pressures as optional in canonical runtime World State.",
-        "Do not normalize a present malformed pressures value.",
-        "Do not introduce a general migration framework."
+    "persistence_and_immutability": {
+      "requirements": [
+        "The changed pressure and new history entry must survive the existing save/load path",
+        "Preserve save version 1",
+        "Do not add a migration",
+        "Do not change legacy pressure normalization",
+        "Do not reapply Region Pack seeds during loading",
+        "data/regions/bryn_shander.json remains an immutable initialization input",
+        "Runtime mutation must not alter region[\"initial_pressures\"] or any nested seed data",
+        "No engine/save_system.py change is expected because it already persists the complete world state"
       ]
     },
     "expected_files": {
-      "likely_created": [
-        "engine/pressure_state.py",
-        "test_pressure_state.py"
-      ],
       "likely_modified": [
-        "engine/world_state.py",
+        "engine/pressure_state.py",
         "engine/game_engine.py",
-        "engine/region_validator.py",
-        "engine/save_system.py",
-        "data/regions/bryn_shander.json",
+        "test_pressure_state.py",
         "test_save_load.py",
-        "play_game.py",
         "docs/architecture.md",
         "docs/decisions.md",
         "docs/roadmap.md",
@@ -275,87 +487,127 @@ The JSON block below is canonical machine data and must remain structurally iden
         "docs/current_sprint.json",
         "docs/next_chat_handoff.md"
       ],
-      "possibly_modified_if_ownership_requires": [
-        "engine/game_session.py"
-      ],
-      "staging_infrastructure_modified": [
-        "tools/validate_hardening_package.ps1",
-        "review_context.md"
+      "not_expected_to_require_modification": [
+        "engine/world_state.py",
+        "engine/world_update.py",
+        "engine/save_system.py",
+        "engine/region_validator.py",
+        "data/regions/bryn_shander.json",
+        "play_game.py"
       ]
     },
     "acceptance_criteria": [
-      "The supported pressure record has exactly pressure_id, pressure_type, scope_type, scope_id, level, and provenance fields, with provenance containing exactly kind and source_id.",
-      "pressure_id and pressure_type are stable non-empty strings, and pressure_id values are unique.",
-      "scope_type accepts only region and location, and scope_id resolves to the declared region or a valid location in the Region Pack.",
-      "level accepts integers from 0 through 100 inclusive and rejects booleans.",
-      "provenance accepts only kind region_pack, and source_id must exactly equal the containing Region Pack's region_id.",
-      "initial_pressures is the exact optional top-level Region Pack seed field; absence means no seeds, while a present value must be a list of exact pressure records.",
-      "Unsupported, malformed, duplicate, extra-field, or invalid pressure seeds fail validation deterministically.",
-      "New-game pressure state is deep-copied from valid Region Pack seeds into a dictionary keyed by pressure_id.",
-      "Mutating runtime pressure state cannot mutate Region Pack data.",
-      "Pressure records are stored in persistent world_state and survive save/load without material change.",
-      "Canonical runtime World State always requires pressures, and new-game construction always creates it.",
-      "During loading only, copied version-1 legacy save data without pressures is normalized to an empty dictionary before strict runtime validation and engine construction.",
-      "A present malformed pressures value fails strict validation and is not normalized.",
-      "Loading does not reapply or overwrite pressure state from Region Pack seeds.",
-      "Save files produced after Sprint 10.2 include pressures and preserve save version 1.",
-      "GameEngine implements exactly get_pressures() returning dict[str, dict] and get_pressure(pressure_id: str) returning dict or None.",
-      "Unknown pressure identifiers return None.",
-      "Pressure access returns deterministic copy-safe data, and mutating returned data cannot mutate durable state.",
-      "The required pressures CLI/debug command routes through GameEngine.get_pressures(), displays deterministically, and never accesses world_state directly.",
-      "Pressure inspection does not create history, advance time, move the player, or alter other world state.",
-      "Existing movement, waiting, resolved-conversation history, history identifiers, narration boundaries, target resolution, destination resolution, and save/load behavior remain materially unchanged.",
-      "Documentation records ADR-036 and the representation-only boundary.",
-      "Sprint 10.2 is marked complete only after every documented required check passes.",
-      "Sprint 10.3 is neither defined nor started."
+      "GameEngine.set_pressure_level(pressure_id, new_level) exists with the exact gameplay-facing name and parameters.",
+      "A valid material change succeeds.",
+      "Exactly one existing pressure is targeted.",
+      "Only the targeted pressure's level changes.",
+      "Every other field of the targeted pressure remains unchanged.",
+      "Existing provenance remains exactly unchanged.",
+      "Region Pack seed data remains exactly unchanged.",
+      "Every non-target pressure remains exactly unchanged.",
+      "Exactly one pressure_changed history entry is created for a material change.",
+      "The history entry receives a stable engine-owned history ID.",
+      "The operation result returns that history ID.",
+      "The history entry contains current durable time.",
+      "Durable time is not advanced.",
+      "The entry records previous and new levels.",
+      "The entry records pressure identity, type, and scope.",
+      "The entry does not automatically include player location.",
+      "Save/load preserves the changed pressure and its history entry.",
+      "Unknown pressure IDs raise ValueError.",
+      "Boolean levels raise ValueError.",
+      "Non-integer levels raise ValueError.",
+      "Values below 0 or above 100 raise ValueError.",
+      "Validation failures commit no pressure mutation and no history.",
+      "An injected history-construction failure commits no pressure mutation and no history.",
+      "A completed-candidate validation failure, where practically testable without broad infrastructure, commits no partial state.",
+      "Setting the existing level returns changed false.",
+      "A no-op returns history_id null.",
+      "A no-op creates no history.",
+      "Returned operation data cannot mutate durable state.",
+      "Player location remains unchanged.",
+      "Weather remains unchanged.",
+      "Current scene snapshot remains unchanged.",
+      "Narration behavior and narration data remain unchanged.",
+      "Unrelated world state remains unchanged.",
+      "Existing movement, waiting, conversation history, history queries, history context, narration context, narration pipeline, target resolution, destination resolution, and save/load behavior remain materially unchanged.",
+      "Sprint 10.3 closes only after every required verification passes.",
+      "Sprint 10.4 remains undefined and not started."
     ],
     "non_goals": [
-      "Pressure-level mutation or runtime pressure creation.",
-      "Pressure creation from player actions or history.",
-      "Pressure-change history events.",
-      "Time-based pressure drift, world ticks, or schedulers.",
-      "Scene, perception, or narration projection.",
-      "AI-created pressures.",
-      "Unresolved-thread representation or a generic ongoing-condition framework.",
-      "Actor state, actor knowledge, evidence, consequences, opportunities, or quests.",
-      "Travel execution, combat, economy simulation, or faction simulation.",
-      "Unrelated refactoring or broad cleanup."
+      "Runtime pressure creation",
+      "Runtime pressure deletion",
+      "Delta-based adjustment as the primitive API",
+      "Automatic clamping",
+      "Gameplay-event coupling",
+      "Interaction Kernel pressure commands",
+      "Player-facing pressure mutation",
+      "Debug pressure mutation",
+      "Time-based drift",
+      "Escalation policy",
+      "Decay policy",
+      "Pressure consequences",
+      "Pressure projection",
+      "Scene rebuilding",
+      "Narration integration",
+      "AI-generated pressure behavior",
+      "Causal event references",
+      "Change-reason taxonomies",
+      "Mutation provenance fields",
+      "updated_at",
+      "Persistent unresolved threads",
+      "Opportunities",
+      "Actor state",
+      "Actor knowledge",
+      "Evidence systems",
+      "Generic transactions",
+      "Event buses",
+      "Schedulers",
+      "Command buses",
+      "Dependency-injection infrastructure",
+      "Broad cleanup",
+      "Sprint 10.4 planning"
     ],
     "verification": {
       "primary_commands": [
         ".\\.venv\\Scripts\\python.exe test_pressure_state.py",
-        ".\\.venv\\Scripts\\python.exe engine/region_validator.py",
         ".\\.venv\\Scripts\\python.exe test_save_load.py",
         ".\\.venv\\Scripts\\python.exe test_interaction_history.py",
         ".\\.venv\\Scripts\\python.exe test_history_query.py",
         ".\\.venv\\Scripts\\python.exe test_history_context.py",
         ".\\.venv\\Scripts\\python.exe test_narration_context.py",
-        ".\\.venv\\Scripts\\python.exe test_narration_pipeline.py"
+        ".\\.venv\\Scripts\\python.exe test_narration_pipeline.py",
+        ".\\.venv\\Scripts\\python.exe engine/region_validator.py"
       ],
       "manifest_commands": [
         ".\\.venv\\Scripts\\python.exe -m json.tool docs/current_sprint.json",
         ".\\.venv\\Scripts\\python.exe -c \"import json, yaml; from pathlib import Path; j=json.loads(Path('docs/current_sprint.json').read_text(encoding='utf-8')); y=yaml.safe_load(Path('docs/current_sprint.yaml').read_text(encoding='utf-8')); assert type(j) is type(y) and j == y\"",
-        "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tools\\validate_hardening_package.ps1 -PackageRoot ."
+        "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tools\\validate_hardening_package.ps1 -PackageRoot .",
+        "git diff --check"
       ],
-      "startup_command": ".\\.venv\\Scripts\\python.exe play_game.py",
-      "manual_or_scripted_steps": [
-        "Start a new game and inspect pressures through the narrow CLI/debug boundary.",
-        "Confirm the Bryn Shander winter pressure matches the validated Region Pack seed.",
-        "Mutate returned inspection data in a focused test and confirm durable pressure state is unchanged.",
-        "Save and load, then confirm pressure state is materially unchanged.",
-        "Load a legacy save payload without pressures and confirm pressures is empty rather than reseeded.",
-        "Confirm pressure inspection does not create history, advance time, move the player, or alter unrelated state.",
-        "Smoke movement, wait, conversation history, history queries, target and destination resolution, narration preview, reset, and quit."
+      "smoke_plan": [
+        "A direct API smoke flow for one material pressure change.",
+        "A no-op pressure change.",
+        "Invalid pressure ID and invalid-level checks.",
+        "Save/load of the changed pressure and history.",
+        "Existing movement, wait, conversation, history review, target resolution, destination resolution, narration preview, reset, and quit smoke coverage.",
+        "No CLI pressure-mutation command."
       ]
     },
+    "documentation_closeout_checks": [
+      "Pressures were added to the current world_state ownership list in docs/architecture.md.",
+      "The stale statement that Sprint 10.2 had not started was corrected.",
+      "The architecture version was updated to 0.10.3.",
+      "The Sprint 10.2 closeout record was retained with a corrected closeout heading rather than being replaced by Sprint 10.3."
+    ],
     "execution_phases": [
       {
         "id": "setup",
-        "goal": "Perform Startup Review and confirm the synchronized Sprint 10.2 definition before application changes."
+        "goal": "Perform Startup Review and confirm the synchronized Sprint 10.3 definition before application changes."
       },
       {
         "id": "implementation",
-        "goal": "Implement only the bounded persistent pressure representation."
+        "goal": "Implement only the bounded atomic pressure-level transition."
       },
       {
         "id": "verification",
@@ -363,7 +615,7 @@ The JSON block below is canonical machine data and must remain structurally iden
       },
       {
         "id": "closeout",
-        "goal": "Record actual results, synchronize documentation, and stop without defining Sprint 10.3."
+        "goal": "Record actual results, synchronize documentation, and stop without defining Sprint 10.4."
       }
     ],
     "governance": [
@@ -371,7 +623,7 @@ The JSON block below is canonical machine data and must remain structurally iden
       "Do not substitute bundled, system, Windows Store, or alternate Python for official verification.",
       "Preserve provider neutrality, deterministic behavior, simulation-owned truth, and unrelated user changes.",
       "Do not begin implementation during planning and staging.",
-      "Do not define or begin Sprint 10.3."
+      "Do not define or begin Sprint 10.4."
     ],
     "closeout": {
       "allowed_terminal_statuses": [

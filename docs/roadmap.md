@@ -76,7 +76,7 @@ The playable vertical-slice review is complete. It confirmed that movement and w
 
 Phase 2B has begun with **Persistent Resolved Conversation Memory** complete as Sprint 10.1.
 
-The architecture and scope review selected persistent scoped pressure representation as Sprint 10.2. Sprint 10.2 is complete and closed out.
+The architecture and scope review selected persistent scoped pressure representation as Sprint 10.2. Sprint 10.2 is complete and closed out. Sprint 10.3, explicit atomic pressure-level change with durable history, is complete and closed out.
 
 Real AI provider integration remains deferred. It is not required for the next simulation capabilities and should not lead the roadmap merely because the provider-neutral narration boundary exists.
 
@@ -108,6 +108,7 @@ This sequence is directional, not a sprint commitment. The playable vertical-sli
    - Unresolved threads remain a distinct future concept rather than part of a generic combined abstraction.
 
 3. **Explicit pressure change operation**
+   - Complete as Sprint 10.3.
    - One deterministic engine-owned operation changes one pressure.
    - The accepted change is recorded in durable history.
 

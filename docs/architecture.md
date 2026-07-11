@@ -1,6 +1,6 @@
 # Architecture
 
-Version: 0.9.13
+Version: 0.10.3
 
 ## Current Engine Pipeline
 
@@ -56,6 +56,7 @@ Currently owned by `world_state`:
 - Current weather
 - Current time
 - World history entries
+- Persistent scoped pressures
 
 Region Packs provide static world data and initial values only.
 
@@ -81,9 +82,9 @@ Phase 2 remains **World Evolution Foundations**.
 
 Phase 1 established world representation. Sprint 9 completed the first Phase 2 milestone by establishing durable world memory, explicit simulation-owned time advancement, bounded historical context, and safe narration boundaries.
 
-Sprint 9 is closed as **World Memory and Safe Narration Foundations**. It completed history and time prerequisites but did not complete World Evolution Foundations as a whole. Persistent pressures or threads, pressure change, time-based drift, runtime actor state, actor knowledge, evidence, consequences, schedules, affordances, and opportunity surfacing remain future capabilities.
+Sprint 9 is closed as **World Memory and Safe Narration Foundations**. It completed history and time prerequisites but did not complete World Evolution Foundations as a whole. Persistent unresolved threads, time-based pressure drift, runtime actor state, actor knowledge, evidence, consequences, schedules, affordances, and opportunity surfacing remain future capabilities.
 
-Sprint 10.1 closed the first Phase 2B capability: **Persistent Resolved Conversation Memory**. The subsequent architecture and scope review selected **Persistent Scoped Pressure Representation** as Sprint 10.2. Sprint 10.2 is defined and staged but implementation has not started.
+Sprint 10.1 closed the first Phase 2B capability: **Persistent Resolved Conversation Memory**. The subsequent architecture and scope review selected **Persistent Scoped Pressure Representation** as Sprint 10.2. Sprint 10.2 is complete and closed out.
 
 The implementation keeps the existing `GameEngine` command path intact: `Interaction Kernel -> GameEngine -> current-scene target resolution -> World Update -> world_state.history`. A successful resolved conversation becomes a durable accepted event only when the normal command path succeeds and target resolution returns a resolved entity with stable identity.
 
@@ -96,6 +97,8 @@ Canonical runtime World State always requires the pressure dictionary. During lo
 The initial pressure contract supports region and location scopes, an integer level from 0 through 100, and Region Pack provenance. The exact read boundary is `GameEngine.get_pressures()` for the complete keyed dictionary and `GameEngine.get_pressure(pressure_id)` for one copied record or `None`. Both return defensive deep copies without state, time, history, or scene-rebuild effects. The required `pressures` CLI command routes through `get_pressures()` and never accesses durable state directly. Mutation, history of pressure changes, time drift, projection, AI creation, unresolved-thread representation, and generic ongoing-condition frameworks remain outside Sprint 10.2.
 
 Sprint 10.2 is complete. The verified implementation covered the representation-only boundary, the Region Pack seed contract, load-only legacy normalization, and read-only pressure inspection.
+
+Sprint 10.3 adds the exact gameplay-facing operation `GameEngine.set_pressure_level(pressure_id, new_level)`. It accepts an exact level rather than a delta. Pure pressure mutation remains in or near `engine/pressure_state.py`, while `GameEngine` prepares a copied candidate world state, adds exactly one engine-identified `pressure_changed` history entry for a material change, validates the completed candidate, and commits pressure and history together through one final assignment. Validation or history failure commits neither. A no-op creates no history and does not replace durable state. The entry records current durable time without advancing it and records pressure scope rather than player location. The operation does not rebuild scene state or invoke narration.
 
 ## Completed
 
@@ -130,11 +133,11 @@ Sprint 10.2 is complete. The verified implementation covered the representation-
 - Scene-bound target resolution
 - Known-destination resolution without travel execution
 - Persistent scoped pressure representation
+- Explicit atomic pressure-level change with durable history
 
 ## In Progress
 
 - Phase 2 - World Evolution Foundations
-- Reactive world-state capability selection through a playable vertical-slice review
 
 ## Post-Sprint-9 Architecture Review
 
@@ -152,7 +155,7 @@ The post-Sprint-9 architecture review reached these decisions:
 
 ## Known Architectural Debt
 
-The following issues are real but do not block the playable vertical-slice review or the first reactive world-state capability:
+The following issues are real but do not block later bounded reactive-world capabilities:
 
 - The untrusted narration candidate and the enriched validated narration result currently use the same narration-output schema and version despite having different supported shapes. Separate or version these contracts before real provider integration.
 - Narration preview packets repeat substantial context through request, prompt, source-result, candidate, validated-output, and display fields. Preserve the current tested boundary for now and simplify only when a real provider or runtime consumer demonstrates the required shape.

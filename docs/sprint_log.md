@@ -1,6 +1,25 @@
 # Sprint Log
 
-## Sprint 10.2 Planning and Staging
+## Sprint 10.3 Closeout
+
+- Status: Complete.
+- Implementation and verification completed using the official project environment.
+- Selected capability: Explicit Atomic Pressure-Level Change with Durable History.
+- Architecture review: Complete; pressure mutation was selected as the next bounded Phase 2B capability after persistent scoped pressure representation.
+- Ownership decision: exact pressure-level changes remain in or near `engine/pressure_state.py`; `GameEngine` owns orchestration and history creation.
+- Atomicity decision: material changes commit pressure and history together, and no-op updates create no history.
+- Persistence decision: loaded games retain the changed pressure and pressure-change history; save version remains unchanged.
+- Boundary: exact-level validation, candidate-based mutation, durable history creation, and copy-safe result reporting only.
+- Contract clarification: `GameEngine.set_pressure_level(pressure_id, new_level)` is the gameplay-facing method; exact levels are required and deltas are rejected.
+- History clarification: material changes record `pressure_changed` entries with the pressure identity, type, scope, time, previous level, and new level.
+- Facade clarification: there is no pressure-mutation CLI command.
+- Added ADR-037: Pressure-Level Changes Are Atomic Current-State Transitions.
+- Canonical Sprint 10.3 Markdown, YAML, JSON, and handoff files staged and synchronized.
+- Application code and tests were updated for Sprint 10.3.
+- Corrected verification passed with the official project environment: environment preflight, package validator, every required focused and regression test, Region Pack validator, canonical manifest parse and three-way deep-agreement checks, and `git diff --check`.
+- Sprint 10.4 was not defined or started.
+
+## Sprint 10.2 Closeout
 
 - Status: Complete.
 - Implementation and verification completed using the official project environment.

@@ -16,6 +16,7 @@ from play_game import print_pressures
 REGION_PATH = "data/regions/bryn_shander.json"
 PRESSURE_ID = "bryn_shander_winter"
 REGION_ID = "icewind_dale_bryn_shander"
+SECOND_PRESSURE_ID = "bryn_shander_supply_shortage"
 EXPECTED_PRESSURE = {
     "pressure_id": PRESSURE_ID,
     "pressure_type": "winter",
@@ -27,10 +28,28 @@ EXPECTED_PRESSURE = {
         "source_id": REGION_ID,
     },
 }
+SECOND_PRESSURE = {
+    "pressure_id": SECOND_PRESSURE_ID,
+    "pressure_type": "supply_shortage",
+    "scope_type": "region",
+    "scope_id": REGION_ID,
+    "level": 12,
+    "provenance": {
+        "kind": "region_pack",
+        "source_id": REGION_ID,
+    },
+}
 
 
 def load_region() -> dict:
     return json.loads(Path(REGION_PATH).read_text(encoding="utf-8"))
+
+
+def build_engine() -> GameEngine:
+    region = load_region()
+    world_state = create_initial_world_state(region)
+    world_state["pressures"][SECOND_PRESSURE_ID] = deepcopy(SECOND_PRESSURE)
+    return GameEngine(REGION_PATH, initial_world_state=world_state)
 
 
 def assert_invalid_region(region: dict, expected_text: str) -> None:
@@ -212,8 +231,193 @@ def test_runtime_representation_and_reads() -> None:
     assert "level=65" in rendered
 
 
+def test_pressure_level_change_atomicity() -> None:
+    engine = build_engine()
+
+    starting_world_state = engine.get_world_state()
+    starting_scene_snapshot = engine.get_scene_snapshot()
+    starting_history = engine.get_history()
+
+    no_op_result = engine.set_pressure_level(PRESSURE_ID, 65)
+    assert list(no_op_result) == [
+        "changed",
+        "pressure_id",
+        "previous_level",
+        "new_level",
+        "history_id",
+    ]
+    assert no_op_result == {
+        "changed": False,
+        "pressure_id": PRESSURE_ID,
+        "previous_level": 65,
+        "new_level": 65,
+        "history_id": None,
+    }
+    assert engine.get_world_state() == starting_world_state
+    assert engine.get_scene_snapshot() == starting_scene_snapshot
+    assert engine.get_history() == starting_history
+
+    result = engine.set_pressure_level(PRESSURE_ID, 70)
+    assert list(result) == [
+        "changed",
+        "pressure_id",
+        "previous_level",
+        "new_level",
+        "history_id",
+    ]
+    assert result == {
+        "changed": True,
+        "pressure_id": PRESSURE_ID,
+        "previous_level": 65,
+        "new_level": 70,
+        "history_id": "history_000001",
+    }
+
+    world_state_after_change = engine.get_world_state()
+    expected_world_state = deepcopy(starting_world_state)
+    expected_world_state["pressures"][PRESSURE_ID]["level"] = 70
+    expected_world_state["history"].append(
+        {
+            "history_id": "history_000001",
+            "event_type": "pressure_changed",
+            "summary": (
+                "Pressure bryn_shander_winter changed from 65 to 70."
+            ),
+            "time": deepcopy(starting_world_state["time"]),
+            "pressure_id": PRESSURE_ID,
+            "pressure_type": "winter",
+            "scope_type": "region",
+            "scope_id": REGION_ID,
+            "previous_level": 65,
+            "new_level": 70,
+        }
+    )
+    assert world_state_after_change == expected_world_state
+    assert world_state_after_change["time"] == starting_world_state["time"]
+    assert world_state_after_change["player"] == starting_world_state["player"]
+    assert world_state_after_change["weather"] == starting_world_state["weather"]
+    assert world_state_after_change["pressures"][PRESSURE_ID]["level"] == 70
+    assert world_state_after_change["pressures"][PRESSURE_ID]["pressure_type"] == "winter"
+    assert world_state_after_change["pressures"][PRESSURE_ID]["scope_type"] == "region"
+    assert world_state_after_change["pressures"][PRESSURE_ID]["scope_id"] == REGION_ID
+    assert world_state_after_change["pressures"][PRESSURE_ID]["provenance"] == EXPECTED_PRESSURE["provenance"]
+    assert world_state_after_change["pressures"][SECOND_PRESSURE_ID] == SECOND_PRESSURE
+    assert engine.region["initial_pressures"] == [EXPECTED_PRESSURE]
+    assert engine.get_scene_snapshot() == starting_scene_snapshot
+
+    history = engine.get_history()
+    assert len(history) == 1
+    entry = history[0]
+    assert list(entry) == [
+        "history_id",
+        "event_type",
+        "summary",
+        "time",
+        "pressure_id",
+        "pressure_type",
+        "scope_type",
+        "scope_id",
+        "previous_level",
+        "new_level",
+    ]
+    assert entry["history_id"] == "history_000001"
+    assert entry["event_type"] == "pressure_changed"
+    assert entry["summary"] == "Pressure bryn_shander_winter changed from 65 to 70."
+    assert entry["time"] == starting_world_state["time"]
+    assert entry["pressure_id"] == PRESSURE_ID
+    assert entry["pressure_type"] == "winter"
+    assert entry["scope_type"] == "region"
+    assert entry["scope_id"] == REGION_ID
+    assert entry["previous_level"] == 65
+    assert entry["new_level"] == 70
+    assert "location" not in entry
+
+    durable_state_before_result_mutation = engine.get_world_state()
+    durable_history_before_result_mutation = engine.get_history()
+    result["new_level"] = 10
+    result["history_id"] = "history_999999"
+    assert result["new_level"] == 10
+    assert result["history_id"] == "history_999999"
+    assert engine.get_world_state() == durable_state_before_result_mutation
+    assert engine.get_history() == durable_history_before_result_mutation
+    assert engine.get_pressure(PRESSURE_ID)["level"] == 70
+    assert engine.get_pressure(SECOND_PRESSURE_ID) == SECOND_PRESSURE
+
+
+def test_pressure_level_change_validation_and_atomic_failure() -> None:
+    engine = build_engine()
+    starting_world_state = engine.get_world_state()
+    starting_history = engine.get_history()
+    starting_scene_snapshot = engine.get_scene_snapshot()
+
+    for bad_pressure_id in ("missing_pressure", ""):
+        try:
+            engine.set_pressure_level(bad_pressure_id, 70)
+        except ValueError as error:
+            assert "pressure" in str(error).lower()
+        else:
+            raise AssertionError("Unknown pressure_id was accepted.")
+        assert engine.get_world_state() == starting_world_state
+        assert engine.get_history() == starting_history
+        assert engine.get_scene_snapshot() == starting_scene_snapshot
+
+    for invalid_level in (True, "70", 65.0, -1, 101):
+        try:
+            engine.set_pressure_level(PRESSURE_ID, invalid_level)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError(f"Invalid level was accepted: {invalid_level!r}")
+
+        assert engine.get_world_state() == starting_world_state
+        assert engine.get_history() == starting_history
+        assert engine.get_scene_snapshot() == starting_scene_snapshot
+
+    import engine.game_engine as game_engine_module
+
+    original_add_history_entry = game_engine_module.add_history_entry
+    try:
+        def boom_add_history_entry(*args, **kwargs):
+            raise RuntimeError("history failure")
+
+        game_engine_module.add_history_entry = boom_add_history_entry
+        try:
+            engine.set_pressure_level(PRESSURE_ID, 70)
+        except RuntimeError as error:
+            assert "history failure" in str(error)
+        else:
+            raise AssertionError("History failure was swallowed.")
+    finally:
+        game_engine_module.add_history_entry = original_add_history_entry
+
+    assert engine.get_world_state() == starting_world_state
+    assert engine.get_history() == starting_history
+    assert engine.get_scene_snapshot() == starting_scene_snapshot
+
+    original_validate_world_state = game_engine_module.validate_world_state
+    try:
+        def boom_validate_world_state(*args, **kwargs):
+            raise ValueError("candidate validation failure")
+
+        game_engine_module.validate_world_state = boom_validate_world_state
+        try:
+            engine.set_pressure_level(PRESSURE_ID, 70)
+        except ValueError as error:
+            assert "candidate validation failure" in str(error)
+        else:
+            raise AssertionError("Candidate validation failure was swallowed.")
+    finally:
+        game_engine_module.validate_world_state = original_validate_world_state
+
+    assert engine.get_world_state() == starting_world_state
+    assert engine.get_history() == starting_history
+    assert engine.get_scene_snapshot() == starting_scene_snapshot
+
+
 def test_save_load_and_legacy_normalization() -> None:
-    engine = GameEngine(REGION_PATH)
+    engine = build_engine()
+    starting_scene_snapshot = engine.get_scene_snapshot()
+    result = engine.set_pressure_level(PRESSURE_ID, 70)
 
     with TemporaryDirectory() as temp_dir:
         save_path = Path(temp_dir) / "pressure_save.json"
@@ -223,7 +427,15 @@ def test_save_load_and_legacy_normalization() -> None:
 
         assert saved_payload["save_version"] == SAVE_VERSION == 1
         assert saved_payload["world_state"]["pressures"] == engine.get_pressures()
+        assert saved_payload["world_state"]["history"] == engine.get_history()
         assert loaded_engine.get_pressures() == engine.get_pressures()
+        assert loaded_engine.get_history() == engine.get_history()
+        assert loaded_engine.get_history()[0]["history_id"] == result["history_id"]
+        assert loaded_engine.get_history()[0]["time"] == engine.get_history()[0]["time"]
+        assert loaded_engine.get_history()[0]["pressure_id"] == PRESSURE_ID
+        assert loaded_engine.get_history()[0]["pressure_type"] == "winter"
+        assert loaded_engine.get_history()[0]["scope_type"] == "region"
+        assert loaded_engine.get_history()[0]["scope_id"] == REGION_ID
 
         legacy_payload = build_save_data(engine)
         del legacy_payload["world_state"]["pressures"]
@@ -234,6 +446,15 @@ def test_save_load_and_legacy_normalization() -> None:
         assert "pressures" in legacy_engine.get_world_state()
         assert legacy_engine.get_pressures() == {}
         assert legacy_engine.region["initial_pressures"] == [EXPECTED_PRESSURE]
+        assert legacy_engine.get_scene_snapshot() == starting_scene_snapshot
+
+        next_history_result = loaded_engine.set_pressure_level(
+            PRESSURE_ID,
+            65,
+        )
+        assert next_history_result["history_id"] == "history_000002"
+        assert next_history_result["history_id"] != result["history_id"]
+        assert loaded_engine.get_history()[-1]["history_id"] == "history_000002"
 
     malformed_payload = build_save_data(engine)
     malformed_payload["world_state"]["pressures"] = []
@@ -243,6 +464,8 @@ def test_save_load_and_legacy_normalization() -> None:
 def main() -> None:
     test_region_seed_validation()
     test_runtime_representation_and_reads()
+    test_pressure_level_change_atomicity()
+    test_pressure_level_change_validation_and_atomic_failure()
     test_save_load_and_legacy_normalization()
     print("Pressure state tests passed.")
 
