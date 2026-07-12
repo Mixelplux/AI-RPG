@@ -1,6 +1,6 @@
 # Architecture
 
-Version: 0.10.5
+Version: 0.10.6
 
 ## Current Engine Pipeline
 
@@ -107,6 +107,10 @@ Sprint 10.5 adds the strict optional Region Pack field `conversation_pressure_ef
 For a matching resolved conversation, `GameEngine` copies durable world state, adds the normal `player_conversation` source first, captures its engine-owned `history_id`, resolves the one declaration, and uses a private non-committing form of the Sprint 10.4 linked-transition logic to prepare the exact pressure mutation and linked `pressure_changed` consequence in the same candidate. It validates the completed candidate and builds the required candidate scene before assigning live world state once and replacing `scene_snapshot`. An unmatched conversation remains source-only. A matching same-level conversation commits its new source but creates no consequence history. Save version 1 persists the resulting pressure and causal history without persisting or replaying Region Pack declarations.
 
 This first automatic gameplay-event-to-pressure-consequence path remains deliberately bounded. It does not add generic effect rules, multiple consequences, deltas, predicates, ordering, event replay, schedulers, autonomous progression, pressure projection, narration coupling, runtime pressure creation, actor state, unresolved threads, or new commands.
+
+Sprint 10.6 adds the canonical read-only pressure-applicability boundary. `engine/pressure_state.py` owns the pure operation: it validates the pressure collection, filters only records whose region scope exactly matches the loaded Region Pack `region_id` or whose location scope exactly matches the requested location, deep-copies the results, and orders them by sorted `pressure_id`. It remains independent of player movement, Region Pack scenes, history, narration, perception, and runtime effects.
+
+`GameEngine.get_applicable_pressures(location_id=None)` is the gameplay facade. It resolves an omitted identifier from the player's durable current location, rejects non-string, empty, and non-canonical explicit locations, delegates scope filtering to the pressure-domain operation, and returns the copy-safe result without modifying world state, pressure state, history, time, weather, Region Pack data, player location, or the scene snapshot. Applicability is scope membership only; it does not imply activity, visibility, perceptibility, importance, narration eligibility, or escalation eligibility.
 
 ## Completed
 

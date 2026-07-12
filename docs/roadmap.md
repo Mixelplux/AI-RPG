@@ -76,9 +76,9 @@ The playable vertical-slice review is complete. It confirmed that movement and w
 
 Phase 2B has begun with **Persistent Resolved Conversation Memory** complete as Sprint 10.1.
 
-The architecture and scope review selected persistent scoped pressure representation as Sprint 10.2. Sprint 10.2 is complete and closed out. Sprint 10.3, explicit atomic pressure-level change with durable history, is complete and closed out. Sprint 10.4, causally referenced pressure transition, is complete and closed out. Sprint 10.5, one declared resolved-conversation pressure consequence, is complete and closed out.
+The architecture and scope review selected persistent scoped pressure representation as Sprint 10.2. Sprint 10.2 is complete and closed out. Sprint 10.3, explicit atomic pressure-level change with durable history, is complete and closed out. Sprint 10.4, causally referenced pressure transition, is complete and closed out. Sprint 10.5, one declared resolved-conversation pressure consequence, is complete and closed out. Sprint 10.6, read-only applicable pressures for one location, is complete and closed out.
 
-Phase 2B now includes one deterministic gameplay event automatically causing one linked pressure consequence through a strict Region Pack-owned declaration and atomic source-and-consequence candidate-state composition. The next Phase 2B capability requires a focused post-Sprint 10.5 architecture review; no next capability or sprint has been selected.
+Phase 2B now includes one deterministic gameplay event automatically causing one linked pressure consequence and one canonical scope-aware read boundary for pressures applicable to an exact location. The next action is an architecture and scope review; no next capability or sprint has been selected.
 
 Real AI provider integration remains deferred. It is not required for the next simulation capabilities and should not lead the roadmap merely because the provider-neutral narration boundary exists.
 
@@ -124,7 +124,11 @@ This sequence is directional, not a sprint commitment. The playable vertical-sli
    - The source conversation event, linked pressure consequence, and resulting state commit atomically in one candidate world state.
    - Complete as Sprint 10.5.
 
-6. **Narrow time-based pressure drift**
+6. **Read-only applicable pressures for one location**
+   - Exact region and requested-location scope membership is exposed through one deterministic, copy-safe gameplay facade.
+   - Complete as Sprint 10.6.
+
+7. **Narrow time-based pressure drift**
    - One explicitly configured pressure can increase, decay, or remain stable after elapsed time.
    - No generalized scheduler or world tick framework.
 

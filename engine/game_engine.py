@@ -22,6 +22,7 @@ from engine.narration_output import (
 )
 from engine.narration_pipeline import build_narration_preview_packet
 from engine.pressure_state import (
+    get_applicable_pressures as get_applicable_world_pressures,
     get_pressure as get_world_pressure,
     get_pressures as get_world_pressures,
     prepare_pressure_level_change,
@@ -98,6 +99,29 @@ class GameEngine:
 
     def get_pressure(self, pressure_id: str) -> dict | None:
         return get_world_pressure(self.world_state, pressure_id)
+
+    def get_applicable_pressures(
+        self,
+        location_id: str | None = None,
+    ) -> dict[str, dict]:
+        if location_id is None:
+            location_id = get_player_location_id(self.world_state)
+        elif not isinstance(location_id, str) or not location_id:
+            raise ValueError("location_id must be a non-empty string.")
+
+        location_ids = {
+            location.get("location_id")
+            for location in self.region.get("locations", [])
+            if isinstance(location, dict)
+        }
+        if location_id not in location_ids:
+            raise ValueError("Unknown location_id.")
+
+        return get_applicable_world_pressures(
+            self.world_state["pressures"],
+            self.region,
+            location_id,
+        )
 
     def set_pressure_level(
         self,

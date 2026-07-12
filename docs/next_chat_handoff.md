@@ -1,63 +1,58 @@
-# Next Chat Handoff: Sprint 10.6 Staged
+# Next Chat Handoff: Sprint 10.6 Complete
 
 ## Source State
 
 - Project: AI Narrative RPG Engine
-- Source branch: `main`
-- Source commit: `eda236ac74eba329411fb728921d0bcdb292fd09`
-- Sprint 10.5 is complete, closed out, committed, and the architecture-review packet records a clean repository.
-- ADR-039 is accepted.
-- The post-Sprint 10.5 architecture recommendation was explicitly accepted.
+- Branch: `main`
+- Closeout started from commit `ce5b501f5eb561e47cd438a5dbfc87b10af31236` with the Sprint 10.6 implementation uncommitted.
+- Sprint 10.6 is implemented, verified, closed out, and remains uncommitted.
+- Exactly one sprint is recorded; `next_sprint` is `null`.
 
-## Current Sprint
+## Completed Capability
 
-- Sprint 10.6 - Read-Only Applicable Pressures for One Location
-- Status: planned and staged for implementation
-- Exactly one sprint is defined.
-- Implementation has not begun during the staging pass.
-- Sprint 10.7 is not defined.
-
-## Accepted Capability
-
-Add one canonical read-only operation, preferably:
+Sprint 10.6 added the canonical read-only facade:
 
 ```python
 GameEngine.get_applicable_pressures(location_id=None)
 ```
 
-An omitted location uses the player's current durable location. An explicit location must be a non-empty string exactly matching a Region Pack `location_id` and must not move the player.
+An omitted identifier uses the player's durable current location. Explicit identifiers must be non-empty strings exactly matching a loaded Region Pack location. The pressure-domain helper validates state, includes exact matching region and location scopes at every valid level including `0`, excludes other locations, returns defensive copies, and orders results by sorted `pressure_id`.
 
-The result includes every exact region-scoped pressure and every exact requested-location-scoped pressure, including valid level `0` records. It excludes other-location pressures, uses deterministic ordering, and returns defensive copies.
+The boundary creates no history, advances no time, moves no player, replaces no scene snapshot, and mutates no pressure, weather, Region Pack data, or other runtime state. Save version remains `1` and no persistence fields were added.
 
-Applicability means exact scope membership only. It does not imply activity, visibility, perceptibility, importance, narrative relevance, or escalation eligibility.
+Applicability is exact scope membership only. It does not imply activity, visibility, perceptibility, importance, narrative relevance, narration eligibility, or escalation eligibility.
 
-## Ownership
+## Architecture Decision
 
-- `engine/pressure_state.py`: pure validation, exact scope filtering, deterministic ordering, defensive results.
-- `engine/game_engine.py`: default-location resolution, explicit Region Pack location validation, and public facade.
-- No scene, perception, narration, event, movement, or command code may reimplement scope filtering.
+ADR-040 - Pressure Applicability Is a Pure Scope-Aware Read Boundary is accepted.
 
-## Required Preservation
+Future consumers must use the canonical applicability operation instead of reimplementing pressure-scope filtering. Pressure applicability remains separate from scene, perception, narration, visibility, ranking, mutation, and runtime-effect policy.
 
-The operation creates no history, advances no time, moves no player, rebuilds or replaces no scene, changes no pressure, mutates no Region Pack data, adds no persistence field, and preserves save version `1`.
+## Verification
 
-Existing `get_pressures()`, `get_pressure()`, pressure mutation, conversation consequence, and causal-history contracts remain unchanged.
+- All required focused, pressure, save/load, interaction, history, narration, and Region Pack checks passed through `.\.venv\Scripts\python.exe`.
+- Canonical JSON parsing and YAML/JSON deep agreement passed.
+- Preflight: 15 passed, 2 warnings, 3 restricted-context probes blocked, 0 failures.
+- Hardening package: 20 passed, 0 failed.
+- Direct launch reached the initial scene and then encountered expected non-interactive EOF.
+- Scripted `play_game.main()` smoke passed with exit code 0.
+- `git diff --check` passed.
+- No live AI or alternate Python environment was used.
 
-## Planned ADR
+## Files Changed
 
-ADR-040 - Pressure Applicability Is a Pure Scope-Aware Read Boundary
-
-The ADR is proposed during implementation and should be accepted only during verified closeout.
+- `engine/pressure_state.py`
+- `engine/game_engine.py`
+- `test_pressure_applicability.py`
+- `docs/architecture.md`
+- `docs/decisions.md`
+- `docs/roadmap.md`
+- `docs/sprint_log.md`
+- `docs/current_sprint.md`
+- `docs/current_sprint.yaml`
+- `docs/current_sprint.json`
+- `docs/next_chat_handoff.md`
 
 ## Next Action
 
-Perform the separate bounded implementation pass required by `WORKFLOW.md`:
-
-1. Confirm live branch, HEAD, and Git status.
-2. Confirm the four canonical Sprint 10.6 files were promoted and deeply agree.
-3. Perform Startup Review against the live repository.
-4. Implement only the pure pressure applicability helper and GameEngine facade.
-5. Add focused `test_pressure_applicability.py` coverage and bounded save/load regression coverage.
-6. Run all official environment, focused, regression, manifest, launch/smoke, and diff checks through `.\.venv\Scripts\python.exe` only.
-7. Do not close out or commit unless separately authorized by the workflow and user instruction.
-8. Do not define Sprint 10.7.
+Conduct an architecture and scope review before selecting another bounded capability. Sprint 10.7 has not been defined, staged, or started.

@@ -2,7 +2,7 @@
 
 ## Sprint 10.6 - Read-Only Applicable Pressures for One Location
 
-Status: Planned. Staged for implementation; implementation has not begun.
+Status: Complete. Implemented, verified, and closed out without defining Sprint 10.7.
 
 ## Goal
 
@@ -22,11 +22,11 @@ Sprint 10.6 establishes the reusable read boundary required before pressure can 
 
 The sprint adds no scene, perception, or narration projection and no pressure policy beyond exact region/location filtering.
 
-## Expected ADR
+## Architectural Decision
 
 **ADR-040 - Pressure Applicability Is a Pure Scope-Aware Read Boundary**
 
-The ADR remains proposed during implementation and should be accepted only during verified closeout.
+ADR-040 is accepted following verified closeout.
 
 ## Ownership
 
@@ -108,7 +108,7 @@ The JSON block below is canonical machine data and must remain structurally iden
     "phase": "Phase 2B - Reactive World State Foundations",
     "type": "bounded-feature",
     "mode": "single-sprint",
-    "status": "planned",
+    "status": "complete",
     "goal": "Add one canonical, deterministic, read-only, scope-aware operation for retrieving every persistent pressure applicable to one exact Region Pack location, defaulting to the player's current durable location when no location identifier is supplied.",
     "design_intent": "Sprint 10.6 establishes a reusable pressure-read boundary before any scene, perception, narration, visibility, activity, ranking, progression, or generic effect policy is introduced. Applicability means exact scope membership only.",
     "source_state": {
@@ -126,7 +126,7 @@ The JSON block below is canonical machine data and must remain structurally iden
     "architectural_decision": {
       "adr": "ADR-040",
       "title": "Pressure Applicability Is a Pure Scope-Aware Read Boundary",
-      "status_during_sprint": "proposed",
+      "status_during_sprint": "accepted",
       "policy": "Pressure applicability is determined only by exact region and location scope. The canonical operation is deterministic, read-only, and copy-safe. Applicability does not imply activity, visibility, perceptibility, importance, narrative relevance, escalation eligibility, or any other policy. Future consumers must use this boundary rather than reimplementing scope filtering."
     },
     "public_api": {
@@ -388,8 +388,8 @@ The JSON block below is canonical machine data and must remain structurally iden
     ],
     "governance": [
       "Exactly one sprint is defined at a time.",
-      "Sprint 10.6 is staged but implementation has not begun during the setup pass.",
-      "Do not substitute bundled, system, Windows Store, uv, or alternate Python for official verification.",
+      "Sprint 10.6 is implemented, verified, and complete.",
+      "Do not substitute bundled, system, Windows Store, or alternate Python, including uv or any fallback environment, for verification; use the official project .venv and report a blocked official command as blocked rather than rerunning it with another Python installation.",
       "Preserve provider neutrality, deterministic behavior, simulation-owned truth, and unrelated user changes.",
       "Use one pure explicit applicability operation rather than projection or a generic framework.",
       "Do not define or begin Sprint 10.7.",
@@ -400,6 +400,21 @@ The JSON block below is canonical machine data and must remain structurally iden
         "complete",
         "blocked"
       ],
+      "actual_files_changed": [
+        "engine/pressure_state.py",
+        "engine/game_engine.py",
+        "test_pressure_applicability.py",
+        "docs/architecture.md",
+        "docs/decisions.md",
+        "docs/roadmap.md",
+        "docs/sprint_log.md",
+        "docs/current_sprint.md",
+        "docs/current_sprint.yaml",
+        "docs/current_sprint.json",
+        "docs/next_chat_handoff.md"
+      ],
+      "verification_result": "All required application tests passed through the official project .venv. Preflight reported 15 passed, 2 warnings, 3 blocked execution-context probes, and 0 failures. Hardening validation reported 20 passed and 0 failed. Direct launch reached the initial scene then encountered expected non-interactive EOF; the scripted play_game.main() smoke passed.",
+      "non_goals_preserved": "No scene, perception, narration, visibility, activity, ranking, aggregation, progression, mutation, runtime-effect integration, persistence field, new command, generic framework, or Sprint 10.7 work was added.",
       "next_sprint": null
     }
   }

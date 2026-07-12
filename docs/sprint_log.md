@@ -1,5 +1,21 @@
 # Sprint Log
 
+## Sprint 10.6 Closeout
+
+- Status: Complete.
+- Capability delivered: one canonical, deterministic, read-only operation for pressures applicable to one exact Region Pack location.
+- Files changed: `engine/pressure_state.py`, `engine/game_engine.py`, `test_pressure_applicability.py`, and the required closeout documentation.
+- Ownership: `engine/pressure_state.py` validates and filters exact pressure scopes; `GameEngine` resolves and validates locations through the public facade `GameEngine.get_applicable_pressures(location_id=None)`.
+- Ordering and copying: results are deep defensive copies ordered by sorted `pressure_id`; valid level `0` records remain included.
+- Failure behavior: non-string, empty, unknown, and malformed-state reads fail closed without modifying durable or derived runtime state.
+- Focused coverage: region and location applicability, omitted-location movement behavior, level `0`, stable ordering, defensive copies, failure preservation, existing read contracts, helper/facade agreement, and save/load equivalence passed.
+- Persistence: save version remains `1`, no persistence fields were added, and save/load preserves applicability results.
+- Official verification: all 15 required focused and regression commands passed through `.\.venv\Scripts\python.exe`; JSON parsing and YAML/JSON deep agreement passed.
+- Environment: preflight reported 15 passes, 2 warnings, 3 blocked restricted-context probes, and 0 failures. No alternate, bundled, system, fallback, or live-AI environment was used.
+- Launch: direct launch reached the initial scene and then encountered expected non-interactive EOF; the scripted `play_game.main()` smoke passed with exit code 0.
+- Hardening: 20 checks passed with 0 failures; `git diff --check` passed.
+- Governance: ADR-040 was accepted. No scene, perception, narration, visibility, ranking, mutation, or runtime-effect integration was added. Sprint 10.7 was not defined.
+
 ## Sprint 10.3 Closeout
 
 - Status: Complete.

@@ -163,6 +163,36 @@ def get_pressure(
     return deepcopy(pressure) if pressure is not None else None
 
 
+def get_applicable_pressures(
+    pressures: Any,
+    region: Dict[str, Any],
+    location_id: str,
+) -> dict[str, dict]:
+    validate_pressure_state(pressures, region)
+
+    if not isinstance(location_id, str) or not location_id:
+        raise ValueError("location_id must be a non-empty string.")
+
+    region_id = region["region_id"]
+    applicable_pressures = {
+        pressure_id: deepcopy(pressure)
+        for pressure_id, pressure in pressures.items()
+        if (
+            pressure["scope_type"] == "region"
+            and pressure["scope_id"] == region_id
+        )
+        or (
+            pressure["scope_type"] == "location"
+            and pressure["scope_id"] == location_id
+        )
+    }
+
+    return {
+        pressure_id: applicable_pressures[pressure_id]
+        for pressure_id in sorted(applicable_pressures)
+    }
+
+
 def prepare_pressure_level_change(
     pressures: Any,
     pressure_id: str,

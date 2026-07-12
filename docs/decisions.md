@@ -546,3 +546,17 @@ The public Sprint 10.4 `set_pressure_level_from_event(...)` operation retains it
 - Add a generic rule engine, event or command bus, or transaction framework. Rejected as premature infrastructure.
 - Add pressure projection or time-based progression first. Rejected because the simpler atomic composition seam was the immediate bounded capability.
 - Add persistent unresolved threads in parallel. Rejected as a separate future subsystem.
+
+---
+
+## ADR-040
+
+**Title:** Pressure Applicability Is a Pure Scope-Aware Read Boundary
+
+**Status:** Accepted
+
+Pressure applicability is determined only by exact scope membership: region-scoped pressure records apply when their `scope_id` exactly equals the loaded Region Pack `region_id`, and location-scoped records apply when their `scope_id` exactly equals the requested canonical location identifier.
+
+Applicability does not imply perceptibility, activity, importance, visibility, escalation eligibility, or narration eligibility. Scene, perception, narration, visibility, and runtime-effect policy remain separate concerns.
+
+The canonical operation is deterministic, read-only, and copy-safe. It validates pressure state before filtering, returns defensive copies, and orders results by sorted `pressure_id`. Future consumers must use this canonical boundary instead of reimplementing pressure-scope filtering.
