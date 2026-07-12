@@ -52,11 +52,19 @@ Use the lowest reasoning level capable of completing the entire coherent task sa
 - Medium: a normal bounded sprint from startup and staging through implementation, documentation, verification, closeout, and reporting.
 - High: architecture or scope review, systemic or unclear failures, ownership conflict, persistence or atomicity design, and material contradictions.
 
-## Architecture Review
+## Architecture Review Support
 
-Require full review at meaningful subsystem and capability-cluster boundaries, including new persistent domains or schemas, save compatibility changes, ownership-boundary changes, autonomous behavior, projection policy, generic infrastructure, material architectural contradictions, and the beginning or end of a meaningful capability cluster.
+Codex supplies repository evidence; ChatGPT owns architecture assessment and recommendation. Codex must not replace the owner-facing review with a long technical essay unless the task explicitly asks for one.
 
-An accepted review may cover a small sequence, but every sprint must remain explicitly staged, independently bounded, and testable. Review again when the sequence ends, implementation diverges, a stop condition occurs, or the next capability crosses an architecture boundary. Cluster approval does not authorize speculative work.
+Use the review type specified by the accepted task or `WORKFLOW.md`:
+
+- sprint health check for routine closeout confirmation;
+- capability-cluster review after related work or before subsystem integration;
+- deep architecture review for new persistence, save compatibility, ownership changes, autonomous behavior, generic infrastructure, live AI authority, canonical-lore authority, or serious contradictions.
+
+For an architecture-review handoff, read `docs/architecture_review_template.md` and assemble the smallest complete evidence packet needed to support the decision. Record facts accurately, including changed files, verification, manifests, relevant implementation and tests, and pre-assembly and post-cleanup Git status. Do not present packet assembly as the architecture recommendation.
+
+An accepted review may cover a small sequence, but every sprint must remain explicitly staged, independently bounded, and testable. Review again when the sequence ends, implementation diverges, a stop condition occurs, or the next capability crosses an architecture boundary. Review approval does not authorize speculative work or automatically start a sprint.
 
 ## Verification
 
@@ -85,8 +93,10 @@ Do not create a Git commit unless the task prompt explicitly authorizes it. With
 
 ## Packaging and Project Invariants
 
-- Create a handoff ZIP only at an environment or architecture-review boundary, for a formal milestone, or when explicitly requested.
+- Create a handoff ZIP only at a genuine repository-access or architecture-review boundary, for a formal milestone, or when explicitly requested.
+- Do not create a full review packet when a sprint health check is sufficient.
 - Use PowerShell `Compress-Archive` and independently validate archive entries.
 - Create generated content only under `.build\`, `.artifacts\`, or `handoffs\` according to repository policy.
+- Capture pre-assembly source status and post-cleanup final status separately.
 - Packaging success is independent from application-test success.
 - Preserve provider neutrality, deterministic behavior, simulation-owned truth, exactly one active sprint, and unrelated user changes.

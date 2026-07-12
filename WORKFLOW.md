@@ -39,22 +39,88 @@ Temporary sprint-numbered planning files may be promoted into the canonical path
 
 Future workflow tooling should choose one structured canonical source, generate the other formats mechanically, and validate that generated files are current. This direction does not change the present three-manifest policy until separately designed and accepted.
 
-## Architecture Review Cadence
+## Architecture Review Workflow
 
-A full architecture review is required when:
+Architecture reviews serve two audiences and must separate their outputs.
+
+### Owner-facing review
+
+The primary review is written for the project owner in plain language. Use `docs/architecture_review_template.md`. It should normally fit within 800 words and answer:
+
+1. What was completed?
+2. Did it work as intended?
+3. Was any important defect or risk found?
+4. What does the engine now make possible for the game?
+5. What should be built next, and why?
+6. What decision is requested from the owner?
+
+The owner-facing review must avoid file-by-file commentary, function names, schema minutiae, and test mechanics unless they materially affect the decision. It must include a compact decision card with:
+
+- recommended capability;
+- why now;
+- player or project value;
+- technical risk;
+- persistence impact;
+- ADR requirement;
+- expected scope; and
+- major alternatives deferred.
+
+The project owner is not expected to validate low-level implementation mechanics. The review must translate technical findings into product, scope, risk, and sequencing consequences.
+
+### Technical evidence and appendix
+
+Detailed repository evidence remains available for auditability. It may include ownership boundaries, atomicity and rollback analysis, schema details, persistence implications, test evidence, file references, and candidate comparisons.
+
+Keep this material in the review packet or a clearly separated technical appendix. Include a substantial appendix in the main response only when:
+
+- a material defect was found;
+- ownership or persistence boundaries change;
+- save compatibility is affected;
+- alternatives are genuinely close; or
+- the owner requests technical detail.
+
+### Review types and cadence
+
+Use the lightest review type that safely supports the next decision.
+
+#### Sprint health check
+
+Perform after every sprint closeout. Confirm the sprint matched scope, required verification passed, no boundary was unintentionally broadened, and the previously accepted direction remains sound. This is normally brief and does not require a new architecture-review ZIP when Codex and ChatGPT are continuing from the same repository context.
+
+A correction sprint that only restores conformance to an already accepted decision normally receives a health check, not another full subsystem review. Reopen the deeper review only if the correction changes the recommendation or reveals a broader issue.
+
+#### Capability-cluster review
+
+Perform after roughly three to five related sprints, at the end of a meaningful capability cluster, or before connecting one established subsystem to another. Determine whether the cluster is coherent, what is still missing, whether it is ready for projection or integration, and which bounded capability should come next.
+
+#### Deep architecture review
+
+Require a deep review when:
 
 - introducing a new persistent domain or schema;
 - changing save compatibility;
 - changing established ownership boundaries;
 - adding autonomous simulation or background behavior;
-- adding scene, perception, narration, visibility, or other projection policy;
 - introducing generic infrastructure;
-- resolving a material architectural contradiction; or
-- beginning or ending a meaningful capability cluster.
+- adding live AI authority;
+- materially changing canonical-lore ownership;
+- resolving a serious architectural contradiction; or
+- comparing multiple consequential designs with similar merit.
 
-A full architecture review is not automatically required after every small method-sized or closely related capability. An accepted review may authorize a small sequence or capability cluster. Every sprint in that sequence must still be explicitly staged, independently bounded, and testable.
+Scene, perception, narration, visibility, or other projection work requires at least a capability-cluster review before the first boundary is established. Later narrow work inside an accepted projection boundary may use sprint health checks.
 
-Review again when the accepted sequence is complete, implementation materially diverges from the reviewed architecture, a stop condition is triggered, or the next capability crosses an architecture boundary listed above. Cluster approval never authorizes speculative implementation or more than one staged sprint.
+An accepted review may authorize a small sequence or capability cluster. Every sprint in that sequence must still be explicitly staged, independently bounded, and testable. Review again when the accepted sequence is complete, implementation materially diverges, a stop condition occurs, or the next capability crosses one of the boundaries above. Approval never authorizes speculative implementation or more than one active sprint.
+
+### Review decision states
+
+End every owner-facing architecture review with one explicit decision request:
+
+- accept the recommendation;
+- reject it;
+- defer it; or
+- request a deeper review of one identified issue.
+
+Acceptance authorizes sprint staging around the recommended capability but does not itself define, stage, or start the sprint.
 
 ## Model and Reasoning Routing
 
@@ -130,9 +196,18 @@ Do not create separate staging and closeout commits unless the user explicitly r
 
 ## Handoff and ZIP Policy
 
-A handoff ZIP is required only when moving from Codex to ChatGPT for architecture review, moving to an environment without repository access, creating a formal milestone artifact, or when explicitly requested. Do not create staging ZIPs for normal sprint work or architecture-review ZIPs after minor sprints without a genuine external-review boundary. Within one repository session, continue from the live repository.
+A handoff ZIP is required only when moving from Codex to ChatGPT across an actual repository-access boundary, moving to an environment without repository access, creating a formal milestone artifact, or when explicitly requested. Do not create staging ZIPs for normal sprint work or architecture-review ZIPs after minor sprints when a brief health check is sufficient. Within one repository session, continue from the live repository.
+
+Architecture-review packets are evidence packages, not the owner-facing review itself. They should contain the smallest complete set of canonical documents, changed or directly relevant implementation files, focused tests, verification evidence, and Git evidence needed to support the review. Codex should report repository facts and packet validation; ChatGPT owns the architecture assessment and plain-language recommendation.
 
 When a ZIP is required, use PowerShell `Compress-Archive`, a deterministic inventory, exact archive-membership validation, readability checks, temporary-assembly cleanup, and recorded Git evidence. Generated content must stay under `.build\`, `.artifacts\`, or `handoffs\` according to repository policy. Packaging success remains independent from application-test success.
+
+Capture Git status separately as:
+
+- pre-assembly source status; and
+- post-cleanup final status.
+
+Generate final status evidence only after temporary assembly content and temporary scripts are removed. A packet stored in an ignored or policy-approved handoff location must not cause a false clean-tree claim.
 
 ## Task Prompt Guidance
 
