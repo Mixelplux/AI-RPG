@@ -1,58 +1,63 @@
-# Next Chat Handoff: Post-Sprint 10.5
+# Next Chat Handoff: Sprint 10.6 Staged
 
-## Current State
+## Source State
 
-- Sprint 10.5 - One Declared Resolved-Conversation Pressure Consequence is complete and closed out.
-- Implementation and closeout changes remain uncommitted until the repository owner reviews and commits them.
+- Project: AI Narrative RPG Engine
+- Source branch: `main`
+- Source commit: `eda236ac74eba329411fb728921d0bcdb292fd09`
+- Sprint 10.5 is complete, closed out, committed, and the architecture-review packet records a clean repository.
 - ADR-039 is accepted.
-- Sprint 10.6 is undefined and has not started.
-- No next Phase 2B capability has been selected.
+- The post-Sprint 10.5 architecture recommendation was explicitly accepted.
 
-## Completed Capability
+## Current Sprint
 
-The first automatic deterministic gameplay-event-to-pressure-consequence path is complete. A strict immutable Region Pack declaration maps a successful conversation with Captain Darvin Grey to `bryn_shander_gate_scrutiny`, changing it from 10 to 25. The winter pressure remains unchanged.
+- Sprint 10.6 - Read-Only Applicable Pressures for One Location
+- Status: planned and staged for implementation
+- Exactly one sprint is defined.
+- Implementation has not begun during the staging pass.
+- Sprint 10.7 is not defined.
 
-For a material match, `GameEngine` prepares the `player_conversation` source, exact pressure mutation, linked `pressure_changed` consequence, completed-state validation, and candidate scene in one copied world state before assigning live state once. The consequence references the new source through `source_history_id`.
+## Accepted Capability
 
-Elin Voss remains source-only. A repeated Captain conversation at level 25 commits a new source but no consequence history and reports `changed: false` with the new source ID.
+Add one canonical read-only operation, preferably:
 
-Save version 1 preserves the pressure and causal chain without persisting or replaying Region Pack declarations.
+```python
+GameEngine.get_applicable_pressures(location_id=None)
+```
 
-## Review Correction
+An omitted location uses the player's current durable location. An explicit location must be a non-empty string exactly matching a Region Pack `location_id` and must not move the player.
 
-The implementation review found that entity cross-reference validation used set membership and could accept duplicate entities sharing one identifier. Validation now counts matches and requires exactly one. Focused tests also cover declaration-extraction atomicity, exact source preservation, and complete no-op pressure-record preservation.
+The result includes every exact region-scoped pressure and every exact requested-location-scoped pressure, including valid level `0` records. It excludes other-location pressures, uses deterministic ordering, and returns defensive copies.
 
-## Changed Files
+Applicability means exact scope membership only. It does not imply activity, visibility, perceptibility, importance, narrative relevance, or escalation eligibility.
 
-Implementation and tests:
+## Ownership
 
-- `data/regions/bryn_shander.json`
-- `engine/game_engine.py`
-- `engine/region_validator.py`
-- `test_conversation_pressure_effect.py`
-- `test_interaction_history.py`
-- `test_pressure_state.py`
-- `test_save_load.py`
+- `engine/pressure_state.py`: pure validation, exact scope filtering, deterministic ordering, defensive results.
+- `engine/game_engine.py`: default-location resolution, explicit Region Pack location validation, and public facade.
+- No scene, perception, narration, event, movement, or command code may reimplement scope filtering.
 
-Closeout documentation:
+## Required Preservation
 
-- `docs/architecture.md`
-- `docs/decisions.md`
-- `docs/roadmap.md`
-- `docs/sprint_log.md`
-- `docs/current_sprint.md`
-- `docs/current_sprint.yaml`
-- `docs/current_sprint.json`
-- `docs/next_chat_handoff.md`
+The operation creates no history, advances no time, moves no player, rebuilds or replaces no scene, changes no pressure, mutates no Region Pack data, adds no persistence field, and preserves save version `1`.
 
-## Verification Evidence
+Existing `get_pressures()`, `get_pressure()`, pressure mutation, conversation consequence, and causal-history contracts remain unchanged.
 
-- Hardening validation: 20 passed, 0 failed.
-- Preflight: exit 1; 15 passed, 2 warnings, 3 restricted-context interpreter probes blocked, 0 application failures.
-- The approved official `.venv` interpreter subsequently passed every required available application test, Region Pack validation, JSON validation, canonical manifest deep comparison, and `git diff --check`.
-- `test_target_resolver.py` and `test_time_advance.py` do not exist. Relevant behavior is covered by the focused conversation, interaction-history, save/load, world-update, and history-context tests.
-- No alternate Python was used.
+## Planned ADR
 
-## Next Step
+ADR-040 - Pressure Applicability Is a Pure Scope-Aware Read Boundary
 
-The repository owner should review and commit the Sprint 10.5 implementation and closeout changes. After the commit and confirmation of a clean tree, generate `handoffs/post_sprint_10_5_architecture_review_packet.zip` and conduct a focused post-Sprint 10.5 Phase 2B architecture review. Do not generate that packet against the current uncommitted tree, and do not stage Sprint 10.6 before the review selects a capability.
+The ADR is proposed during implementation and should be accepted only during verified closeout.
+
+## Next Action
+
+Perform the separate bounded implementation pass required by `WORKFLOW.md`:
+
+1. Confirm live branch, HEAD, and Git status.
+2. Confirm the four canonical Sprint 10.6 files were promoted and deeply agree.
+3. Perform Startup Review against the live repository.
+4. Implement only the pure pressure applicability helper and GameEngine facade.
+5. Add focused `test_pressure_applicability.py` coverage and bounded save/load regression coverage.
+6. Run all official environment, focused, regression, manifest, launch/smoke, and diff checks through `.\.venv\Scripts\python.exe` only.
+7. Do not close out or commit unless separately authorized by the workflow and user instruction.
+8. Do not define Sprint 10.7.

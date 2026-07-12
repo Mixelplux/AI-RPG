@@ -38,6 +38,18 @@ Codex must attempt each official `.\.venv\Scripts\python.exe` command first. If 
    - Perform sprint closeout.
 8. Stop. Await the next sprint.
 
+### Zip Handoff Handling
+
+When a sprint handoff arrives as a zip archive, Codex handles the archive directly:
+
+1. Inspect the archive contents.
+2. Extract any required staging files into the workspace if needed.
+3. Promote the staged content into the canonical repository files.
+4. Validate the promoted files using the normal workflow checks.
+5. Keep the user out of manual unzip and file-copy work unless a specific archive is malformed or blocked by tooling.
+
+Do not require the user to extract sprint handoff zip files manually when Codex can process them in the workspace.
+
 ## Canonical and Staging File Rule
 
 The permanent authoritative sprint paths are:
