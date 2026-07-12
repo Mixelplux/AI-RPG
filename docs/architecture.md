@@ -336,6 +336,8 @@ Failed source-result validation uses a bounded `source_result_validation` stage,
 
 Named static actors remain authored in the Region Pack. World State owns only sparse `actor_location_overrides`, keyed by the existing stable `entity_id`. One canonical resolver chooses the runtime override when present and otherwise the authored location; scene construction uses that boundary so downstream perception and target resolution naturally reflect movement. Spawned templates remain independent derived scene content. Material actor movement and the rebuilt current scene commit together only after candidate validation succeeds.
 
+Sprint 10.12 permits one optional immutable `conversation_actor_relocation_effect` declaration. A matching resolved conversation prepares its durable conversation source, any material actor move and backward causal reference, completed World State validation, and one rebuilt scene before the existing single live commit. A repeated matching conversation remains durable but creates no false movement when the actor is already at the destination. This is a bounded content policy, not a generic consequence dispatcher.
+
 ## Elapsed-Time Pressure Consequence
 
 ## Authored Pressure Observation

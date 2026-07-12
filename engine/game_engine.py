@@ -106,6 +106,25 @@ class GameEngine:
     def set_actor_location(
         self, entity_id: str, destination_location_id: str
     ) -> Dict[str, Any]:
+        candidate_world_state = copy_world_state(self.world_state)
+        candidate_world_state, result = self._prepare_actor_location_candidate(
+            candidate_world_state, entity_id, destination_location_id
+        )
+        if not result["changed"]:
+            return deepcopy(result)
+        validate_world_state(candidate_world_state, self.region)
+        candidate_scene_snapshot = build_scene(self.region, candidate_world_state)
+        self.world_state = candidate_world_state
+        self.scene_snapshot = candidate_scene_snapshot
+        return deepcopy(result)
+
+    def _prepare_actor_location_candidate(
+        self,
+        candidate_world_state: Dict[str, Any],
+        entity_id: str,
+        destination_location_id: str,
+        source_history_id: str | None = None,
+    ) -> tuple[Dict[str, Any], Dict[str, Any]]:
         actor = get_static_actor(self.region, entity_id)
         if not isinstance(destination_location_id, str) or not destination_location_id:
             raise ValueError("destination_location_id must be a non-empty string.")
@@ -117,7 +136,7 @@ class GameEngine:
             raise ValueError("Unknown destination_location_id.")
 
         previous_location_id = get_effective_actor_location(
-            self.region, self.world_state, entity_id
+            self.region, candidate_world_state, entity_id
         )
         result = {
             "changed": False,
@@ -127,14 +146,20 @@ class GameEngine:
             "history_id": None,
         }
         if destination_location_id == previous_location_id:
-            return deepcopy(result)
+            return candidate_world_state, deepcopy(result)
 
-        candidate_world_state = copy_world_state(self.world_state)
         overrides = candidate_world_state.setdefault("actor_location_overrides", {})
         if destination_location_id == actor["location"]:
             overrides.pop(entity_id, None)
         else:
             overrides[entity_id] = destination_location_id
+        extra = {
+            "entity_id": entity_id,
+            "previous_location_id": previous_location_id,
+            "new_location_id": destination_location_id,
+        }
+        if source_history_id is not None:
+            extra["source_history_id"] = source_history_id
         candidate_world_state = add_history_entry(
             candidate_world_state,
             event_type="actor_moved",
@@ -142,19 +167,11 @@ class GameEngine:
                      f"to {destination_location_id}."),
             location=destination_location_id,
             time=deepcopy(candidate_world_state["time"]),
-            extra={
-                "entity_id": entity_id,
-                "previous_location_id": previous_location_id,
-                "new_location_id": destination_location_id,
-            },
+            extra=extra,
         )
-        validate_world_state(candidate_world_state, self.region)
-        candidate_scene_snapshot = build_scene(self.region, candidate_world_state)
         result["changed"] = True
         result["history_id"] = candidate_world_state["history"][-1]["history_id"]
-        self.world_state = candidate_world_state
-        self.scene_snapshot = candidate_scene_snapshot
-        return deepcopy(result)
+        return candidate_world_state, deepcopy(result)
 
     def get_applicable_pressures(
         self,
@@ -622,7 +639,39 @@ class GameEngine:
                     "source_history_id": consequence["source_history_id"],
                 }
 
-        validate_world_state(candidate_world_state)
+            relocation = self.region.get(
+                "conversation_actor_relocation_effect"
+            )
+            interaction_result["actor_location_consequence"] = None
+            if (
+                relocation is not None
+                and relocation["trigger_entity_id"] == target_entity_id
+            ):
+                source_history_id = next(
+                    entry["history_id"]
+                    for entry in reversed(candidate_world_state["history"])
+                    if entry["event_type"] == "player_conversation"
+                    and entry.get("target_entity_id") == target_entity_id
+                )
+                candidate_world_state, actor_result = (
+                    self._prepare_actor_location_candidate(
+                        candidate_world_state,
+                        relocation["actor_entity_id"],
+                        relocation["destination_location_id"],
+                        source_history_id,
+                    )
+                )
+                interaction_result["actor_location_consequence"] = {
+                    "effect_id": relocation["effect_id"],
+                    "trigger_entity_id": relocation["trigger_entity_id"],
+                    "actor_entity_id": relocation["actor_entity_id"],
+                    "previous_location_id": actor_result["previous_location_id"],
+                    "new_location_id": actor_result["new_location_id"],
+                    "changed": actor_result["changed"],
+                    "history_id": actor_result["history_id"],
+                }
+
+        validate_world_state(candidate_world_state, self.region)
         candidate_scene_snapshot = build_scene(
             self.region,
             candidate_world_state

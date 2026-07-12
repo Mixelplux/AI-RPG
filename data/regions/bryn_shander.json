@@ -36,6 +36,12 @@
       "new_level": 25
     }
   ],
+  "conversation_actor_relocation_effect": {
+    "effect_id": "captain_conversation_moves_elin",
+    "trigger_entity_id": "captain_darvin_grey",
+    "actor_entity_id": "guard_elin_voss",
+    "destination_location_id": "bryn_shander_main_street"
+  },
   "elapsed_time_pressure_effect": {
     "effect_id": "winter_deepens_after_first_hour",
     "trigger_elapsed_hours": 1,

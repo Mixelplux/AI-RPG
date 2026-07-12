@@ -36,7 +36,7 @@ def main():
     )
 
     first_history = engine.get_history()
-    assert len(first_history) == 2
+    assert len(first_history) == 3
     first_entry = first_history[0]
     assert first_entry["history_id"] == "history_000001"
     assert first_entry["event_type"] == "player_conversation"
@@ -51,6 +51,8 @@ def main():
         first_entry["history_id"]
     )
     assert first_history[1]["event_type"] == "pressure_changed"
+    assert first_history[2]["event_type"] == "actor_moved"
+    assert first_history[2]["source_history_id"] == first_entry["history_id"]
 
     after_first_state = engine.get_world_state()
     assert after_first_state["player"]["current_location_id"] == (
@@ -61,6 +63,9 @@ def main():
     expected_after_first["pressures"]["bryn_shander_gate_scrutiny"][
         "level"
     ] = 25
+    expected_after_first["actor_location_overrides"] = {
+        "guard_elin_voss": "bryn_shander_main_street"
+    }
     assert without_history(after_first_state) == expected_after_first
 
     second_result = engine.process_command("talk to captain")
@@ -70,7 +75,7 @@ def main():
     )
     assert len(conversation_entries) == 2
     assert conversation_entries[0]["history_id"] == "history_000001"
-    assert conversation_entries[1]["history_id"] == "history_000003"
+    assert conversation_entries[1]["history_id"] == "history_000004"
     assert conversation_entries[1]["target_entity_id"] == (
         "captain_darvin_grey"
     )
@@ -97,6 +102,9 @@ def main():
     assert engine.get_world_state()["time"] == starting_time
     expected_final = without_history(starting_state)
     expected_final["pressures"]["bryn_shander_gate_scrutiny"]["level"] = 25
+    expected_final["actor_location_overrides"] = {
+        "guard_elin_voss": "bryn_shander_main_street"
+    }
     assert without_history(engine.get_world_state()) == expected_final
 
     history_context = engine.get_history_context(count=2)
@@ -129,8 +137,8 @@ def main():
     post_load_result = loaded_engine.process_command("talk to captain")
     assert post_load_result["success"]
     post_load_history = loaded_engine.get_history()
-    assert len(post_load_history) == 4
-    assert post_load_history[-1]["history_id"] == "history_000004"
+    assert len(post_load_history) == 5
+    assert post_load_history[-1]["history_id"] == "history_000005"
     assert post_load_history[-1]["history_id"] not in loaded_history_ids
     assert post_load_history[-1]["target_entity_id"] == (
         "captain_darvin_grey"

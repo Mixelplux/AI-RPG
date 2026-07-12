@@ -19,6 +19,12 @@ def load_region() -> dict:
     return json.loads(Path(REGION_PATH).read_text(encoding="utf-8"))
 
 
+def new_pressure_test_engine() -> GameEngine:
+    engine = GameEngine(REGION_PATH)
+    engine.region.pop("conversation_actor_relocation_effect", None)
+    return engine
+
+
 def assert_invalid(region: dict, text: str) -> None:
     try:
         validate_region(region)
@@ -103,7 +109,7 @@ def test_declaration_validation() -> None:
 
 
 def test_material_unmatched_and_no_op_behavior() -> None:
-    engine = GameEngine(REGION_PATH)
+    engine = new_pressure_test_engine()
     before = engine.get_world_state()
     scene_before = engine.get_scene_snapshot()
     region_before = deepcopy(engine.region)
@@ -207,25 +213,25 @@ def test_matched_atomic_failures() -> None:
         assert engine.get_world_state() == state
         assert engine.get_scene_snapshot() == scene
 
-    engine = GameEngine(REGION_PATH)
+    engine = new_pressure_test_engine()
     with patch.object(game_engine_module, "apply_interaction", side_effect=RuntimeError("source")):
         assert_unchanged_after_failure(
             engine, lambda: engine.process_command("talk to captain")
         )
 
-    engine = GameEngine(REGION_PATH)
+    engine = new_pressure_test_engine()
     with patch.object(game_engine_module, "prepare_pressure_level_change", side_effect=RuntimeError("pressure")):
         assert_unchanged_after_failure(
             engine, lambda: engine.process_command("talk to captain")
         )
 
-    engine = GameEngine(REGION_PATH)
+    engine = new_pressure_test_engine()
     del engine.region["conversation_pressure_effects"][0]["pressure_id"]
     assert_unchanged_after_failure(
         engine, lambda: engine.process_command("talk to captain")
     )
 
-    engine = GameEngine(REGION_PATH)
+    engine = new_pressure_test_engine()
     original_add = game_engine_module.add_history_entry
     with patch.object(
         game_engine_module,
@@ -237,13 +243,13 @@ def test_matched_atomic_failures() -> None:
         )
     game_engine_module.add_history_entry = original_add
 
-    engine = GameEngine(REGION_PATH)
+    engine = new_pressure_test_engine()
     with patch.object(game_engine_module, "validate_world_state", side_effect=ValueError("state")):
         assert_unchanged_after_failure(
             engine, lambda: engine.process_command("talk to captain")
         )
 
-    engine = GameEngine(REGION_PATH)
+    engine = new_pressure_test_engine()
     with patch.object(game_engine_module, "build_scene", side_effect=RuntimeError("scene")):
         assert_unchanged_after_failure(
             engine, lambda: engine.process_command("talk to captain")
@@ -251,7 +257,7 @@ def test_matched_atomic_failures() -> None:
 
 
 def test_save_load_without_replay() -> None:
-    engine = GameEngine(REGION_PATH)
+    engine = new_pressure_test_engine()
     engine.process_command("talk to captain")
     history = engine.get_history()
 
@@ -259,6 +265,8 @@ def test_save_load_without_replay() -> None:
         path = str(Path(temp_dir) / "save.json")
         save_game(engine, path)
         loaded = load_game(path)
+
+    loaded.region.pop("conversation_actor_relocation_effect", None)
 
     assert loaded.get_history() == history
     assert loaded.get_pressure(PRESSURE_ID)["level"] == 25

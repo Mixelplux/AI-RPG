@@ -216,6 +216,8 @@ Sprint 10.8 completed the wait single-commit atomicity correction. Sprint 10.9 c
 
 Sprint 10.11 completed the persistent actor-location prerequisite: seeded named static actors can move through sparse durable overrides while retaining immutable Region Pack identity and authored baseline data. Spawned entities, schedules, autonomous behavior, and actor activity remain deferred. Sprint 10.12 is undefined and unstarted.
 
+Sprint 10.12 connected one accepted resolved conversation to one Region-declared persistent actor relocation while preserving one candidate transition, causal history, and Scene Snapshot consumer boundaries. The capability adds no scheduler, autonomous behavior, generic effect framework, or new persistence schema. Sprint 10.13 is undefined and unstarted.
+
 Active sprint definitions must include:
 
 - Goal

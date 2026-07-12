@@ -1,5 +1,16 @@
 # Sprint Log
 
+## Sprint 10.12 Closeout
+
+- Status: Complete.
+- Capability delivered: one optional immutable Region Pack declaration can relocate one seeded named static actor after a successful resolved conversation with one exact trigger actor.
+- Fixture behavior: speaking with Captain Darvin Grey moves Guard Elin Voss from the North Gate to Main Street. The rebuilt scene immediately removes Elin from North Gate perception, targeting, and later conversation routing.
+- Atomicity: the accepted conversation, pressure consequence when material, actor override, causally linked `actor_moved` history, final validation, and one rebuilt scene are prepared before one live commit. Repeated Captain conversations create genuine conversation history but no duplicate movement event.
+- Persistence: save version remains 1; the actor override and backward causal history survive save/load, while Region declaration policy remains immutable content.
+- Verification: focused relocation, actor-location, conversation-pressure, and save/load tests passed; all 20 root test scripts passed through the official interpreter. Final workflow evidence is recorded in the canonical manifest.
+- ADR determination: no new ADR. ADR-035, ADR-038, ADR-039, and ADR-043 already establish the required conversation, causal-history, atomic-consequence, actor-location, and scene-consumer boundaries.
+- Scope: no commands, schedules, autonomous movement, pathfinding, multiple declarations, spawned-instance persistence, or generic consequence infrastructure. Sprint 10.13 remains undefined and unstarted.
+
 ## Sprint 10.11 Closeout
 
 - Status: Complete.
