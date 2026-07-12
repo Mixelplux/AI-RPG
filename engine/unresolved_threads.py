@@ -21,6 +21,44 @@ def validate_open_threads(open_threads: Any) -> None:
             raise ValueError("Open thread created_by_history_id must be a non-empty string.")
 
 
+def validate_open_thread_integrity(world_state: dict[str, Any], region: dict[str, Any]) -> None:
+    """Validate the one declared open thread against durable causal history."""
+    open_threads = world_state["open_threads"]
+    validate_open_threads(open_threads)
+    declaration = region.get("conversation_unresolved_thread")
+    history = world_state.get("history", [])
+    history_by_id = {entry.get("history_id"): (index, entry) for index, entry in enumerate(history)}
+    openings = [
+        (index, entry) for index, entry in enumerate(history)
+        if entry.get("event_type") == "unresolved_thread_opened"
+    ]
+    for thread_id, thread in open_threads.items():
+        if declaration is None or declaration.get("thread_id") != thread_id:
+            raise ValueError("Open thread must match the active Region Pack declaration.")
+        source = history_by_id.get(thread["created_by_history_id"])
+        if source is None:
+            raise ValueError("Open thread source history id is unknown.")
+        source_index, source_entry = source
+        if (source_entry.get("event_type") != "player_conversation"
+                or source_entry.get("target_entity_id") != declaration["trigger_entity_id"]):
+            raise ValueError("Open thread source must be its declared triggering conversation.")
+        matching = [
+            (index, entry) for index, entry in openings
+            if entry.get("thread_id") == thread_id
+        ]
+        if len(matching) != 1:
+            raise ValueError("Open thread must have exactly one opening lifecycle record.")
+        opening_index, opening = matching[0]
+        if (opening.get("status") != "open"
+                or opening.get("source_history_id") != thread["created_by_history_id"]
+                or opening_index <= source_index):
+            raise ValueError("Open thread lifecycle record is causally inconsistent.")
+    for _, opening in openings:
+        thread_id = opening.get("thread_id")
+        if thread_id not in open_threads:
+            raise ValueError("Opening lifecycle record has no persisted open thread.")
+
+
 def get_open_threads(world_state: dict[str, Any]) -> dict[str, dict[str, str]]:
     validate_open_threads(world_state["open_threads"])
     return deepcopy(world_state["open_threads"])

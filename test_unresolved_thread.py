@@ -104,7 +104,7 @@ def test_save_load_legacy_and_atomic_failure() -> None:
         assert loaded.get_open_threads() == engine.get_open_threads()
         assert loaded.get_player_perception()["unresolved_thread_evidence"] == [EVIDENCE]
 
-        legacy = build_save_data(engine)
+        legacy = build_save_data(GameEngine(REGION_PATH))
         del legacy["world_state"]["open_threads"]
         legacy_path = Path(temporary_directory) / "legacy.json"
         import json
@@ -119,10 +119,36 @@ def test_save_load_legacy_and_atomic_failure() -> None:
         expect_value_error(lambda: load_game(str(malformed_path)))
 
 
+def test_causal_integrity_narration_isolation_and_live_load_atomicity() -> None:
+    engine = GameEngine(REGION_PATH)
+    engine.process_command("talk to captain")
+    assert engine.query_history(event_type="unresolved_thread_opened")
+    assert all(entry["event_type"] != "unresolved_thread_opened" for entry in engine.get_narration_context("look", history_count=10)["history_context"]["history_entries"])
+    with TemporaryDirectory() as temporary_directory:
+        valid = build_save_data(engine)
+        for label, mutate in (
+            ("phantom", lambda p: p["world_state"]["open_threads"].__setitem__("phantom", {"thread_id":"phantom","status":"open","created_by_history_id":"history_000001"})),
+            ("mismatch", lambda p: p["world_state"]["open_threads"][THREAD_ID].__setitem__("thread_id", "other")),
+            ("wrong_source", lambda p: p["world_state"]["open_threads"][THREAD_ID].__setitem__("created_by_history_id", "history_000002")),
+            ("missing_open", lambda p: p["world_state"].__setitem__("history", [e for e in p["world_state"]["history"] if e["event_type"] != "unresolved_thread_opened"])),
+            ("duplicate_open", lambda p: p["world_state"]["history"].append(deepcopy(p["world_state"]["history"][-1]) | {"history_id":"history_999999"})),
+        ):
+            payload = deepcopy(valid); mutate(payload)
+            path = Path(temporary_directory) / f"{label}.json"
+            import json; path.write_text(json.dumps(payload), encoding="utf-8")
+            expect_value_error(lambda path=path: load_game(str(path)))
+        bad = deepcopy(valid); bad["world_state"]["open_threads"][THREAD_ID]["created_by_history_id"] = "history_000002"
+        path = Path(temporary_directory) / "bad_live.json"; import json; path.write_text(json.dumps(bad), encoding="utf-8")
+        before_state, before_scene = engine.get_world_state(), engine.get_scene_snapshot()
+        expect_value_error(lambda: engine.load(str(path)))
+        assert engine.get_world_state() == before_state and engine.get_scene_snapshot() == before_scene
+
+
 def main() -> None:
     test_declaration_and_state_validation()
     test_atomic_creation_duplicate_prevention_and_perception()
     test_save_load_legacy_and_atomic_failure()
+    test_causal_integrity_narration_isolation_and_live_load_atomicity()
     print("Unresolved thread tests passed.")
 
 

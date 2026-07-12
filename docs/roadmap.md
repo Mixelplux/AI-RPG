@@ -222,6 +222,8 @@ Sprint 10.13 adds one bounded elapsed-time actor relocation through the existing
 
 Sprint 10.14 adds one declared conversation-triggered unresolved thread. The engine persists one sparse open record and causal history while projecting only local authored evidence; it adds no resolution, quest interface, objective, timer, or generic trigger system. Sprint 10.15 remains undefined and unstarted.
 
+Sprint 10.15 hardens the declared thread's persisted identity and causal history, and isolates its internal lifecycle record from narration-facing history. It adds no new thread capability, persistence version, or ADR. Sprint 10.16 remains undefined and unstarted.
+
 Active sprint definitions must include:
 
 - Goal

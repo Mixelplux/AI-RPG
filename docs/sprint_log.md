@@ -430,4 +430,5 @@
 - The candidate transition creates one sparse `open_threads` record and one causally linked `unresolved_thread_opened` history event without duplicate creation.
 - Player perception projects only authored local evidence at the North Gate; it adds no quest-facing interface, objective, or marker.
 - ADR-044 records the new persistent-domain ownership and compatible version-1 load normalization.
+- Sprint 10.15 follow-up hardening validates persisted thread causality and excludes lifecycle history from narration context without changing player-facing evidence.
 - Focused coverage and all 22 repository tests passed; scripted save/load and direct launch-close smoke checks passed through the official interpreter.

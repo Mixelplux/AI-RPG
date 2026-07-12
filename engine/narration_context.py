@@ -37,7 +37,9 @@ def build_narration_context_packet(
     history_context["history_entries"] = [
         entry
         for entry in history_context["history_entries"]
-        if entry.get("event_type") not in {"pressure_changed", "actor_moved"}
+        if entry.get("event_type") not in {
+            "pressure_changed", "actor_moved", "unresolved_thread_opened"
+        }
     ]
     return {
         "schema": NARRATION_CONTEXT_SCHEMA,
