@@ -38,7 +38,8 @@ def build_narration_context_packet(
         entry
         for entry in history_context["history_entries"]
         if entry.get("event_type") not in {
-            "pressure_changed", "actor_moved", "unresolved_thread_opened"
+            "pressure_changed", "actor_moved", "unresolved_thread_opened",
+            "actor_knowledge_added",
         }
     ]
     return {

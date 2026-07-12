@@ -4,6 +4,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 from engine.game_engine import GameEngine
+import engine.game_engine as game_engine_module
 from engine.region_validator import validate_region
 from engine.save_system import SAVE_VERSION, build_save_data, load_game
 from engine.world_state import create_initial_world_state, validate_world_state
@@ -76,7 +77,7 @@ def test_sparse_state_validation_and_inspection() -> None:
 def test_persistence_legacy_and_atomic_live_load() -> None:
     engine = GameEngine(REGION_PATH)
     before_state = engine.get_world_state()
-    before_scene = engine.get_scene_snapshot()
+    before_scene = engine.scene_snapshot
     with TemporaryDirectory() as temporary_directory:
         payload = build_save_data(engine)
         assert payload["save_version"] == SAVE_VERSION == 1
@@ -105,10 +106,99 @@ def test_persistence_legacy_and_atomic_live_load() -> None:
     assert "actor_knowledge" not in engine.get_narration_context("look")
 
 
+def test_explicit_atomic_addition_and_duplicate_noop() -> None:
+    engine = GameEngine(REGION_PATH)
+    knowledge_id = "heard_about_the_eastgate_patrol"
+    before_scene = engine.scene_snapshot
+    before_history = engine.get_history()
+    before_world_state = engine.world_state
+
+    result = engine.add_actor_knowledge(ACTOR_ID, knowledge_id)
+    assert result == {
+        "changed": True,
+        "actor_id": ACTOR_ID,
+        "knowledge_id": knowledge_id,
+        "history_id": "history_000001",
+    }
+    assert engine.world_state is not before_world_state
+    assert engine.scene_snapshot is before_scene
+    assert engine.get_actor_knowledge(ACTOR_ID)[-1] == knowledge_id
+    entry = engine.get_history_entry_by_id(result["history_id"])
+    assert entry == {
+        "history_id": result["history_id"],
+        "event_type": "actor_knowledge_added",
+        "summary": f"Actor {ACTOR_ID} gained knowledge {knowledge_id}.",
+        "time": engine.get_world_state()["time"],
+        "actor_id": ACTOR_ID,
+        "knowledge_id": knowledge_id,
+    }
+    assert engine.query_history(event_type="actor_knowledge_added") == [entry]
+
+    state_before_duplicate = engine.world_state
+    history_before_duplicate = engine.get_history()
+    scene_before_duplicate = engine.scene_snapshot
+    duplicate = engine.add_actor_knowledge(ACTOR_ID, knowledge_id)
+    assert duplicate == {
+        "changed": False,
+        "actor_id": ACTOR_ID,
+        "knowledge_id": knowledge_id,
+        "history_id": None,
+    }
+    assert engine.world_state is state_before_duplicate
+    assert engine.get_history() == history_before_duplicate
+    assert engine.scene_snapshot is scene_before_duplicate
+    assert before_history == []
+
+
+def test_addition_validation_and_candidate_failure_are_atomic() -> None:
+    engine = GameEngine(REGION_PATH)
+    before_state = engine.get_world_state()
+    before_scene = engine.get_scene_snapshot()
+    for actor_id, knowledge_id in (
+        ("", "known"), ("missing", "known"), (ACTOR_ID, ""),
+        (ACTOR_ID, None),
+    ):
+        expect_value_error(
+            lambda actor_id=actor_id, knowledge_id=knowledge_id:
+            engine.add_actor_knowledge(actor_id, knowledge_id)
+        )
+    assert engine.get_world_state() == before_state
+    assert engine.get_scene_snapshot() == before_scene
+
+    original_validate = game_engine_module.validate_world_state
+    try:
+        game_engine_module.validate_world_state = (
+            lambda *args, **kwargs: (_ for _ in ()).throw(ValueError("blocked"))
+        )
+        expect_value_error(
+            lambda: engine.add_actor_knowledge(ACTOR_ID, "candidate_failure")
+        )
+    finally:
+        game_engine_module.validate_world_state = original_validate
+    assert engine.get_world_state() == before_state
+    assert engine.get_scene_snapshot() == before_scene
+
+
+def test_added_membership_persists_through_save_load() -> None:
+    engine = GameEngine(REGION_PATH)
+    result = engine.add_actor_knowledge(ACTOR_ID, "saved_knowledge")
+    with TemporaryDirectory() as temporary_directory:
+        path = Path(temporary_directory) / "knowledge_addition.json"
+        path.write_text(json.dumps(build_save_data(engine)), encoding="utf-8")
+        loaded = load_game(str(path))
+    assert loaded.get_actor_knowledge(ACTOR_ID)[-1] == "saved_knowledge"
+    assert loaded.get_history_entry_by_id(result["history_id"]) == (
+        engine.get_history_entry_by_id(result["history_id"])
+    )
+
+
 def main() -> None:
     test_region_validation_and_new_game_seeding()
     test_sparse_state_validation_and_inspection()
     test_persistence_legacy_and_atomic_live_load()
+    test_explicit_atomic_addition_and_duplicate_noop()
+    test_addition_validation_and_candidate_failure_are_atomic()
+    test_added_membership_persists_through_save_load()
     print("Actor knowledge tests passed.")
 
 

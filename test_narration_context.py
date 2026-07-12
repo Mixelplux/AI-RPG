@@ -98,6 +98,19 @@ def main():
     assert engine.get_history() == history_before_context
     assert engine.get_scene_snapshot() == scene_before_context
 
+    added = engine.add_actor_knowledge(
+        "captain_darvin_grey", "narration_excluded_knowledge"
+    )
+    assert engine.get_history_entry_by_id(added["history_id"])["event_type"] == (
+        "actor_knowledge_added"
+    )
+    excluded_context = engine.get_narration_context("look", history_count=20)
+    assert all(
+        entry["event_type"] != "actor_knowledge_added"
+        for entry in excluded_context["history_context"]["history_entries"]
+    )
+    full_history = engine.get_history()
+
     try:
         engine.get_narration_context("listen", history_count=-1)
     except ValueError:
@@ -112,6 +125,10 @@ def main():
 
     with TemporaryDirectory() as temp_dir:
         save_path = f"{temp_dir}/narration_context_save.json"
+        expected_history_entries = engine.get_narration_context(
+            "look at the road",
+            history_count=3,
+        )["history_context"]["history_entries"]
         save_game(engine, save_path)
         loaded_engine = load_game(save_path)
 
@@ -120,7 +137,7 @@ def main():
         history_count=3
     )
     assert loaded_context["history_context"]["history_entries"] == (
-        full_history[-3:]
+        expected_history_entries
     )
     assert loaded_context["current_time"] == engine.get_world_state()["time"]
     assert loaded_context["player"]["current_location_id"] == (

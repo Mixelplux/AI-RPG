@@ -224,7 +224,7 @@ Sprint 10.14 adds one declared conversation-triggered unresolved thread. The eng
 
 Sprint 10.15 hardens the declared thread's persisted identity and causal history, and isolates its internal lifecycle record from narration-facing history. It adds no new thread capability, persistence version, or ADR.
 
-Sprint 10.16 establishes sparse persistent actor-knowledge membership for stable static actors. Immutable Region Pack arrays seed new games only; version-1 legacy saves missing the runtime field load empty and are not reseeded. The capability provides copy-safe engine inspection without knowledge mutation, player-facing projection, dialogue behavior, or autonomous propagation. Sprint 10.17 remains undefined and unstarted.
+Sprint 10.16 establishes sparse persistent actor-knowledge membership for stable static actors. Immutable Region Pack arrays seed new games only; version-1 legacy saves missing the runtime field load empty and are not reseeded. Sprint 10.17 adds one explicit atomic knowledge-addition operation with durable lifecycle history while preserving the non-projection boundary. No following sprint is defined.
 
 Active sprint definitions must include:
 

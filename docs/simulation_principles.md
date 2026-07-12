@@ -80,7 +80,7 @@ Use this principle when discussing witnesses, secrets, rumors, false belief, inv
 
 ### Implementation Note
 
-Sprint 10.16 establishes persistent membership of authored knowledge identifiers for stable static actors. It does not yet implement any channel that changes or projects that membership.
+Sprint 10.16 establishes persistent membership of authored knowledge identifiers for stable static actors. Sprint 10.17 permits one explicit engine-owned durable addition, but does not establish a source channel, projection, interpretation, or propagation rule.
 
 ---
 

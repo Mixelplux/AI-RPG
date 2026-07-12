@@ -596,3 +596,13 @@ Status: Accepted.
 Immutable Region Pack `knowledge` arrays belong to authored static actors and serve only as validated new-game seeds. `world_state.actor_knowledge` owns current sparse membership keyed by the same stable static `entity_id`; absent keys mean no current membership. The runtime structure stores only unique non-empty knowledge identifiers and does not add truth, certainty, provenance, timestamps, categories, beliefs, or behavior semantics.
 
 New games deep-copy non-empty seeds. Version-1 saves missing the field normalize to empty membership only while loading, and loading never reseeds from changed Region Pack content. Region-aware validation excludes unknown, spawned, and ephemeral identities. `GameEngine.get_actor_knowledge(actor_id)` is a copy-safe inspection boundary only; no scene, perception, narration, prompt, target-resolution, dialogue, acquisition, loss, propagation, or autonomous behavior is authorized.
+
+# ADR-046 - Explicit Actor-Knowledge Addition Commits Membership and History Atomically
+
+Status: Accepted.
+
+`GameEngine.add_actor_knowledge(actor_id, knowledge_id)` is the sole Sprint 10.17 gameplay-facing addition boundary. It accepts exactly one stable static actor identity and one non-empty knowledge identifier. The engine copies World State, creates sparse membership only when absent, appends once in call order, records one `actor_knowledge_added` history entry with current durable time, validates the completed candidate against the active Region Pack, and assigns live World State once. It does not rebuild or replace the Scene Snapshot.
+
+Duplicates are successful no-ops: they add no history and do not replace World State or the Scene Snapshot. Material entries contain only the engine-owned history identity, event type, exact summary, time, actor identity, and knowledge identity. They remain durable and history-queryable but narration context excludes them as lifecycle records.
+
+This decision preserves save version 1 and introduces no source linkage, certainty, truth, provenance, reason, evidence, dialogue, perception, target resolution, loss, propagation, or autonomous behavior.

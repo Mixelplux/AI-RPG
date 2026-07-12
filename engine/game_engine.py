@@ -116,6 +116,44 @@ class GameEngine:
         get_static_actor(self.region, actor_id)
         return get_world_actor_knowledge(self.world_state["actor_knowledge"], actor_id)
 
+    def add_actor_knowledge(
+        self,
+        actor_id: str,
+        knowledge_id: str,
+    ) -> Dict[str, Any]:
+        candidate_world_state = copy_world_state(self.world_state)
+        get_static_actor(self.region, actor_id)
+        if not isinstance(knowledge_id, str) or not knowledge_id:
+            raise ValueError("knowledge_id must be a non-empty string.")
+
+        actor_knowledge = candidate_world_state["actor_knowledge"]
+        membership = actor_knowledge.setdefault(actor_id, [])
+        result = {
+            "changed": False,
+            "actor_id": actor_id,
+            "knowledge_id": knowledge_id,
+            "history_id": None,
+        }
+        if knowledge_id in membership:
+            return deepcopy(result)
+
+        membership.append(knowledge_id)
+        candidate_world_state = add_history_entry(
+            candidate_world_state,
+            event_type="actor_knowledge_added",
+            summary=f"Actor {actor_id} gained knowledge {knowledge_id}.",
+            time=deepcopy(candidate_world_state["time"]),
+            extra={
+                "actor_id": actor_id,
+                "knowledge_id": knowledge_id,
+            },
+        )
+        validate_world_state(candidate_world_state, self.region)
+        result["changed"] = True
+        result["history_id"] = candidate_world_state["history"][-1]["history_id"]
+        self.world_state = candidate_world_state
+        return deepcopy(result)
+
     def set_actor_location(
         self, entity_id: str, destination_location_id: str
     ) -> Dict[str, Any]:

@@ -1,5 +1,13 @@
 # Sprint Log
 
+## Sprint 10.17 Closeout
+
+- Status: Complete.
+- Capability delivered: explicit atomic addition of one opaque knowledge identifier to one stable static actor, with one durable `actor_knowledge_added` history entry for each material change.
+- Preserved ownership: World State remains simulation truth; Region Pack data remains immutable; duplicate additions leave World State and Scene Snapshot live objects untouched; save version remains 1.
+- Preserved non-goals: no knowledge projection, source, certainty, truth, provenance, evidence, dialogue, propagation, loss, or autonomous behavior.
+- Verification: focused and required regressions, complete root inventory, Region Pack validation, manifest agreement, preflight, launch and save/load atomicity smokes, packet validation, and diff check passed through the official interpreter.
+
 ## Sprint 10.16 Closeout
 
 - Status: Complete.
