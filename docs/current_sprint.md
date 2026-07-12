@@ -1,31 +1,39 @@
 # Current Sprint
 
-## Sprint 10.19 - One Declared Resolved-Conversation Actor-Knowledge Consequence
+## Sprint 10.20 — Persistent Located Evidence-Trace Representation
 
-Status: Complete.
+Status: Active.
 
 ## Goal
 
-Add one immutable declared resolved-conversation actor-knowledge consequence with an accepted conversation as its structural causal source.
+Establish sparse persistent World State evidence traces with stable identity,
+opaque content identity, exact Region Pack location, defensive reads, and
+version-1 candidate-load normalization.
 
 ## Expected Files
 
-`data/regions/bryn_shander.json`, `engine/game_engine.py`, `engine/region_validator.py`, focused conversation actor-knowledge tests, canonical records, relevant documentation, and the Sprint 10.19 review packet.
+`engine/evidence_traces.py`, `engine/world_state.py`, `engine/save_system.py`,
+`engine/region_validator.py`, focused tests, ADR/documentation, and canonical
+package and sprint records.
 
 ## Acceptance Criteria
 
-- One strict optional declaration triggers one causal actor-knowledge addition for stable static actors.
-- Material changes commit conversation, membership, and lifecycle history atomically; duplicates leave knowledge lifecycle unchanged.
-- Save version remains `1`; no player-facing knowledge projection or generic framework is added.
+- Every persisted trace has unique stable `trace_id`, opaque `evidence_id`, and
+  one exact Region Pack `location_id` in deterministic order.
+- Validation is strict and Region-aware; reads are defensive.
+- Save version remains `1`; legacy candidate loads may normalize only a missing
+  collection and malformed candidate loads fail safely.
+- No player-facing trace projection exists.
 
 ## Verification
 
-Focused and root tests, Region Pack and manifest validation, hardening, smoke checks, packet validation, and `git diff --check` passed.
+Focused evidence-trace tests, affected World State/save-load/Region Pack
+regressions, canonical manifest agreement, and `git diff --check`.
 
 ## Canonical Manifest
 
 <!-- CANONICAL-MANIFEST-START -->
 ```json
-{"schema_version":"1.0.0","document_type":"current_sprint","sprint_count":1,"project":{"name":"AI Narrative RPG Engine","principles":["provider-neutral","deterministic-core","simulation-owned-truth"]},"sprint":{"id":"10.19","title":"One Declared Resolved-Conversation Actor-Knowledge Consequence","type":"bounded-feature","mode":"single-sprint","status":"complete","goal":"Add one strict immutable Region Pack declaration that causes one successfully resolved conversation with one declared static actor to add one exact knowledge identifier to one declared stable static actor, using the accepted conversation history entry as the causal source and committing the conversation, knowledge membership, and lifecycle history atomically within the existing conversation transition.","platform":{"official_interpreter":".\\.venv\\Scripts\\python.exe"},"expected_files":{"likely_modified":["data/regions/bryn_shander.json","engine/game_engine.py","engine/region_validator.py","test_conversation_actor_knowledge.py","test_conversation_pressure_effect.py","test_interaction_history.py","test_unresolved_thread.py","docs/architecture.md","docs/decisions.md","docs/roadmap.md","docs/simulation_model.md","docs/simulation_principles.md","docs/sprint_log.md","docs/current_sprint.md","docs/current_sprint.yaml","docs/current_sprint.json","docs/next_chat_handoff.md"],"likely_created":["handoffs/post_sprint_10_19_architecture_review_packet.zip"]},"acceptance_criteria":["One optional singular exact conversation_actor_knowledge_effect declaration validates effect_id, trigger_entity_id, actor_entity_id, and knowledge_id as non-empty strings for stable static actors.","A matching successful resolved conversation atomically adds absent membership and one causally linked actor_knowledge_added history entry using its new player_conversation entry as source_history_id, then validates, builds, and commits once.","A duplicate consequence leaves membership and lifecycle history unchanged while the successful conversation records normally and reports changed false with no history id.","Save version remains 1; declarations are immutable and unsaved; causal history persists and malformed causal links fail atomically during load.","Knowledge and linkage remain absent from player-facing projections; no semantic source policy or generic consequence system is added."],"verification":{"focused_commands":[".\\.venv\\Scripts\\python.exe test_conversation_actor_knowledge.py",".\\.venv\\Scripts\\python.exe test_actor_knowledge.py"],"required_regressions":["conversation, history, narration, save/load, World State, and engine regressions"],"manifest_commands":["JSON/YAML/Markdown deep comparison","git diff --check"],"closeout_commands":["Complete root test inventory (24 scripts)","Region Pack validation","atomicity and save/load smokes","hardening validation","review-packet validation"]},"execution_phases":[{"id":"setup"},{"id":"implementation"},{"id":"verification"},{"id":"closeout"}],"governance":["Exactly one sprint is active.","Save version remains 1.","Do not define or begin Sprint 10.20.","Do not commit."],"closeout":{"allowed_terminal_statuses":["complete","blocked"],"verification_result":"Focused coverage, affected regressions, all 24 root tests, Region Pack validation, manifest agreement, hardening, smokes, packet validation, and diff check passed through the official interpreter; direct preflight process creation was blocked by the agent execution context.","next_sprint":null}}}
+{"schema_version":"1.0.0","document_type":"current_sprint","sprint_count":1,"project":{"name":"AI Narrative RPG Engine","principles":["provider-neutral","deterministic-core","simulation-owned-truth"]},"sprint":{"id":"10.20","title":"Persistent Located Evidence-Trace Representation","type":"bounded-feature","mode":"capability-package-internal","status":"active","goal":"Establish one sparse persistent World State evidence-trace representation with stable trace identity, exact Region Pack location, opaque content identity, deterministic ordering, strict Region-aware validation, defensive copies, and version-1 legacy-load normalization only.","platform":{"official_interpreter":".\\.venv\\Scripts\\python.exe"},"expected_files":{"likely_modified":["engine/world_state.py","engine/save_system.py","engine/region_validator.py","docs/architecture.md","docs/decisions.md","docs/roadmap.md","docs/current_sprint.md","docs/current_sprint.yaml","docs/current_sprint.json","docs/current_capability_package.md","TASK.md"],"likely_created":["engine/evidence_traces.py","test_evidence_traces.py"]},"acceptance_criteria":["World State owns a sparse evidence_traces collection whose records have stable non-empty trace_id, opaque non-empty evidence_id, and one exact Region Pack location_id.","Validation is deterministic, Region-aware, rejects malformed or duplicate identities, and all public reads are defensive.","Save version remains 1; missing evidence_traces normalizes only during candidate loading and malformed candidate loads fail without changing live state.","No trace projection enters scene, perception, narration, dialogue, targeting, CLI, or gameplay behavior."],"verification":{"focused_commands":[".\\.venv\\Scripts\\python.exe test_evidence_traces.py"],"required_regressions":["World State, save/load, history, region validation, and engine regressions"],"manifest_commands":["JSON/YAML/Markdown deep comparison","git diff --check"],"closeout_commands":["Focused representation tests, affected regressions, Region Pack validation, save/load checks, and checkpoint validation"]},"execution_phases":[{"id":"setup"},{"id":"implementation"},{"id":"verification"},{"id":"closeout"}],"governance":["Exactly one sprint is active.","Part of accepted Evidence Trace Foundations package.","Save version remains 1.","Do not begin Sprint 10.21 until Sprint 10.20 is complete."],"closeout":{"allowed_terminal_statuses":["complete","blocked"],"verification_result":null,"next_sprint":"10.21"}}}
 ```
 <!-- CANONICAL-MANIFEST-END -->

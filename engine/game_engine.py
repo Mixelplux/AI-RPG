@@ -51,6 +51,11 @@ from engine.world_state import (
     validate_world_state
 )
 from engine.actor_knowledge import get_actor_knowledge as get_world_actor_knowledge
+from engine.evidence_traces import (
+    get_evidence_trace as get_world_evidence_trace,
+    get_evidence_traces as get_world_evidence_traces,
+    get_evidence_traces_at_location as get_world_evidence_traces_at_location,
+)
 
 
 class GameEngine:
@@ -115,6 +120,68 @@ class GameEngine:
     def get_actor_knowledge(self, actor_id: str) -> tuple[str, ...]:
         get_static_actor(self.region, actor_id)
         return get_world_actor_knowledge(self.world_state["actor_knowledge"], actor_id)
+
+    def get_evidence_trace(self, trace_id: str) -> Dict[str, str] | None:
+        return get_world_evidence_trace(self.world_state, trace_id)
+
+    def get_evidence_traces_at_location(self, location_id: str) -> list[Dict[str, str]]:
+        return get_world_evidence_traces_at_location(self.world_state, location_id)
+
+    def get_evidence_traces(self) -> list[Dict[str, str]]:
+        return get_world_evidence_traces(self.world_state)
+
+    def create_evidence_trace(self, trace_id: str, evidence_id: str, location_id: str) -> Dict[str, Any]:
+        candidate, result = self._prepare_evidence_trace_candidate(
+            copy_world_state(self.world_state), trace_id, evidence_id, location_id
+        )
+        if not result["changed"]:
+            return deepcopy(result)
+        validate_world_state(candidate, self.region)
+        self.world_state = candidate
+        return deepcopy(result)
+
+    def create_evidence_trace_from_event(
+        self, trace_id: str, evidence_id: str, location_id: str, source_history_id: str
+    ) -> Dict[str, Any]:
+        candidate, result = self._prepare_evidence_trace_candidate(
+            copy_world_state(self.world_state), trace_id, evidence_id, location_id, source_history_id
+        )
+        if not result["changed"]:
+            return deepcopy(result)
+        validate_world_state(candidate, self.region)
+        self.world_state = candidate
+        return deepcopy(result)
+
+    def _prepare_evidence_trace_candidate(
+        self, candidate: Dict[str, Any], trace_id: str, evidence_id: str,
+        location_id: str, source_history_id: str | None = None,
+    ) -> tuple[Dict[str, Any], Dict[str, Any]]:
+        for name, value in (("trace_id", trace_id), ("evidence_id", evidence_id), ("location_id", location_id)):
+            if not isinstance(value, str) or not value:
+                raise ValueError(f"{name} must be a non-empty string.")
+        location_ids = {item.get("location_id") for item in self.region.get("locations", []) if isinstance(item, dict)}
+        if location_id not in location_ids:
+            raise ValueError("location_id is unknown.")
+        if source_history_id is not None:
+            if not isinstance(source_history_id, str) or not source_history_id:
+                raise ValueError("source_history_id must be a non-empty string.")
+            if get_history_entry_by_id(candidate, source_history_id) is None:
+                raise ValueError("Unknown source_history_id.")
+        existing = next((trace for trace in candidate["evidence_traces"] if trace["trace_id"] == trace_id), None)
+        result = {"changed": False, "trace_id": trace_id, "evidence_id": evidence_id,
+                  "location_id": location_id, "source_history_id": source_history_id, "history_id": None}
+        if existing is not None:
+            if existing != {"trace_id": trace_id, "evidence_id": evidence_id, "location_id": location_id}:
+                raise ValueError("Conflicting evidence trace identity.")
+            return candidate, deepcopy(result)
+        candidate["evidence_traces"].append({"trace_id": trace_id, "evidence_id": evidence_id, "location_id": location_id})
+        extra = {"trace_id": trace_id, "evidence_id": evidence_id, "location_id": location_id}
+        if source_history_id is not None:
+            extra["source_history_id"] = source_history_id
+        candidate = add_history_entry(candidate, "evidence_trace_added", f"Evidence trace added: {trace_id}.", location_id, deepcopy(candidate["time"]), extra)
+        result["changed"] = True
+        result["history_id"] = candidate["history"][-1]["history_id"]
+        return candidate, deepcopy(result)
 
     def add_actor_knowledge(
         self,
@@ -841,6 +908,17 @@ class GameEngine:
                     "knowledge_id": knowledge_result["knowledge_id"],
                     "source_history_id": knowledge_result["source_history_id"],
                     "history_id": knowledge_result["history_id"],
+                }
+
+            trace_effect = self.region.get("conversation_evidence_trace_effect")
+            interaction_result["evidence_trace_consequence"] = None
+            if trace_effect is not None and trace_effect["trigger_entity_id"] == target_entity_id:
+                candidate_world_state, trace_result = self._prepare_evidence_trace_candidate(
+                    candidate_world_state, trace_effect["trace_id"], trace_effect["evidence_id"],
+                    trace_effect["location_id"], conversation_source_history_id,
+                )
+                interaction_result["evidence_trace_consequence"] = {
+                    "effect_id": trace_effect["effect_id"], **trace_result
                 }
 
         validate_world_state(candidate_world_state, self.region)

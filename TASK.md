@@ -29,11 +29,18 @@ Confirm `docs/current_sprint.md` contains:
 - Acceptance Criteria
 - Verification
 
+For an owner-approved capability package recorded in
+`docs/current_capability_package.md`, the lead agent may define and stage one
+accepted internal milestone at a time, then progress sequentially without
+routine owner interruption. Exactly one sprint remains active and all canonical
+manifest, verification, and meaningful-stop-condition rules still apply.
+
 If any section is missing, stop and request only the missing sprint definition.
 
 Do not invent missing sprint details.
 
-Do not begin the next sprint automatically.
+Do not begin work outside the accepted package or begin the next capability
+package automatically.
 
 Do not modify files outside the current sprint scope unless reporting the need first.
 
