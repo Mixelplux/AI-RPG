@@ -429,3 +429,7 @@ Sprint 8.4 scopes this layer to identifying known locations from loaded region d
 Destination resolution does not execute travel. It must not move the player, calculate a route, perform fast travel, advance time, trigger encounters, or narrate a journey. Those behaviors belong to later travel and world-simulation systems.
 
 `GameEngine` remains the gameplay-facing facade. Front ends should not call lower-level destination-resolution modules directly.
+
+## Sprint 10.19 Conversation Actor-Knowledge Consequence
+
+One optional immutable `conversation_actor_knowledge_effect` composes with the successful resolved-conversation candidate transition. Its declared trigger actor, receiving stable static actor, and opaque knowledge identifier add one absent membership only after the new accepted `player_conversation` entry exists in the candidate. That entry is the structural `source_history_id` of the resulting `actor_knowledge_added` entry. Existing pressure, actor-location, and unresolved-thread consequences retain their candidate composition; final validation and one Scene Snapshot build precede the sole live commit. Duplicate knowledge adds no membership or lifecycle entry while the new successful conversation still records normally. The declaration is not persisted or replayed, and knowledge remains absent from scene, perception, narration, dialogue, targeting, and CLI behavior.

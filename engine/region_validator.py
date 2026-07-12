@@ -122,6 +122,11 @@ def validate_region(region: dict) -> None:
         errors.append(str(error))
 
     try:
+        validate_conversation_actor_knowledge_effect(region)
+    except ValueError as error:
+        errors.append(str(error))
+
+    try:
         validate_elapsed_time_pressure_effect(region)
     except ValueError as error:
         errors.append(str(error))
@@ -184,6 +189,34 @@ def validate_conversation_actor_relocation_effect(region: dict) -> None:
     }
     if effect["destination_location_id"] not in location_ids:
         raise ValueError(f"{field}.destination_location_id is unknown.")
+
+
+def validate_conversation_actor_knowledge_effect(region: dict) -> None:
+    field = "conversation_actor_knowledge_effect"
+    if field not in region:
+        return
+    effect = region[field]
+    if not isinstance(effect, dict):
+        raise ValueError(f"{field} must be a dictionary.")
+    required = {"effect_id", "trigger_entity_id", "actor_entity_id", "knowledge_id"}
+    fields = set(effect)
+    if fields != required:
+        raise ValueError(
+            f"{field} fields are invalid; "
+            f"missing={sorted(required - fields)}, extra={sorted(fields - required)}."
+        )
+    for name in sorted(required):
+        if not isinstance(effect[name], str) or not effect[name]:
+            raise ValueError(f"{field}.{name} must be a non-empty string.")
+    static_ids = {
+        entity.get("entity_id")
+        for entity in region.get("entities", [])
+        if isinstance(entity, dict) and entity.get("persistence") == "static"
+    }
+    if effect["trigger_entity_id"] not in static_ids:
+        raise ValueError(f"{field}.trigger_entity_id must reference a static actor.")
+    if effect["actor_entity_id"] not in static_ids:
+        raise ValueError(f"{field}.actor_entity_id must reference a static actor.")
 
 
 def validate_conversation_unresolved_thread(region: dict) -> None:

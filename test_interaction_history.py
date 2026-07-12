@@ -36,7 +36,7 @@ def main():
     )
 
     first_history = engine.get_history()
-    assert len(first_history) == 4
+    assert len(first_history) == 5
     first_entry = first_history[0]
     assert first_entry["history_id"] == "history_000001"
     assert first_entry["event_type"] == "player_conversation"
@@ -55,6 +55,8 @@ def main():
     assert first_history[2]["source_history_id"] == first_entry["history_id"]
     assert first_history[3]["event_type"] == "unresolved_thread_opened"
     assert first_history[3]["source_history_id"] == first_entry["history_id"]
+    assert first_history[4]["event_type"] == "actor_knowledge_added"
+    assert first_history[4]["source_history_id"] == first_entry["history_id"]
 
     after_first_state = engine.get_world_state()
     assert after_first_state["player"]["current_location_id"] == (
@@ -75,6 +77,9 @@ def main():
             "created_by_history_id": first_entry["history_id"],
         }
     }
+    expected_after_first["actor_knowledge"]["captain_darvin_grey"].append(
+        "player_spoke_with_captain"
+    )
     assert without_history(after_first_state) == expected_after_first
 
     second_result = engine.process_command("talk to captain")
@@ -84,7 +89,7 @@ def main():
     )
     assert len(conversation_entries) == 2
     assert conversation_entries[0]["history_id"] == "history_000001"
-    assert conversation_entries[1]["history_id"] == "history_000005"
+    assert conversation_entries[1]["history_id"] == "history_000006"
     assert conversation_entries[1]["target_entity_id"] == (
         "captain_darvin_grey"
     )
@@ -121,6 +126,9 @@ def main():
             "created_by_history_id": first_entry["history_id"],
         }
     }
+    expected_final["actor_knowledge"]["captain_darvin_grey"].append(
+        "player_spoke_with_captain"
+    )
     assert without_history(engine.get_world_state()) == expected_final
 
     history_context = engine.get_history_context(count=2)
@@ -135,7 +143,8 @@ def main():
             entry
             for entry in engine.get_history()[-2:]
             if entry["event_type"] not in {
-                "pressure_changed", "actor_moved", "unresolved_thread_opened"
+                "pressure_changed", "actor_moved", "unresolved_thread_opened",
+                "actor_knowledge_added"
             }
         ]
     )
@@ -155,8 +164,8 @@ def main():
     post_load_result = loaded_engine.process_command("talk to captain")
     assert post_load_result["success"]
     post_load_history = loaded_engine.get_history()
-    assert len(post_load_history) == 6
-    assert post_load_history[-1]["history_id"] == "history_000006"
+    assert len(post_load_history) == 7
+    assert post_load_history[-1]["history_id"] == "history_000007"
     assert post_load_history[-1]["history_id"] not in loaded_history_ids
     assert post_load_history[-1]["target_entity_id"] == (
         "captain_darvin_grey"

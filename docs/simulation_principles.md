@@ -249,3 +249,7 @@ The following ideas are important but not fully settled:
 - how long campaigns compress history while preserving meaning
 
 These questions should remain open until implementation experience gives better evidence.
+
+## Declared Conversation Knowledge Consequences
+
+An accepted resolved conversation may cause one declared actor-knowledge membership addition only through immutable Region Pack policy and an atomic simulation transition. The causal link is structural, not a claim about truth, belief, understanding, or evidence. Such membership remains simulation-owned and non-player-facing until a later accepted projection boundary exists.

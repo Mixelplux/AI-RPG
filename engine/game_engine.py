@@ -163,6 +163,26 @@ class GameEngine:
         """Atomically add actor knowledge with one prior durable source event."""
 
         candidate_world_state = copy_world_state(self.world_state)
+        candidate_world_state, result = (
+            self._prepare_actor_knowledge_from_event_candidate(
+                candidate_world_state, actor_id, knowledge_id, source_history_id
+            )
+        )
+        if not result["changed"]:
+            return deepcopy(result)
+        validate_world_state(candidate_world_state, self.region)
+        self.world_state = candidate_world_state
+        return deepcopy(result)
+
+    def _prepare_actor_knowledge_from_event_candidate(
+        self,
+        candidate_world_state: Dict[str, Any],
+        actor_id: str,
+        knowledge_id: str,
+        source_history_id: str,
+    ) -> tuple[Dict[str, Any], Dict[str, Any]]:
+        """Prepare one causally linked actor-knowledge addition without commit."""
+
         get_static_actor(self.region, actor_id)
         if not isinstance(knowledge_id, str) or not knowledge_id:
             raise ValueError("knowledge_id must be a non-empty string.")
@@ -181,7 +201,7 @@ class GameEngine:
             "history_id": None,
         }
         if knowledge_id in membership:
-            return deepcopy(result)
+            return candidate_world_state, deepcopy(result)
 
         membership.append(knowledge_id)
         candidate_world_state = add_history_entry(
@@ -195,11 +215,9 @@ class GameEngine:
                 "source_history_id": source_history_id,
             },
         )
-        validate_world_state(candidate_world_state, self.region)
         result["changed"] = True
         result["history_id"] = candidate_world_state["history"][-1]["history_id"]
-        self.world_state = candidate_world_state
-        return deepcopy(result)
+        return candidate_world_state, deepcopy(result)
 
     def set_actor_location(
         self, entity_id: str, destination_location_id: str
@@ -735,6 +753,9 @@ class GameEngine:
             target_entity_id = interaction_result["target_resolution"][
                 "identifier"
             ]
+            conversation_source_history_id = candidate_world_state["history"][-1][
+                "history_id"
+            ]
             effect = next(
                 (
                     item
@@ -746,15 +767,12 @@ class GameEngine:
                 None,
             )
             if effect is not None:
-                source_history_id = candidate_world_state["history"][-1][
-                    "history_id"
-                ]
                 candidate_world_state, consequence = (
                     self._prepare_pressure_level_from_event_candidate(
                         candidate_world_state,
                         effect["pressure_id"],
                         effect["new_level"],
-                        source_history_id,
+                        conversation_source_history_id,
                     )
                 )
                 consequence["effect_id"] = effect["effect_id"]
@@ -776,18 +794,12 @@ class GameEngine:
                 relocation is not None
                 and relocation["trigger_entity_id"] == target_entity_id
             ):
-                source_history_id = next(
-                    entry["history_id"]
-                    for entry in reversed(candidate_world_state["history"])
-                    if entry["event_type"] == "player_conversation"
-                    and entry.get("target_entity_id") == target_entity_id
-                )
                 candidate_world_state, actor_result = (
                     self._prepare_actor_location_candidate(
                         candidate_world_state,
                         relocation["actor_entity_id"],
                         relocation["destination_location_id"],
-                        source_history_id,
+                        conversation_source_history_id,
                     )
                 )
                 interaction_result["actor_location_consequence"] = {
@@ -803,16 +815,33 @@ class GameEngine:
             thread = self.region.get("conversation_unresolved_thread")
             interaction_result["unresolved_thread_consequence"] = None
             if thread is not None and thread["trigger_entity_id"] == target_entity_id:
-                source_history_id = next(
-                    entry["history_id"]
-                    for entry in reversed(candidate_world_state["history"])
-                    if entry["event_type"] == "player_conversation"
-                    and entry.get("target_entity_id") == target_entity_id
-                )
                 candidate_world_state, thread_result = prepare_open_thread_candidate(
-                    candidate_world_state, thread, source_history_id
+                    candidate_world_state, thread, conversation_source_history_id
                 )
                 interaction_result["unresolved_thread_consequence"] = thread_result
+
+            knowledge_effect = self.region.get("conversation_actor_knowledge_effect")
+            interaction_result["actor_knowledge_consequence"] = None
+            if (
+                knowledge_effect is not None
+                and knowledge_effect["trigger_entity_id"] == target_entity_id
+            ):
+                candidate_world_state, knowledge_result = (
+                    self._prepare_actor_knowledge_from_event_candidate(
+                        candidate_world_state,
+                        knowledge_effect["actor_entity_id"],
+                        knowledge_effect["knowledge_id"],
+                        conversation_source_history_id,
+                    )
+                )
+                interaction_result["actor_knowledge_consequence"] = {
+                    "effect_id": knowledge_effect["effect_id"],
+                    "changed": knowledge_result["changed"],
+                    "actor_id": knowledge_result["actor_id"],
+                    "knowledge_id": knowledge_result["knowledge_id"],
+                    "source_history_id": knowledge_result["source_history_id"],
+                    "history_id": knowledge_result["history_id"],
+                }
 
         validate_world_state(candidate_world_state, self.region)
         candidate_scene_snapshot = build_scene(

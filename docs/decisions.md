@@ -616,3 +616,7 @@ Status: Accepted.
 A material addition prepares copied World State, appends absent membership once, constructs one `actor_knowledge_added` history entry with `source_history_id`, validates the completed Region-aware candidate including backward history integrity, and commits World State exactly once. The source entry remains unchanged and outside the commit. Duplicates still validate the source but create no membership, history, World State replacement, or Scene Snapshot rebuild.
 
 Source-free Sprint 10.17 entries remain valid through save/load. This decision preserves save version 1, stable static actor ownership, narration-context exclusion, and all non-projection boundaries. It introduces no automatic trigger, source-event type restriction, causal graph, generic transaction system, knowledge loss, propagation, or player-facing behavior.
+
+## Sprint 10.19 ADR Determination
+
+No new ADR is required. Sprint 10.19 directly composes ADR-035 resolved conversation history, ADR-039 declared conversation consequences, ADR-045 actor-knowledge ownership, ADR-046 atomic explicit addition, and ADR-047 causal linkage. It creates no new persistent domain, ownership boundary, save compatibility rule, or generic consequence mechanism.

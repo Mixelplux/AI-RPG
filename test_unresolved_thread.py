@@ -131,7 +131,7 @@ def test_causal_integrity_narration_isolation_and_live_load_atomicity() -> None:
             ("mismatch", lambda p: p["world_state"]["open_threads"][THREAD_ID].__setitem__("thread_id", "other")),
             ("wrong_source", lambda p: p["world_state"]["open_threads"][THREAD_ID].__setitem__("created_by_history_id", "history_000002")),
             ("missing_open", lambda p: p["world_state"].__setitem__("history", [e for e in p["world_state"]["history"] if e["event_type"] != "unresolved_thread_opened"])),
-            ("duplicate_open", lambda p: p["world_state"]["history"].append(deepcopy(p["world_state"]["history"][-1]) | {"history_id":"history_999999"})),
+            ("duplicate_open", lambda p: p["world_state"]["history"].append(deepcopy(next(e for e in p["world_state"]["history"] if e["event_type"] == "unresolved_thread_opened")) | {"history_id":"history_999999"})),
         ):
             payload = deepcopy(valid); mutate(payload)
             path = Path(temporary_directory) / f"{label}.json"

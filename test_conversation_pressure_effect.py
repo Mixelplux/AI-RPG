@@ -116,7 +116,9 @@ def test_material_unmatched_and_no_op_behavior() -> None:
 
     result = engine.process_command("talk to captain")
     history = engine.get_history()
-    source, consequence, thread_opened = history
+    source = next(entry for entry in history if entry["event_type"] == "player_conversation")
+    consequence = next(entry for entry in history if entry["event_type"] == "pressure_changed")
+    thread_opened = next(entry for entry in history if entry["event_type"] == "unresolved_thread_opened")
 
     assert result["pressure_consequence"] == {
         "effect_id": EFFECT_ID,
@@ -158,14 +160,14 @@ def test_material_unmatched_and_no_op_behavior() -> None:
         engine.get_history()[-1]["history_id"]
     )
     assert engine.get_history()[-1]["event_type"] == "player_conversation"
-    assert len(engine.get_history()) == 4
+    assert len(engine.get_history()) == 5
     assert engine.get_pressure(PRESSURE_ID) == pressure_before_repeat
 
     elin = engine.process_command("talk to elin")
     assert elin["success"]
     assert "pressure_consequence" not in elin
     assert engine.get_history()[-1]["target_entity_id"] == "guard_elin_voss"
-    assert len(engine.get_history()) == 5
+    assert len(engine.get_history()) == 6
 
     for command in ("talk to blacksmith", "talk to guard"):
         history_before = engine.get_history()
@@ -197,7 +199,7 @@ def test_material_unmatched_and_no_op_behavior() -> None:
     exit_result = engine.process_command("talk to north")
     assert exit_result["success"]
     assert "pressure_consequence" not in exit_result
-    assert len(engine.get_history()) == 5
+    assert len(engine.get_history()) == 6
 
 
 def test_matched_atomic_failures() -> None:

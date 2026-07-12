@@ -638,4 +638,6 @@ The following questions are intentionally unresolved:
 - How should ephemeral AI flavor be promoted into simulation state, if ever?
 - How should long campaigns compress history without losing meaning?
 
+Sprint 10.19 adds one authored, deterministic bridge from an accepted resolved conversation to opaque current actor-knowledge membership. The durable source records that the declared transition caused the membership change; it does not decide what was said, heard, understood, true, believed, or reliable. Player-facing discovery and interpretation remain separate future concerns.
+
 These questions should be answered through future design sessions and implementation experience, not solved prematurely.

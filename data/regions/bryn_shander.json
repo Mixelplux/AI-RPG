@@ -42,6 +42,12 @@
     "actor_entity_id": "guard_elin_voss",
     "destination_location_id": "bryn_shander_main_street"
   },
+  "conversation_actor_knowledge_effect": {
+    "effect_id": "captain_conversation_grants_knowledge",
+    "trigger_entity_id": "captain_darvin_grey",
+    "actor_entity_id": "captain_darvin_grey",
+    "knowledge_id": "player_spoke_with_captain"
+  },
   "conversation_unresolved_thread": {
     "thread_id": "bryn_shander_west_road_bandit_report",
     "description": "Captain Darvin Grey's report of bandit activity on the western road remains unresolved.",

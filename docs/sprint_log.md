@@ -1,5 +1,14 @@
 # Sprint Log
 
+## Sprint 10.19 Closeout
+
+- Status: Complete.
+- Scope: one declared resolved conversation may add one opaque knowledge identifier to one stable static actor using the accepted conversation entry as a structural source.
+- Atomicity: conversation history, existing declared consequences, material membership, and causally linked lifecycle history prepare in one candidate; validation and one scene build occur before one live commit.
+- Boundary: duplicate knowledge remains a no-op while the conversation records normally; no text interpretation, truth, belief, evidence, projection, dialogue, or generic dispatcher was introduced.
+- Compatibility: save version remains 1; declaration content remains immutable and unsaved; source-free and existing causal history remain valid.
+- ADR: no new ADR; ADR-035, ADR-039, and ADR-045 through ADR-047 already establish the composed boundaries. Sprint 10.20 is not defined or started.
+
 ## Sprint 10.18 Closeout
 
 - Status: Complete.

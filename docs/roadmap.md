@@ -226,6 +226,8 @@ Sprint 10.15 hardens the declared thread's persisted identity and causal history
 
 Sprint 10.16 establishes sparse persistent actor-knowledge membership for stable static actors. Immutable Region Pack arrays seed new games only; version-1 legacy saves missing the runtime field load empty and are not reseeded. Sprint 10.17 adds one explicit atomic knowledge-addition operation with durable lifecycle history while preserving the non-projection boundary. Sprint 10.18 adds a bounded structural reference from one addition to one already accepted durable source event; it adds no semantic source eligibility, belief model, acquisition policy, or player-facing projection. No following sprint is defined.
 
+Sprint 10.19 composes one strict immutable resolved-conversation declaration with the accepted candidate transition. It may grant one opaque actor-knowledge identifier to one stable static actor using the new conversation entry as a structural causal source. It adds no conversation-text interpretation, knowledge projection, semantic source policy, or generic consequence system. No following sprint is defined.
+
 Active sprint definitions must include:
 
 - Goal
