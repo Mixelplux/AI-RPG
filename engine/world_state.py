@@ -45,10 +45,14 @@ def create_initial_world_state(region: Dict[str, Any]) -> Dict[str, Any]:
         "time": deepcopy(initial_time),
         "history": [],
         "pressures": build_initial_pressure_state(region),
+        "actor_location_overrides": {},
     }
 
 
-def validate_world_state(world_state: Dict[str, Any]) -> None:
+def validate_world_state(
+    world_state: Dict[str, Any],
+    region: Dict[str, Any] | None = None,
+) -> None:
     """
     Validate the minimum required World State shape for runtime use.
     """
@@ -73,6 +77,34 @@ def validate_world_state(world_state: Dict[str, Any]) -> None:
 
     validate_pressure_state(world_state["pressures"])
 
+    overrides = world_state.get("actor_location_overrides", {})
+    if not isinstance(overrides, dict):
+        raise ValueError("World State actor_location_overrides must be a dictionary.")
+    for entity_id, location_id in overrides.items():
+        if not isinstance(entity_id, str) or not entity_id:
+            raise ValueError("Actor override entity_id must be a non-empty string.")
+        if not isinstance(location_id, str) or not location_id:
+            raise ValueError("Actor override location_id must be a non-empty string.")
+
+    if region is not None:
+        actors = {
+            entity["entity_id"]: entity
+            for entity in region.get("entities", [])
+            if isinstance(entity, dict) and entity.get("persistence") == "static"
+        }
+        location_ids = {
+            location.get("location_id")
+            for location in region.get("locations", [])
+            if isinstance(location, dict)
+        }
+        for entity_id, location_id in overrides.items():
+            if entity_id not in actors:
+                raise ValueError(f"Unknown static actor override: {entity_id}.")
+            if location_id not in location_ids:
+                raise ValueError(f"Unknown actor override destination: {location_id}.")
+            if location_id == actors[entity_id]["location"]:
+                raise ValueError(f"Redundant baseline actor override: {entity_id}.")
+
     if "history" in world_state and not isinstance(
         world_state["history"],
         list
@@ -90,6 +122,29 @@ def copy_world_state(world_state: Dict[str, Any]) -> Dict[str, Any]:
 
     validate_world_state(world_state)
     return deepcopy(world_state)
+
+
+def get_static_actor(region: Dict[str, Any], entity_id: str) -> Dict[str, Any]:
+    if not isinstance(entity_id, str) or not entity_id:
+        raise ValueError("entity_id must be a non-empty string.")
+    matches = [
+        entity for entity in region.get("entities", [])
+        if isinstance(entity, dict)
+        and entity.get("persistence") == "static"
+        and entity.get("entity_id") == entity_id
+    ]
+    if len(matches) != 1:
+        raise ValueError("Unknown supported static actor entity_id.")
+    return deepcopy(matches[0])
+
+
+def get_effective_actor_location(
+    region: Dict[str, Any], world_state: Dict[str, Any], entity_id: str
+) -> str:
+    actor = get_static_actor(region, entity_id)
+    return world_state.get("actor_location_overrides", {}).get(
+        entity_id, actor["location"]
+    )
 
 
 def get_player_location_id(world_state: Dict[str, Any]) -> str:

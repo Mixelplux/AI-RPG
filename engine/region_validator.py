@@ -72,17 +72,30 @@ def validate_region(region: dict) -> None:
                 )
 
     # --------------------------------------------------
-    # Entity locations
+    # Supported named static actors
     # --------------------------------------------------
 
-    for entity in entities:
-
+    static_ids = []
+    for index, entity in enumerate(entities):
+        if not isinstance(entity, dict) or entity.get("persistence") != "static":
+            continue
+        entity_id = entity.get("entity_id")
+        if not isinstance(entity_id, str) or not entity_id:
+            errors.append(f"Static entity at index {index} requires a non-empty entity_id")
+            continue
+        static_ids.append(entity_id)
         entity_location = entity.get("location")
-
-        if entity_location not in location_set:
+        if not isinstance(entity_location, str) or not entity_location:
+            errors.append(f"Entity '{entity_id}' requires one authored location")
+        elif entity_location not in location_set:
             errors.append(
-                f"Entity '{entity['entity_id']}' has invalid location '{entity_location}'"
+                f"Entity '{entity_id}' has invalid location '{entity_location}'"
             )
+    duplicate_static_ids = sorted(
+        entity_id for entity_id, count in Counter(static_ids).items() if count > 1
+    )
+    if duplicate_static_ids:
+        errors.append(f"Duplicate static entity_id(s): {duplicate_static_ids}")
 
     try:
         validate_initial_pressures(region)

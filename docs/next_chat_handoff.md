@@ -1,3 +1,3 @@
-# Next Chat Handoff: Sprint 10.10 Complete
+# Next Chat Handoff: Sprint 10.11 Complete
 
-Sprint 10.10 projects the one perception-owned authored pressure cue through the deterministic narration pipeline and composes its exact text into accepted player-facing preview output once. Raw pressure records, numeric levels, scope internals, and causal history identifiers remain outside narration. No provider or persistence change was added, no new ADR was needed, `next_sprint` is null, and Sprint 10.11 is undefined.
+Sprint 10.11 adds sparse persistent location overrides for seeded named static actors. Region Packs retain immutable identity and authored baseline data; World State stores only differences keyed by existing `entity_id`. Scene projection, perception, and target resolution now reflect effective actor location, while spawned templates remain unchanged. `GameEngine.set_actor_location(...)` commits material movement, one `actor_moved` history entry, and the rebuilt scene atomically; same-location requests are true no-ops. Save version remains 1, ADR-043 is accepted, `next_sprint` is null, and Sprint 10.12 is undefined and unstarted.

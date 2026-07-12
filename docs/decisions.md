@@ -570,3 +570,11 @@ One immutable Region Pack declaration may target one existing pressure and exact
 Status: Accepted.
 
 Applicability is necessary but insufficient for perception. One strict immutable Region Pack declaration grants perceptibility. Observation is derived and non-persistent; raw pressure state remains simulation-owned. The Scene Snapshot does not own pressure cues, perception receives only a validated authored cue, and narration gains no authority. No general visibility, player-knowledge, or observation-history system is introduced.
+
+# ADR-043 - Authored Actors Retain Immutable Identity and Description While World State Owns Mutable Runtime Location
+
+Status: Accepted.
+
+Region Packs own immutable named static actor identity, description, and authored baseline location. The existing `entity_id` is the sole runtime ownership key. World State stores only sparse location overrides; absence means the authored location, and returning to that baseline removes the override. Spawned template entities are excluded because they have no stable instance identity.
+
+Scene Snapshot construction is the canonical projection boundary that merges authored actor data with effective runtime location. Perception, target resolution, conversations, and narration consume the Scene Snapshot rather than override state. Version-1 saves remain compatible by normalizing a missing mapping to empty. A material move prepares its override, one `actor_moved` history entry, validation, and rebuilt scene before committing World State and scene atomically.

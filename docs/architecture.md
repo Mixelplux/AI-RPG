@@ -332,6 +332,10 @@ Failed source-result validation uses a bounded `source_result_validation` stage,
 
 ## Session Lifecycle
 
+## Persistent Static Actor Location
+
+Named static actors remain authored in the Region Pack. World State owns only sparse `actor_location_overrides`, keyed by the existing stable `entity_id`. One canonical resolver chooses the runtime override when present and otherwise the authored location; scene construction uses that boundary so downstream perception and target resolution naturally reflect movement. Spawned templates remain independent derived scene content. Material actor movement and the rebuilt current scene commit together only after candidate validation succeeds.
+
 ## Elapsed-Time Pressure Consequence
 
 ## Authored Pressure Observation

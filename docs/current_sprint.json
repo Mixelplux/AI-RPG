@@ -2,146 +2,31 @@
   "schema_version": "1.0.0",
   "document_type": "current_sprint",
   "sprint_count": 1,
-  "project": {
-    "name": "AI Narrative RPG Engine",
-    "principles": [
-      "provider-neutral",
-      "deterministic-core",
-      "simulation-owned-truth"
-    ]
-  },
+  "project": {"name": "AI Narrative RPG Engine", "principles": ["provider-neutral", "deterministic-core", "simulation-owned-truth"]},
   "sprint": {
-    "id": "10.10",
-    "title": "Deterministic Pressure Cue Narration Projection",
+    "id": "10.11",
+    "title": "Persistent Actor Location Baseline",
     "phase": "Phase 2B - Reactive World State Foundations",
     "type": "bounded-feature",
     "mode": "single-sprint",
     "status": "complete",
-    "goal": "Carry the one validated pressure observation cue through the deterministic narration path into player-facing output.",
-    "source_state": {
-      "branch": "main",
-      "commit": "e52ce2d13432ab8bf27c410abe9bf9c773705d88",
-      "predecessor_sprint": "10.9",
-      "predecessor_status": "complete"
-    },
-    "platform": {
-      "operating_system": "Windows",
-      "shell": "PowerShell",
-      "official_interpreter": ".\\.venv\\Scripts\\python.exe"
-    },
-    "architectural_decision": {
-      "adr": "ADR-042 and existing narration ADRs",
-      "title": "Perception-owned pressure perceptibility with deterministic narration projection",
-      "status_during_sprint": "ADR-042 and ADR-029 through ADR-033 sufficient; no new ADR required"
-    },
+    "goal": "Persist sparse runtime location overrides for seeded named static actors and provide one atomic actor-location mutation operation.",
+    "source_state": {"branch": "main", "commit": "4a1bcb593e5fe3597fab4e472abeddcf01f323b9", "predecessor_sprint": "10.10", "predecessor_status": "complete"},
+    "platform": {"operating_system": "Windows", "shell": "PowerShell", "official_interpreter": ".\\.venv\\Scripts\\python.exe"},
+    "architectural_decision": {"adr": "ADR-043", "title": "Authored Actors Retain Immutable Identity and Description While World State Owns Mutable Runtime Location", "status_during_sprint": "accepted"},
     "acceptance_criteria": [
-      "Narration carries zero or one already-derived pressure cue through deterministic context, request, and prompt boundaries.",
-      "Accepted player-facing narration includes the exact authored cue text at most once.",
-      "Narration never receives raw pressure records or numeric pressure levels and does not evaluate applicability or thresholds.",
-      "No cue preserves existing narration behavior.",
-      "Packets and outputs are deterministic, validated, copy-safe, and non-persistent.",
-      "Narration failures do not mutate world state, history, elapsed time, pressure state, scene identity, or Region Pack data.",
-      "Save version remains 1."
+      "Supported named static actors have unique non-empty entity_id values and valid authored locations.",
+      "World State stores only sparse valid actor location overrides and legacy missing data normalizes to an empty mapping.",
+      "Scene Snapshot projects each static actor once at its effective runtime-or-authored location while spawned entities remain unchanged.",
+      "GameEngine exposes one atomic set_actor_location operation with true no-op and baseline-removal behavior.",
+      "Material moves create exactly one actor_moved history entry and failures preserve live state and exact scene identity.",
+      "Save version remains 1 and preserves material overrides with defensive deterministic behavior."
     ],
-    "expected_files": {
-      "likely_modified": [
-        "engine/narration_context.py",
-        "engine/narration_request.py",
-        "engine/narration_prompt.py",
-        "engine/narration_pipeline.py",
-        "engine/game_engine.py",
-        "test_pressure_narration.py",
-        "test_narration_context.py",
-        "test_narration_request.py",
-        "test_narration_prompt.py",
-        "test_narration_pipeline.py",
-        "docs/architecture.md",
-        "docs/roadmap.md",
-        "docs/sprint_log.md",
-        "docs/current_sprint.md",
-        "docs/current_sprint.yaml",
-        "docs/current_sprint.json",
-        "docs/next_chat_handoff.md"
-      ]
-    },
-    "non_goals": [
-      "multiple cues",
-      "raw pressure or level narration",
-      "narration-owned applicability or threshold decisions",
-      "persistent cue state or save-version changes",
-      "scene pressure projection",
-      "live AI narration",
-      "generic environmental facts",
-      "Sprint 10.11 planning"
-    ],
-    "verification": {
-      "focused_commands": [
-        ".\\.venv\\Scripts\\python.exe test_pressure_narration.py",
-        ".\\.venv\\Scripts\\python.exe test_pressure_observation.py",
-        ".\\.venv\\Scripts\\python.exe test_narration_context.py",
-        ".\\.venv\\Scripts\\python.exe test_narration_request.py",
-        ".\\.venv\\Scripts\\python.exe test_narration_prompt.py",
-        ".\\.venv\\Scripts\\python.exe test_narration_source.py",
-        ".\\.venv\\Scripts\\python.exe test_narration_pipeline.py"
-      ],
-      "environment_commands": [
-        "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tools\\preflight.ps1 -RepoRoot .",
-        "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tools\\validate_hardening_package.ps1 -PackageRoot ."
-      ],
-      "manifest_commands": [
-        "JSON/YAML/Markdown deep comparison",
-        "git diff --check"
-      ]
-    },
-    "execution_phases": [
-      {
-        "id": "setup",
-        "goal": "Stage and validate Sprint 10.10."
-      },
-      {
-        "id": "implementation",
-        "goal": "Project the bounded cue through deterministic narration."
-      },
-      {
-        "id": "verification",
-        "goal": "Run focused and official regressions."
-      },
-      {
-        "id": "closeout",
-        "goal": "Close without defining Sprint 10.11."
-      }
-    ],
-    "governance": [
-      "Exactly one sprint is active.",
-      "Perception remains pressure-cue authority.",
-      "Do not substitute bundled, system, Windows Store, or alternate Python.",
-      "Do not define Sprint 10.11.",
-      "Do not commit."
-    ],
-    "closeout": {
-      "allowed_terminal_statuses": [
-        "complete",
-        "blocked"
-      ],
-      "actual_files_changed": [
-        "engine/narration_context.py",
-        "engine/narration_request.py",
-        "engine/narration_prompt.py",
-        "engine/narration_pipeline.py",
-        "engine/game_engine.py",
-        "test_pressure_narration.py",
-        "test_interaction_history.py",
-        "docs/architecture.md",
-        "docs/roadmap.md",
-        "docs/sprint_log.md",
-        "docs/current_sprint.md",
-        "docs/current_sprint.yaml",
-        "docs/current_sprint.json",
-        "docs/next_chat_handoff.md"
-      ],
-      "verification_result": "Focused narration and pressure tests passed; all 18 repository tests passed through the official .venv; final workflow checks completed.",
-      "non_goals_preserved": "No multiple cues, raw pressure or level narration, narration-owned applicability, persistence, scene pressure projection, live AI, generic environmental facts, or Sprint 10.11 planning.",
-      "next_sprint": null
-    }
+    "expected_files": {"likely_modified": ["engine/region_validator.py", "engine/world_state.py", "engine/scene_loader.py", "engine/game_engine.py", "engine/save_system.py", "test_actor_location.py", "test_save_load.py", "docs/architecture.md", "docs/decisions.md", "docs/roadmap.md", "docs/sprint_log.md", "docs/current_sprint.md", "docs/current_sprint.yaml", "docs/current_sprint.json", "docs/next_chat_handoff.md"]},
+    "non_goals": ["spawned actor instance persistence", "actor schedules or autonomous movement", "pathfinding or travel duration", "player-facing actor movement commands", "generic actor components", "actor knowledge, relationships, health, inventory, or disposition"],
+    "verification": {"focused_commands": [".\\.venv\\Scripts\\python.exe test_actor_location.py", ".\\.venv\\Scripts\\python.exe test_save_load.py"], "environment_commands": ["powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tools\\preflight.ps1 -RepoRoot .", "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tools\\validate_hardening_package.ps1 -PackageRoot ."], "manifest_commands": ["JSON/YAML/Markdown deep comparison", "git diff --check"]},
+    "execution_phases": [{"id": "setup", "goal": "Stage and validate Sprint 10.11."}, {"id": "implementation", "goal": "Implement persistent actor location."}, {"id": "verification", "goal": "Run focused and official regressions."}, {"id": "closeout", "goal": "Close without defining Sprint 10.12."}],
+    "governance": ["Exactly one sprint is active.", "Region Packs retain immutable authored actor data.", "World State owns sparse runtime location differences.", "Do not substitute bundled, system, Windows Store, or alternate Python.", "Do not define Sprint 10.12.", "Do not commit."],
+    "closeout": {"allowed_terminal_statuses": ["complete", "blocked"], "actual_files_changed": ["engine/game_engine.py", "engine/region_validator.py", "engine/save_system.py", "engine/scene_loader.py", "engine/world_state.py", "test_actor_location.py", "docs/architecture.md", "docs/decisions.md", "docs/roadmap.md", "docs/sprint_log.md", "docs/current_sprint.md", "docs/current_sprint.yaml", "docs/current_sprint.json", "docs/next_chat_handoff.md"], "verification_result": "Focused actor-location and save/load tests passed; all 19 repository tests passed through the official interpreter; final workflow checks completed.", "non_goals_preserved": "No spawned-instance persistence, schedules, autonomous movement, commands, pathfinding, generic components, or broader actor state.", "next_sprint": null}
   }
 }

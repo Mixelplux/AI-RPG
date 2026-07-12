@@ -214,6 +214,8 @@ Sprint 10.7 completed one declared elapsed-hour threshold pressure consequence w
 
 Sprint 10.8 completed the wait single-commit atomicity correction. Sprint 10.9 completed the first bounded pressure projection into perception through one authored observation cue. Sprint 10.10 carried that cue into deterministic player-facing narration without exposing raw pressure state or adding provider integration. Recurring or continuous pressure drift remains a distinct future capability.
 
+Sprint 10.11 completed the persistent actor-location prerequisite: seeded named static actors can move through sparse durable overrides while retaining immutable Region Pack identity and authored baseline data. Spawned entities, schedules, autonomous behavior, and actor activity remain deferred. Sprint 10.12 is undefined and unstarted.
+
 Active sprint definitions must include:
 
 - Goal

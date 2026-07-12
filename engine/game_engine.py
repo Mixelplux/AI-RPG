@@ -35,6 +35,8 @@ from engine.world_state import (
     create_initial_world_state,
     get_history,
     get_history_entry_by_id,
+    get_effective_actor_location,
+    get_static_actor,
     get_player_location_id,
     get_time,
     query_history,
@@ -64,7 +66,7 @@ class GameEngine:
         if initial_world_state is None:
             self.world_state = create_initial_world_state(self.region)
         else:
-            validate_world_state(initial_world_state)
+            validate_world_state(initial_world_state, self.region)
             validate_pressure_state(initial_world_state["pressures"], self.region)
             self.world_state = copy_world_state(initial_world_state)
 
@@ -100,6 +102,59 @@ class GameEngine:
 
     def get_pressure(self, pressure_id: str) -> dict | None:
         return get_world_pressure(self.world_state, pressure_id)
+
+    def set_actor_location(
+        self, entity_id: str, destination_location_id: str
+    ) -> Dict[str, Any]:
+        actor = get_static_actor(self.region, entity_id)
+        if not isinstance(destination_location_id, str) or not destination_location_id:
+            raise ValueError("destination_location_id must be a non-empty string.")
+        location_ids = {
+            location.get("location_id") for location in self.region.get("locations", [])
+            if isinstance(location, dict)
+        }
+        if destination_location_id not in location_ids:
+            raise ValueError("Unknown destination_location_id.")
+
+        previous_location_id = get_effective_actor_location(
+            self.region, self.world_state, entity_id
+        )
+        result = {
+            "changed": False,
+            "entity_id": entity_id,
+            "previous_location_id": previous_location_id,
+            "new_location_id": destination_location_id,
+            "history_id": None,
+        }
+        if destination_location_id == previous_location_id:
+            return deepcopy(result)
+
+        candidate_world_state = copy_world_state(self.world_state)
+        overrides = candidate_world_state.setdefault("actor_location_overrides", {})
+        if destination_location_id == actor["location"]:
+            overrides.pop(entity_id, None)
+        else:
+            overrides[entity_id] = destination_location_id
+        candidate_world_state = add_history_entry(
+            candidate_world_state,
+            event_type="actor_moved",
+            summary=(f"Actor {entity_id} moved from {previous_location_id} "
+                     f"to {destination_location_id}."),
+            location=destination_location_id,
+            time=deepcopy(candidate_world_state["time"]),
+            extra={
+                "entity_id": entity_id,
+                "previous_location_id": previous_location_id,
+                "new_location_id": destination_location_id,
+            },
+        )
+        validate_world_state(candidate_world_state, self.region)
+        candidate_scene_snapshot = build_scene(self.region, candidate_world_state)
+        result["changed"] = True
+        result["history_id"] = candidate_world_state["history"][-1]["history_id"]
+        self.world_state = candidate_world_state
+        self.scene_snapshot = candidate_scene_snapshot
+        return deepcopy(result)
 
     def get_applicable_pressures(
         self,

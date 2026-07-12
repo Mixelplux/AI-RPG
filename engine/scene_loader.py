@@ -2,7 +2,7 @@ import json
 import math
 from typing import Dict, Any
 
-from engine.world_state import get_weather, get_time
+from engine.world_state import get_effective_actor_location, get_weather, get_time
 
 
 def resolve_spawn_count(rule: Dict[str, Any]) -> int:
@@ -33,10 +33,14 @@ def find_location(region: Dict[str, Any], location_id: str) -> Dict[str, Any] | 
     return None
 
 
-def get_static_entities(region: Dict[str, Any], location_id: str):
+def get_static_entities(
+    region: Dict[str, Any], world_state: Dict[str, Any], location_id: str
+):
     static = []
     for entity in region.get("entities", []):
-        if entity["location"] == location_id:
+        if entity.get("persistence") == "static" and get_effective_actor_location(
+            region, world_state, entity["entity_id"]
+        ) == location_id:
             static.append(entity)
     return static
 
@@ -72,7 +76,7 @@ def build_scene(
         raise ValueError(f"Location not found in Region Pack: {entry}")
 
     # STEP 2: static entities
-    static_entities = get_static_entities(region, entry)
+    static_entities = get_static_entities(region, world_state, entry)
 
     # STEP 3: spawned entities
     spawned_entities = resolve_spawns(location)

@@ -1,5 +1,16 @@
 # Sprint Log
 
+## Sprint 10.11 Closeout
+
+- Status: Complete.
+- Capability delivered: sparse persistent location overrides for seeded named static actors plus one explicit atomic `set_actor_location` operation.
+- Ownership: Region Packs retain immutable actor identity, description, classification, and baseline location; World State owns only runtime location differences keyed by existing `entity_id`.
+- Projection: moved actors naturally disappear from old perception and target resolution and appear at the destination; spawned templates are unchanged.
+- Atomicity: material override preparation, one `actor_moved` history entry, completed-state validation, and candidate scene construction succeed before one live World State and scene commit. Same-location moves preserve exact scene identity and create no history.
+- Persistence: save version remains 1; missing legacy override data normalizes to `{}`, and material overrides survive save/load.
+- Verification: focused actor-location and save/load tests passed; all 19 root test scripts passed with the official project interpreter. Final workflow checks are recorded in the canonical sprint manifest.
+- Governance: ADR-043 accepted. No commands, schedules, autonomous movement, pathfinding, spawned-instance persistence, or generic actor components were added. Sprint 10.12 remains undefined and unstarted.
+
 ## Sprint 10.6 Closeout
 
 - Status: Complete.
