@@ -36,7 +36,7 @@ def main():
     )
 
     first_history = engine.get_history()
-    assert len(first_history) == 5
+    assert len(first_history) == 6
     first_entry = first_history[0]
     assert first_entry["history_id"] == "history_000001"
     assert first_entry["event_type"] == "player_conversation"
@@ -80,6 +80,11 @@ def main():
     expected_after_first["actor_knowledge"]["captain_darvin_grey"].append(
         "player_spoke_with_captain"
     )
+    expected_after_first["evidence_traces"] = [{
+        "trace_id": "captain_conversation_gate_trace",
+        "evidence_id": "captain_conversation_trace",
+        "location_id": "bryn_shander_gate_north",
+    }]
     assert without_history(after_first_state) == expected_after_first
 
     second_result = engine.process_command("talk to captain")
@@ -89,7 +94,7 @@ def main():
     )
     assert len(conversation_entries) == 2
     assert conversation_entries[0]["history_id"] == "history_000001"
-    assert conversation_entries[1]["history_id"] == "history_000006"
+    assert conversation_entries[1]["history_id"] == "history_000007"
     assert conversation_entries[1]["target_entity_id"] == (
         "captain_darvin_grey"
     )
@@ -129,6 +134,11 @@ def main():
     expected_final["actor_knowledge"]["captain_darvin_grey"].append(
         "player_spoke_with_captain"
     )
+    expected_final["evidence_traces"] = [{
+        "trace_id": "captain_conversation_gate_trace",
+        "evidence_id": "captain_conversation_trace",
+        "location_id": "bryn_shander_gate_north",
+    }]
     assert without_history(engine.get_world_state()) == expected_final
 
     history_context = engine.get_history_context(count=2)
@@ -164,8 +174,8 @@ def main():
     post_load_result = loaded_engine.process_command("talk to captain")
     assert post_load_result["success"]
     post_load_history = loaded_engine.get_history()
-    assert len(post_load_history) == 7
-    assert post_load_history[-1]["history_id"] == "history_000007"
+    assert len(post_load_history) == 8
+    assert post_load_history[-1]["history_id"] == "history_000008"
     assert post_load_history[-1]["history_id"] not in loaded_history_ids
     assert post_load_history[-1]["target_entity_id"] == (
         "captain_darvin_grey"

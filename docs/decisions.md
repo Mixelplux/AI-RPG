@@ -617,6 +617,23 @@ A material addition prepares copied World State, appends absent membership once,
 
 Source-free Sprint 10.17 entries remain valid through save/load. This decision preserves save version 1, stable static actor ownership, narration-context exclusion, and all non-projection boundaries. It introduces no automatic trigger, source-event type restriction, causal graph, generic transaction system, knowledge loss, propagation, or player-facing behavior.
 
+# ADR-048 - Evidence Traces Are Sparse World State Records
+
+Status: Accepted.
+
+World State owns deterministic ordered evidence-trace records. Each has one
+stable `trace_id`, opaque `evidence_id`, and exact immutable Region Pack
+`location_id`. No trace is a Region Pack seed or a player-facing object.
+Version-1 saves persist the records; only a missing legacy field normalizes to
+an empty list during candidate loading. Records and inspection results are
+defensively copied. Identical identities are no-ops while conflicting reuse
+fails.
+
+Lifecycle entries may structurally reference an earlier durable source history
+entry, without asserting truth, reliability, discovery, interpretation, belief,
+or causation semantics beyond the declared transition. Traces remain distinct
+from history, unresolved threads, actor knowledge, perception, and narration.
+
 ## Sprint 10.19 ADR Determination
 
 No new ADR is required. Sprint 10.19 directly composes ADR-035 resolved conversation history, ADR-039 declared conversation consequences, ADR-045 actor-knowledge ownership, ADR-046 atomic explicit addition, and ADR-047 causal linkage. It creates no new persistent domain, ownership boundary, save compatibility rule, or generic consequence mechanism.
