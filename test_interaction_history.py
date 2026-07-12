@@ -154,7 +154,7 @@ def main():
             for entry in engine.get_history()[-2:]
             if entry["event_type"] not in {
                 "pressure_changed", "actor_moved", "unresolved_thread_opened",
-                "actor_knowledge_added"
+                "actor_knowledge_added", "evidence_trace_added"
             }
         ]
     )

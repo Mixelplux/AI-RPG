@@ -41,12 +41,25 @@ def test_conversation_and_persistence():
     consequence = result["evidence_trace_consequence"]
     assert consequence["changed"] and consequence["source_history_id"]
     assert engine.get_history_entry_by_id(consequence["history_id"])["source_history_id"] == consequence["source_history_id"]
+    assert engine.query_history(event_type="evidence_trace_added") == [
+        engine.get_history_entry_by_id(consequence["history_id"])
+    ]
+    context = engine.get_narration_context("look", history_count=20)
+    preview = engine.get_narration_preview("look")
+    for packet in (context, preview):
+        rendered = repr(packet)
+        assert "evidence_trace_added" not in rendered
+        assert "captain_conversation_gate_trace" not in rendered
+        assert "captain_conversation_trace" not in rendered
+    assert all(entry["event_type"] != "evidence_trace_added" for entry in context["history_context"]["history_entries"])
     assert not engine.process_command("talk to captain")["evidence_trace_consequence"]["changed"]
     with TemporaryDirectory() as directory:
         path = Path(directory) / "trace.json"
         path.write_text(json.dumps(build_save_data(engine)), encoding="utf-8")
         loaded = load_game(str(path))
         assert loaded.get_evidence_trace("captain_conversation_gate_trace")
+        assert "captain_conversation_gate_trace" not in repr(loaded.get_narration_context("look", history_count=20))
+        assert not loaded.process_command("talk to captain")["evidence_trace_consequence"]["changed"]
         legacy = build_save_data(engine); del legacy["world_state"]["evidence_traces"]
         legacy_path = Path(directory) / "legacy.json"; legacy_path.write_text(json.dumps(legacy), encoding="utf-8")
         assert load_game(str(legacy_path)).get_evidence_traces() == []
