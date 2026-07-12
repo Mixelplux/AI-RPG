@@ -94,6 +94,14 @@ def test_matching_material_duplicate_and_boundaries():
     assert result["pressure_consequence"]["changed"]
     assert result["actor_location_consequence"]["changed"]
     assert result["unresolved_thread_consequence"]["changed"]
+    assert [entry["event_type"] for entry in engine.get_history()] == [
+        "player_conversation",
+        "pressure_changed",
+        "actor_moved",
+        "unresolved_thread_opened",
+        "actor_knowledge_added",
+        "evidence_trace_added",
+    ]
     assert engine.region == original_region
     consequence["actor_id"] = "changed"
     assert engine.get_actor_knowledge(TRIGGER)[-1] == KNOWLEDGE_ID

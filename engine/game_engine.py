@@ -733,6 +733,117 @@ class GameEngine:
         self.world_state = other.get_world_state()
         self.scene_snapshot = other.get_scene_snapshot()
 
+    def _compose_resolved_conversation_consequences(
+        self,
+        candidate_world_state: Dict[str, Any],
+        interaction_result: Dict[str, Any],
+        target_entity_id: str,
+    ) -> Dict[str, Any]:
+        """Prepare declared conversation consequences in their established order."""
+
+        conversation_source_history_id = candidate_world_state["history"][-1][
+            "history_id"
+        ]
+        effect = next(
+            (
+                item
+                for item in self.region.get("conversation_pressure_effects", [])
+                if item["target_entity_id"] == target_entity_id
+            ),
+            None,
+        )
+        if effect is not None:
+            candidate_world_state, consequence = (
+                self._prepare_pressure_level_from_event_candidate(
+                    candidate_world_state,
+                    effect["pressure_id"],
+                    effect["new_level"],
+                    conversation_source_history_id,
+                )
+            )
+            consequence["effect_id"] = effect["effect_id"]
+            interaction_result["pressure_consequence"] = {
+                "effect_id": consequence["effect_id"],
+                "changed": consequence["changed"],
+                "pressure_id": consequence["pressure_id"],
+                "previous_level": consequence["previous_level"],
+                "new_level": consequence["new_level"],
+                "history_id": consequence["history_id"],
+                "source_history_id": consequence["source_history_id"],
+            }
+
+        relocation = self.region.get("conversation_actor_relocation_effect")
+        interaction_result["actor_location_consequence"] = None
+        if relocation is not None and relocation["trigger_entity_id"] == target_entity_id:
+            candidate_world_state, actor_result = (
+                self._prepare_actor_location_candidate(
+                    candidate_world_state,
+                    relocation["actor_entity_id"],
+                    relocation["destination_location_id"],
+                    conversation_source_history_id,
+                )
+            )
+            interaction_result["actor_location_consequence"] = {
+                "effect_id": relocation["effect_id"],
+                "trigger_entity_id": relocation["trigger_entity_id"],
+                "actor_entity_id": relocation["actor_entity_id"],
+                "previous_location_id": actor_result["previous_location_id"],
+                "new_location_id": actor_result["new_location_id"],
+                "changed": actor_result["changed"],
+                "history_id": actor_result["history_id"],
+            }
+
+        thread = self.region.get("conversation_unresolved_thread")
+        interaction_result["unresolved_thread_consequence"] = None
+        if thread is not None and thread["trigger_entity_id"] == target_entity_id:
+            candidate_world_state, thread_result = prepare_open_thread_candidate(
+                candidate_world_state, thread, conversation_source_history_id
+            )
+            interaction_result["unresolved_thread_consequence"] = thread_result
+
+        knowledge_effect = self.region.get("conversation_actor_knowledge_effect")
+        interaction_result["actor_knowledge_consequence"] = None
+        if (
+            knowledge_effect is not None
+            and knowledge_effect["trigger_entity_id"] == target_entity_id
+        ):
+            candidate_world_state, knowledge_result = (
+                self._prepare_actor_knowledge_from_event_candidate(
+                    candidate_world_state,
+                    knowledge_effect["actor_entity_id"],
+                    knowledge_effect["knowledge_id"],
+                    conversation_source_history_id,
+                )
+            )
+            interaction_result["actor_knowledge_consequence"] = {
+                "effect_id": knowledge_effect["effect_id"],
+                "changed": knowledge_result["changed"],
+                "actor_id": knowledge_result["actor_id"],
+                "knowledge_id": knowledge_result["knowledge_id"],
+                "source_history_id": knowledge_result["source_history_id"],
+                "history_id": knowledge_result["history_id"],
+            }
+
+        trace_effect = self.region.get("conversation_evidence_trace_effect")
+        interaction_result["evidence_trace_consequence"] = None
+        if (
+            trace_effect is not None
+            and trace_effect["trigger_entity_id"] == target_entity_id
+        ):
+            candidate_world_state, trace_result = self._prepare_evidence_trace_candidate(
+                candidate_world_state,
+                trace_effect["trace_id"],
+                trace_effect["evidence_id"],
+                trace_effect["location_id"],
+                conversation_source_history_id,
+            )
+            interaction_result["evidence_trace_consequence"] = {
+                "effect_id": trace_effect["effect_id"],
+                **trace_result,
+            }
+
+        return candidate_world_state
+
     def process_command(self, player_input: str) -> Dict[str, Any]:
         interaction_result = process_player_input(
             player_input,
@@ -820,106 +931,11 @@ class GameEngine:
             target_entity_id = interaction_result["target_resolution"][
                 "identifier"
             ]
-            conversation_source_history_id = candidate_world_state["history"][-1][
-                "history_id"
-            ]
-            effect = next(
-                (
-                    item
-                    for item in self.region.get(
-                        "conversation_pressure_effects", []
-                    )
-                    if item["target_entity_id"] == target_entity_id
-                ),
-                None,
+            candidate_world_state = self._compose_resolved_conversation_consequences(
+                candidate_world_state,
+                interaction_result,
+                target_entity_id,
             )
-            if effect is not None:
-                candidate_world_state, consequence = (
-                    self._prepare_pressure_level_from_event_candidate(
-                        candidate_world_state,
-                        effect["pressure_id"],
-                        effect["new_level"],
-                        conversation_source_history_id,
-                    )
-                )
-                consequence["effect_id"] = effect["effect_id"]
-                interaction_result["pressure_consequence"] = {
-                    "effect_id": consequence["effect_id"],
-                    "changed": consequence["changed"],
-                    "pressure_id": consequence["pressure_id"],
-                    "previous_level": consequence["previous_level"],
-                    "new_level": consequence["new_level"],
-                    "history_id": consequence["history_id"],
-                    "source_history_id": consequence["source_history_id"],
-                }
-
-            relocation = self.region.get(
-                "conversation_actor_relocation_effect"
-            )
-            interaction_result["actor_location_consequence"] = None
-            if (
-                relocation is not None
-                and relocation["trigger_entity_id"] == target_entity_id
-            ):
-                candidate_world_state, actor_result = (
-                    self._prepare_actor_location_candidate(
-                        candidate_world_state,
-                        relocation["actor_entity_id"],
-                        relocation["destination_location_id"],
-                        conversation_source_history_id,
-                    )
-                )
-                interaction_result["actor_location_consequence"] = {
-                    "effect_id": relocation["effect_id"],
-                    "trigger_entity_id": relocation["trigger_entity_id"],
-                    "actor_entity_id": relocation["actor_entity_id"],
-                    "previous_location_id": actor_result["previous_location_id"],
-                    "new_location_id": actor_result["new_location_id"],
-                    "changed": actor_result["changed"],
-                    "history_id": actor_result["history_id"],
-                }
-
-            thread = self.region.get("conversation_unresolved_thread")
-            interaction_result["unresolved_thread_consequence"] = None
-            if thread is not None and thread["trigger_entity_id"] == target_entity_id:
-                candidate_world_state, thread_result = prepare_open_thread_candidate(
-                    candidate_world_state, thread, conversation_source_history_id
-                )
-                interaction_result["unresolved_thread_consequence"] = thread_result
-
-            knowledge_effect = self.region.get("conversation_actor_knowledge_effect")
-            interaction_result["actor_knowledge_consequence"] = None
-            if (
-                knowledge_effect is not None
-                and knowledge_effect["trigger_entity_id"] == target_entity_id
-            ):
-                candidate_world_state, knowledge_result = (
-                    self._prepare_actor_knowledge_from_event_candidate(
-                        candidate_world_state,
-                        knowledge_effect["actor_entity_id"],
-                        knowledge_effect["knowledge_id"],
-                        conversation_source_history_id,
-                    )
-                )
-                interaction_result["actor_knowledge_consequence"] = {
-                    "effect_id": knowledge_effect["effect_id"],
-                    "changed": knowledge_result["changed"],
-                    "actor_id": knowledge_result["actor_id"],
-                    "knowledge_id": knowledge_result["knowledge_id"],
-                    "source_history_id": knowledge_result["source_history_id"],
-                    "history_id": knowledge_result["history_id"],
-                }
-
-            trace_effect = self.region.get("conversation_evidence_trace_effect")
-            interaction_result["evidence_trace_consequence"] = None
-            if trace_effect is not None and trace_effect["trigger_entity_id"] == target_entity_id:
-                candidate_world_state, trace_result = self._prepare_evidence_trace_candidate(
-                    candidate_world_state, trace_effect["trace_id"], trace_effect["evidence_id"],
-                    trace_effect["location_id"], conversation_source_history_id,
-                )
-                interaction_result["evidence_trace_consequence"] = {
-                    "effect_id": trace_effect["effect_id"], **trace_result
-                }
 
         validate_world_state(candidate_world_state, self.region)
         candidate_scene_snapshot = build_scene(

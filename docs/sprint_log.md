@@ -1,5 +1,28 @@
 # Sprint Log
 
+## Sprint 10.26 Closeout
+
+- Status: Complete.
+- Package: Deterministic Local Investigation and Evidence Discovery remains
+  active on feature/deterministic-evidence-discovery.
+- Capability delivered: extracted existing resolved-conversation consequence
+  composition to the narrow private
+  GameEngine._compose_resolved_conversation_consequences boundary.
+- Preserved ordering and atomicity: pressure, actor relocation, unresolved
+  thread, actor knowledge, and evidence trace share one candidate World State;
+  final validation, one Scene Snapshot build, and one live commit remain in
+  process_command.
+- Preserved boundaries: result packets, duplicate and no-op behavior,
+  player-facing behavior, World State and Region Pack schemas, history event
+  types, and save version 1 are unchanged. No discovery or investigation
+  behavior, generic framework, or unrelated refactor was introduced.
+- Verification: focused consequence-family plus history, narration,
+  scene-consumer, and save/load regressions passed through the official
+  interpreter. Canonical manifests parse and deeply agree; git diff --check
+  passed.
+- Governance: no new ADR is required for this internal extraction. Sprint 10.27
+  remains unstaged.
+
 ## Sprint 10.25 Closeout
 
 - Status: Complete.
