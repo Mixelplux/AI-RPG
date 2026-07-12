@@ -210,6 +210,10 @@ These are future applications of World Evolution Foundations, not the foundation
 
 ## Sprint Rule
 
+Deterministic Local Investigation and Evidence Discovery is complete through
+the reconciled 10.27 through 10.30 package closeout. No following sprint or
+capability package is selected.
+
 Sprint 10.7 completed one declared elapsed-hour threshold pressure consequence with atomic causal history and no new persistent schema or generic scheduling infrastructure.
 
 Sprint 10.8 completed the wait single-commit atomicity correction. Sprint 10.9 completed the first bounded pressure projection into perception through one authored observation cue. Sprint 10.10 carried that cue into deterministic player-facing narration without exposing raw pressure state or adding provider integration. Recurring or continuous pressure drift remains a distinct future capability.

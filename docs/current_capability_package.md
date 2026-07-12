@@ -1,6 +1,6 @@
 # Deterministic Local Investigation and Evidence Discovery
 
-Status: Active.
+Status: Complete.
 
 ## Purpose and Owner-Visible Value
 
@@ -87,3 +87,11 @@ Routine in-scope milestone progression needs no owner interruption. A final
 capability-package review records the smallest complete evidence packet and
 returns one owner decision request: accept, reject, defer, or request deeper
 review of this package.
+
+## Closeout Reconciliation
+
+Checkpoint d61f884 implemented the approved outcomes of Sprints 10.27 through
+10.30 together rather than creating a checkpoint per internal milestone. The
+work remained within this approved package and introduced no new owner-level
+architecture boundary. This record does not fabricate separate commits. Future
+packages retain one focused checkpoint per milestone.

@@ -637,3 +637,18 @@ from history, unresolved threads, actor knowledge, perception, and narration.
 ## Sprint 10.19 ADR Determination
 
 No new ADR is required. Sprint 10.19 directly composes ADR-035 resolved conversation history, ADR-039 declared conversation consequences, ADR-045 actor-knowledge ownership, ADR-046 atomic explicit addition, and ADR-047 causal linkage. It creates no new persistent domain, ownership boundary, save compatibility rule, or generic consequence mechanism.
+
+## ADR-049 - Deterministic Local Discovery Is Authored Policy with Sparse Player Membership
+
+**Status:** Accepted
+
+Region Packs own immutable discoverability declarations and exact player-facing
+text. World State owns only unique discovery identifiers. Investigation examines
+only the current location, considers only present opaque traces matched by an
+authored declaration, and deterministically selects the first undiscovered
+declaration. A material discovery and one player_discovery_added history entry
+validate and commit together; exhausted eligibility is a successful no-op.
+Missing version-1 legacy membership normalizes to empty on load. Discovery and
+trace internals do not enter Scene Snapshots, perception, narration, dialogue,
+targeting, actor knowledge, quests, inventories, interpretation, or generic
+frameworks.

@@ -1,5 +1,17 @@
 # Sprint Log
 
+## Deterministic Local Investigation and Evidence Discovery Package Closeout
+
+- Status: Complete.
+- Checkpoint reconciliation: d61f884 combined approved internal milestones
+  10.27 through 10.30. No separate checkpoint commits are claimed.
+- Delivered: authored local discovery declarations, sparse persistent player
+  membership, atomic durable discovery history, and deterministic investigation.
+- ADR-049 records ownership, ordering, atomicity, no-op, version-1
+  compatibility, and strict projection exclusions.
+- Full root test inventory, preflight, Region Pack validation, manifest checks,
+  and diff check passed. The next sprint and capability package are undefined.
+
 ## Sprint 10.26 Closeout
 
 - Status: Complete.
