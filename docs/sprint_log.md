@@ -1,5 +1,22 @@
 # Sprint Log
 
+## Sprint 10.25 Staging
+
+- Status: Staged; implementation has not begun.
+- Package: Deterministic Local Investigation and Evidence Discovery is active
+  on `feature/deterministic-evidence-discovery` with six approved internal
+  milestones.
+- Scope: replace the narration-history internal-event deny-list with an
+  explicit narration-safe allow-list. Internal, evidence-trace, unknown, and
+  future history event types remain excluded by default.
+- Boundary: no history persistence change, evidence discovery behavior, save
+  version change, or narration packet-shape redesign is authorized.
+- ADR determination: no new ADR is required for staging; existing narration
+  and evidence boundaries govern this hardening repair.
+- Verification: documentation review and `git diff --check` are required.
+  Official-environment manifest parsing and deep agreement remain pending while
+  the mandated interpreter is inaccessible in this execution context.
+
 ## Sprint 10.19 Closeout
 
 - Status: Complete.

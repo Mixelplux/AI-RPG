@@ -1,3 +1,8 @@
-# Evidence Trace Foundations Complete
+# Deterministic Local Investigation and Evidence Discovery — Sprint 10.25 Staged
 
-Evidence Trace Foundations establishes sparse persistent located traces, explicit and causal creation, one declared Captain conversation consequence, and defensive inspection. Evidence remains opaque and hidden from all player-facing systems. Save version remains `1`; Sprint 10.25 and the next capability package are undefined and unstarted.
+The approved package is active on `feature/deterministic-evidence-discovery`.
+Sprint 10.25 stages fail-closed narration-history projection only: explicit
+narration-safe event types may pass; internal, evidence-trace, unknown, and
+future event types must remain excluded. No implementation has begun, save
+version remains `1`, and official-environment manifest validation is pending
+because `./.venv/Scripts/python.exe` is denied by the current execution context.

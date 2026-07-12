@@ -1,51 +1,89 @@
-# Evidence Trace Foundations
+# Deterministic Local Investigation and Evidence Discovery
 
-Status: Complete.
+Status: Active.
 
-## Owner-Visible Value
+## Purpose and Owner-Visible Value
 
-The engine can retain grounded, simulation-owned traces of accepted events for
-future discovery systems. This package establishes trusted hidden state only;
-it does not decide whether a trace is noticed, interpreted, believed, or acted
-upon.
+This package creates the first complete deliberate discovery loop from hidden
+simulation truth to durable player knowledge:
+
+```text
+world event -> hidden evidence trace -> player investigation -> durable discovery
+```
+
+The player can investigate the current location, discover at most one authored
+clue supported by an existing trace, and retain that discovery through
+save/load. Region Packs own immutable discovery policy and exact player-facing
+observation prose; World State owns mutable truth and discovery membership.
+
+## Architecture Direction and Compatibility
+
+- Evidence traces remain hidden simulation records and keep their existing
+  schema.
+- Player discoveries are separate sparse persistent membership state; history
+  records accepted transitions without replacing current state.
+- Scene Snapshots and perception remain derived. Discovery does not enter
+  ordinary perception, narration, or scene data.
+- Candidate World State preparation, validation, and one final commit preserve
+  atomicity. Inspection APIs return defensive copies and duplicate material
+  operations are successful no-ops where appropriate.
+- Save version remains `1`; compatibility uses the established narrow
+  candidate-load normalization pattern only when needed.
 
 ## Accepted Internal Milestones
 
-1. Sprint 10.20 — persistent located evidence-trace representation.
-2. Sprint 10.21 — explicit atomic evidence-trace creation.
-3. Sprint 10.22 — causally referenced evidence-trace creation.
-4. Sprint 10.23 — one declared resolved-conversation evidence-trace consequence.
-5. Sprint 10.24 — defensive inspection and package closeout.
+1. Sprint 10.25 — fail-closed narration-history projection.
+2. Sprint 10.26 — narrow resolved-conversation consequence extraction.
+3. Sprint 10.27 — Region Pack discovery declarations and authored discovery
+   text.
+4. Sprint 10.28 — sparse persistent player-discovery representation.
+5. Sprint 10.29 — atomic local discovery transition and durable history.
+6. Sprint 10.30 — deterministic investigation command, full verification, and
+   final package review.
 
-## Boundaries
+## Boundaries and Exclusions
 
-- Persistence impact: one sparse World State `evidence_traces` collection;
-  save version remains `1`, with candidate-load-only missing-field normalization.
-- Player-facing impact: none. Traces remain outside scene, perception,
-  narration, dialogue, targeting, CLI, and gameplay behavior.
-- Architecture: one ADR establishes World State ownership, identity, location,
-  opaque content semantics, duplicate behavior, persistence, copying, and
-  non-projection boundaries.
-- Exclusions: discovery, investigation, interpretation, reliability or belief,
-  actor reactions, removal or decay, generic frameworks, automatic event rules,
-  and all work outside Sprints 10.20–10.24.
+The package does not add evidence interpretation, clue combination,
+reliability, certainty, suspicion, belief, truth scores, actor reactions,
+actor-knowledge propagation, unresolved-thread resolution, quests,
+objectives, markers, journals, evidence inventory, trace movement/removal/
+destruction/aging/decay, automatic or remote discovery, multiple discoveries
+per action, random checks, attributes, skills, proficiency, travel, combat,
+schedules, factions, economy, live AI, provider integration, save version `2`,
+trace-schema provenance fields, or unrelated refactors.
 
-## Verification and Stop Conditions
+Raw trace IDs, evidence IDs, lifecycle metadata, and causal identifiers must
+never be exposed to the player. Only traces with valid authored discovery
+declarations may be discoverable. Movement, scene entry, ordinary perception,
+narration, and conversation never automatically discover evidence.
 
-Each milestone requires focused tests, affected regressions, manifest agreement,
-and `git diff --check` before its checkpoint. Final closeout requires the full
-repository verification cycle and one review packet.
+## Verification and Meaningful Stop Conditions
 
-Stop for conflicting authority, a different ownership model, a save-version
-change, generic framework or broad refactor, unsafe conversation composition,
-unapproved player-visible behavior, excluded discovery or interpretation work,
-material repository ambiguity, irreversible risk, or an unresolved required
-failure outside package scope.
+Each milestone requires focused tests, affected regressions, canonical manifest
+agreement, and `git diff --check` before its checkpoint. Package closeout adds
+the full required verification cycle, a player-facing investigation playtest,
+and a capability-package review packet.
 
-## Recovery and Git
+Stop for conflicting authority; a new ownership or persistence model; a save
+version change; unapproved player-visible behavior; a generic framework or
+broad refactor; discovery requiring interpretation, belief, or reliability;
+trace-schema changes; evidence entering snapshots, ordinary perception, or
+narration; inability to atomically commit discovery and history; material
+narration behavior change from the fail-closed projection; Region Pack prose
+ownership conflict; need for a broad player-knowledge model; material
+repository ambiguity; irreversible risk; or unresolved required verification
+outside safe scope.
 
-Feature branch: `feature/evidence-trace-foundations`.
+## Git, Checkpoints, and Owner Review
 
-Each accepted milestone is a focused checkpoint commit after verification. The
-package is removable by reverting its feature-branch commits. Do not merge,
-rebase, force-push, or begin another package without owner approval.
+Feature branch: `feature/deterministic-evidence-discovery`.
+
+Each completed milestone receives one focused checkpoint commit after its
+required verification. Do not merge, rebase, force-push, or begin another
+capability package. The package is recoverable by reverting its feature-branch
+commits.
+
+Routine in-scope milestone progression needs no owner interruption. A final
+capability-package review records the smallest complete evidence packet and
+returns one owner decision request: accept, reject, defer, or request deeper
+review of this package.
