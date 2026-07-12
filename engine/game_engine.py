@@ -154,6 +154,53 @@ class GameEngine:
         self.world_state = candidate_world_state
         return deepcopy(result)
 
+    def add_actor_knowledge_from_event(
+        self,
+        actor_id: str,
+        knowledge_id: str,
+        source_history_id: str,
+    ) -> Dict[str, Any]:
+        """Atomically add actor knowledge with one prior durable source event."""
+
+        candidate_world_state = copy_world_state(self.world_state)
+        get_static_actor(self.region, actor_id)
+        if not isinstance(knowledge_id, str) or not knowledge_id:
+            raise ValueError("knowledge_id must be a non-empty string.")
+        if not isinstance(source_history_id, str) or not source_history_id:
+            raise ValueError("source_history_id must be a non-empty string.")
+        if get_history_entry_by_id(candidate_world_state, source_history_id) is None:
+            raise ValueError("Unknown source_history_id.")
+
+        actor_knowledge = candidate_world_state["actor_knowledge"]
+        membership = actor_knowledge.setdefault(actor_id, [])
+        result = {
+            "changed": False,
+            "actor_id": actor_id,
+            "knowledge_id": knowledge_id,
+            "source_history_id": source_history_id,
+            "history_id": None,
+        }
+        if knowledge_id in membership:
+            return deepcopy(result)
+
+        membership.append(knowledge_id)
+        candidate_world_state = add_history_entry(
+            candidate_world_state,
+            event_type="actor_knowledge_added",
+            summary=f"Actor {actor_id} gained knowledge {knowledge_id}.",
+            time=deepcopy(candidate_world_state["time"]),
+            extra={
+                "actor_id": actor_id,
+                "knowledge_id": knowledge_id,
+                "source_history_id": source_history_id,
+            },
+        )
+        validate_world_state(candidate_world_state, self.region)
+        result["changed"] = True
+        result["history_id"] = candidate_world_state["history"][-1]["history_id"]
+        self.world_state = candidate_world_state
+        return deepcopy(result)
+
     def set_actor_location(
         self, entity_id: str, destination_location_id: str
     ) -> Dict[str, Any]:

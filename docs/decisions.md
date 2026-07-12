@@ -606,3 +606,13 @@ Status: Accepted.
 Duplicates are successful no-ops: they add no history and do not replace World State or the Scene Snapshot. Material entries contain only the engine-owned history identity, event type, exact summary, time, actor identity, and knowledge identity. They remain durable and history-queryable but narration context excludes them as lifecycle records.
 
 This decision preserves save version 1 and introduces no source linkage, certainty, truth, provenance, reason, evidence, dialogue, perception, target resolution, loss, propagation, or autonomous behavior.
+
+# ADR-047 - Causally Referenced Actor-Knowledge Addition
+
+Status: Accepted.
+
+`GameEngine.add_actor_knowledge_from_event(actor_id, knowledge_id, source_history_id)` may add one opaque knowledge identifier to one stable static actor while referencing one already accepted durable history entry. The source identifier must be non-empty, resolve in current history, and be backward from the new entry. The linkage is structural only: it does not establish semantic eligibility, witnessing, understanding, evidence, truth, certainty, reliability, or provenance.
+
+A material addition prepares copied World State, appends absent membership once, constructs one `actor_knowledge_added` history entry with `source_history_id`, validates the completed Region-aware candidate including backward history integrity, and commits World State exactly once. The source entry remains unchanged and outside the commit. Duplicates still validate the source but create no membership, history, World State replacement, or Scene Snapshot rebuild.
+
+Source-free Sprint 10.17 entries remain valid through save/load. This decision preserves save version 1, stable static actor ownership, narration-context exclusion, and all non-projection boundaries. It introduces no automatic trigger, source-event type restriction, causal graph, generic transaction system, knowledge loss, propagation, or player-facing behavior.

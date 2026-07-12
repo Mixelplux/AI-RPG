@@ -621,7 +621,7 @@ Working rule:
 
 ## 20. Implemented Knowledge Membership Baseline
 
-Static actors now have persistent current knowledge membership in World State, seeded once from immutable authored identifiers when a new game starts. One explicit engine operation may durably add an opaque knowledge identifier with a matching lifecycle history record. This still does not make knowledge objective truth, active belief, dialogue content, perception, narration context, or automatic behavior. Acquisition policy, loss, propagation, and interpretation remain future work.
+Static actors now have persistent current knowledge membership in World State, seeded once from immutable authored identifiers when a new game starts. Explicit engine operations may durably add an opaque knowledge identifier with a matching lifecycle history record; the causally referenced form may point structurally to one earlier accepted durable event. That reference does not establish witnessing, understanding, truth, evidence, certainty, reliability, or semantic eligibility. Knowledge remains outside dialogue content, perception, narration context, and automatic behavior. Acquisition policy, loss, propagation, and interpretation remain future work.
 
 ---
 

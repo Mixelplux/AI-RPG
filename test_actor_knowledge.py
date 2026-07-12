@@ -192,6 +192,90 @@ def test_added_membership_persists_through_save_load() -> None:
     )
 
 
+def test_causally_referenced_addition_and_duplicate_noop() -> None:
+    engine = GameEngine(REGION_PATH)
+    source_result = engine.add_actor_knowledge(ACTOR_ID, "source_knowledge")
+    source_id = source_result["history_id"]
+    source_entry = engine.get_history_entry_by_id(source_id)
+    before_scene = engine.scene_snapshot
+
+    result = engine.add_actor_knowledge_from_event(
+        OTHER_ACTOR_ID, "causally_added_knowledge", source_id
+    )
+    assert result == {
+        "changed": True,
+        "actor_id": OTHER_ACTOR_ID,
+        "knowledge_id": "causally_added_knowledge",
+        "source_history_id": source_id,
+        "history_id": "history_000002",
+    }
+    assert engine.get_actor_knowledge(OTHER_ACTOR_ID)[-1] == "causally_added_knowledge"
+    entry = engine.get_history_entry_by_id(result["history_id"])
+    assert entry == {
+        "history_id": result["history_id"],
+        "event_type": "actor_knowledge_added",
+        "summary": "Actor guard_elin_voss gained knowledge causally_added_knowledge.",
+        "time": engine.get_world_state()["time"],
+        "actor_id": OTHER_ACTOR_ID,
+        "knowledge_id": "causally_added_knowledge",
+        "source_history_id": source_id,
+    }
+    assert engine.get_history_entry_by_id(source_id) == source_entry
+    assert engine.scene_snapshot is before_scene
+    assert engine.query_history(event_type="actor_knowledge_added")[-1] == entry
+
+    before_state = engine.world_state
+    before_history = engine.get_history()
+    duplicate = engine.add_actor_knowledge_from_event(
+        OTHER_ACTOR_ID, "causally_added_knowledge", source_id
+    )
+    assert duplicate == result | {"changed": False, "history_id": None}
+    assert engine.world_state is before_state
+    assert engine.get_history() == before_history
+    assert engine.scene_snapshot is before_scene
+    duplicate["source_history_id"] = "mutated"
+    assert engine.get_history_entry_by_id(source_id) == source_entry
+
+
+def test_causally_referenced_addition_validation_persistence_and_atomic_load() -> None:
+    engine = GameEngine(REGION_PATH)
+    source_id = engine.add_actor_knowledge(ACTOR_ID, "source_knowledge")["history_id"]
+    before_state = engine.get_world_state()
+    before_scene = engine.scene_snapshot
+    for args in (
+        (ACTOR_ID, "known", None), (ACTOR_ID, "known", ""),
+        (ACTOR_ID, "known", 1), (ACTOR_ID, "known", "history_999999"),
+        ("missing", "known", source_id), (ACTOR_ID, "", source_id),
+        (ACTOR_ID, None, source_id),
+    ):
+        expect_value_error(lambda args=args: engine.add_actor_knowledge_from_event(*args))
+    assert engine.get_world_state() == before_state
+    assert engine.scene_snapshot is before_scene
+
+    result = engine.add_actor_knowledge_from_event(
+        ACTOR_ID, "persisted_causal_knowledge", source_id
+    )
+    with TemporaryDirectory() as temporary_directory:
+        path = Path(temporary_directory) / "causal_knowledge.json"
+        path.write_text(json.dumps(build_save_data(engine)), encoding="utf-8")
+        loaded = load_game(str(path))
+        assert loaded.get_history_entry_by_id(result["history_id"])["source_history_id"] == source_id
+        assert loaded.get_history_entry_by_id(source_id) == engine.get_history_entry_by_id(source_id)
+        assert not loaded.add_actor_knowledge_from_event(
+            ACTOR_ID, "persisted_causal_knowledge", source_id
+        )["changed"]
+
+        malformed = build_save_data(engine)
+        malformed["world_state"]["history"][-1]["source_history_id"] = "history_999999"
+        malformed_path = Path(temporary_directory) / "bad_causal_knowledge.json"
+        malformed_path.write_text(json.dumps(malformed), encoding="utf-8")
+        live_before = engine.get_world_state()
+        scene_before = engine.scene_snapshot
+        expect_value_error(lambda: engine.load(str(malformed_path)))
+        assert engine.get_world_state() == live_before
+        assert engine.scene_snapshot is scene_before
+
+
 def main() -> None:
     test_region_validation_and_new_game_seeding()
     test_sparse_state_validation_and_inspection()
@@ -199,6 +283,8 @@ def main() -> None:
     test_explicit_atomic_addition_and_duplicate_noop()
     test_addition_validation_and_candidate_failure_are_atomic()
     test_added_membership_persists_through_save_load()
+    test_causally_referenced_addition_and_duplicate_noop()
+    test_causally_referenced_addition_validation_persistence_and_atomic_load()
     print("Actor knowledge tests passed.")
 
 

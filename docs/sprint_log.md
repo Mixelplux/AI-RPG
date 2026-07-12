@@ -1,5 +1,13 @@
 # Sprint Log
 
+## Sprint 10.18 Closeout
+
+- Status: Complete.
+- Scope: one explicit actor-knowledge addition may structurally reference one already accepted durable history event through `source_history_id`.
+- Boundary: no source eligibility policy, witness or belief model, truth or reliability semantics, automatic acquisition, scene/perception/narration projection, dialogue behavior, or player-facing command.
+- Verification: focused causal actor-knowledge coverage, narration-context isolation, and all 23 root test scripts passed through the official interpreter. Save/load, malformed causal-link atomicity, and duplicate no-op coverage passed.
+- ADR-047 records the causal-linkage and atomicity decision. Sprint 10.19 is not defined or started.
+
 ## Sprint 10.17 Closeout
 
 - Status: Complete.
