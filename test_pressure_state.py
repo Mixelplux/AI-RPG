@@ -92,6 +92,7 @@ def test_region_seed_validation() -> None:
     without_seeds = deepcopy(region)
     del without_seeds["initial_pressures"]
     del without_seeds["conversation_pressure_effects"]
+    del without_seeds["elapsed_time_pressure_effect"]
     validate_region(without_seeds)
     assert create_initial_world_state(without_seeds)["pressures"] == {}
     with TemporaryDirectory() as temp_dir:

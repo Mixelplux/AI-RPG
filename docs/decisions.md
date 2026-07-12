@@ -560,3 +560,8 @@ Pressure applicability is determined only by exact scope membership: region-scop
 Applicability does not imply perceptibility, activity, importance, visibility, escalation eligibility, or narration eligibility. Scene, perception, narration, visibility, and runtime-effect policy remain separate concerns.
 
 The canonical operation is deterministic, read-only, and copy-safe. It validates pressure state before filtering, returns defensive copies, and orders results by sorted `pressure_id`. Future consumers must use this canonical boundary instead of reimplementing pressure-scope filtering.
+# ADR-041 - One Elapsed-Hour Threshold May Cause One Atomic Pressure Consequence
+
+Status: Accepted.
+
+One immutable Region Pack declaration may target one existing pressure and exact level. It is evaluated only during accepted time advancement using `previous_elapsed_hours < trigger_elapsed_hours <= new_elapsed_hours`. The source event and any material consequence commit atomically with time and the rebuilt scene. One-shot behavior is inferred from durable elapsed time; no persisted fired flag is required. This decision introduces no scheduler, recurring drift, world tick, or generic effect engine.

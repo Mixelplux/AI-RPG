@@ -94,6 +94,11 @@ def validate_region(region: dict) -> None:
     except ValueError as error:
         errors.append(str(error))
 
+    try:
+        validate_elapsed_time_pressure_effect(region)
+    except ValueError as error:
+        errors.append(str(error))
+
     if errors:
         raise ValueError(
             "Region validation failed:\n\n" +
@@ -174,6 +179,63 @@ def validate_conversation_pressure_effects(region: dict) -> None:
 
         seen_effect_ids.add(effect_id)
         seen_target_ids.add(target_entity_id)
+
+
+def validate_elapsed_time_pressure_effect(region: dict) -> None:
+    if "elapsed_time_pressure_effect" not in region:
+        return
+
+    effect = region["elapsed_time_pressure_effect"]
+    if not isinstance(effect, dict):
+        raise ValueError("elapsed_time_pressure_effect must be a dictionary.")
+
+    required_fields = {
+        "effect_id", "trigger_elapsed_hours", "pressure_id", "new_level"
+    }
+    fields = set(effect)
+    if fields != required_fields:
+        missing = sorted(required_fields - fields)
+        extra = sorted(fields - required_fields)
+        raise ValueError(
+            "elapsed_time_pressure_effect fields are invalid; "
+            f"missing={missing}, extra={extra}."
+        )
+
+    for field in ("effect_id", "pressure_id"):
+        value = effect[field]
+        if not isinstance(value, str) or not value:
+            raise ValueError(
+                f"elapsed_time_pressure_effect.{field} must be a non-empty string."
+            )
+
+    trigger = effect["trigger_elapsed_hours"]
+    if isinstance(trigger, bool) or not isinstance(trigger, int) or trigger <= 0:
+        raise ValueError(
+            "elapsed_time_pressure_effect.trigger_elapsed_hours must be a "
+            "positive integer and not a boolean."
+        )
+
+    new_level = effect["new_level"]
+    if isinstance(new_level, bool) or not isinstance(new_level, int):
+        raise ValueError(
+            "elapsed_time_pressure_effect.new_level must be an integer and "
+            "not a boolean."
+        )
+    if new_level < 0 or new_level > 100:
+        raise ValueError(
+            "elapsed_time_pressure_effect.new_level must be from 0 through 100."
+        )
+
+    pressure_ids = {
+        pressure.get("pressure_id")
+        for pressure in region.get("initial_pressures", [])
+        if isinstance(pressure, dict)
+    }
+    if effect["pressure_id"] not in pressure_ids:
+        raise ValueError(
+            "Unknown elapsed-time pressure effect pressure: "
+            f"{effect['pressure_id']}."
+        )
 
 if __name__ == "__main__":
 

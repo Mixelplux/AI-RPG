@@ -36,6 +36,12 @@
       "new_level": 25
     }
   ],
+  "elapsed_time_pressure_effect": {
+    "effect_id": "winter_deepens_after_first_hour",
+    "trigger_elapsed_hours": 1,
+    "pressure_id": "bryn_shander_winter",
+    "new_level": 70
+  },
   "time": {
     "calendar_system": "standard_fantasy",
     "current_date": "1489 DR - Midwinter",

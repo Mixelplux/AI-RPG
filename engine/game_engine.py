@@ -310,9 +310,10 @@ class GameEngine:
         new_time = advance_time_by_hours(previous_time, duration_hours)
         location_id = get_player_location_id(self.world_state)
 
-        self.world_state = set_time(self.world_state, new_time)
-        self.world_state = add_history_entry(
-            self.world_state,
+        candidate_world_state = copy_world_state(self.world_state)
+        candidate_world_state = set_time(candidate_world_state, new_time)
+        candidate_world_state = add_history_entry(
+            candidate_world_state,
             event_type="time_advanced",
             summary=f"Player waited for {duration_hours} hour.",
             location=location_id,
@@ -322,15 +323,37 @@ class GameEngine:
                 "new_time": new_time
             }
         )
-        self.scene_snapshot = build_scene(
+        source_history_id = candidate_world_state["history"][-1]["history_id"]
+        pressure_consequence = None
+        effect = self.region.get("elapsed_time_pressure_effect")
+        if effect is not None and (
+            previous_time.get("elapsed_hours", 0)
+            < effect["trigger_elapsed_hours"]
+            <= new_time["elapsed_hours"]
+        ):
+            candidate_world_state, pressure_consequence = (
+                self._prepare_pressure_level_from_event_candidate(
+                    candidate_world_state,
+                    effect["pressure_id"],
+                    effect["new_level"],
+                    source_history_id,
+                )
+            )
+            pressure_consequence["effect_id"] = effect["effect_id"]
+
+        validate_world_state(candidate_world_state)
+        candidate_scene_snapshot = build_scene(
             self.region,
-            self.world_state
+            candidate_world_state
         )
+        self.world_state = candidate_world_state
+        self.scene_snapshot = candidate_scene_snapshot
 
         return {
             "duration_hours": duration_hours,
             "previous_time": previous_time,
-            "new_time": new_time
+            "new_time": new_time,
+            "pressure_consequence": deepcopy(pressure_consequence),
         }
 
     def get_scene_snapshot(self) -> Dict[str, Any]:

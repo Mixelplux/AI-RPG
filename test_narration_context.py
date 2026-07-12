@@ -56,7 +56,7 @@ def main():
     assert movement_result["success"]
 
     full_history = engine.get_history()
-    assert len(full_history) == 5
+    assert len(full_history) == 6
 
     bounded_context = engine.get_narration_context(
         "describe what I can see",

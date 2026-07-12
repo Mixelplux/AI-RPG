@@ -356,3 +356,12 @@
 - Verified with the official project virtual environment: `test_narration_request.py`, `test_narration_source.py`, `test_narration_pipeline.py`, `test_narration_output.py`, `test_narration_context.py`, `test_history_context.py`, `test_history_query.py`, `test_save_load.py`, `-m json.tool docs/current_sprint.json`, `play_game.py` startup, and a scripted `play_game.main()` smoke flow covering narration context, narration output, repeated narration preview, and quit.
 - Bundled Python was not used for Sprint 9.11 verification.
 - Sprint 9.12 was not started.
+# Sprint 10.7 - One Declared Elapsed-Hour Pressure Threshold Consequence
+
+- Status: Complete.
+- Added strict validation for one optional immutable `elapsed_time_pressure_effect` Region Pack declaration.
+- Added exact elapsed-hour threshold crossing during accepted time advancement.
+- Atomically prepares and commits time, source history, material pressure change, causal history, and scene.
+- Preserved same-level no-op behavior, direct/wait equivalence, save version 1, and replay prevention from durable time.
+- Added `test_time_pressure_effect.py` and updated history expectations for the new causal consequence.
+- Accepted ADR-041. Sprint 10.8 was not defined.

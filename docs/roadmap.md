@@ -210,6 +210,8 @@ These are future applications of World Evolution Foundations, not the foundation
 
 ## Sprint Rule
 
+Sprint 10.7 completed one declared elapsed-hour threshold pressure consequence with atomic causal history and no new persistent schema or generic scheduling infrastructure.
+
 Active sprint definitions must include:
 
 - Goal
