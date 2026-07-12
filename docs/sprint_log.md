@@ -467,3 +467,10 @@
 - ADR-044 records the new persistent-domain ownership and compatible version-1 load normalization.
 - Sprint 10.15 follow-up hardening validates persisted thread causality and excludes lifecycle history from narration context without changing player-facing evidence.
 - Focused coverage and all 22 repository tests passed; scripted save/load and direct launch-close smoke checks passed through the official interpreter.
+
+# Evidence Trace Foundations - Sprints 10.20 through 10.24
+
+- Status: Complete.
+- Added World State-owned ordered opaque evidence traces with exact Region Pack locations, version-1 legacy-load normalization, atomic explicit and causal creation, one declared conversation consequence, and defensive inspection.
+- No discovery, interpretation, reliability, actor reaction, player-facing projection, generic framework, or save-version change was added.
+- Checkpoint `7d24e3d` was an early package implementation checkpoint titled for Sprint 10.20 but spanning approved later milestones; later reconciliation commits restored canonical sequencing and auditability without rewriting history.
