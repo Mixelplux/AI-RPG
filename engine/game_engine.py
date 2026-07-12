@@ -3,6 +3,7 @@ from typing import Any, Dict
 
 from engine.scene_loader import load_region, build_scene
 from engine.perception_builder import build_perception
+from engine.pressure_observation import derive_pressure_observation
 from engine.scene_narrator import narrate_scene
 from engine.interaction_kernel import process_player_input
 from engine.world_update import apply_interaction
@@ -360,7 +361,15 @@ class GameEngine:
         return deepcopy(self.scene_snapshot)
 
     def get_player_perception(self) -> Dict[str, Any]:
-        return build_perception(self.scene_snapshot)
+        applicable = self.get_applicable_pressures()
+        cue = derive_pressure_observation(
+            applicable,
+            self.region.get("pressure_observation_cue"),
+        )
+        return build_perception(
+            self.scene_snapshot,
+            [] if cue is None else [cue],
+        )
 
     def get_narration(self) -> Dict[str, Any]:
         perception = self.get_player_perception()

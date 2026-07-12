@@ -2,7 +2,10 @@ from copy import deepcopy
 from typing import Dict, Any
 
 
-def build_perception(scene_snapshot: Dict[str, Any]) -> Dict[str, Any]:
+def build_perception(
+    scene_snapshot: Dict[str, Any],
+    pressure_cues: list[Dict[str, str]] | None = None,
+) -> Dict[str, Any]:
     """
     Convert a Scene Snapshot into a Perception Snapshot.
 
@@ -45,5 +48,7 @@ def build_perception(scene_snapshot: Dict[str, Any]) -> Dict[str, Any]:
 
         "audible": [],
 
-        "hidden": []
+        "hidden": [],
+
+        "pressure_cues": deepcopy(pressure_cues or [])
     }

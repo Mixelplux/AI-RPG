@@ -565,3 +565,8 @@ The canonical operation is deterministic, read-only, and copy-safe. It validates
 Status: Accepted.
 
 One immutable Region Pack declaration may target one existing pressure and exact level. It is evaluated only during accepted time advancement using `previous_elapsed_hours < trigger_elapsed_hours <= new_elapsed_hours`. The source event and any material consequence commit atomically with time and the rebuilt scene. One-shot behavior is inferred from durable elapsed time; no persisted fired flag is required. This decision introduces no scheduler, recurring drift, world tick, or generic effect engine.
+# ADR-042 - Pressure Applicability Does Not Grant Perceptibility; Authored Observation Policy Does
+
+Status: Accepted.
+
+Applicability is necessary but insufficient for perception. One strict immutable Region Pack declaration grants perceptibility. Observation is derived and non-persistent; raw pressure state remains simulation-owned. The Scene Snapshot does not own pressure cues, perception receives only a validated authored cue, and narration gains no authority. No general visibility, player-knowledge, or observation-history system is introduced.

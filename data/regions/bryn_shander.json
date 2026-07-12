@@ -42,6 +42,12 @@
     "pressure_id": "bryn_shander_winter",
     "new_level": 70
   },
+  "pressure_observation_cue": {
+    "cue_id": "winter_deepens_observation",
+    "pressure_id": "bryn_shander_winter",
+    "minimum_level": 70,
+    "text": "The cold has become noticeably more severe."
+  },
   "time": {
     "calendar_system": "standard_fantasy",
     "current_date": "1489 DR - Midwinter",

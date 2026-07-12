@@ -99,6 +99,11 @@ def validate_region(region: dict) -> None:
     except ValueError as error:
         errors.append(str(error))
 
+    try:
+        validate_pressure_observation_cue(region)
+    except ValueError as error:
+        errors.append(str(error))
+
     if errors:
         raise ValueError(
             "Region validation failed:\n\n" +
@@ -236,6 +241,26 @@ def validate_elapsed_time_pressure_effect(region: dict) -> None:
             "Unknown elapsed-time pressure effect pressure: "
             f"{effect['pressure_id']}."
         )
+
+
+def validate_pressure_observation_cue(region: dict) -> None:
+    if "pressure_observation_cue" not in region:
+        return
+    cue = region["pressure_observation_cue"]
+    if not isinstance(cue, dict):
+        raise ValueError("pressure_observation_cue must be a dictionary.")
+    required = {"cue_id", "pressure_id", "minimum_level", "text"}
+    if set(cue) != required:
+        raise ValueError("pressure_observation_cue must contain exactly cue_id, pressure_id, minimum_level, and text.")
+    for field in ("cue_id", "pressure_id", "text"):
+        if not isinstance(cue[field], str) or not cue[field]:
+            raise ValueError(f"pressure_observation_cue.{field} must be a non-empty string.")
+    level = cue["minimum_level"]
+    if isinstance(level, bool) or not isinstance(level, int) or not 0 <= level <= 100:
+        raise ValueError("pressure_observation_cue.minimum_level must be an integer from 0 through 100 and not a boolean.")
+    ids = [p.get("pressure_id") for p in region.get("initial_pressures", []) if isinstance(p, dict)]
+    if ids.count(cue["pressure_id"]) != 1:
+        raise ValueError("pressure_observation_cue.pressure_id must reference exactly one seeded pressure.")
 
 if __name__ == "__main__":
 

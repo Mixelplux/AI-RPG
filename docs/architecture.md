@@ -334,6 +334,10 @@ Failed source-result validation uses a bounded `source_result_validation` stage,
 
 ## Elapsed-Time Pressure Consequence
 
+## Authored Pressure Observation
+
+Sprint 10.9 adds one derived, non-persistent observation cue. Canonical applicability is necessary but not sufficient: one validated immutable Region Pack declaration names the pressure, minimum level, and authored text. `GameEngine` derives the cue on perception reads and passes only cue identity, pressure identity, and text to perception. Raw pressure state never enters the Scene Snapshot or perception, and narration is unchanged.
+
 Sprint 10.7 completes the Sprint 10.5 through 10.7 pressure capability cluster: one declared conversation consequence, canonical read-only pressure applicability, and one declared elapsed-time consequence. One optional immutable Region Pack declaration, `elapsed_time_pressure_effect`, may target one seeded pressure and one exact level. `GameEngine.advance_time` evaluates it only when accepted advancement satisfies `previous_elapsed_hours < trigger_elapsed_hours <= new_elapsed_hours`. Time calculation remains pure in `timekeeper`; declaration validation belongs to `region_validator`; pressure preparation remains in `pressure_state`.
 
 The engine prepares time, the `time_advanced` source record, any material linked `pressure_changed` consequence, validation, and the rebuilt scene against a copied World State before committing World State and scene once. A same-level target is a validated consequence no-op: time and source history commit, but pressure history does not. Durable elapsed time supplies one-shot behavior, so no fired flag or other persistence field exists.

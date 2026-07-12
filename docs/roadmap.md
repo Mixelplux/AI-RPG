@@ -212,6 +212,8 @@ These are future applications of World Evolution Foundations, not the foundation
 
 Sprint 10.7 completed one declared elapsed-hour threshold pressure consequence with atomic causal history and no new persistent schema or generic scheduling infrastructure.
 
+Sprint 10.8 completed the wait single-commit atomicity correction. Sprint 10.9 completed the first bounded pressure projection into perception through one authored observation cue. Recurring or continuous pressure drift remains a distinct future capability.
+
 Active sprint definitions must include:
 
 - Goal

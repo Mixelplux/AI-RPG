@@ -374,3 +374,10 @@
 - Focused tests prove exactly one validation and scene build, direct/wait equivalence, and command-path failure atomicity.
 - This is a conformance correction to ADR-041; no new ADR or architecture boundary was introduced.
 - Sprint 10.9 was not defined or started.
+# Sprint 10.9 - One Declared Pressure Observation Cue
+
+- Status: Complete.
+- Added one strict immutable Region Pack observation declaration and ADR-042.
+- Derived one copy-safe cue from canonical applicability and current pressure level on perception reads.
+- Preserved Scene Snapshot, narration, persistence, save version 1, and raw pressure ownership boundaries.
+- Sprint 10.10 was not defined or started.
