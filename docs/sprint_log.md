@@ -365,3 +365,12 @@
 - Preserved same-level no-op behavior, direct/wait equivalence, save version 1, and replay prevention from durable time.
 - Added `test_time_pressure_effect.py` and updated history expectations for the new causal consequence.
 - Accepted ADR-041. Sprint 10.8 was not defined.
+
+# Sprint 10.8 - Wait Command Single-Commit Atomicity
+
+- Status: Complete.
+- Added the immediate successful-wait return after the shared `advance_time` boundary.
+- Successful wait now bypasses generic interaction application, validation, scene construction, and final assignment.
+- Focused tests prove exactly one validation and scene build, direct/wait equivalence, and command-path failure atomicity.
+- This is a conformance correction to ADR-041; no new ADR or architecture boundary was introduced.
+- Sprint 10.9 was not defined or started.

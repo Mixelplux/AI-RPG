@@ -1,5 +1,5 @@
-# Next Chat Handoff: Sprint 10.7 Complete
+# Next Chat Handoff: Sprint 10.8 Complete
 
-Sprint 10.7 is implemented and closed out. One strict immutable `elapsed_time_pressure_effect` declaration changes one existing pressure to one exact level when accepted time advancement crosses its threshold. Time, source history, material causal consequence, and scene commit atomically; same-level consequences add no pressure history. One-shot behavior derives from durable elapsed time, save version remains 1, and no policy is persisted into World State.
+Sprint 10.8 corrected successful wait command orchestration to return immediately after the shared ADR-041 time-advancement boundary. Successful wait now performs no generic interaction application and has exactly one validation, one scene build, and one commit boundary. Failure preserves pre-command World State and exact scene identity.
 
-ADR-041 is accepted. Exactly one completed sprint is recorded, `next_sprint` is `null`, and Sprint 10.8 is not defined or recommended.
+This was a conformance correction with no new ADR, persistence, effect policy, or architecture infrastructure. Preflight evidence is 16 passed, 1 warning, 3 blocked, and 0 failures. `next_sprint` remains `null`; Sprint 10.9 is not defined or started.

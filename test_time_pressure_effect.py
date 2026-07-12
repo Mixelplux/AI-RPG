@@ -6,6 +6,8 @@ from unittest.mock import patch
 from engine.game_engine import GameEngine
 from engine.region_validator import validate_region
 from engine.save_system import load_game
+from engine.scene_loader import build_scene as real_build_scene
+from engine.world_state import validate_world_state as real_validate_world_state
 
 
 REGION_PATH = "data/regions/bryn_shander.json"
@@ -79,9 +81,20 @@ def main():
     direct = GameEngine(REGION_PATH)
     waited = GameEngine(REGION_PATH)
     direct_result = direct.advance_time(1)
-    wait_result = waited.process_command("wait")["time_advancement"]
+    with patch("engine.game_engine.apply_interaction") as generic_apply, patch(
+        "engine.game_engine.validate_world_state",
+        wraps=real_validate_world_state,
+    ) as validate_call, patch(
+        "engine.game_engine.build_scene",
+        wraps=real_build_scene,
+    ) as scene_call:
+        wait_result = waited.process_command("wait")["time_advancement"]
+    generic_apply.assert_not_called()
+    assert validate_call.call_count == 1
+    assert scene_call.call_count == 1
     assert direct_result == wait_result
     assert direct.get_world_state() == waited.get_world_state()
+    assert direct.get_scene_snapshot() == waited.get_scene_snapshot()
 
     failing = GameEngine(REGION_PATH)
     before_state = failing.get_world_state()
@@ -95,6 +108,24 @@ def main():
             raise AssertionError("Expected preparation failure.")
     assert failing.get_world_state() == before_state
     assert failing.scene_snapshot is before_scene
+
+    for target in (
+        "engine.game_engine.prepare_pressure_level_change",
+        "engine.game_engine.validate_world_state",
+        "engine.game_engine.build_scene",
+    ):
+        failing = GameEngine(REGION_PATH)
+        before_state = failing.get_world_state()
+        before_scene = failing.scene_snapshot
+        with patch(target, side_effect=ValueError("fail")):
+            try:
+                failing.process_command("wait")
+            except ValueError:
+                pass
+            else:
+                raise AssertionError(f"Expected wait failure from {target}.")
+        assert failing.get_world_state() == before_state
+        assert failing.scene_snapshot is before_scene
 
     for target in ("engine.game_engine.validate_world_state", "engine.game_engine.build_scene"):
         failing = GameEngine(REGION_PATH)

@@ -483,6 +483,7 @@ class GameEngine:
             interaction_result["time_advancement"] = self.advance_time(
                 duration_hours
             )
+            return deepcopy(interaction_result)
 
         target_text = interaction_result["action"].get("target")
         if target_text and interaction_result["intent"] in {
