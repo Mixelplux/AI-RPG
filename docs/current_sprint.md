@@ -1,39 +1,31 @@
 # Current Sprint
 
-## Sprint 10.20 — Persistent Located Evidence-Trace Representation
+## Sprint 10.24 — Evidence-Trace Inspection and Package Closeout
 
-Status: Active.
+Status: Complete.
 
 ## Goal
 
-Establish sparse persistent World State evidence traces with stable identity,
-opaque content identity, exact Region Pack location, defensive reads, and
-version-1 candidate-load normalization.
+Complete defensive evidence-trace inspection and close Evidence Trace Foundations.
 
 ## Expected Files
 
-`engine/evidence_traces.py`, `engine/world_state.py`, `engine/save_system.py`,
-`engine/region_validator.py`, focused tests, ADR/documentation, and canonical
-package and sprint records.
+Evidence-trace engine and tests, final package records, documentation, and review packet.
 
 ## Acceptance Criteria
 
-- Every persisted trace has unique stable `trace_id`, opaque `evidence_id`, and
-  one exact Region Pack `location_id` in deterministic order.
-- Validation is strict and Region-aware; reads are defensive.
-- Save version remains `1`; legacy candidate loads may normalize only a missing
-  collection and malformed candidate loads fail safely.
-- No player-facing trace projection exists.
+- Stable-id and exact-location inspection is deterministic and defensive.
+- Evidence remains outside every player-facing boundary.
+- Sprints 10.20–10.24 are complete; save version remains `1`.
 
 ## Verification
 
-Focused evidence-trace tests, affected World State/save-load/Region Pack
-regressions, canonical manifest agreement, and `git diff --check`.
+Focused evidence tests, full repository tests, manifest agreement, packet validation, and `git diff --check` passed.
 
 ## Canonical Manifest
 
 <!-- CANONICAL-MANIFEST-START -->
 ```json
-{"schema_version":"1.0.0","document_type":"current_sprint","sprint_count":1,"project":{"name":"AI Narrative RPG Engine","principles":["provider-neutral","deterministic-core","simulation-owned-truth"]},"sprint":{"id":"10.20","title":"Persistent Located Evidence-Trace Representation","type":"bounded-feature","mode":"capability-package-internal","status":"active","goal":"Establish one sparse persistent World State evidence-trace representation with stable trace identity, exact Region Pack location, opaque content identity, deterministic ordering, strict Region-aware validation, defensive copies, and version-1 legacy-load normalization only.","platform":{"official_interpreter":".\\.venv\\Scripts\\python.exe"},"expected_files":{"likely_modified":["engine/world_state.py","engine/save_system.py","engine/region_validator.py","docs/architecture.md","docs/decisions.md","docs/roadmap.md","docs/current_sprint.md","docs/current_sprint.yaml","docs/current_sprint.json","docs/current_capability_package.md","TASK.md"],"likely_created":["engine/evidence_traces.py","test_evidence_traces.py"]},"acceptance_criteria":["World State owns a sparse evidence_traces collection whose records have stable non-empty trace_id, opaque non-empty evidence_id, and one exact Region Pack location_id.","Validation is deterministic, Region-aware, rejects malformed or duplicate identities, and all public reads are defensive.","Save version remains 1; missing evidence_traces normalizes only during candidate loading and malformed candidate loads fail without changing live state.","No trace projection enters scene, perception, narration, dialogue, targeting, CLI, or gameplay behavior."],"verification":{"focused_commands":[".\\.venv\\Scripts\\python.exe test_evidence_traces.py"],"required_regressions":["World State, save/load, history, region validation, and engine regressions"],"manifest_commands":["JSON/YAML/Markdown deep comparison","git diff --check"],"closeout_commands":["Focused representation tests, affected regressions, Region Pack validation, save/load checks, and checkpoint validation"]},"execution_phases":[{"id":"setup"},{"id":"implementation"},{"id":"verification"},{"id":"closeout"}],"governance":["Exactly one sprint is active.","Part of accepted Evidence Trace Foundations package.","Save version remains 1.","Do not begin Sprint 10.21 until Sprint 10.20 is complete."],"closeout":{"allowed_terminal_statuses":["complete","blocked"],"verification_result":null,"next_sprint":"10.21"}}}
+{"schema_version":"1.0.0","document_type":"current_sprint","sprint_count":1,"project":{"name":"AI Narrative RPG Engine","principles":["provider-neutral","deterministic-core","simulation-owned-truth"]},"sprint":{"id":"10.24","title":"Evidence-Trace Inspection and Package Closeout","type":"bounded-feature","mode":"capability-package-internal","status":"complete","goal":"Complete defensive evidence-trace inspection and close Evidence Trace Foundations without player-facing projection.","platform":{"official_interpreter":".\\.venv\\Scripts\\python.exe"},"expected_files":{"likely_modified":["engine/evidence_traces.py","engine/game_engine.py","docs/current_capability_package.md","docs/current_sprint.md","docs/current_sprint.yaml","docs/current_sprint.json","docs/decisions.md","docs/sprint_log.md","docs/next_chat_handoff.md"],"likely_created":["handoffs/evidence_trace_foundations_architecture_review_packet.zip"]},"acceptance_criteria":["Stable-id and exact-location inspection is deterministic and defensive.","Evidence remains absent from all player-facing boundaries.","Sprints 10.20 through 10.24 and the package are closed with save version 1."],"verification":{"focused_commands":[".\\.venv\\Scripts\\python.exe test_evidence_traces.py"],"required_regressions":["full root repository test inventory"],"manifest_commands":["JSON/YAML/Markdown deep comparison","git diff --check"],"closeout_commands":["full package verification and review-packet validation"]},"execution_phases":[{"id":"closeout"}],"governance":["Exactly one sprint is active.","Sprint 10.25 remains undefined and unstarted."],"closeout":{"allowed_terminal_statuses":["complete"],"verification_result":"Focused and full regression verification passed through the official interpreter.","next_sprint":null}}}
 ```
 <!-- CANONICAL-MANIFEST-END -->

@@ -1,3 +1,3 @@
-# Sprint 10.19 Complete
+# Evidence Trace Foundations Complete
 
-Sprint 10.19 composes one immutable `conversation_actor_knowledge_effect` with the successful resolved-conversation transition. A material match adds one opaque identifier to one stable static actor and records one `actor_knowledge_added` entry structurally linked to the accepted conversation. Duplicates create no membership or lifecycle history while the conversation records normally. Save version remains `1`; no player-facing projection, semantic source policy, or generic consequence framework was added. Sprint 10.20 is not defined or started.
+Evidence Trace Foundations establishes sparse persistent located traces, explicit and causal creation, one declared Captain conversation consequence, and defensive inspection. Evidence remains opaque and hidden from all player-facing systems. Save version remains `1`; Sprint 10.25 and the next capability package are undefined and unstarted.

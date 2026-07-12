@@ -1,6 +1,6 @@
 # Evidence Trace Foundations
 
-Status: Active.
+Status: Complete.
 
 ## Owner-Visible Value
 
