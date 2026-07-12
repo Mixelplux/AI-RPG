@@ -2,19 +2,19 @@
 
 ## Purpose
 
-Codex is the implementation agent. Its default unit of work is one complete coherent sprint run, not a sequence of mandatory micro-passes.
+Codex is the implementation agent. Its default unit of work is one approved capability package containing a coherent sequence of closely related internal milestones, not a sequence of mandatory owner-interrupted micro-passes. Exactly one sprint remains active at a time.
 
 ## Responsibilities
 
-- Read the canonical project documentation.
+- Read the canonical project, package, and active-sprint documentation.
 - Perform Startup Review and environment preflight.
-- Stage only the explicitly accepted sprint in the canonical manifests.
-- Implement only that sprint.
-- Run proportionate implementation checks and one complete closeout verification cycle.
-- Complete required documentation, ADR work, and sprint closeout after successful verification.
-- Report results and stop without defining or beginning the next sprint.
+- Implement only accepted package milestones, staging only the active milestone in canonical manifests.
+- Run proportionate focused checks, required regressions, and each required closeout verification cycle.
+- Complete relevant documentation, ADR work, checkpoint records, and package closeout after successful verification.
+- Provide a concise owner-level outcome first, with detailed evidence only when it supports a meaningful decision.
+- Stop without defining or beginning the next capability package.
 
-A normal bounded sprint may stage, implement, document, verify, close out, and report in one medium-reasoning run. Separate runs are allowed when they materially improve safety, but are not the default.
+Routine implementation choices inside the accepted package do not require owner interruption when they follow established architecture and remain within scope. The lead agent may define internal milestones, maintain their records, proceed sequentially, and prepare the final review packet.
 
 ## Required Reads
 
@@ -26,77 +26,57 @@ A normal bounded sprint may stage, implement, document, verify, close out, and r
 - `docs/current_sprint.yaml`
 - `docs/current_sprint.json`
 
-Read other canonical architecture and project documents required by `TASK.md` or the active sprint.
+Read other canonical architecture, package, and project documents required by `TASK.md` or the active work.
 
 ## Startup Gate
 
 Before editing:
 
 - confirm branch, full HEAD, and working-tree status;
-- stop for unexpected user changes or a materially contradictory dirty tree;
+- stop for unexpected user changes or materially ambiguous repository state;
 - confirm the prior sprint is complete;
-- confirm `next_sprint` is `null` or matches the explicitly accepted sprint;
+- confirm `next_sprint` is `null` or matches the accepted active milestone;
 - confirm exactly one sprint will be active;
+- confirm the accepted package has explicit value, scope, exclusions, impacts, decisions, verification, completion, and rollback boundaries;
 - confirm `docs/current_sprint.md` contains Goal, Expected Files, Acceptance Criteria, and Verification; and
 - confirm the canonical Markdown, JSON, and YAML manifests materially agree.
 
 The JSON and YAML manifests must both parse successfully, represent the same data types, contain the same keys and nesting, preserve equivalent ordered list values, and deeply agree after parsing. JSON syntax validation alone is insufficient.
 
-For a combined sprint run, stage the accepted sprint in all canonical manifests and verify their agreement before changing implementation code. Then continue directly unless a stop condition in `WORKFLOW.md` is encountered. Never stage more than one sprint.
+Stage the accepted active milestone in all canonical manifests and verify agreement before changing implementation code. Continue directly inside the approved package unless a `WORKFLOW.md` stop condition occurs. Never stage more than one sprint.
+
+## Meaningful Stop Conditions
+
+Stop and request owner input for a decision outside package scope, conflicting authoritative requirements, a new ownership or persistence model, save-version change, unapproved player-visible behavior, generic framework or broad refactor, unresolved required verification failure outside safe scope, destructive or irreversible risk, or entry into an explicitly deferred capability.
+
+Do not stop for routine naming, established implementation details, expected in-scope test repairs, documentation maintenance, or normal milestone progression.
 
 ## Reasoning Routing
 
-Use the lowest reasoning level capable of completing the entire coherent task safely. Do not divide one coherent task into many runs solely to obtain a lower reasoning setting.
+Use the lowest reasoning level capable of completing the coherent work safely.
 
-- Low: genuinely mechanical edits, established validation, package generation, archive inspection, Git evidence, and deterministic cleanup.
-- Medium: a normal bounded sprint from startup and staging through implementation, documentation, verification, closeout, and reporting.
+- Low: mechanical setup and closeout, established validation, package generation, archive inspection, Git evidence, and deterministic cleanup.
+- Medium: bounded implementation inside an approved package, including startup, staging, focused tests, documentation, closeout, and reporting.
 - High: architecture or scope review, systemic or unclear failures, ownership conflict, persistence or atomicity design, and material contradictions.
 
 ## Architecture Review Support
 
-Codex supplies repository evidence; ChatGPT owns architecture assessment and recommendation. Codex must not replace the owner-facing review with a long technical essay unless the task explicitly asks for one.
+Codex supplies repository evidence; ChatGPT owns architecture assessment and recommendation. Use the review type in `WORKFLOW.md`: brief health checks for routine internal confirmation, capability-package review at capability boundaries, and deep review for consequential architecture boundaries.
 
-Use the review type specified by the accepted task or `WORKFLOW.md`:
+For a required review packet, read `docs/architecture_review_template.md` and assemble the smallest complete evidence packet. Record changed files, verification, manifests, relevant implementation and tests, and pre-assembly and post-cleanup Git status. Do not turn packet assembly into an owner-facing technical essay. Full packets are required only at package completion, material architecture decisions, blocked external reviews, repository-access boundaries, or when explicitly requested.
 
-- sprint health check for routine closeout confirmation;
-- capability-cluster review after related work or before subsystem integration;
-- deep architecture review for new persistence, save compatibility, ownership changes, autonomous behavior, generic infrastructure, live AI authority, canonical-lore authority, or serious contradictions.
+## Verification, Environment, and Closeout
 
-For an architecture-review handoff, read `docs/architecture_review_template.md` and assemble the smallest complete evidence packet needed to support the decision. Record facts accurately, including changed files, verification, manifests, relevant implementation and tests, and pre-assembly and post-cleanup Git status. Do not present packet assembly as the architecture recommendation.
+Run focused tests, directly affected regressions, and required syntax or static checks during work. Do not rerun the full official suite after every small edit. At the relevant closeout, run the complete required verification cycle. A documentation-only repair requires manifest/governance validation, `git diff --check`, and directly affected checks unless it could affect implementation behavior.
 
-An accepted review may cover a small sequence, but every sprint must remain explicitly staged, independently bounded, and testable. Review again when the sequence ends, implementation diverges, a stop condition occurs, or the next capability crosses an architecture boundary. Review approval does not authorize speculative work or automatically start a sprint.
+Work from the repository root in PowerShell. The only official Python interpreter is `.\.venv\Scripts\python.exe`; do not substitute another interpreter. Record required commands, exit codes, outcomes, and concise output. If the execution context cannot launch the official interpreter, preserve the exact failure and classify it accurately as an execution-context limitation.
 
-## Verification
+Before declaring a milestone or package complete, confirm canonical manifest parsing and deep agreement where records were touched. Closeout never defines the following package.
 
-During implementation, run focused tests, directly affected regressions, and necessary syntax or static checks. Do not rerun the full official suite after every small edit.
+## Git, Packaging, and Invariants
 
-At closeout, run one complete workflow-required verification cycle. If a later repair is documentation-only, rerun only manifest/governance validation, `git diff --check`, and directly affected checks. If implementation changes after the full cycle, rerun affected tests and the required final suite according to `WORKFLOW.md`.
+For larger packages, prefer a dedicated feature branch when practical and use authorized logical checkpoint commits or equivalent recoverable milestones. Verify before advancing. Do not rewrite or destroy owner work or merge to `main` without explicitly delegated authority.
 
-Treat application failures and tooling/runtime failures differently. Application failures and other unresolved required failures block closeout. Blocked commands are not passes.
+Do not create a Git commit unless the task prompt explicitly authorizes it. Otherwise report the exact changed files and recommended commit title.
 
-## Canonical Windows Environment
-
-- Work from the repository root in PowerShell on Windows.
-- The only official Python interpreter is `.\.venv\Scripts\python.exe`.
-- Invoke small Python probes with `-c` and substantial logic from checked-in or generated script files. Do not pipe multiline Python through stdin.
-- Do not substitute bundled, system, Windows Store, alternate, `uv`, or fallback Python.
-- Run environment preflight before implementation and closeout.
-- Record each required command, exit code, outcome, and concise output.
-
-If Codex cannot launch the official interpreter, preserve the exact command, exit code, and error. Classify access-denied or process-creation failure as an execution-context limitation, not evidence that `.venv` is unhealthy. Provide copy-safe commands for the repository owner. Clearly identified user-executed evidence using the same official interpreter may satisfy verification; alternate interpreters remain prohibited.
-
-## Closeout and Commit Control
-
-Before marking a sprint complete, confirm all canonical manifests parse and deeply agree. Synchronize them during staging and closeout, and again only if a repair changes sprint-record content. Closeout must not define the following sprint.
-
-Do not create a Git commit unless the task prompt explicitly authorizes it. Without authorization, report the exact changed files and a recommended commit title.
-
-## Packaging and Project Invariants
-
-- Create a handoff ZIP only at a genuine repository-access or architecture-review boundary, for a formal milestone, or when explicitly requested.
-- Do not create a full review packet when a sprint health check is sufficient.
-- Use PowerShell `Compress-Archive` and independently validate archive entries.
-- Create generated content only under `.build\`, `.artifacts\`, or `handoffs\` according to repository policy.
-- Capture pre-assembly source status and post-cleanup final status separately.
-- Packaging success is independent from application-test success.
-- Preserve provider neutrality, deterministic behavior, simulation-owned truth, exactly one active sprint, and unrelated user changes.
+Create a handoff ZIP only at a genuine repository-access or architecture-review boundary, formal milestone, or on request. Generated content belongs only under `.build\`, `.artifacts\`, or `handoffs\`. Preserve provider neutrality, deterministic behavior, simulation-owned truth, atomicity, persistence compatibility, canonical manifest agreement, fail-closed behavior, scope boundaries, unrelated user changes, and owner authority.

@@ -2,241 +2,153 @@
 
 ## Governing Principle
 
-Use the lowest reasoning level capable of completing the entire coherent task safely. Do not divide one coherent task into many runs solely to obtain a lower reasoning setting.
+Use the lowest reasoning level capable of completing the entire coherent task safely. Do not divide coherent work into many runs solely to obtain a lower reasoning setting.
 
-The default unit of work is one complete, coherent sprint run. For a normal bounded sprint, one medium-reasoning Codex run may perform startup review, sprint staging, implementation, focused testing, required documentation and ADR work, full closeout verification, sprint closeout, and final reporting. Separate runs remain allowed when they materially improve safety, but are not required by default for staging, implementation, documentation repair, closeout, or packet generation.
+The default delivery unit is an approved **capability package**: one coherent development objective containing several closely related internal milestones. A package has one clear purpose, one rollback boundary, and explicit exclusions. It must not combine unrelated systems merely to reduce review frequency, and it must never be an open-ended instruction to continue developing.
 
-## Sprint Lifecycle
+The project protects owner attention as well as implementation safety. **Review fatigue** from excessive low-value review, packets, and approvals is a governance risk: it can create the appearance of oversight while making it harder to notice meaningful product, architecture, and risk decisions. Optimize for fewer meaningful checkpoints, clear plain-language status, strong automated verification, recoverable internal milestones, explicit stop conditions, and preserved owner authority. More text or more approval steps are not inherently safer.
 
-Exactly one sprint may be active at a time. A combined sprint run must:
+## Capability-Package Lifecycle
+
+Exactly one sprint may be active at a time. A capability package may contain sequential internal milestones that would previously have been separate small sprints, but all work remains explicitly bounded and testable.
+
+Before a package begins, the owner normally approves its direction, player or project value, major scope boundaries, and any architectural decision it requires. Each package record must state:
+
+- goal and owner-visible value;
+- included internal milestones;
+- explicit exclusions;
+- expected files or systems;
+- persistence impact;
+- player-facing impact;
+- architecture decisions required;
+- verification requirements;
+- completion conditions; and
+- rollback boundary.
+
+After approval, one lead Codex session may define and record the internal milestones, stage their required manifest records, implement them sequentially, run focused and regression checks, update relevant documentation, create permitted checkpoint commits on a feature branch, complete package closeout, and assemble the final review packet. The lead agent must not stop after each routine milestone to ask permission to continue.
+
+For each internal sprint or milestone, the lead agent must:
 
 1. Work from the repository root in PowerShell and run the environment preflight.
-2. Read the canonical project and sprint documents and perform Startup Review.
-3. Confirm the prior sprint is complete and `next_sprint` is `null` or matches the explicitly accepted sprint.
-4. Stage the explicitly accepted sprint in all three canonical manifests before changing implementation code.
+2. Read the canonical project, package, and sprint documents and perform Startup Review.
+3. Confirm the prior sprint is complete and `next_sprint` is `null` or matches the accepted package milestone.
+4. Stage only the accepted active sprint in all three canonical manifests before changing implementation code.
 5. Confirm the staged Markdown, YAML, and JSON manifests parse and deeply agree.
-6. Continue directly into implementation unless a stop condition is encountered.
-7. Run focused verification during implementation.
+6. Continue directly into the bounded work unless a stop condition is encountered.
+7. Run focused verification during implementation and before advancing between internal milestones.
 8. Complete required documentation and ADR work.
-9. Run one complete closeout verification cycle.
-10. Close out the active sprint only after verification succeeds, then report and stop.
+9. Run the required closeout verification for that milestone or package boundary.
+10. Close out the active sprint only after required verification succeeds. Do not define, stage, or begin work outside the accepted package automatically.
 
-A combined run must not stage more than one sprint. Closeout must not define, stage, or begin the following sprint.
+Closeout of a package must not select or start the following package. A package may contain several explicitly accepted internal milestones, but never more than one active sprint.
 
-## Canonical Sprint Manifests
+## Owner Approval and Stop Conditions
 
-The permanent sprint paths are:
+Owner approval is required at meaningful boundaries: package direction and value; major scope boundaries; player-visible behavior; new persistent-state ownership; save-version changes; generic frameworks; major refactors; live AI integration; and other independent architectural decisions.
+
+Routine implementation choices inside an approved package do not require separate approval when they follow accepted architecture and remain within package scope. This includes established naming choices, expected focused-test repairs, documentation maintenance, and ordinary internal milestone progression.
+
+Stop and request owner input when any of the following occurs:
+
+- a required decision falls outside approved package boundaries;
+- authoritative requirements conflict;
+- a new ownership or persistence model is proposed;
+- a save-version change is needed;
+- unapproved player-visible behavior is needed;
+- a generic framework or broad refactor is needed;
+- required verification has an unresolved failure that cannot be safely corrected within scope;
+- repository state is materially ambiguous;
+- work risks destructive or irreversible change; or
+- scope would enter an explicitly deferred capability.
+
+A minor, clearly bounded defect may be repaired in the same run only when it was directly caused by the package work, does not broaden scope, requires no new architectural decision, and is recorded in the final report.
+
+## Canonical Sprint and Package Records
+
+The permanent current-sprint paths are:
 
 - `docs/current_sprint.md`
 - `docs/current_sprint.yaml`
 - `docs/current_sprint.json`
 
-Continue maintaining and validating all three. Synchronize them once during staging, once during closeout, and again only when a repair changes sprint-record content. Do not rewrite or repeatedly revalidate them between implementation edits that do not affect sprint metadata.
+Continue maintaining and validating all three. The active record must preserve goal, expected files, acceptance criteria, verification, status, and its relationship to the accepted package. Synchronize them during staging and closeout, and again only when a repair changes sprint-record content. Do not rewrite or repeatedly revalidate them between implementation edits that do not affect sprint metadata.
 
 The JSON and YAML manifests must both parse successfully, use the same data types, contain the same keys and nesting, preserve equivalent ordered list values, and deeply agree after parsing. The embedded Markdown manifest must materially agree with them. JSON syntax validation alone is insufficient.
 
-Temporary sprint-numbered planning files may be promoted into the canonical paths when supplied, then deleted only after successful promotion and validation. Their presence does not require a separate staging run.
+Temporary planning files may be promoted into the canonical paths when supplied, then deleted only after successful promotion and validation. Their presence does not require a separate staging run. Future tooling may choose one structured canonical source and generate the others mechanically, but that does not change the present three-manifest policy until separately accepted.
 
-Future workflow tooling should choose one structured canonical source, generate the other formats mechanically, and validate that generated files are current. This direction does not change the present three-manifest policy until separately designed and accepted.
+## Architecture Reviews and Packets
 
-## Architecture Review Workflow
+Architecture reviews serve two audiences and must separate owner-level conclusions from technical evidence. Use the lightest review that safely supports the next decision.
 
-Architecture reviews serve two audiences and must separate their outputs.
+### Review cadence
 
-### Owner-facing review
+- **Sprint health check:** brief routine confirmation during internal work or at closeout that scope, verification, and boundaries remain sound. It does not require a full packet.
+- **Capability-package review:** normally required before a new capability cluster, after a completed package, when the existing architecture no longer safely supports the intended work, or when implementation reveals a genuinely new architectural decision.
+- **Deep architecture review:** required for a new persistent domain or schema, save-compatibility change, established ownership change, autonomous simulation, generic infrastructure, live AI authority, material canonical-lore ownership change, serious contradiction, or consequential alternatives with similar merit.
 
-The primary review is written for the project owner in plain language. Use `docs/architecture_review_template.md`. It should normally fit within 800 words and answer:
+Do not automatically conduct a new architecture review after every routine extension of an approved pattern. Review again when a package ends, implementation materially diverges, a stop condition occurs, or the next capability crosses an architecture boundary.
 
-1. What was completed?
-2. Did it work as intended?
-3. Was any important defect or risk found?
-4. What does the engine now make possible for the game?
-5. What should be built next, and why?
-6. What decision is requested from the owner?
+### Owner-facing review and report
 
-The owner-facing review must avoid file-by-file commentary, function names, schema minutiae, and test mechanics unless they materially affect the decision. It must include a compact decision card with:
+Use `docs/architecture_review_template.md` for a review. Begin every completion report with a concise plain-language owner summary covering:
 
-- recommended capability;
-- why now;
-- player or project value;
-- technical risk;
-- persistence impact;
-- ADR requirement;
-- expected scope; and
-- major alternatives deferred.
+- what the engine can now do and the value it adds;
+- player-facing change, if any;
+- intentionally unsupported behavior;
+- whether verification passed;
+- real compromises, defects, or decisions needing attention; and
+- the recommended owner action.
 
-The project owner is not expected to validate low-level implementation mechanics. The review must translate technical findings into product, scope, risk, and sequencing consequences.
+Do not require the owner to review helper signatures, schema checks, test case numbers, or internal mechanics unless a failure occurred, a new architectural decision was made, the owner asks, or the detail is needed for a meaningful decision. Keep detailed evidence in an appendix or packet.
 
-### Technical evidence and appendix
+End every owner-facing architecture review with exactly one decision request: accept, reject, defer, or request a deeper review of one named issue. Acceptance authorizes later bounded staging inside the approved package; it does not authorize speculative work or automatically start a package.
 
-Detailed repository evidence remains available for auditability. It may include ownership boundaries, atomicity and rollback analysis, schema details, persistence implications, test evidence, file references, and candidate comparisons.
+### Packet and handoff policy
 
-Keep this material in the review packet or a clearly separated technical appendix. Include a substantial appendix in the main response only when:
+Create a full architecture-review packet only when a capability package is complete, a major architectural decision is required, a package is blocked and needs external review, a repository-access boundary requires it, or the owner explicitly requests it. Internal milestones retain enough records, tests, and checkpoint history to make the final package auditable, but do not generate a full packet merely because an internal milestone completed.
 
-- a material defect was found;
-- ownership or persistence boundaries change;
-- save compatibility is affected;
-- alternatives are genuinely close; or
-- the owner requests technical detail.
+A handoff ZIP is required only when moving across an actual repository-access boundary, moving to an environment without repository access, creating a formal milestone artifact, or when explicitly requested. Within one repository session, continue from stable project records. Do not make the owner a courier for prompts, files, summaries, routine continuation approval, or repeated Git checks.
 
-### Review types and cadence
+Architecture-review packets are evidence packages, not the owner-facing recommendation. They contain the smallest complete set of canonical documents, changed or directly relevant implementation files, focused tests, verification evidence, and Git evidence needed to support the decision. When a ZIP is required, use PowerShell `Compress-Archive`, deterministic inventory, exact archive-membership validation, readability checks, temporary-assembly cleanup, and recorded Git evidence. Generated content must stay under `.build\`, `.artifacts\`, or `handoffs\` according to repository policy. Packaging success remains independent from application-test success.
 
-Use the lightest review type that safely supports the next decision.
-
-#### Sprint health check
-
-Perform after every sprint closeout. Confirm the sprint matched scope, required verification passed, no boundary was unintentionally broadened, and the previously accepted direction remains sound. This is normally brief and does not require a new architecture-review ZIP when Codex and ChatGPT are continuing from the same repository context.
-
-A correction sprint that only restores conformance to an already accepted decision normally receives a health check, not another full subsystem review. Reopen the deeper review only if the correction changes the recommendation or reveals a broader issue.
-
-#### Capability-cluster review
-
-Perform after roughly three to five related sprints, at the end of a meaningful capability cluster, or before connecting one established subsystem to another. Determine whether the cluster is coherent, what is still missing, whether it is ready for projection or integration, and which bounded capability should come next.
-
-#### Deep architecture review
-
-Require a deep review when:
-
-- introducing a new persistent domain or schema;
-- changing save compatibility;
-- changing established ownership boundaries;
-- adding autonomous simulation or background behavior;
-- introducing generic infrastructure;
-- adding live AI authority;
-- materially changing canonical-lore ownership;
-- resolving a serious architectural contradiction; or
-- comparing multiple consequential designs with similar merit.
-
-Scene, perception, narration, visibility, or other projection work requires at least a capability-cluster review before the first boundary is established. Later narrow work inside an accepted projection boundary may use sprint health checks.
-
-An accepted review may authorize a small sequence or capability cluster. Every sprint in that sequence must still be explicitly staged, independently bounded, and testable. Review again when the accepted sequence is complete, implementation materially diverges, a stop condition occurs, or the next capability crosses one of the boundaries above. Approval never authorizes speculative implementation or more than one active sprint.
-
-### Review decision states
-
-End every owner-facing architecture review with one explicit decision request:
-
-- accept the recommendation;
-- reject it;
-- defer it; or
-- request a deeper review of one identified issue.
-
-Acceptance authorizes sprint staging around the recommended capability but does not itself define, stage, or start the sprint.
+Capture Git status separately as pre-assembly source status and post-cleanup final status.
 
 ## Model and Reasoning Routing
 
-### Low reasoning
+- **Low reasoning:** mechanical setup or closeout, approved documentation edits, established validation, package generation, archive inspection, Git evidence, and deterministic cleanup.
+- **Medium reasoning:** normal bounded implementation inside an approved package, including startup review, staging, focused tests, documentation, closeout, and reporting.
+- **High reasoning:** architecture or scope review, unclear or systemic failures, ownership conflict, persistence design, atomicity problems, or material contradictions.
 
-Use for genuinely mechanical work: applying an already approved exact documentation edit, running established validation commands, generating a handoff package, checking archive inventory, collecting Git evidence, or deterministic cleanup.
-
-### Medium reasoning
-
-Use for a normal bounded sprint, including startup review, staging, implementation, focused tests, documentation, closeout, and final verification.
-
-### High reasoning
-
-Reserve for architecture and scope review, unclear or systemic test failures, ownership conflicts, persistence design, atomicity problems, or material contradictions between accepted scope and repository structure.
-
-A run may escalate only when the coherent task genuinely requires it.
+The owner should not need to route ordinary internal tasks manually. Escalate only when the coherent work genuinely requires it.
 
 ## Verification Cadence
 
-### During implementation
+During implementation, run new focused tests, directly affected regressions, and necessary syntax or static checks. Do not repeatedly run the entire official suite after every small edit.
 
-Run new focused tests, directly affected regression tests, and syntax or static validation needed for changed files. Do not repeatedly run the entire official suite after every small edit.
+At each required closeout, run the documented complete verification cycle, including focused and required regressions; save/load and Region Pack validation where applicable; canonical manifest parsing and deep agreement; environment preflight; hardening validation; launch and scripted smoke checks where applicable; and `git diff --check`.
 
-### At closeout
+If a repair changes only documentation, rerun manifest validation, applicable documentation or governance validators, `git diff --check`, and directly affected checks. Do not rerun unrelated application tests unless the repair could affect them. Required failures block closeout; blocked commands must be reported accurately and never treated as passes.
 
-Run one complete workflow-required verification cycle, including:
-
-- focused and required regression tests;
-- save/load validation where applicable;
-- Region Pack validation where applicable;
-- canonical manifest parsing and deep agreement;
-- environment preflight;
-- hardening validation;
-- launch check;
-- scripted smoke check; and
-- `git diff --check`.
-
-If a closeout repair changes only documentation, rerun manifest validation, applicable documentation or governance validators, `git diff --check`, and any check directly affected by the repair. Do not rerun unrelated application tests unless the repair could affect them.
-
-If implementation code changes after the full closeout cycle, rerun affected tests and any required final suite under the existing safety rules. Required failures block closeout. Blocked commands must be reported accurately and never treated as passes.
+Infrastructure-only packages that intentionally create no player-visible behavior may close without owner gameplay testing. Player-visible packages must provide a short, concrete playtest procedure focused on behavior the owner can meaningfully evaluate. Do not ask the owner to validate invisible internals manually when automated verification is the appropriate evidence.
 
 ## Canonical Windows Environment
 
-- Work from the repository root in PowerShell on Windows.
-- Run preflight before implementation and closeout.
+- Work from the repository root in PowerShell and run preflight before implementation and closeout.
 - Use only `.\.venv\Scripts\python.exe` for Python setup, tests, validation, and closeout evidence.
 - Do not substitute bundled, system, Windows Store, alternate, `uv`, or fallback Python environments.
 - Record exact verification commands, exit codes, outcomes, and artifact paths.
 
-Codex must attempt each official interpreter command first. If its execution context denies process creation, record the exact command, exit code, and error and classify it as an agent execution-context limitation, not an unhealthy virtual environment. Provide a copy-safe command for the repository owner. Clearly identified user-executed output from the same official interpreter may satisfy the check; alternate interpreters may not.
+If the execution context denies the official interpreter, preserve the exact command, exit code, and error and classify that as an execution-context limitation, not evidence that `.venv` is unhealthy. Provide a copy-safe command for the owner. User-executed output from the same official interpreter may satisfy the check; alternate interpreters may not.
 
-## Stop Conditions
+## Git and Recovery Policy
 
-Stop before implementation or closeout if:
+For a larger capability package, prefer a dedicated feature branch when practical. Use logical, focused checkpoint commits or equivalent recoverable milestones when the project policy and task authorization permit them; run verification before advancing between milestones. Preserve a straightforward rollback path, do not rewrite or destroy owner work, and do not merge to `main` without owner approval unless that authority has been explicitly delegated.
 
-- the repository is unexpectedly dirty;
-- canonical sprint manifests materially disagree;
-- the sprint is already implemented or conflicts with current state;
-- accepted architecture materially contradicts the repository;
-- the change requires a new persistent schema not previously approved;
-- ownership cannot remain within the accepted boundary;
-- atomicity cannot be preserved;
-- implementation would require a listed non-goal; or
-- required verification exposes an unresolved material failure.
+Codex must not create a Git commit unless the task prompt explicitly authorizes it. When authorization is absent, report the exact changed-file list and a recommended commit title. An authorized normal package may use focused checkpoint commits and a final logical commit; checkpoints must not become an excuse for uncontrolled writes.
 
-A minor, clearly bounded defect may be repaired in the same run only when it was directly caused by the sprint work, does not broaden scope, requires no new architectural decision, and is recorded in the final report.
+## Task Prompt Guidance and Invariants
 
-## Commit Policy
+Package prompts should reference canonical repository documents instead of repeating stable architecture. They should state the accepted package, value, milestones or boundaries, ownership, persistence and player-facing impact, verification, explicit exclusions, stop conditions, and commit authority. Missing package details must not be invented.
 
-Codex may stage sprint documentation, implement, verify, and close out in one run. Codex must not create a Git commit unless the task prompt explicitly authorizes it. When authorization is absent, report the exact changed-file list and a recommended commit title.
-
-Do not create separate staging and closeout commits unless the user explicitly requests them, the sprint is unusually large, or an architecture checkpoint requires preserving an intermediate state. An authorized normal sprint may use one atomic commit after all verification passes.
-
-## Handoff and ZIP Policy
-
-A handoff ZIP is required only when moving from Codex to ChatGPT across an actual repository-access boundary, moving to an environment without repository access, creating a formal milestone artifact, or when explicitly requested. Do not create staging ZIPs for normal sprint work or architecture-review ZIPs after minor sprints when a brief health check is sufficient. Within one repository session, continue from the live repository.
-
-Architecture-review packets are evidence packages, not the owner-facing review itself. They should contain the smallest complete set of canonical documents, changed or directly relevant implementation files, focused tests, verification evidence, and Git evidence needed to support the review. Codex should report repository facts and packet validation; ChatGPT owns the architecture assessment and plain-language recommendation.
-
-When a ZIP is required, use PowerShell `Compress-Archive`, a deterministic inventory, exact archive-membership validation, readability checks, temporary-assembly cleanup, and recorded Git evidence. Generated content must stay under `.build\`, `.artifacts\`, or `handoffs\` according to repository policy. Packaging success remains independent from application-test success.
-
-Capture Git status separately as:
-
-- pre-assembly source status; and
-- post-cleanup final status.
-
-Generate final status evidence only after temporary assembly content and temporary scripts are removed. A packet stored in an ignored or policy-approved handoff location must not cause a false clean-tree claim.
-
-## Task Prompt Guidance
-
-Normal sprint prompts should reference canonical repository documents instead of repeating stable architecture. They should normally state:
-
-- accepted capability;
-- task type and reasoning level;
-- required behavior;
-- ownership;
-- focused tests;
-- ADR requirement when applicable;
-- explicit non-goals;
-- stop conditions; and
-- commit authorization.
-
-The prompt should instruct Codex to read the canonical repository documents. Missing sprint details must not be invented.
-
-## Future Mechanical Automation
-
-Future tooling should support commands equivalent to:
-
-```powershell
-.\tools\validate_sprint.ps1
-.\tools\close_sprint.ps1
-.\tools\build_review_packet.ps1
-```
-
-It should automate manifest parsing and deep comparison, focused and official regression execution, preflight and hardening checks, Git evidence capture, launch and scripted smoke checks, handoff assembly, exact ZIP inventory validation, and temporary-file cleanup. This section documents direction only; no new script is required by this workflow update.
-
-## Project Invariants
-
-Preserve provider neutrality, deterministic behavior, simulation-owned truth, exactly one active sprint, and unrelated user changes. Never begin the next sprint automatically.
+Preserve provider neutrality, deterministic behavior, simulation-owned truth, exactly one active sprint, atomicity expectations, persistence compatibility, canonical manifest agreement, fail-closed behavior, ADR discipline, scope boundaries, unrelated user changes, and owner authority over high-impact decisions. Never begin the next sprint or capability package automatically.
