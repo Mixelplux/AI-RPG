@@ -87,7 +87,7 @@ def test_material_and_repeat():
         "previous_location_id": BASELINE,
         "new_location_id": DESTINATION,
         "changed": True,
-        "history_id": engine.get_history()[-1]["history_id"],
+        "history_id": engine.query_history(event_type="actor_moved")[0]["history_id"],
     }
     conversations = engine.query_history(event_type="player_conversation")
     moves = engine.query_history(event_type="actor_moved")

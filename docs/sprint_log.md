@@ -422,3 +422,12 @@
 - One candidate transition prepares time, source history, any pressure consequence, actor relocation, causal links, validation, and rebuilt scene before one live commit.
 - ADR-035, ADR-038, ADR-039, and ADR-043 were sufficient; no new ADR was required. Save version remains 1.
 - Focused tests and all 21 repository tests passed through the official project interpreter. Sprint 10.14 is undefined and unstarted.
+
+# Sprint 10.14 - One Declared Conversation-Triggered Unresolved Thread
+
+- Status: Complete.
+- Adds one immutable Bryn Shander declaration triggered by a successful Captain Darvin Grey conversation.
+- The candidate transition creates one sparse `open_threads` record and one causally linked `unresolved_thread_opened` history event without duplicate creation.
+- Player perception projects only authored local evidence at the North Gate; it adds no quest-facing interface, objective, or marker.
+- ADR-044 records the new persistent-domain ownership and compatible version-1 load normalization.
+- Focused coverage and all 22 repository tests passed; scripted save/load and direct launch-close smoke checks passed through the official interpreter.

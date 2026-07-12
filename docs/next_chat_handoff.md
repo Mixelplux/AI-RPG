@@ -1,3 +1,3 @@
-# Next Chat Handoff: Sprint 10.13 Complete
+# Next Chat Handoff: Sprint 10.14 Complete
 
-Sprint 10.13 adds one immutable `elapsed_time_actor_relocation_effect`. In the shipped fixture, the first accepted elapsed-hour crossing moves Captain Darvin Grey from the North Gate to the West Gate. The implementation composes the source time history, existing pressure consequence, and optional actor move in the existing single candidate transition; both material consequences link to the same `time_advanced` source. Save version remains 1, no new ADR was required, and Sprint 10.14 remains undefined and unstarted.
+Sprint 10.14 is complete. A successful conversation with Captain Darvin Grey now opens exactly one durable Bryn Shander thread tied to the conversation source and projects authored evidence only at the North Gate. Save version remains 1; ADR-044 records the new state boundary. Sprint 10.15 remains undefined and unstarted.

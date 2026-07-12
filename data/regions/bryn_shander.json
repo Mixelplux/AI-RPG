@@ -42,6 +42,15 @@
     "actor_entity_id": "guard_elin_voss",
     "destination_location_id": "bryn_shander_main_street"
   },
+  "conversation_unresolved_thread": {
+    "thread_id": "bryn_shander_west_road_bandit_report",
+    "description": "Captain Darvin Grey's report of bandit activity on the western road remains unresolved.",
+    "trigger_entity_id": "captain_darvin_grey",
+    "perception_location_ids": [
+      "bryn_shander_gate_north"
+    ],
+    "evidence_text": "Watch patrols at the North Gate speak in low voices about the unanswered bandit report on the western road."
+  },
   "elapsed_time_pressure_effect": {
     "effect_id": "winter_deepens_after_first_hour",
     "trigger_elapsed_hours": 1,

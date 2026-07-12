@@ -127,6 +127,11 @@ def validate_region(region: dict) -> None:
     except ValueError as error:
         errors.append(str(error))
 
+    try:
+        validate_conversation_unresolved_thread(region)
+    except ValueError as error:
+        errors.append(str(error))
+
     if errors:
         raise ValueError(
             "Region validation failed:\n\n" +
@@ -170,6 +175,43 @@ def validate_conversation_actor_relocation_effect(region: dict) -> None:
     }
     if effect["destination_location_id"] not in location_ids:
         raise ValueError(f"{field}.destination_location_id is unknown.")
+
+
+def validate_conversation_unresolved_thread(region: dict) -> None:
+    field = "conversation_unresolved_thread"
+    if field not in region:
+        return
+    declaration = region[field]
+    if not isinstance(declaration, dict):
+        raise ValueError(f"{field} must be a dictionary.")
+    required = {
+        "thread_id", "description", "trigger_entity_id",
+        "perception_location_ids", "evidence_text",
+    }
+    if set(declaration) != required:
+        raise ValueError(f"{field} fields are invalid.")
+    for name in ("thread_id", "description", "trigger_entity_id", "evidence_text"):
+        if not isinstance(declaration[name], str) or not declaration[name]:
+            raise ValueError(f"{field}.{name} must be a non-empty string.")
+    static_ids = {
+        entity.get("entity_id")
+        for entity in region.get("entities", [])
+        if isinstance(entity, dict) and entity.get("persistence") == "static"
+    }
+    if declaration["trigger_entity_id"] not in static_ids:
+        raise ValueError(f"{field}.trigger_entity_id must reference a static actor.")
+    locations = declaration["perception_location_ids"]
+    if not isinstance(locations, list) or not locations:
+        raise ValueError(f"{field}.perception_location_ids must be a non-empty list.")
+    location_ids = {
+        location.get("location_id")
+        for location in region.get("locations", [])
+        if isinstance(location, dict)
+    }
+    if any(not isinstance(location_id, str) or not location_id for location_id in locations):
+        raise ValueError(f"{field}.perception_location_ids must contain non-empty strings.")
+    if len(set(locations)) != len(locations) or any(location_id not in location_ids for location_id in locations):
+        raise ValueError(f"{field}.perception_location_ids must contain unique known locations.")
 
 
 def validate_conversation_pressure_effects(region: dict) -> None:

@@ -218,7 +218,9 @@ Sprint 10.11 completed the persistent actor-location prerequisite: seeded named 
 
 Sprint 10.12 connected one accepted resolved conversation to one Region-declared persistent actor relocation while preserving one candidate transition, causal history, and Scene Snapshot consumer boundaries. The capability adds no scheduler, autonomous behavior, generic effect framework, or new persistence schema. Sprint 10.13 is undefined and unstarted.
 
-Sprint 10.13 adds one bounded elapsed-time actor relocation through the existing time-transition boundary. It does not introduce a schedule, recurrence, generic dispatcher, autonomous behavior, pathfinding, or a persistence-schema change. Sprint 10.14 remains undefined and unstarted.
+Sprint 10.13 adds one bounded elapsed-time actor relocation through the existing time-transition boundary. It does not introduce a schedule, recurrence, generic dispatcher, autonomous behavior, pathfinding, or a persistence-schema change.
+
+Sprint 10.14 adds one declared conversation-triggered unresolved thread. The engine persists one sparse open record and causal history while projecting only local authored evidence; it adds no resolution, quest interface, objective, timer, or generic trigger system. Sprint 10.15 remains undefined and unstarted.
 
 Active sprint definitions must include:
 

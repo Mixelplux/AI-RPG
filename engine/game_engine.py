@@ -4,6 +4,11 @@ from typing import Any, Dict
 from engine.scene_loader import load_region, build_scene
 from engine.perception_builder import build_perception
 from engine.pressure_observation import derive_pressure_observation
+from engine.unresolved_threads import (
+    derive_unresolved_thread_evidence,
+    get_open_threads as get_world_open_threads,
+    prepare_open_thread_candidate,
+)
 from engine.scene_narrator import narrate_scene
 from engine.interaction_kernel import process_player_input
 from engine.world_update import apply_interaction
@@ -102,6 +107,9 @@ class GameEngine:
 
     def get_pressure(self, pressure_id: str) -> dict | None:
         return get_world_pressure(self.world_state, pressure_id)
+
+    def get_open_threads(self) -> dict[str, dict[str, str]]:
+        return get_world_open_threads(self.world_state)
 
     def set_actor_location(
         self, entity_id: str, destination_location_id: str
@@ -470,6 +478,11 @@ class GameEngine:
         return build_perception(
             self.scene_snapshot,
             [] if cue is None else [cue],
+            derive_unresolved_thread_evidence(
+                self.world_state["open_threads"],
+                self.region.get("conversation_unresolved_thread"),
+                get_player_location_id(self.world_state),
+            ),
         )
 
     def get_narration(self) -> Dict[str, Any]:
@@ -696,6 +709,20 @@ class GameEngine:
                     "changed": actor_result["changed"],
                     "history_id": actor_result["history_id"],
                 }
+
+            thread = self.region.get("conversation_unresolved_thread")
+            interaction_result["unresolved_thread_consequence"] = None
+            if thread is not None and thread["trigger_entity_id"] == target_entity_id:
+                source_history_id = next(
+                    entry["history_id"]
+                    for entry in reversed(candidate_world_state["history"])
+                    if entry["event_type"] == "player_conversation"
+                    and entry.get("target_entity_id") == target_entity_id
+                )
+                candidate_world_state, thread_result = prepare_open_thread_candidate(
+                    candidate_world_state, thread, source_history_id
+                )
+                interaction_result["unresolved_thread_consequence"] = thread_result
 
         validate_world_state(candidate_world_state, self.region)
         candidate_scene_snapshot = build_scene(

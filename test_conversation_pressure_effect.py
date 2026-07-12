@@ -116,7 +116,7 @@ def test_material_unmatched_and_no_op_behavior() -> None:
 
     result = engine.process_command("talk to captain")
     history = engine.get_history()
-    source, consequence = history
+    source, consequence, thread_opened = history
 
     assert result["pressure_consequence"] == {
         "effect_id": EFFECT_ID,
@@ -133,6 +133,8 @@ def test_material_unmatched_and_no_op_behavior() -> None:
     assert source == expected_source_state["history"][-1]
     assert consequence["event_type"] == "pressure_changed"
     assert consequence["source_history_id"] == source["history_id"]
+    assert thread_opened["event_type"] == "unresolved_thread_opened"
+    assert thread_opened["source_history_id"] == source["history_id"]
     assert source["time"] == consequence["time"] == before["time"]
     assert engine.get_pressure(PRESSURE_ID)["level"] == 25
     assert engine.get_pressure("bryn_shander_winter") == before["pressures"][
@@ -156,14 +158,14 @@ def test_material_unmatched_and_no_op_behavior() -> None:
         engine.get_history()[-1]["history_id"]
     )
     assert engine.get_history()[-1]["event_type"] == "player_conversation"
-    assert len(engine.get_history()) == 3
+    assert len(engine.get_history()) == 4
     assert engine.get_pressure(PRESSURE_ID) == pressure_before_repeat
 
     elin = engine.process_command("talk to elin")
     assert elin["success"]
     assert "pressure_consequence" not in elin
     assert engine.get_history()[-1]["target_entity_id"] == "guard_elin_voss"
-    assert len(engine.get_history()) == 4
+    assert len(engine.get_history()) == 5
 
     for command in ("talk to blacksmith", "talk to guard"):
         history_before = engine.get_history()
@@ -195,7 +197,7 @@ def test_material_unmatched_and_no_op_behavior() -> None:
     exit_result = engine.process_command("talk to north")
     assert exit_result["success"]
     assert "pressure_consequence" not in exit_result
-    assert len(engine.get_history()) == 4
+    assert len(engine.get_history()) == 5
 
 
 def test_matched_atomic_failures() -> None:

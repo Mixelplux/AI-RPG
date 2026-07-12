@@ -578,3 +578,13 @@ Status: Accepted.
 Region Packs own immutable named static actor identity, description, and authored baseline location. The existing `entity_id` is the sole runtime ownership key. World State stores only sparse location overrides; absence means the authored location, and returning to that baseline removes the override. Spawned template entities are excluded because they have no stable instance identity.
 
 Scene Snapshot construction is the canonical projection boundary that merges authored actor data with effective runtime location. Perception, target resolution, conversations, and narration consume the Scene Snapshot rather than override state. Version-1 saves remain compatible by normalizing a missing mapping to empty. A material move prepares its override, one `actor_moved` history entry, validation, and rebuilt scene before committing World State and scene atomically.
+
+# ADR-044 - One Declared Unresolved Thread Is Sparse Persistent State with Derived Local Evidence
+
+Status: Accepted.
+
+One unresolved situation may be declared immutably in a Region Pack and triggered by one resolved conversation with one static actor. Immutable content owns its identity, description, trigger, applicable perception locations, and evidence text. `world_state.open_threads` owns only whether that declaration has been created, its sole supported `open` status, and the stable history identifier of the source conversation.
+
+The matching conversation source, one open-thread record, and one causally linked `unresolved_thread_opened` history entry are prepared in the existing candidate transition and committed only after completed-state validation and scene construction succeed. A thread identifier is unique in the runtime dictionary, so repeated trigger conversations do not create a second instance or a second opening event. Version-1 saves missing the field normalize to an empty dictionary only on load.
+
+Perception derives authored evidence text for an open declared thread at an applicable location. It does not create a quest log, objective, marker, player-knowledge record, resolution mechanism, generic trigger engine, or ongoing-condition framework.

@@ -189,6 +189,12 @@ Ideas that are important but not ready for implementation belong in `docs/future
 
 Only `world_state` is persisted. Region Packs remain immutable assets. Scene Snapshots, Perception, and Narration are regenerated after loading.
 
+Sprint 10.14 adds `world_state.open_threads`, a sparse dictionary keyed by immutable Region Pack thread identity. Each record contains exactly its identity, the sole supported status `open`, and the stable `created_by_history_id` for the accepted conversation that opened it. The reference must resolve to durable history. During loading only, version-1 saves missing `open_threads` normalize to an empty dictionary; authored declarations are not replayed. Region Pack content owns each thread's description, trigger actor, perception locations, and evidence text.
+
+`GameEngine` composes a matching resolved conversation, existing bounded consequences, one open-thread record, and an `unresolved_thread_opened` history event in one candidate state. Validation and scene rebuilding complete before one live commit. Repeating the trigger does not duplicate the record or opening event.
+
+Open-thread perception is derived and read-only: it returns authored evidence only at a declared applicable location. It exposes no objective, completion instruction, map marker, status label, raw runtime record, actor knowledge, or resolution behavior.
+
 Every future persistent world-state expansion must define default initialization and compatibility for saves created before the new field existed. A broad migration framework is not required in advance, but compatibility must be explicit in the sprint that adds the field.
 
 `GameEngine` exposes save and load operations to gameplay front ends. Persistence serialization and reconstruction remain implemented by the save system behind that engine API.

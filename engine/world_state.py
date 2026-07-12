@@ -5,6 +5,7 @@ from engine.pressure_state import (
     build_initial_pressure_state,
     validate_pressure_state,
 )
+from engine.unresolved_threads import validate_open_threads
 
 
 DEFAULT_HISTORY_QUERY_COUNT = 10
@@ -46,6 +47,7 @@ def create_initial_world_state(region: Dict[str, Any]) -> Dict[str, Any]:
         "history": [],
         "pressures": build_initial_pressure_state(region),
         "actor_location_overrides": {},
+        "open_threads": {},
     }
 
 
@@ -75,7 +77,11 @@ def validate_world_state(
     if "pressures" not in world_state:
         raise ValueError("World State is missing pressures.")
 
+    if "open_threads" not in world_state:
+        raise ValueError("World State is missing open_threads.")
+
     validate_pressure_state(world_state["pressures"])
+    validate_open_threads(world_state["open_threads"])
 
     overrides = world_state.get("actor_location_overrides", {})
     if not isinstance(overrides, dict):
@@ -113,6 +119,12 @@ def validate_world_state(
 
     if "history" in world_state:
         validate_history_entry_ids(world_state["history"])
+        history_ids = {
+            entry["history_id"] for entry in world_state["history"]
+        }
+        for thread in world_state["open_threads"].values():
+            if thread["created_by_history_id"] not in history_ids:
+                raise ValueError("Open thread source history id is unknown.")
 
 
 def copy_world_state(world_state: Dict[str, Any]) -> Dict[str, Any]:

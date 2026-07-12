@@ -5,6 +5,7 @@ from typing import Dict, Any
 def build_perception(
     scene_snapshot: Dict[str, Any],
     pressure_cues: list[Dict[str, str]] | None = None,
+    unresolved_thread_evidence: list[Dict[str, str]] | None = None,
 ) -> Dict[str, Any]:
     """
     Convert a Scene Snapshot into a Perception Snapshot.
@@ -50,5 +51,7 @@ def build_perception(
 
         "hidden": [],
 
-        "pressure_cues": deepcopy(pressure_cues or [])
+        "pressure_cues": deepcopy(pressure_cues or []),
+
+        "unresolved_thread_evidence": deepcopy(unresolved_thread_evidence or [])
     }
