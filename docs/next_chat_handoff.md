@@ -1,8 +1,9 @@
-# Deterministic Local Investigation and Evidence Discovery — Sprint 10.25 Staged
+# Deterministic Local Investigation and Evidence Discovery — Sprint 10.25 Complete
 
-The approved package is active on `feature/deterministic-evidence-discovery`.
-Sprint 10.25 stages fail-closed narration-history projection only: explicit
-narration-safe event types may pass; internal, evidence-trace, unknown, and
-future event types must remain excluded. No implementation has begun, save
-version remains `1`, and official-environment manifest validation is pending
-because `./.venv/Scripts/python.exe` is denied by the current execution context.
+The approved package remains active on feature/deterministic-evidence-discovery.
+Sprint 10.25 now projects only three explicit narration-safe history types:
+player conversation, player movement, and time advancement. Internal,
+evidence-trace, unknown, and future event types are excluded by default.
+Focused narration-context, history-context, and evidence-trace regressions
+passed through the official project environment. Save version remains 1;
+Sprint 10.26 is not yet staged.

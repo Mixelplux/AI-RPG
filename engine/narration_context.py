@@ -21,6 +21,11 @@ NARRATION_CONTEXT_ATMOSPHERE_EXAMPLE = (
     "but may not mention the player's gloves unless gloves are present in "
     "player state or context."
 )
+NARRATION_SAFE_HISTORY_EVENT_TYPES = frozenset({
+    "player_conversation",
+    "player_movement",
+    "time_advanced",
+})
 
 
 def build_narration_context_packet(
@@ -37,10 +42,7 @@ def build_narration_context_packet(
     history_context["history_entries"] = [
         entry
         for entry in history_context["history_entries"]
-        if entry.get("event_type") not in {
-            "pressure_changed", "actor_moved", "unresolved_thread_opened",
-            "actor_knowledge_added", "evidence_trace_added",
-        }
+        if entry.get("event_type") in NARRATION_SAFE_HISTORY_EVENT_TYPES
     ]
     return {
         "schema": NARRATION_CONTEXT_SCHEMA,

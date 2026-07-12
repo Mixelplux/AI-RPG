@@ -7,6 +7,8 @@ from engine.narration_context import (
     NARRATION_CONTEXT_DRIFT_GUARDRAIL,
     NARRATION_CONTEXT_SCHEMA,
     NARRATION_CONTEXT_VERSION,
+    NARRATION_SAFE_HISTORY_EVENT_TYPES,
+    build_narration_context_packet,
 )
 from engine.save_system import load_game, save_game
 from play_game import parse_narration_context_command
@@ -110,6 +112,38 @@ def main():
         for entry in excluded_context["history_context"]["history_entries"]
     )
     full_history = engine.get_history()
+
+    assert NARRATION_SAFE_HISTORY_EVENT_TYPES == frozenset({
+        "player_conversation",
+        "player_movement",
+        "time_advanced",
+    })
+    projection_world_state = engine.get_world_state()
+    projection_world_state["history"] = [
+        {"history_id": "history_1", "event_type": "player_conversation"},
+        {"history_id": "history_2", "event_type": "player_movement"},
+        {"history_id": "history_3", "event_type": "time_advanced"},
+        {"history_id": "history_4", "event_type": "pressure_changed"},
+        {"history_id": "history_5", "event_type": "actor_moved"},
+        {"history_id": "history_6", "event_type": "unresolved_thread_opened"},
+        {"history_id": "history_7", "event_type": "actor_knowledge_added"},
+        {"history_id": "history_8", "event_type": "evidence_trace_added"},
+        {"history_id": "history_9", "event_type": "future_event_type"},
+    ]
+    projected_context = build_narration_context_packet(
+        projection_world_state,
+        engine.get_scene_snapshot(),
+        "look",
+        history_count=20,
+    )
+    assert [
+        entry["event_type"]
+        for entry in projected_context["history_context"]["history_entries"]
+    ] == [
+        "player_conversation",
+        "player_movement",
+        "time_advanced",
+    ]
 
     try:
         engine.get_narration_context("listen", history_count=-1)

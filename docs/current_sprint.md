@@ -2,51 +2,41 @@
 
 ## Sprint 10.25 — Fail-Closed Narration-History Projection
 
-Status: Staged.
+Status: Complete.
 
 ## Goal
 
-Replace the manually maintained internal-event exclusion approach with an
-explicit allow-list of narration-safe history event types, preserving the
-existing public narration contract.
+Replace the manually maintained internal-event exclusion approach with an explicit allow-list of narration-safe history event types, preserving the existing public narration contract.
 
 ## Expected Files
 
-- `engine/narration_context.py`
-- `test_narration_context.py`
-- `docs/current_capability_package.md`
-- `docs/current_sprint.md`
-- `docs/current_sprint.yaml`
-- `docs/current_sprint.json`
-- `docs/next_chat_handoff.md`
-- `docs/sprint_log.md`
+- engine/narration_context.py
+- test_narration_context.py
+- docs/current_capability_package.md
+- docs/current_sprint.md
+- docs/current_sprint.yaml
+- docs/current_sprint.json
+- docs/next_chat_handoff.md
+- docs/sprint_log.md
 
 ## Acceptance Criteria
 
-- History event types are excluded from narration by default; only explicitly
-  approved narration-safe types enter narration history.
-- Current intended narration behavior remains unchanged, while evidence-trace
-  and other internal lifecycle event families remain excluded.
+- History event types are excluded from narration by default; only explicitly approved narration-safe types enter narration history.
+- Current intended narration behavior remains unchanged, while evidence-trace and other internal lifecycle event families remain excluded.
 - Unknown and future history event types remain excluded from narration.
-- History persistence is unchanged; narration request, prompt, output, and
-  preview packet shapes remain unchanged unless strictly necessary to preserve
-  the existing public contract.
+- History persistence and existing narration packet shapes remain unchanged.
 - No evidence discovery behavior or save-version change is introduced.
-- Focused regressions cover allowed, internal lifecycle, and unknown event
-  types.
+- Focused regressions cover allowed, internal lifecycle, and unknown event types.
 
 ## Verification
 
-- `.\\.venv\\Scripts\\python.exe test_narration_context.py`
-- `.\\.venv\\Scripts\\python.exe test_history_context.py`
-- `.\\.venv\\Scripts\\python.exe test_evidence_traces.py`
-- Official-environment JSON/YAML/Markdown parse and deep comparison.
-- `git diff --check`
+- Official focused narration-context, history-context, and evidence-trace regressions passed.
+- Canonical manifests parse and deeply agree; git diff --check passed.
 
 ## Canonical Manifest
 
 <!-- CANONICAL-MANIFEST-START -->
 ```json
-{"schema_version":"1.0.0","document_type":"current_sprint","sprint_count":1,"project":{"name":"AI Narrative RPG Engine","principles":["provider-neutral","deterministic-core","simulation-owned-truth"]},"sprint":{"id":"10.25","title":"Fail-Closed Narration-History Projection","type":"bounded-feature","mode":"capability-package-internal","status":"staged","goal":"Replace the manually maintained internal-event exclusion approach with an explicit allow-list of narration-safe history event types while preserving the existing public narration contract.","platform":{"official_interpreter":".\\.venv\\Scripts\\python.exe"},"expected_files":{"likely_modified":["engine/narration_context.py","test_narration_context.py","docs/current_capability_package.md","docs/current_sprint.md","docs/current_sprint.yaml","docs/current_sprint.json","docs/next_chat_handoff.md","docs/sprint_log.md"],"likely_created":[]},"acceptance_criteria":["History event types are excluded from narration by default; only explicitly approved narration-safe types enter narration history.","Current intended narration behavior remains unchanged, while evidence-trace and other internal lifecycle event families remain excluded.","Unknown and future history event types remain excluded from narration.","History persistence is unchanged; narration request, prompt, output, and preview packet shapes remain unchanged unless strictly necessary to preserve the existing public contract.","No evidence discovery behavior or save-version change is introduced.","Focused regressions cover allowed, internal lifecycle, and unknown history event types."],"verification":{"focused_commands":[".\\.venv\\Scripts\\python.exe test_narration_context.py"],"required_regressions":[".\\.venv\\Scripts\\python.exe test_history_context.py",".\\.venv\\Scripts\\python.exe test_evidence_traces.py"],"manifest_commands":["Official-environment JSON/YAML/Markdown parse and deep comparison","git diff --check"],"closeout_commands":["Focused narration-history regression and affected history/evidence regressions"]},"execution_phases":[{"id":"implementation"}],"governance":["Exactly one sprint is active.","Sprint 10.25 is the first internal milestone of Deterministic Local Investigation and Evidence Discovery.","Do not begin Sprint 10.26 until Sprint 10.25 is complete, verified, and checkpointed."],"closeout":{"allowed_terminal_statuses":["complete"],"verification_result":"Pending official-environment validation and implementation verification.","next_sprint":null}}}
+{"schema_version":"1.0.0","document_type":"current_sprint","sprint_count":1,"project":{"name":"AI Narrative RPG Engine","principles":["provider-neutral","deterministic-core","simulation-owned-truth"]},"sprint":{"id":"10.25","title":"Fail-Closed Narration-History Projection","type":"bounded-feature","mode":"capability-package-internal","status":"complete","goal":"Replace the manually maintained internal-event exclusion approach with an explicit allow-list of narration-safe history event types while preserving the existing public narration contract.","platform":{"official_interpreter":".\\.venv\\Scripts\\python.exe"},"expected_files":{"likely_modified":["engine/narration_context.py","test_narration_context.py","docs/current_capability_package.md","docs/current_sprint.md","docs/current_sprint.yaml","docs/current_sprint.json","docs/next_chat_handoff.md","docs/sprint_log.md"],"likely_created":[]},"acceptance_criteria":["History event types are excluded from narration by default; only explicitly approved narration-safe types enter narration history.","Current intended narration behavior remains unchanged, while evidence-trace and other internal lifecycle event families remain excluded.","Unknown and future history event types remain excluded from narration.","History persistence is unchanged; narration request, prompt, output, and preview packet shapes remain unchanged unless strictly necessary to preserve the existing public contract.","No evidence discovery behavior or save-version change is introduced.","Focused regressions cover allowed, internal lifecycle, and unknown history event types."],"verification":{"focused_commands":[".\\.venv\\Scripts\\python.exe test_narration_context.py"],"required_regressions":[".\\.venv\\Scripts\\python.exe test_history_context.py",".\\.venv\\Scripts\\python.exe test_evidence_traces.py"],"manifest_commands":["Official-environment JSON/YAML/Markdown parse and deep comparison","git diff --check"],"closeout_commands":["Focused narration-history regression and affected history/evidence regressions"]},"execution_phases":[{"id":"implementation"}],"governance":["Exactly one sprint is active.","Sprint 10.25 is the first internal milestone of Deterministic Local Investigation and Evidence Discovery.","Sprint 10.26 remains unstaged."],"closeout":{"allowed_terminal_statuses":["complete"],"verification_result":"Focused narration-context, history-context, and evidence-trace regressions passed through the official interpreter; canonical manifests parse and deeply agree.","next_sprint":null}}}
 ```
 <!-- CANONICAL-MANIFEST-END -->

@@ -12,7 +12,7 @@ sprint:
   title: Fail-Closed Narration-History Projection
   type: bounded-feature
   mode: capability-package-internal
-  status: staged
+  status: complete
   goal: Replace the manually maintained internal-event exclusion approach with an explicit allow-list of narration-safe history event types while preserving the existing public narration contract.
   platform:
     official_interpreter: .\.venv\Scripts\python.exe
@@ -50,9 +50,9 @@ sprint:
   governance:
     - Exactly one sprint is active.
     - Sprint 10.25 is the first internal milestone of Deterministic Local Investigation and Evidence Discovery.
-    - Do not begin Sprint 10.26 until Sprint 10.25 is complete, verified, and checkpointed.
+    - Sprint 10.26 remains unstaged.
   closeout:
     allowed_terminal_statuses:
       - complete
-    verification_result: Pending official-environment validation and implementation verification.
+    verification_result: Focused narration-context, history-context, and evidence-trace regressions passed through the official interpreter; canonical manifests parse and deeply agree.
     next_sprint: null
