@@ -150,12 +150,40 @@ def validate_region(region: dict) -> None:
         validate_conversation_unresolved_thread(region)
     except ValueError as error:
         errors.append(str(error))
+    try:
+        validate_discovery_declarations(region)
+    except ValueError as error:
+        errors.append(str(error))
 
     if errors:
         raise ValueError(
             "Region validation failed:\n\n" +
             "\n".join(f"- {error}" for error in errors)
         )
+
+
+def validate_discovery_declarations(region: dict) -> None:
+    field = "discovery_declarations"
+    if field not in region:
+        return
+    declarations = region[field]
+    if not isinstance(declarations, list):
+        raise ValueError(f"{field} must be a list.")
+    location_ids = {item.get("location_id") for item in region.get("locations", [])}
+    seen = set()
+    for declaration in declarations:
+        if not isinstance(declaration, dict):
+            raise ValueError(f"{field} entries must be dictionaries.")
+        required = {"discovery_id", "trace_id", "location_id", "text"}
+        if set(declaration) != required:
+            raise ValueError(f"{field} fields are invalid.")
+        if any(not isinstance(declaration[name], str) or not declaration[name] for name in required):
+            raise ValueError(f"{field} values must be non-empty strings.")
+        if declaration["location_id"] not in location_ids:
+            raise ValueError(f"{field}.location_id is unknown.")
+        if declaration["discovery_id"] in seen:
+            raise ValueError(f"Duplicate discovery_id: {declaration['discovery_id']}.")
+        seen.add(declaration["discovery_id"])
 
 
 def validate_conversation_actor_relocation_effect(region: dict) -> None:

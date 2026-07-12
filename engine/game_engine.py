@@ -130,6 +130,30 @@ class GameEngine:
     def get_evidence_traces(self) -> list[Dict[str, str]]:
         return get_world_evidence_traces(self.world_state)
 
+    def get_player_discoveries(self) -> tuple[str, ...]:
+        return tuple(self.world_state["player_discoveries"])
+
+    def investigate(self) -> Dict[str, Any]:
+        candidate = copy_world_state(self.world_state)
+        location_id = get_player_location_id(candidate)
+        trace_ids = {trace["trace_id"] for trace in candidate["evidence_traces"]}
+        declaration = next((item for item in self.region.get("discovery_declarations", [])
+                            if item["location_id"] == location_id and item["trace_id"] in trace_ids
+                            and item["discovery_id"] not in candidate["player_discoveries"]), None)
+        result = {"changed": False, "discovery_id": None, "text": None, "history_id": None}
+        if declaration is None:
+            return result
+        candidate["player_discoveries"].append(declaration["discovery_id"])
+        candidate = add_history_entry(candidate, "player_discovery_added",
+            "Player discovered an authored clue.", location_id, deepcopy(candidate["time"]),
+            {"discovery_id": declaration["discovery_id"]})
+        validate_world_state(candidate, self.region)
+        scene = build_scene(self.region, candidate)
+        self.world_state = candidate
+        self.scene_snapshot = scene
+        return {"changed": True, "discovery_id": declaration["discovery_id"],
+                "text": declaration["text"], "history_id": candidate["history"][-1]["history_id"]}
+
     def create_evidence_trace(self, trace_id: str, evidence_id: str, location_id: str) -> Dict[str, Any]:
         candidate, result = self._prepare_evidence_trace_candidate(
             copy_world_state(self.world_state), trace_id, evidence_id, location_id
@@ -892,6 +916,9 @@ class GameEngine:
             interaction_result["time_advancement"] = self.advance_time(
                 duration_hours
             )
+            return deepcopy(interaction_result)
+        if interaction_result["intent"] == "investigation" and interaction_result["success"]:
+            interaction_result["investigation"] = self.investigate()
             return deepcopy(interaction_result)
 
         target_text = interaction_result["action"].get("target")

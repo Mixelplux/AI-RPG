@@ -70,6 +70,8 @@ def process_player_input(
             message="You wait for 1 hour.",
             action=action
         )
+    if intent == "investigation":
+        return build_interaction_result(success=True, intent=intent, message="You investigate the area.", action=action)
 
     if intent == "movement":
         return resolve_movement(action, scene_snapshot)
@@ -122,6 +124,8 @@ def classify_intent(player_input: str) -> str:
 
     if lowered == "wait":
         return "wait"
+    if lowered in {"investigate", "search for clues"}:
+        return "investigation"
 
     movement_words = ["go", "walk", "move", "travel", "enter", "leave"]
     look_words = ["look", "inspect", "examine", "search", "study"]
@@ -169,6 +173,8 @@ def build_action(player_input: str, intent: str) -> Dict[str, Any]:
             },
             "confidence": 1.0
         }
+    if intent == "investigation":
+        return {"type": "investigate", "target": None, "parameters": {}, "confidence": 1.0}
 
     if intent == "movement":
         return {

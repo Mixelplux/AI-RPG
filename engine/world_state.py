@@ -55,6 +55,7 @@ def create_initial_world_state(region: Dict[str, Any]) -> Dict[str, Any]:
         "open_threads": {},
         "actor_knowledge": build_initial_actor_knowledge(region),
         "evidence_traces": [],
+        "player_discoveries": [],
     }
 
 
@@ -90,6 +91,12 @@ def validate_world_state(
         raise ValueError("World State is missing actor_knowledge.")
     if "evidence_traces" not in world_state:
         raise ValueError("World State is missing evidence_traces.")
+    if "player_discoveries" not in world_state:
+        raise ValueError("World State is missing player_discoveries.")
+    discoveries = world_state["player_discoveries"]
+    if (not isinstance(discoveries, list) or any(not isinstance(item, str) or not item for item in discoveries)
+            or len(set(discoveries)) != len(discoveries)):
+        raise ValueError("World State player_discoveries must be unique non-empty strings.")
 
     validate_pressure_state(world_state["pressures"])
     validate_open_threads(world_state["open_threads"])
