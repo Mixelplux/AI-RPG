@@ -381,3 +381,14 @@
 - Derived one copy-safe cue from canonical applicability and current pressure level on perception reads.
 - Preserved Scene Snapshot, narration, persistence, save version 1, and raw pressure ownership boundaries.
 - Sprint 10.10 was not defined or started.
+
+# Sprint 10.10 - Deterministic Pressure Cue Narration Projection
+
+- Status: Complete.
+- Carried zero or one perception-owned authored pressure cue through narration context, request, and prompt packets.
+- Deterministically composed the exact cue into accepted preview display text at most once after source-result and candidate validation.
+- Excluded pressure-change history records from narration context so raw levels, scope internals, and causal identifiers do not enter narration.
+- Preserved empty-cue behavior, copy safety, determinism, failure atomicity, save version 1, and the fixed provider-neutral source.
+- ADR-042 plus ADR-029 through ADR-033 already establish the ownership and fail-closed boundaries; no new ADR was required.
+- Focused tests and all 18 repository tests passed through the official project interpreter.
+- Sprint 10.11 was not defined or started.

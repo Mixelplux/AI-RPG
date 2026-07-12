@@ -107,7 +107,11 @@ def main():
         history_count=2
     )
     assert narration_context["history_context"]["history_entries"] == (
-        engine.get_history()[-2:]
+        [
+            entry
+            for entry in engine.get_history()[-2:]
+            if entry["event_type"] != "pressure_changed"
+        ]
     )
 
     with TemporaryDirectory() as temp_dir:
@@ -154,7 +158,10 @@ def main():
 
     narration_preview = loaded_engine.get_narration_preview("look around")
     assert narration_preview["accepted"]
-    assert narration_preview["display_text"] == "The street remains quiet."
+    assert narration_preview["display_text"] == (
+        "The street remains quiet. "
+        "The cold has become noticeably more severe."
+    )
 
     loaded_engine.reset()
     assert loaded_engine.get_world_state()["history"] == []

@@ -34,6 +34,7 @@ REQUIRED_NARRATION_CONTEXT_KEYS = frozenset({
     "player",
     "scene_snapshot",
     "history_context",
+    "pressure_cue",
     "boundary",
 })
 
@@ -132,6 +133,15 @@ def _validate_narration_context_shape(narration_context: Any) -> None:
     if narration_context.get("version") != NARRATION_CONTEXT_VERSION:
         raise ValueError("Narration context version is not supported.")
 
+    extra_keys = set(narration_context) - REQUIRED_NARRATION_CONTEXT_KEYS
+    if extra_keys:
+        raise ValueError(
+            "Narration context contains unsupported fields: "
+            f"{', '.join(sorted(extra_keys))}."
+        )
+
+    _validate_pressure_cue(narration_context.get("pressure_cue"))
+
     if not isinstance(narration_context.get("history_context"), dict):
         raise ValueError("Narration context history context must be an object.")
 
@@ -145,4 +155,23 @@ def _validate_narration_context_shape(narration_context: Any) -> None:
     if "current_location_id" not in player:
         raise ValueError(
             "Narration context player is missing current_location_id."
+        )
+
+
+def _validate_pressure_cue(pressure_cue: Any) -> None:
+    if not isinstance(pressure_cue, dict):
+        raise ValueError("Narration context pressure cue must be an object.")
+    if not pressure_cue:
+        return
+    if set(pressure_cue) != {"cue_id", "pressure_id", "text"}:
+        raise ValueError(
+            "Narration context pressure cue must contain exactly cue_id, "
+            "pressure_id, and text."
+        )
+    if any(
+        not isinstance(pressure_cue[field], str) or not pressure_cue[field]
+        for field in ("cue_id", "pressure_id", "text")
+    ):
+        raise ValueError(
+            "Narration context pressure cue fields must be non-empty strings."
         )

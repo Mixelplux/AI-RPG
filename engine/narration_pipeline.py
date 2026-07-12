@@ -222,6 +222,18 @@ def _build_preview_from_candidate(
             source_result=source_result,
         )
 
+    pressure_cue = narration_context["pressure_cue"]
+    if pressure_cue:
+        cue_text = pressure_cue["text"]
+        base_text = validated_output["narration_text"].replace(cue_text, "")
+        base_text = base_text.strip()
+        composed_text = f"{base_text} {cue_text}" if base_text else cue_text
+        validated_output = validate_narration_output_packet({
+            "schema": validated_output["schema"],
+            "version": validated_output["version"],
+            "narration_text": composed_text,
+        })
+
     return {
         "schema": NARRATION_PIPELINE_SCHEMA,
         "version": NARRATION_PIPELINE_VERSION,

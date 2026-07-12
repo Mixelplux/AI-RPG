@@ -1,6 +1,6 @@
 # Architecture
 
-Version: 0.10.6
+Version: 0.10.10
 
 ## Current Engine Pipeline
 
@@ -336,7 +336,9 @@ Failed source-result validation uses a bounded `source_result_validation` stage,
 
 ## Authored Pressure Observation
 
-Sprint 10.9 adds one derived, non-persistent observation cue. Canonical applicability is necessary but not sufficient: one validated immutable Region Pack declaration names the pressure, minimum level, and authored text. `GameEngine` derives the cue on perception reads and passes only cue identity, pressure identity, and text to perception. Raw pressure state never enters the Scene Snapshot or perception, and narration is unchanged.
+Sprint 10.9 adds one derived, non-persistent observation cue. Canonical applicability is necessary but not sufficient: one validated immutable Region Pack declaration names the pressure, minimum level, and authored text. `GameEngine` derives the cue on perception reads and passes only cue identity, pressure identity, and text to perception. Raw pressure state never enters the Scene Snapshot or perception.
+
+Sprint 10.10 carries that already-derived zero-or-one cue through the existing deterministic narration context, request, and prompt boundaries. Perception remains the only authority for applicability, threshold, and perceptibility. Narration packets receive only cue identity, pressure identity, and exact authored text; pressure-change history records are excluded from narration context so raw levels, scope internals, and causal identifiers do not leak through bounded history. After the existing source-result and candidate-output validation succeeds, the engine deterministically composes the exact cue into validated display text exactly once. Empty-cue behavior is unchanged, failure output remains empty, and no narration artifact is persisted.
 
 Sprint 10.7 completes the Sprint 10.5 through 10.7 pressure capability cluster: one declared conversation consequence, canonical read-only pressure applicability, and one declared elapsed-time consequence. One optional immutable Region Pack declaration, `elapsed_time_pressure_effect`, may target one seeded pressure and one exact level. `GameEngine.advance_time` evaluates it only when accepted advancement satisfies `previous_elapsed_hours < trigger_elapsed_hours <= new_elapsed_hours`. Time calculation remains pure in `timekeeper`; declaration validation belongs to `region_validator`; pressure preparation remains in `pressure_state`.
 

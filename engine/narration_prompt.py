@@ -45,6 +45,7 @@ REQUIRED_PROMPT_INPUT_KEYS = frozenset({
     "player",
     "scene_snapshot",
     "history_context",
+    "pressure_cue",
     "boundary",
     "constraints",
 })
@@ -79,6 +80,7 @@ def build_narration_prompt_packet(
             "player": deepcopy(context["player"]),
             "scene_snapshot": deepcopy(context["scene_snapshot"]),
             "history_context": deepcopy(context["history_context"]),
+            "pressure_cue": deepcopy(context["pressure_cue"]),
             "boundary": deepcopy(context["boundary"]),
             "constraints": deepcopy(request_copy["constraints"]),
         },
@@ -163,6 +165,26 @@ def _validate_prompt_input_shape(deterministic_input: Any) -> None:
             "Narration prompt deterministic input is missing required fields: "
             f"{', '.join(sorted(missing_keys))}."
         )
+
+    extra_keys = set(deterministic_input) - REQUIRED_PROMPT_INPUT_KEYS
+    if extra_keys:
+        raise ValueError(
+            "Narration prompt deterministic input contains unsupported fields: "
+            f"{', '.join(sorted(extra_keys))}."
+        )
+
+    pressure_cue = deterministic_input.get("pressure_cue")
+    if not isinstance(pressure_cue, dict):
+        raise ValueError("Narration prompt pressure cue must be an object.")
+    if pressure_cue and (
+        set(pressure_cue) != {"cue_id", "pressure_id", "text"}
+        or any(
+            not isinstance(pressure_cue.get(field), str)
+            or not pressure_cue[field]
+            for field in ("cue_id", "pressure_id", "text")
+        )
+    ):
+        raise ValueError("Narration prompt pressure cue is malformed.")
 
     if not isinstance(deterministic_input.get("current_time"), dict):
         raise ValueError("Narration prompt current time must be an object.")

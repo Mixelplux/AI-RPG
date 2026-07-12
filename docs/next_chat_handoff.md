@@ -1,3 +1,3 @@
-# Next Chat Handoff: Sprint 10.9 Complete
+# Next Chat Handoff: Sprint 10.10 Complete
 
-Sprint 10.9 added one derived authored pressure observation cue to perception and accepted ADR-042. Raw pressure state remains simulation-owned; scene, narration, persistence, and save version remain unchanged. `next_sprint` is null and Sprint 10.10 is undefined.
+Sprint 10.10 projects the one perception-owned authored pressure cue through the deterministic narration pipeline and composes its exact text into accepted player-facing preview output once. Raw pressure records, numeric levels, scope internals, and causal history identifiers remain outside narration. No provider or persistence change was added, no new ADR was needed, `next_sprint` is null, and Sprint 10.11 is undefined.

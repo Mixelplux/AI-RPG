@@ -27,8 +27,18 @@ def build_narration_context_packet(
     world_state: Dict[str, Any],
     scene_snapshot: Dict[str, Any],
     player_input: str,
-    history_count: int | None = None
+    history_count: int | None = None,
+    pressure_cue: Dict[str, str] | None = None,
 ) -> Dict[str, Any]:
+    history_context = build_history_context_packet(
+        world_state,
+        count=history_count,
+    )
+    history_context["history_entries"] = [
+        entry
+        for entry in history_context["history_entries"]
+        if entry.get("event_type") != "pressure_changed"
+    ]
     return {
         "schema": NARRATION_CONTEXT_SCHEMA,
         "version": NARRATION_CONTEXT_VERSION,
@@ -38,10 +48,8 @@ def build_narration_context_packet(
             "current_location_id": get_player_location_id(world_state)
         },
         "scene_snapshot": deepcopy(scene_snapshot),
-        "history_context": build_history_context_packet(
-            world_state,
-            count=history_count
-        ),
+        "history_context": history_context,
+        "pressure_cue": deepcopy(pressure_cue or {}),
         "boundary": {
             "type": "read_only_narration_input",
             "rule": NARRATION_CONTEXT_BOUNDARY_RULE,

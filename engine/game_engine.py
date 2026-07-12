@@ -283,11 +283,14 @@ class GameEngine:
         player_input: str,
         history_count: int | None = None
     ) -> Dict[str, Any]:
+        perception = self.get_player_perception()
+        pressure_cues = perception["pressure_cues"]
         return build_narration_context_packet(
             self.world_state,
             self.scene_snapshot,
             player_input,
-            history_count=history_count
+            history_count=history_count,
+            pressure_cue=pressure_cues[0] if pressure_cues else None,
         )
 
     def get_narration_output_contract(self) -> Dict[str, Any]:

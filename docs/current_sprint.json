@@ -1,15 +1,147 @@
 {
-  "schema_version":"1.0.0","document_type":"current_sprint","sprint_count":1,
-  "project":{"name":"AI Narrative RPG Engine","principles":["provider-neutral","deterministic-core","simulation-owned-truth"]},
-  "sprint":{"id":"10.9","title":"One Declared Pressure Observation Cue","phase":"Phase 2B - Reactive World State Foundations","type":"bounded-feature","mode":"single-sprint","status":"complete",
-  "goal":"Derive one authored player-perception cue when one applicable pressure meets its declared minimum level.",
-  "source_state":{"branch":"main","commit":"a3717f894227a2a59f14e132641d13293265105f","predecessor_sprint":"10.8","predecessor_status":"complete"},
-  "platform":{"operating_system":"Windows","shell":"PowerShell","official_interpreter":".\\.venv\\Scripts\\python.exe"},
-  "architectural_decision":{"adr":"ADR-042","title":"Pressure Applicability Does Not Grant Perceptibility; Authored Observation Policy Does","status_during_sprint":"accepted"},
-  "acceptance_criteria":["One strict optional Region Pack declaration.","Cue requires canonical applicability and level at or above threshold.","Perception exposes cue identity, pressure identity, and authored text only.","Observation is deterministic, derived, read-only, copy-safe, and non-persistent.","Scene and narration boundaries remain unchanged.","Save version remains 1."],
-  "expected_files":{"likely_modified":["data/regions/bryn_shander.json","engine/region_validator.py","engine/pressure_observation.py","engine/perception_builder.py","engine/game_engine.py","test_pressure_observation.py","docs/architecture.md","docs/decisions.md","docs/roadmap.md","docs/sprint_log.md","docs/current_sprint.md","docs/current_sprint.yaml","docs/current_sprint.json","docs/next_chat_handoff.md"]},
-  "non_goals":["multiple cues","raw pressure display","scene pressure projection","narration integration","persistence","knowledge systems","recurring drift","generic visibility or effect framework","Sprint 10.10 planning"],
-  "verification":{"focused_commands":[".\\.venv\\Scripts\\python.exe test_pressure_observation.py"],"environment_commands":["powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tools\\preflight.ps1 -RepoRoot .","powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tools\\validate_hardening_package.ps1 -PackageRoot ."],"manifest_commands":["JSON/YAML/Markdown deep comparison","git diff --check"]},
-  "execution_phases":[{"id":"setup","goal":"Stage and validate Sprint 10.9."},{"id":"implementation","goal":"Implement the bounded cue."},{"id":"verification","goal":"Run focused and required regressions."},{"id":"closeout","goal":"Close without defining Sprint 10.10."}],
-  "governance":["Exactly one sprint is active.","Do not substitute bundled, system, Windows Store, or alternate Python.","Do not define Sprint 10.10.","Do not commit."],
-  "closeout":{"allowed_terminal_statuses":["complete","blocked"],"actual_files_changed":["data/regions/bryn_shander.json","engine/region_validator.py","engine/pressure_observation.py","engine/perception_builder.py","engine/game_engine.py","test_pressure_observation.py","test_pressure_state.py","docs/architecture.md","docs/decisions.md","docs/roadmap.md","docs/sprint_log.md","docs/current_sprint.md","docs/current_sprint.yaml","docs/current_sprint.json","docs/next_chat_handoff.md"],"verification_result":"Focused and all 17 repository tests passed through the official .venv; final workflow checks completed.","non_goals_preserved":"No multiple cues, raw pressure display, scene or narration projection, persistence, knowledge, recurring drift, generic framework, or Sprint 10.10 planning.","next_sprint":null}}}
+  "schema_version": "1.0.0",
+  "document_type": "current_sprint",
+  "sprint_count": 1,
+  "project": {
+    "name": "AI Narrative RPG Engine",
+    "principles": [
+      "provider-neutral",
+      "deterministic-core",
+      "simulation-owned-truth"
+    ]
+  },
+  "sprint": {
+    "id": "10.10",
+    "title": "Deterministic Pressure Cue Narration Projection",
+    "phase": "Phase 2B - Reactive World State Foundations",
+    "type": "bounded-feature",
+    "mode": "single-sprint",
+    "status": "complete",
+    "goal": "Carry the one validated pressure observation cue through the deterministic narration path into player-facing output.",
+    "source_state": {
+      "branch": "main",
+      "commit": "e52ce2d13432ab8bf27c410abe9bf9c773705d88",
+      "predecessor_sprint": "10.9",
+      "predecessor_status": "complete"
+    },
+    "platform": {
+      "operating_system": "Windows",
+      "shell": "PowerShell",
+      "official_interpreter": ".\\.venv\\Scripts\\python.exe"
+    },
+    "architectural_decision": {
+      "adr": "ADR-042 and existing narration ADRs",
+      "title": "Perception-owned pressure perceptibility with deterministic narration projection",
+      "status_during_sprint": "ADR-042 and ADR-029 through ADR-033 sufficient; no new ADR required"
+    },
+    "acceptance_criteria": [
+      "Narration carries zero or one already-derived pressure cue through deterministic context, request, and prompt boundaries.",
+      "Accepted player-facing narration includes the exact authored cue text at most once.",
+      "Narration never receives raw pressure records or numeric pressure levels and does not evaluate applicability or thresholds.",
+      "No cue preserves existing narration behavior.",
+      "Packets and outputs are deterministic, validated, copy-safe, and non-persistent.",
+      "Narration failures do not mutate world state, history, elapsed time, pressure state, scene identity, or Region Pack data.",
+      "Save version remains 1."
+    ],
+    "expected_files": {
+      "likely_modified": [
+        "engine/narration_context.py",
+        "engine/narration_request.py",
+        "engine/narration_prompt.py",
+        "engine/narration_pipeline.py",
+        "engine/game_engine.py",
+        "test_pressure_narration.py",
+        "test_narration_context.py",
+        "test_narration_request.py",
+        "test_narration_prompt.py",
+        "test_narration_pipeline.py",
+        "docs/architecture.md",
+        "docs/roadmap.md",
+        "docs/sprint_log.md",
+        "docs/current_sprint.md",
+        "docs/current_sprint.yaml",
+        "docs/current_sprint.json",
+        "docs/next_chat_handoff.md"
+      ]
+    },
+    "non_goals": [
+      "multiple cues",
+      "raw pressure or level narration",
+      "narration-owned applicability or threshold decisions",
+      "persistent cue state or save-version changes",
+      "scene pressure projection",
+      "live AI narration",
+      "generic environmental facts",
+      "Sprint 10.11 planning"
+    ],
+    "verification": {
+      "focused_commands": [
+        ".\\.venv\\Scripts\\python.exe test_pressure_narration.py",
+        ".\\.venv\\Scripts\\python.exe test_pressure_observation.py",
+        ".\\.venv\\Scripts\\python.exe test_narration_context.py",
+        ".\\.venv\\Scripts\\python.exe test_narration_request.py",
+        ".\\.venv\\Scripts\\python.exe test_narration_prompt.py",
+        ".\\.venv\\Scripts\\python.exe test_narration_source.py",
+        ".\\.venv\\Scripts\\python.exe test_narration_pipeline.py"
+      ],
+      "environment_commands": [
+        "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tools\\preflight.ps1 -RepoRoot .",
+        "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tools\\validate_hardening_package.ps1 -PackageRoot ."
+      ],
+      "manifest_commands": [
+        "JSON/YAML/Markdown deep comparison",
+        "git diff --check"
+      ]
+    },
+    "execution_phases": [
+      {
+        "id": "setup",
+        "goal": "Stage and validate Sprint 10.10."
+      },
+      {
+        "id": "implementation",
+        "goal": "Project the bounded cue through deterministic narration."
+      },
+      {
+        "id": "verification",
+        "goal": "Run focused and official regressions."
+      },
+      {
+        "id": "closeout",
+        "goal": "Close without defining Sprint 10.11."
+      }
+    ],
+    "governance": [
+      "Exactly one sprint is active.",
+      "Perception remains pressure-cue authority.",
+      "Do not substitute bundled, system, Windows Store, or alternate Python.",
+      "Do not define Sprint 10.11.",
+      "Do not commit."
+    ],
+    "closeout": {
+      "allowed_terminal_statuses": [
+        "complete",
+        "blocked"
+      ],
+      "actual_files_changed": [
+        "engine/narration_context.py",
+        "engine/narration_request.py",
+        "engine/narration_prompt.py",
+        "engine/narration_pipeline.py",
+        "engine/game_engine.py",
+        "test_pressure_narration.py",
+        "test_interaction_history.py",
+        "docs/architecture.md",
+        "docs/roadmap.md",
+        "docs/sprint_log.md",
+        "docs/current_sprint.md",
+        "docs/current_sprint.yaml",
+        "docs/current_sprint.json",
+        "docs/next_chat_handoff.md"
+      ],
+      "verification_result": "Focused narration and pressure tests passed; all 18 repository tests passed through the official .venv; final workflow checks completed.",
+      "non_goals_preserved": "No multiple cues, raw pressure or level narration, narration-owned applicability, persistence, scene pressure projection, live AI, generic environmental facts, or Sprint 10.11 planning.",
+      "next_sprint": null
+    }
+  }
+}
