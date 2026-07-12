@@ -588,3 +588,11 @@ One unresolved situation may be declared immutably in a Region Pack and triggere
 The matching conversation source, one open-thread record, and one causally linked `unresolved_thread_opened` history entry are prepared in the existing candidate transition and committed only after completed-state validation and scene construction succeed. A thread identifier is unique in the runtime dictionary, so repeated trigger conversations do not create a second instance or a second opening event. Version-1 saves missing the field normalize to an empty dictionary only on load.
 
 Perception derives authored evidence text for an open declared thread at an applicable location. It does not create a quest log, objective, marker, player-knowledge record, resolution mechanism, generic trigger engine, or ongoing-condition framework.
+
+# ADR-045 - Actor Knowledge Seeds Initialize Sparse Persistent Membership
+
+Status: Accepted.
+
+Immutable Region Pack `knowledge` arrays belong to authored static actors and serve only as validated new-game seeds. `world_state.actor_knowledge` owns current sparse membership keyed by the same stable static `entity_id`; absent keys mean no current membership. The runtime structure stores only unique non-empty knowledge identifiers and does not add truth, certainty, provenance, timestamps, categories, beliefs, or behavior semantics.
+
+New games deep-copy non-empty seeds. Version-1 saves missing the field normalize to empty membership only while loading, and loading never reseeds from changed Region Pack content. Region-aware validation excludes unknown, spawned, and ephemeral identities. `GameEngine.get_actor_knowledge(actor_id)` is a copy-safe inspection boundary only; no scene, perception, narration, prompt, target-resolution, dialogue, acquisition, loss, propagation, or autonomous behavior is authorized.

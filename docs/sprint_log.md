@@ -1,5 +1,15 @@
 # Sprint Log
 
+## Sprint 10.16 Closeout
+
+- Status: Complete.
+- Capability delivered: sparse persistent current knowledge membership for stable static actors, initialized by deep-copying validated immutable Region Pack `knowledge` arrays for new games.
+- Ownership and compatibility: `world_state.actor_knowledge` stores only actor-to-identifier membership. Version-1 saves missing it normalize to empty membership during loading and do not receive new authored seeds.
+- Validation and inspection: malformed membership, duplicates, empty values, unknown actors, and spawned or ephemeral identities fail closed. `GameEngine.get_actor_knowledge(...)` returns an immutable tuple.
+- Boundary: no knowledge mutation, history, player-facing command, scene/perception/narration/prompt projection, dialogue effect, target-resolution change, or autonomous behavior was added.
+- Verification: focused actor-knowledge coverage and all 23 root test scripts passed through the official interpreter; save/load, malformed live-load atomicity, and boundary checks passed. ADR-045 records the ownership decision.
+- Governance: no gameplay playtest requested, no commit created, and Sprint 10.17 was not defined or started.
+
 ## Sprint 10.12 Closeout
 
 - Status: Complete.

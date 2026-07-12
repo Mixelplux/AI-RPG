@@ -619,7 +619,13 @@ Working rule:
 
 ---
 
-## 20. Open Questions
+## 20. Implemented Knowledge Membership Baseline
+
+Static actors now have persistent current knowledge membership in World State, seeded once from immutable authored identifiers when a new game starts. This establishes ownership only: it does not make knowledge objective truth, active belief, dialogue content, perception, narration context, or automatic behavior. Acquisition, loss, propagation, and interpretation remain future work.
+
+---
+
+## 21. Open Questions
 
 The following questions are intentionally unresolved:
 

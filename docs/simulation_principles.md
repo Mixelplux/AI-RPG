@@ -78,6 +78,10 @@ Knowledge should spread through plausible channels such as perception, reports, 
 
 Use this principle when discussing witnesses, secrets, rumors, false belief, investigation, NPC dialogue, faction response, and delayed consequence.
 
+### Implementation Note
+
+Sprint 10.16 establishes persistent membership of authored knowledge identifiers for stable static actors. It does not yet implement any channel that changes or projects that membership.
+
 ---
 
 ## Evidence Before Consequence

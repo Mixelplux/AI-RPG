@@ -5,6 +5,10 @@ from engine.pressure_state import (
     build_initial_pressure_state,
     validate_pressure_state,
 )
+from engine.actor_knowledge import (
+    build_initial_actor_knowledge,
+    validate_actor_knowledge,
+)
 from engine.unresolved_threads import validate_open_threads, validate_open_thread_integrity
 
 
@@ -48,6 +52,7 @@ def create_initial_world_state(region: Dict[str, Any]) -> Dict[str, Any]:
         "pressures": build_initial_pressure_state(region),
         "actor_location_overrides": {},
         "open_threads": {},
+        "actor_knowledge": build_initial_actor_knowledge(region),
     }
 
 
@@ -79,9 +84,12 @@ def validate_world_state(
 
     if "open_threads" not in world_state:
         raise ValueError("World State is missing open_threads.")
+    if "actor_knowledge" not in world_state:
+        raise ValueError("World State is missing actor_knowledge.")
 
     validate_pressure_state(world_state["pressures"])
     validate_open_threads(world_state["open_threads"])
+    validate_actor_knowledge(world_state["actor_knowledge"], region)
 
     overrides = world_state.get("actor_location_overrides", {})
     if not isinstance(overrides, dict):

@@ -1,3 +1,3 @@
-# Next Chat Handoff: Sprint 10.15 Complete
+# Next Chat Handoff: Sprint 10.16 Complete
 
-Sprint 10.15 is complete. It rejects inconsistent persisted thread identity and causal history before runtime replacement, while retaining lifecycle records for engine history and excluding them only from narration context. Save version remains 1; no new ADR or gameplay playtest was needed. Sprint 10.16 remains undefined and unstarted.
+Sprint 10.16 is complete. World State now owns sparse current membership for stable static actor knowledge, seeded only for new games from immutable validated Region Pack arrays. Version-1 legacy saves missing the field load with empty membership and are never reseeded. No knowledge mutation or player-facing projection exists; ADR-045 records the boundary. Sprint 10.17 remains undefined and unstarted.

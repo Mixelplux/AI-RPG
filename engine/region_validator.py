@@ -91,6 +91,15 @@ def validate_region(region: dict) -> None:
             errors.append(
                 f"Entity '{entity_id}' has invalid location '{entity_location}'"
             )
+        knowledge = entity.get("knowledge")
+        if not isinstance(knowledge, list):
+            errors.append(f"Static entity '{entity_id}' knowledge must be a list")
+        elif any(not isinstance(item, str) or not item for item in knowledge):
+            errors.append(
+                f"Static entity '{entity_id}' knowledge must contain non-empty strings"
+            )
+        elif len(set(knowledge)) != len(knowledge):
+            errors.append(f"Static entity '{entity_id}' knowledge must be unique")
     duplicate_static_ids = sorted(
         entity_id for entity_id, count in Counter(static_ids).items() if count > 1
     )

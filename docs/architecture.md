@@ -57,6 +57,9 @@ Currently owned by `world_state`:
 - Current time
 - World history entries
 - Persistent scoped pressures
+- Runtime actor-location overrides
+- Persistent open unresolved threads
+- Persistent actor knowledge membership for stable static actors
 
 Region Packs provide static world data and initial values only.
 
@@ -190,6 +193,8 @@ Ideas that are important but not ready for implementation belong in `docs/future
 Only `world_state` is persisted. Region Packs remain immutable assets. Scene Snapshots, Perception, and Narration are regenerated after loading.
 
 Sprint 10.15 hardens the existing unresolved-thread boundary without changing its ownership or save version. Region-aware World State validation now requires each persisted open thread to match the singular active declaration, a prior `player_conversation` targeting that declaration's trigger actor, and exactly one later `unresolved_thread_opened` record with matching identity, `open` status, and source history identifier. Malformed state fails before engine replacement or candidate commit. Lifecycle records remain durable and engine-queryable, but the narration-context projection excludes them alongside existing internal pressure and actor consequence records; location-aware perception remains unchanged.
+
+Sprint 10.16 establishes `world_state.actor_knowledge` as sparse current membership keyed only by stable static actor identity. Immutable Region Pack `knowledge` arrays are validated new-game seeds and are deep-copied only during new-game construction. Version-1 saves missing the field normalize to empty membership during loading and never reseed from Region Pack content. Region-aware validation rejects malformed membership, unknown or unsupported actor identities, duplicate identifiers, and nested metadata. `GameEngine.get_actor_knowledge(actor_id)` returns an immutable tuple without adding knowledge to scenes, perception, narration, prompts, targeting, dialogue, or behavior.
 
 Sprint 10.14 adds `world_state.open_threads`, a sparse dictionary keyed by immutable Region Pack thread identity. Each record contains exactly its identity, the sole supported status `open`, and the stable `created_by_history_id` for the accepted conversation that opened it. The reference must resolve to durable history. During loading only, version-1 saves missing `open_threads` normalize to an empty dictionary; authored declarations are not replayed. Region Pack content owns each thread's description, trigger actor, perception locations, and evidence text.
 

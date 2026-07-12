@@ -50,6 +50,7 @@ from engine.world_state import (
     copy_world_state,
     validate_world_state
 )
+from engine.actor_knowledge import get_actor_knowledge as get_world_actor_knowledge
 
 
 class GameEngine:
@@ -110,6 +111,10 @@ class GameEngine:
 
     def get_open_threads(self) -> dict[str, dict[str, str]]:
         return get_world_open_threads(self.world_state)
+
+    def get_actor_knowledge(self, actor_id: str) -> tuple[str, ...]:
+        get_static_actor(self.region, actor_id)
+        return get_world_actor_knowledge(self.world_state["actor_knowledge"], actor_id)
 
     def set_actor_location(
         self, entity_id: str, destination_location_id: str
