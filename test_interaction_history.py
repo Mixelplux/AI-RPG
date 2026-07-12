@@ -118,7 +118,7 @@ def main():
         [
             entry
             for entry in engine.get_history()[-2:]
-            if entry["event_type"] != "pressure_changed"
+            if entry["event_type"] not in {"pressure_changed", "actor_moved"}
         ]
     )
 

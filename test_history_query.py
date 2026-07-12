@@ -35,7 +35,7 @@ def main():
     assert movement_north_result["success"]
 
     full_history = engine.get_history()
-    assert len(full_history) == 15
+    assert len(full_history) == 16
     history_ids = [entry.get("history_id") for entry in full_history]
     assert history_ids == [
         f"history_{index:06d}"
@@ -143,7 +143,7 @@ def main():
     post_load_history = loaded_engine.get_history()
     post_load_history_id = post_load_history[-1]["history_id"]
     assert post_load_history_id not in loaded_history_ids
-    assert post_load_history_id == "history_000016"
+    assert post_load_history_id == "history_000017"
 
     print("History query test passed.")
 

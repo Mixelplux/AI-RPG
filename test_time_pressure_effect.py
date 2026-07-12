@@ -60,9 +60,10 @@ def main():
     }
     history = engine.get_history()
     assert [entry["event_type"] for entry in history] == [
-        "time_advanced", "pressure_changed"
+        "time_advanced", "pressure_changed", "actor_moved"
     ]
     assert history[1]["source_history_id"] == history[0]["history_id"]
+    assert history[2]["source_history_id"] == history[0]["history_id"]
     assert engine.scene_snapshot is not initial_scene
     assert engine.advance_time(1)["pressure_consequence"] is None
 
@@ -76,7 +77,9 @@ def main():
     assert not noop_result["changed"]
     assert noop_result["history_id"] is None
     assert noop_result["source_history_id"] == "history_000002"
-    assert [entry["event_type"] for entry in noop.get_history()][-1] == "time_advanced"
+    assert [entry["event_type"] for entry in noop.get_history()] == [
+        "pressure_changed", "time_advanced", "actor_moved"
+    ]
 
     direct = GameEngine(REGION_PATH)
     waited = GameEngine(REGION_PATH)

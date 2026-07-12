@@ -48,6 +48,12 @@
     "pressure_id": "bryn_shander_winter",
     "new_level": 70
   },
+  "elapsed_time_actor_relocation_effect": {
+    "effect_id": "captain_moves_west_after_first_hour",
+    "trigger_elapsed_hours": 1,
+    "actor_entity_id": "captain_darvin_grey",
+    "destination_location_id": "bryn_shander_gate_west"
+  },
   "pressure_observation_cue": {
     "cue_id": "winter_deepens_observation",
     "pressure_id": "bryn_shander_winter",

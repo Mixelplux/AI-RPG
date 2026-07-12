@@ -417,7 +417,32 @@ class GameEngine:
             )
             pressure_consequence["effect_id"] = effect["effect_id"]
 
-        validate_world_state(candidate_world_state)
+        actor_location_consequence = None
+        actor_effect = self.region.get("elapsed_time_actor_relocation_effect")
+        if actor_effect is not None and (
+            previous_time.get("elapsed_hours", 0)
+            < actor_effect["trigger_elapsed_hours"]
+            <= new_time["elapsed_hours"]
+        ):
+            candidate_world_state, actor_result = (
+                self._prepare_actor_location_candidate(
+                    candidate_world_state,
+                    actor_effect["actor_entity_id"],
+                    actor_effect["destination_location_id"],
+                    source_history_id,
+                )
+            )
+            actor_location_consequence = {
+                "effect_id": actor_effect["effect_id"],
+                "trigger_elapsed_hours": actor_effect["trigger_elapsed_hours"],
+                "actor_entity_id": actor_effect["actor_entity_id"],
+                "previous_location_id": actor_result["previous_location_id"],
+                "new_location_id": actor_result["new_location_id"],
+                "changed": actor_result["changed"],
+                "history_id": actor_result["history_id"],
+            }
+
+        validate_world_state(candidate_world_state, self.region)
         candidate_scene_snapshot = build_scene(
             self.region,
             candidate_world_state
@@ -430,6 +455,7 @@ class GameEngine:
             "previous_time": previous_time,
             "new_time": new_time,
             "pressure_consequence": deepcopy(pressure_consequence),
+            "actor_location_consequence": deepcopy(actor_location_consequence),
         }
 
     def get_scene_snapshot(self) -> Dict[str, Any]:

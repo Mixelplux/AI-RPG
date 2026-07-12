@@ -338,6 +338,8 @@ Named static actors remain authored in the Region Pack. World State owns only sp
 
 Sprint 10.12 permits one optional immutable `conversation_actor_relocation_effect` declaration. A matching resolved conversation prepares its durable conversation source, any material actor move and backward causal reference, completed World State validation, and one rebuilt scene before the existing single live commit. A repeated matching conversation remains durable but creates no false movement when the actor is already at the destination. This is a bounded content policy, not a generic consequence dispatcher.
 
+Sprint 10.13 adds one optional immutable `elapsed_time_actor_relocation_effect`. Its exact declaration names one elapsed-hour threshold, one seeded named static actor, and one known destination. The existing `advance_time` candidate transition evaluates the same crossing rule used by elapsed-time pressure consequences, then prepares any material `actor_moved` entry after the pressure consequence and links both to the same `time_advanced` source. Durable elapsed time and effective actor location provide one-shot behavior without a fired flag. Final World State validation, scene construction, and live publication remain singular; `wait` continues using that shared boundary.
+
 ## Elapsed-Time Pressure Consequence
 
 ## Authored Pressure Observation

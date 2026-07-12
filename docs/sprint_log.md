@@ -414,3 +414,11 @@
 - ADR-042 plus ADR-029 through ADR-033 already establish the ownership and fail-closed boundaries; no new ADR was required.
 - Focused tests and all 18 repository tests passed through the official project interpreter.
 - Sprint 10.11 was not defined or started.
+
+# Sprint 10.13 - One Declared Elapsed-Time Actor Relocation Consequence
+
+- Status: Complete.
+- Added one strict immutable Region Pack declaration that moves Captain Darvin Grey from the North Gate to the West Gate on the first elapsed-hour threshold crossing.
+- One candidate transition prepares time, source history, any pressure consequence, actor relocation, causal links, validation, and rebuilt scene before one live commit.
+- ADR-035, ADR-038, ADR-039, and ADR-043 were sufficient; no new ADR was required. Save version remains 1.
+- Focused tests and all 21 repository tests passed through the official project interpreter. Sprint 10.14 is undefined and unstarted.
