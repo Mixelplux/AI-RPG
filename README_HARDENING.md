@@ -77,27 +77,29 @@ This does not use Python.
 
 ### 8. Run the environment preflight
 
-From the repository root, run:
+Open `D:\AI RPG` directly as the active Codex workspace, or open `D:\AI RPG\AI RPG.code-workspace`. From the repository root, confirm the active Git root and run:
 
 ```powershell
-pwsh -NoProfile -File .\tools\preflight.ps1 -RepoRoot .
+git rev-parse --show-toplevel
+.\.venv\Scripts\python.exe -c "import sys; print(sys.executable); print(sys.version)"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\preflight.ps1 -RepoRoot .
 ```
 
 To require project-specific imports, add each import name explicitly:
 
 ```powershell
-pwsh -NoProfile -File .\tools\preflight.ps1 -RepoRoot . -RequiredPythonModule yaml,pydantic
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\preflight.ps1 -RepoRoot . -RequiredPythonModule yaml,pydantic
 ```
 
-The preflight tests the official interpreter directly, with `-c`, and with a temporary script file. It never searches for or substitutes another Python executable.
+The preflight path-normalizes the Git root, runs the official interpreter with the required minimal `-c` probe, and never searches for or substitutes another Python executable.
 
 ### 9. Resolve failures narrowly
 
 For each failed check, record the check name, exact error, and proposed correction. Repair only the failing capability. Do not broadly disable Windows security controls and do not use another Python to claim official verification passed.
 
-If Python is blocked but PowerShell packaging works, packaging may proceed only as a separately documented operation. Python test verification remains blocked.
+If the official interpreter is blocked, do not begin sprint implementation or treat packaging as a substitute for Python verification. Resolve the workspace-context preflight first.
 
-If Codex receives an access-denied or process-creation error but the repository owner can run the same `.\.venv\Scripts\python.exe`, treat the Codex result as an agent execution-context limitation, not proof that `.venv` is unhealthy. Do not delete or recreate a working virtual environment on that evidence. Codex must provide copy-safe official commands; returned user output may satisfy verification when it shows the official interpreter identity, result, and exit status where applicable. Record such evidence as user-executed and never substitute another interpreter.
+Treat an access-denied or process-creation error from the official interpreter as a Codex workspace-context failure, not proof that `.venv` is unhealthy. Do not recreate `.venv`, change permissions, run Codex as Administrator, or substitute another interpreter. Reopen `D:\AI RPG` directly as the Codex workspace, or open `AI RPG.code-workspace`, then rerun the startup gate. Stop only while that preflight remains blocked; do not repeatedly ask the owner to approve the same diagnosis. Record whether validation was run by Codex or the owner and never claim blocked validation passed.
 
 ### 10. Execute the four Codex phases
 

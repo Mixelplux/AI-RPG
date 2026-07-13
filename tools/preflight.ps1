@@ -1,7 +1,10 @@
 ﻿[CmdletBinding()]
 param(
     [Parameter()]
-    [string]$RepoRoot = (Split-Path -Parent $PSScriptRoot),
+    [string]$RepoRoot,
+
+    [Parameter()]
+    [string]$ExpectedRepoRoot = "D:\AI RPG",
 
     [Parameter()]
     [string[]]$RequiredPythonModule = @(),
@@ -22,7 +25,14 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
+if ([string]::IsNullOrWhiteSpace($RepoRoot)) {
+    $RepoRoot = Split-Path -Parent $PSScriptRoot
+}
+
 $script:Checks = New-Object System.Collections.Generic.List[object]
+$resolvedRepoRoot = $null
+$activeRepoRoot = $null
+$workspaceRootIsValid = $false
 
 function Add-Check {
     param(
@@ -66,6 +76,34 @@ function Test-ExecutionContextDenial {
     return $Text -match '(?i)access is denied|unable to create process'
 }
 
+function Normalize-Path {
+    param([Parameter(Mandatory = $true)][string]$Path)
+
+    return [System.IO.Path]::GetFullPath($Path).TrimEnd(
+        [System.IO.Path]::DirectorySeparatorChar,
+        [System.IO.Path]::AltDirectorySeparatorChar
+    )
+}
+
+function Test-NormalizedPathEqual {
+    param(
+        [Parameter(Mandatory = $true)][string]$Left,
+        [Parameter(Mandatory = $true)][string]$Right
+    )
+
+    return [string]::Equals(
+        (Normalize-Path -Path $Left),
+        (Normalize-Path -Path $Right),
+        [System.StringComparison]::OrdinalIgnoreCase
+    )
+}
+
+function Get-WorkspaceRemediation {
+    param([Parameter(Mandatory = $true)][string]$ExpectedRoot)
+
+    return "Workspace-context failure. Reopen $ExpectedRoot directly as the Codex workspace, or open the existing AI RPG.code-workspace, then rerun the startup gate. Do not recreate .venv, change permissions, run as Administrator, or substitute another Python interpreter."
+}
+
 function Add-PythonProbeResult {
     param(
         [Parameter(Mandatory = $true)][string]$Name,
@@ -76,7 +114,7 @@ function Add-PythonProbeResult {
         Add-Check -Name $Name -Status "PASS" -Detail $Probe.output
     }
     elseif (Test-ExecutionContextDenial -Text $Probe.output) {
-        Add-Check -Name $Name -Status "BLOCKED" -Detail "Agent execution-context limitation; this is not evidence that the .venv is unhealthy. Exit $($Probe.exit_code): $($Probe.output)"
+        Add-Check -Name $Name -Status "BLOCKED" -Detail "$(Get-WorkspaceRemediation -ExpectedRoot $ExpectedRepoRoot) Exit $($Probe.exit_code): $($Probe.output)"
     }
     else {
         Add-Check -Name $Name -Status "FAIL" -Detail "Exit $($Probe.exit_code): $($Probe.output)"
@@ -156,6 +194,15 @@ if ($null -ne $resolvedRepoRoot) {
         else {
             Add-Check -Name "git-repository" -Status "PASS" -Detail $gitRoot.Trim()
 
+            $activeRepoRoot = $gitRoot.Trim()
+            if (Test-NormalizedPathEqual -Left $activeRepoRoot -Right $ExpectedRepoRoot) {
+                $workspaceRootIsValid = $true
+                Add-Check -Name "workspace-root" -Status "PASS" -Detail (Normalize-Path -Path $activeRepoRoot)
+            }
+            else {
+                Add-Check -Name "workspace-root" -Status "FAIL" -Detail "Expected Git root $(Normalize-Path -Path $ExpectedRepoRoot); got $(Normalize-Path -Path $activeRepoRoot). $(Get-WorkspaceRemediation -ExpectedRoot $ExpectedRepoRoot)"
+            }
+
             $global:LASTEXITCODE = 0
             $gitStatus = git -C $resolvedRepoRoot status --porcelain=v1 2>&1 | Out-String
             if ($LASTEXITCODE -ne 0) {
@@ -171,94 +218,71 @@ if ($null -ne $resolvedRepoRoot) {
         }
     }
 
-    foreach ($relativeDirectory in @(".build", ".artifacts", "handoffs")) {
-        $directoryPath = Join-Path $resolvedRepoRoot $relativeDirectory
-        $probePath = Join-Path $directoryPath (".preflight-{0}.tmp" -f [guid]::NewGuid().ToString("N"))
-        try {
-            [void](New-Item -ItemType Directory -Force -Path $directoryPath)
-            [System.IO.File]::WriteAllText($probePath, "preflight")
-            Remove-Item -LiteralPath $probePath -Force
-            Add-Check -Name "writable-$relativeDirectory" -Status "PASS" -Detail $directoryPath
-        }
-        catch {
-            if (Test-Path -LiteralPath $probePath) {
-                Remove-Item -LiteralPath $probePath -Force -ErrorAction SilentlyContinue
+    if ($workspaceRootIsValid) {
+        foreach ($relativeDirectory in @(".build", ".artifacts", "handoffs")) {
+            $directoryPath = Join-Path $activeRepoRoot $relativeDirectory
+            $probePath = Join-Path $directoryPath (".preflight-{0}.tmp" -f [guid]::NewGuid().ToString("N"))
+            try {
+                [void](New-Item -ItemType Directory -Force -Path $directoryPath)
+                [System.IO.File]::WriteAllText($probePath, "preflight")
+                Remove-Item -LiteralPath $probePath -Force
+                Add-Check -Name "writable-$relativeDirectory" -Status "PASS" -Detail $directoryPath
             }
-            Add-Check -Name "writable-$relativeDirectory" -Status "FAIL" -Detail $_.Exception.Message
+            catch {
+                if (Test-Path -LiteralPath $probePath) {
+                    Remove-Item -LiteralPath $probePath -Force -ErrorAction SilentlyContinue
+                }
+                Add-Check -Name "writable-$relativeDirectory" -Status "FAIL" -Detail $_.Exception.Message
+            }
         }
     }
 
-    $officialInterpreter = Join-Path $resolvedRepoRoot ".venv\Scripts\python.exe"
-    if (-not (Test-Path -LiteralPath $officialInterpreter -PathType Leaf)) {
-        Add-Check -Name "official-interpreter" -Status "FAIL" -Detail "Missing official interpreter: $officialInterpreter"
+    if (-not $workspaceRootIsValid) {
+        Add-Check -Name "official-interpreter" -Status "BLOCKED" -Detail "Official-interpreter preflight skipped because the workspace-root check failed."
     }
     else {
-        Add-Check -Name "official-interpreter" -Status "PASS" -Detail $officialInterpreter
-
-        try {
-            $versionProbe = Invoke-OfficialPython -Interpreter $officialInterpreter -Arguments @("--version")
-            Add-PythonProbeResult -Name "python-direct-launch" -Probe $versionProbe
+        $officialInterpreter = Join-Path $activeRepoRoot ".venv\Scripts\python.exe"
+        if (-not (Test-Path -LiteralPath $officialInterpreter -PathType Leaf)) {
+            Add-Check -Name "official-interpreter" -Status "FAIL" -Detail "Missing official interpreter: $officialInterpreter"
         }
-        catch {
-            $status = if (Test-ExecutionContextDenial -Text $_.Exception.Message) { "BLOCKED" } else { "FAIL" }
-            $detail = if ($status -eq "BLOCKED") { "Agent execution-context limitation; this is not evidence that the .venv is unhealthy. $($_.Exception.Message)" } else { $_.Exception.Message }
-            Add-Check -Name "python-direct-launch" -Status $status -Detail $detail
-        }
-
-        try {
-            $inlineProbe = Invoke-OfficialPython -Interpreter $officialInterpreter -Arguments @(
-                "-c",
-                "import json,sys; print(json.dumps({'executable': sys.executable}, sort_keys=True))"
-            )
-            Add-PythonProbeResult -Name "python-c-probe" -Probe $inlineProbe
-        }
-        catch {
-            $status = if (Test-ExecutionContextDenial -Text $_.Exception.Message) { "BLOCKED" } else { "FAIL" }
-            $detail = if ($status -eq "BLOCKED") { "Agent execution-context limitation; this is not evidence that the .venv is unhealthy. $($_.Exception.Message)" } else { $_.Exception.Message }
-            Add-Check -Name "python-c-probe" -Status $status -Detail $detail
-        }
-
-        $scriptProbeDirectory = Join-Path $resolvedRepoRoot ".build\preflight"
-        $scriptProbePath = Join-Path $scriptProbeDirectory "python_file_probe.py"
-        try {
-            [void](New-Item -ItemType Directory -Force -Path $scriptProbeDirectory)
-            $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
-            [System.IO.File]::WriteAllText(
-                $scriptProbePath,
-                "import json`nprint(json.dumps({'file_probe': True}, sort_keys=True))`n",
-                $utf8NoBom
-            )
-            $fileProbe = Invoke-OfficialPython -Interpreter $officialInterpreter -Arguments @($scriptProbePath)
-            Add-PythonProbeResult -Name "python-file-probe" -Probe $fileProbe
-        }
-        catch {
-            $status = if (Test-ExecutionContextDenial -Text $_.Exception.Message) { "BLOCKED" } else { "FAIL" }
-            $detail = if ($status -eq "BLOCKED") { "Agent execution-context limitation; this is not evidence that the .venv is unhealthy. $($_.Exception.Message)" } else { $_.Exception.Message }
-            Add-Check -Name "python-file-probe" -Status $status -Detail $detail
-        }
-        finally {
-            if (Test-Path -LiteralPath $scriptProbePath) {
-                Remove-Item -LiteralPath $scriptProbePath -Force -ErrorAction SilentlyContinue
-            }
-        }
-
-        foreach ($moduleName in $RequiredPythonModule) {
-            if ($moduleName -notmatch '^[A-Za-z_][A-Za-z0-9_.]*$') {
-                Add-Check -Name "python-module-$moduleName" -Status "FAIL" -Detail "Invalid Python import name."
-                continue
-            }
+        else {
+            Add-Check -Name "official-interpreter" -Status "PASS" -Detail $officialInterpreter
+            $pythonProbeSucceeded = $false
 
             try {
-                $moduleProbe = Invoke-OfficialPython -Interpreter $officialInterpreter -Arguments @(
+                $inlineProbe = Invoke-OfficialPython -Interpreter $officialInterpreter -Arguments @(
                     "-c",
-                    "import importlib; importlib.import_module('$moduleName'); print('$moduleName')"
+                    "import sys; print(sys.executable); print(sys.version)"
                 )
-                Add-PythonProbeResult -Name "python-module-$moduleName" -Probe $moduleProbe
+                Add-PythonProbeResult -Name "python-c-probe" -Probe $inlineProbe
+                $pythonProbeSucceeded = $inlineProbe.exit_code -eq 0
             }
             catch {
                 $status = if (Test-ExecutionContextDenial -Text $_.Exception.Message) { "BLOCKED" } else { "FAIL" }
-                $detail = if ($status -eq "BLOCKED") { "Agent execution-context limitation; this is not evidence that the .venv is unhealthy. $($_.Exception.Message)" } else { $_.Exception.Message }
-                Add-Check -Name "python-module-$moduleName" -Status $status -Detail $detail
+                $detail = if ($status -eq "BLOCKED") { "$(Get-WorkspaceRemediation -ExpectedRoot $ExpectedRepoRoot) $($_.Exception.Message)" } else { $_.Exception.Message }
+                Add-Check -Name "python-c-probe" -Status $status -Detail $detail
+            }
+
+            if ($pythonProbeSucceeded) {
+                foreach ($moduleName in $RequiredPythonModule) {
+                    if ($moduleName -notmatch '^[A-Za-z_][A-Za-z0-9_.]*$') {
+                        Add-Check -Name "python-module-$moduleName" -Status "FAIL" -Detail "Invalid Python import name."
+                        continue
+                    }
+
+                    try {
+                        $moduleProbe = Invoke-OfficialPython -Interpreter $officialInterpreter -Arguments @(
+                            "-c",
+                            "import importlib; importlib.import_module('$moduleName'); print('$moduleName')"
+                        )
+                        Add-PythonProbeResult -Name "python-module-$moduleName" -Probe $moduleProbe
+                    }
+                    catch {
+                        $status = if (Test-ExecutionContextDenial -Text $_.Exception.Message) { "BLOCKED" } else { "FAIL" }
+                        $detail = if ($status -eq "BLOCKED") { "$(Get-WorkspaceRemediation -ExpectedRoot $ExpectedRepoRoot) $($_.Exception.Message)" } else { $_.Exception.Message }
+                        Add-Check -Name "python-module-$moduleName" -Status $status -Detail $detail
+                    }
+                }
             }
         }
     }
@@ -268,8 +292,8 @@ $failureCount = @($script:Checks | Where-Object { $_.status -eq "FAIL" }).Count
 $warningCount = @($script:Checks | Where-Object { $_.status -eq "WARN" }).Count
 $blockedCount = @($script:Checks | Where-Object { $_.status -eq "BLOCKED" }).Count
 $summary = [pscustomobject]@{
-    repository = $resolvedRepoRoot
-    official_interpreter = if ($null -ne $resolvedRepoRoot) { Join-Path $resolvedRepoRoot ".venv\Scripts\python.exe" } else { $null }
+    repository = if ($null -ne $activeRepoRoot) { $activeRepoRoot } else { $resolvedRepoRoot }
+    official_interpreter = if ($workspaceRootIsValid) { Join-Path $activeRepoRoot ".venv\Scripts\python.exe" } else { $null }
     passed = @($script:Checks | Where-Object { $_.status -eq "PASS" }).Count
     warnings = $warningCount
     blocked = $blockedCount
@@ -283,6 +307,10 @@ if ($Json) {
 else {
     $script:Checks | Format-Table -AutoSize | Out-String | Write-Host
     Write-Host ("Preflight summary: {0} passed, {1} warning(s), {2} blocked, {3} failure(s)." -f $summary.passed, $warningCount, $blockedCount, $failureCount)
+    if ($failureCount -eq 0 -and $blockedCount -eq 0) {
+        Write-Host "Resolved repository root: $($summary.repository)"
+        Write-Host "Official interpreter: $($summary.official_interpreter)"
+    }
 }
 
 if ($failureCount -gt 0) {

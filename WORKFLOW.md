@@ -142,12 +142,21 @@ Infrastructure-only packages that intentionally create no player-visible behavio
 
 ## Canonical Windows Environment
 
-- Work from the repository root in PowerShell and run preflight before implementation and closeout.
+- Open `D:\AI RPG` directly as the active Codex workspace, or open `D:\AI RPG\AI RPG.code-workspace`, before implementation or closeout. Work from the repository root in PowerShell.
+- Confirm the active Git root before implementation with `git rev-parse --show-toplevel`.
+- Run the official-interpreter preflight before implementation and closeout:
+
+  ```powershell
+  .\.venv\Scripts\python.exe -c "import sys; print(sys.executable); print(sys.version)"
+  powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\preflight.ps1 -RepoRoot .
+  ```
+
+  The preflight path-normalizes the Git root and requires `D:\AI RPG` by default; its `-ExpectedRepoRoot` parameter exists for an explicit diagnostic override.
 - Use only `.\.venv\Scripts\python.exe` for Python setup, tests, validation, and closeout evidence.
 - Do not substitute bundled, system, Windows Store, alternate, `uv`, or fallback Python environments.
-- Record exact verification commands, exit codes, outcomes, and artifact paths.
+- Record exact verification commands, exit codes, outcomes, artifact paths, and whether Codex or the owner ran each command.
 
-If the execution context denies the official interpreter, preserve the exact command, exit code, and error and classify that as an execution-context limitation, not evidence that `.venv` is unhealthy. Provide a copy-safe command for the owner. User-executed output from the same official interpreter may satisfy the check; alternate interpreters may not.
+Treat `Access is denied` or an unable-to-create-process result from the official interpreter as a Codex workspace-context failure, not evidence that `.venv` is unhealthy. Do not recreate `.venv`, change permissions, elevate Codex, or substitute another interpreter. Stop before implementation while the preflight is blocked and use this remediation: reopen `D:\AI RPG` directly as the Codex workspace, or open `AI RPG.code-workspace`, then rerun the startup gate. Do not repeatedly seek owner approval for the same diagnosis. Once the preflight succeeds, continue routine in-scope work without another owner interruption. Never report owner-executed evidence as Codex-executed or claim blocked validation passed.
 
 ## Git and Recovery Policy
 

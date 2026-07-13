@@ -3,22 +3,31 @@
     "tasks": [
         {
             "label": "Run Game",
-            "type": "shell",
-            "command": "python play_game.py",
+            "type": "process",
+            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "args": [
+                "play_game.py"
+            ],
             "group": "build",
             "problemMatcher": []
         },
         {
             "label": "Run Scene Test",
-            "type": "shell",
-            "command": "python run_scene_test.py",
+            "type": "process",
+            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "args": [
+                "run_scene_test.py"
+            ],
             "group": "test",
             "problemMatcher": []
         },
         {
             "label": "Validate Region",
-            "type": "shell",
-            "command": "python engine/region_validator.py",
+            "type": "process",
+            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "args": [
+                "engine/region_validator.py"
+            ],
             "group": "test",
             "problemMatcher": []
         }
