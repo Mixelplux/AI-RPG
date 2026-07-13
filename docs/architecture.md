@@ -194,6 +194,10 @@ Only `world_state` is persisted. Region Packs remain immutable assets. Scene Sna
 
 ## Authored Resolved-Thread Actor Relocation
 
+## Declared Elapsed-Time Evidence Trace Consequence
+
+One optional immutable `elapsed_time_evidence_trace_effect` declares exactly one positive elapsed-hour threshold, trace identity, evidence identity, and Region Pack location. It must bind exactly one same-location discovery declaration and cannot reuse a supported effect or authored trace identity. Explicit time advancement records `time_advanced` first, then prepares pressure, actor relocation, and evidence consequences in that fixed order on one copied candidate. The trace is source-linked, one-shot through durable elapsed time, and hidden from ordinary scene, perception, narration, and prompt surfaces until existing explicit local investigation discovers its exact authored clue. Save version remains 1; no scheduler, generic consequence registry, or transaction framework is added.
+
 One optional immutable `resolved_thread_actor_relocation_effect` may identify one declared resolved thread, one stable static actor, and one exact destination location. Its identity must not conflict with any other supported authored effect identity in the Region Pack. It is eligible only inside the successful authored clue-presentation resolution transition. The copied candidate records the presentation source first, resolves the thread, adds a material actor-location override and causally linked `actor_moved` history only when needed, validates, builds one final Scene Snapshot, and publishes once. The structured result is only `None`, `{"status": "applied"}`, or `{"status": "no_op"}` and exposes no simulation identifiers. This preserves save version 1 and introduces no generic consequence system.
 
 ## Authored Actor-Knowledge Conversation Response
