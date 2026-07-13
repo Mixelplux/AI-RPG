@@ -1,128 +1,118 @@
-# Lightweight Capability-Sequencing Review — Pilot Baseline
+# Lightweight Capability-Sequencing Review — Corrected Pilot Baseline
 
 ## Current-State Confirmation
 
-- Reviewed `main` HEAD: `039e8cc616be076c83cc3b3fea5d0e678a90b635`; the tree
-  was clean before the workflow-maintenance branch was created.
+- Reviewed `main` HEAD: `039e8cc616be076c83cc3b3fea5d0e678a90b635`; it was
+  clean before the workflow-maintenance branch was created.
 - Latest accepted capability: **One Declared Elapsed-Time Evidence Trace
   Consequence** (`elapsed-time-evidence-trace-consequence-039e8cc.zip`).
 - It preserved the established architecture: immutable Region Pack policy,
   World State ownership, copied candidate composition, source-first causal
   history, validation and one publication, hidden trace projection, and save
   version 1.
-- No full-review trigger is presently evidenced. The comprehensive review at
-  `c69da30`, the accepted package evidence, current authority, runtime, and
-  focused tests support a bounded next recommendation.
+- No full-review trigger is currently evidenced. The comprehensive review at
+  `c69da30`, accepted package evidence, current authority, runtime, and
+  focused tests support the bounded recommendation below.
 
-## Proposed Sequence
+## Corrected Provisional Sequence
 
-### 1. One Declared Resolved-Thread Pressure Consequence — recommended first
-
-| Aspect | Boundary |
-|---|---|
-| Trigger | One successful existing authored discovery-gated thread resolution for Captain Darvin Grey. |
-| Durable change | One existing seeded pressure receives one declared exact level; the resolution source remains first and the pressure history links to it. |
-| Player result | Presenting the discovered North Gate trace resolves the existing west-road report and produces one authored, perceivable change in its established pressure path. |
-| Dependencies | Existing discovery, resolved-thread lifecycle, causal pressure transition, candidate-state validation/publication, and Region Pack validation. |
-| Surface | One strict optional Region Pack declaration, narrow validator and GameEngine composition, focused tests, and affected authority records. |
-| Atomicity and history | The resolution source, thread lifecycle, and material pressure change/history are prepared on one candidate; failure publishes none. Same-level pressure is a valid no-op consequence. |
-| Save/schema | Uses existing `pressures`, `resolved_threads`, and history shapes; no save-version or migration change. |
-| Exclusions | No generic consequence rules, multiple effects, precedence, pressure projection framework, scheduler, new command, or autonomous behavior. |
-| Principal risk | The resolution transition already composes actor relocation; adding one bounded pressure consequence must keep a fixed, documented source-and-consequence order. |
-| Why first | It turns the accepted evidence → investigation → resolution loop into one bounded world-state result using only proven primitives. |
-
-### 2. One Declared Resolved-Thread Actor-Knowledge Consequence
+### 1. One Declared Resolved-Thread Actor-Knowledge Acknowledgment — recommended first
 
 | Aspect | Boundary |
 |---|---|
-| Trigger | The same successful authored resolved-thread transition, after package 1 has confirmed its composition remains clear. |
-| Durable change | One stable actor gains one existing opaque knowledge membership, causally linked to the accepted resolution source. |
-| Player result | A later conversation can use the existing authored knowledge-response projection to acknowledge that the west-road report has been resolved. |
-| Dependencies | Existing resolved thread, actor-knowledge membership and causal history, and the established authored knowledge-response read boundary. |
-| Surface | One strict optional declaration, narrow validator and composition call, focused tests, and authority records. |
-| Atomicity and history | The declared knowledge consequence joins the existing copied resolution candidate and is source-linked; injected failure rolls back all proposed changes. |
-| Save/schema | Reuses version-1 `actor_knowledge` and history validation; no migration. |
-| Exclusions | No dialogue system, knowledge interpretation, propagation, truth/belief model, actor routine, or generic reaction framework. |
-| Principal risk | It must not imply that membership establishes what the actor knows semantically or create ordering between multiple generic reactions. |
-| Why second | Package 1 validates the expanded resolution composition against pressure; package 2 then reuses the already accepted actor-knowledge pattern without adding a domain. |
+| Trigger | The existing successful clue-presentation resolution of the Bryn Shander west-road report. |
+| Durable change | One strict authored effect adds one opaque resolved-report knowledge membership to one existing stable actor, causally linked to the existing clue-presentation source. |
+| Player-facing result | The existing singleton `conversation_actor_knowledge_response` is deliberately retargeted or replaced to require that new membership. Before resolution, no acknowledgment is eligible; during a later successful conversation with the actor, exactly one existing-boundary authored acknowledgment is returned. |
+| Existing dependencies | Discovery and clue presentation, resolved-thread lifecycle, actor relocation, persistent actor knowledge, causal history, current singleton response read boundary, candidate-state validation, and one publication. |
+| Expected surface | One optional strict resolved-thread knowledge-effect declaration, narrow Region Pack validation, one GameEngine candidate composition call, retargeted singleton response declaration, focused tests, and affected authority records. |
+| Atomicity and history | The copied candidate records `clue_presented` first, preserves existing resolution lifecycle and relocation, then prepares the actor-knowledge change and source-linked history before validation, scene construction, and one commit. Exact duplicate membership is a no-op and creates no duplicate knowledge history; injected failure publishes none. |
+| Save and schema | Reuses version-1 `actor_knowledge`, resolved-thread, actor-location, and history shapes; no migration or new persistence owner. |
+| Explicit replacement | The current response requiring `player_spoke_with_captain` is replaced or retargeted. Its former pre-resolution acknowledgment behavior must receive regression coverage as changed behavior, not be silently retained. |
+| Explicit exclusions | No second response declaration, response list, precedence rule, direct resolved-thread response, generic predicate/condition/consequence/reaction/dialogue/rule framework, new command, autonomous behavior, AI-authored mutation, or save migration. |
+| Principal risk | The package must keep response eligibility mutually exclusive through the one existing singleton response, rather than introducing competing response declarations or order rules. |
+| Why first | It completes a coherent, already grounded player loop—discover, present, durably change what the Captain knows, then receive one authored acknowledgment—using accepted ownership and projection boundaries. |
 
-### 3. One Declared Resolved-Thread Conversation Projection
-
-| Aspect | Boundary |
-|---|---|
-| Trigger | A later successful conversation with the declared actor after the exact existing thread is resolved. |
-| Durable change or projection | No new durable state; one exact authored response is projected only from already persisted resolved-thread state. |
-| Player result | The Captain's later response reflects the completed west-road report without exposing hidden IDs or adding a quest interface. |
-| Dependencies | Existing resolved-thread validation, target resolution, successful conversation path, and actor-knowledge response precedent. |
-| Surface | One strict optional Region Pack declaration, narrow validator/read helper, focused tests, and authority records. |
-| Atomicity and history | Read-only projection occurs after a successful published interaction and does not create history or mutate state. |
-| Save/schema | Reads existing version-1 resolved-thread state; no migration. |
-| Exclusions | No dialogue tree, generic predicates, conversation ordering model, narration authority, or new persistence. |
-| Principal risk | A projection-only capability must remain sufficiently player-meaningful and must not turn the response pattern into a generic dialogue framework. |
-| Why third | It lets the player see the outcome of the first two bounded consequences only after their durable lifecycle behavior is proven. |
+No second or third candidate is proposed. The previously considered
+resolved-thread pressure consequence is durable but not currently
+player-perceivable: the authored pressure cue targets winter at level 70, while
+the semantically relevant gate-scrutiny pressure has no cue. The direct
+resolved-thread conversation projection is removed because it could compete
+with the singleton actor-knowledge response and would require an unapproved
+precedence rule. Adding a cue, a second response, or a projection family would
+be scope expansion or a full-review trigger, not sequencing work.
 
 ## Sequence Dependencies and Invalidation
 
-Package 2 should follow package 1 because package 1 verifies that one
-resolution transition can add one pressure consequence without losing its
-fixed candidate composition. Package 3 should follow package 2 because it
-uses settled persisted resolution/knowledge state for a read-only authored
-response. Package 2 could still proceed if package 1 is rejected, provided it
-uses the existing resolution source alone; package 3 could proceed after a
-rejected package 2 if it is explicitly narrowed to resolved-thread state
-rather than actor knowledge.
+There is no later provisional package: reassess after package 1 is reviewed
+and merged. This is intentional; the accepted singleton response boundary is
+being retargeted, so package-review findings must determine whether another
+bounded player loop remains justified.
 
-Invalidate this sequence and conduct a full review if package review finds
-ambiguous consequence order, a need for multiple declarations of any singleton
-kind, a generic rule or precedence mechanism, a new persistence owner, a
-save-version change, leakage of hidden state, a validation/publication pattern
-that cannot remain atomic, or material authority conflict.
+Conduct a full architecture review instead of continuing this sequence if the
+package reveals a need for multiple response declarations, response precedence,
+generic consequence or condition handling, a new persistence domain or owner,
+save migration, a non-atomic publication path, causal history outside the
+existing pattern, hidden-state exposure, material package-review friction,
+canonical-authority conflict, or more than one normal consolidated correction
+cycle.
 
 ## First-Package Recommendation
 
-**Objective:** make the established clue-discovery and resolved-thread loop
-cause one declared, visible scoped pressure result without broadening it into a
-reaction system.
+**Objective:** let the existing successful clue-presentation resolution give
+Captain Darvin Grey one exact durable resolved-report knowledge membership and
+make the established single authored response acknowledge that completed
+report only on a later successful conversation.
 
-**Authorized behavior:** an exact Region Pack declaration binds the existing
-Captain Darvin Grey resolved-thread outcome to one existing seeded pressure and
-exact target level. On the successful existing resolution transition, the
-engine prepares source history, lifecycle state, existing relocation, and this
-one pressure consequence on a copied candidate, validates it, builds the final
-scene, and publishes once. A same-level pressure adds no pressure history.
+**Authorized behavior:** one strict optional Region Pack effect declaration
+binds one unique effect identity, the existing resolved-thread identity, one
+existing stable actor, and one opaque knowledge identity. During the existing
+successful clue-presentation transition, the copied candidate records the
+clue-presentation source first, preserves existing thread resolution and actor
+relocation, then prepares the causally linked actor-knowledge mutation and its
+history. It validates, builds the final scene, and publishes once. Repeating a
+resolved transition or adding existing membership is an exact no-op without
+duplicate knowledge history.
 
-**Required authored data:** one unique effect identity, exact resolved-thread
-identity, existing pressure identity, and bounded new level; strict
-cross-reference and uniqueness validation.
+**Required authored data:** the strict effect declaration above, plus a
+retargeted or replaced value for the existing singleton
+`conversation_actor_knowledge_response`: it must name Captain Grey, require
+the new resolved-report membership, and contain one exact acknowledgment text.
+It replaces the existing `player_spoke_with_captain` response behavior; no
+second response declaration is permitted.
 
-**Player-facing behavior:** after locally investigating the trace and
-successfully presenting it to Captain Grey, the established world response now
-includes the exact authored pressure outcome. Raw pressure identifiers and
-hidden causal fields remain outside player projections.
+**Player-facing behavior:** before the thread resolves, later successful
+conversations with Captain Grey do not receive the acknowledgment. After the
+player discovers and presents the exact clue, a later successful conversation
+returns the one exact authored acknowledgment through the existing response
+boundary. No raw knowledge, thread, or causal identifiers are projected.
 
-**Acceptance categories:** declaration validation; source-first composition
-and deterministic order; all-or-nothing rollback; same-level no-op; save/load;
-existing discovery, resolution, relocation, pressure, narration, and hidden
-projection regressions; no save-version change.
+**Acceptance categories:** strict declaration and cross-reference validation;
+source-first causal ordering; resolution, relocation, knowledge, and history
+atomicity; duplicate no-op; rollback injection; save/load compatibility;
+pre-resolution and post-resolution response behavior; changed former-response
+regression; hidden-projection and existing conversation regressions; save
+version 1.
 
-**Explicit exclusions:** generic consequence/condition/reaction/transaction
-systems, multiple effects or precedence, new commands, autonomous progression,
-new persistent domains, dialogue or quest frameworks, AI-authored changes, and
-save migration.
+**Explicit exclusions:** pressure changes or pressure cues; a direct
+resolved-thread conversation projection; multiple responses or precedence;
+generic consequence, condition, reaction, transaction, dialogue, predicate, or
+rule frameworks; new persistence; new command; autonomous progression;
+AI-authored state; and save migration.
 
 ## Pilot Stop Conditions for the First Package
 
-Abandon the provisional sequence and run a full architecture review if the
-first package reveals a need for generic ordering, multiple effect handling,
-new durable ownership, save migration, a non-atomic publication path, causal
-history that cannot be represented by existing links, hidden-state exposure,
-material package-review friction, conflicting authority, or more than one
-normal consolidated correction cycle.
+Abandon this recommendation and run a full architecture review if one
+singleton response cannot be retargeted without retaining competing behavior;
+if the effect needs ordering with multiple declarations; if the lifecycle,
+relocation, and knowledge consequence cannot validate and publish atomically;
+if a new durable owner, save change, generic framework, hidden-state exposure,
+or material authority conflict appears; or if normal consolidated correction
+does not resolve material findings.
 
 ## Consolidated Owner Decision Matrix
 
 | Decision | Accept | Reject | Request one consolidated correction | Defer / narrow option |
 |---|---|---|---|---|
-| Workflow pilot documentation | Adopt the bounded cadence pilot. | Keep prior cadence. | Return one consolidated list of required documentation corrections. | Accept the pilot while rejecting or deferring the sequence. |
-| Proposed sequence | Treat the three candidates as provisional planning context. | Do not use this sequence. | Return one consolidated set of sequencing corrections. | Accept the sequence but leave all runtime work unauthorized. |
-| First capability recommendation | Authorize later staging of candidate 1 only. | Do not stage candidate 1. | Return one consolidated scope correction. | Authorize only candidate 1; candidates 2 and 3 remain provisional. |
+| Workflow pilot documentation | Remains accepted as documented. | Reopen the accepted cadence policy. | Return one consolidated workflow correction only if new evidence requires it. | Keep the pilot while deferring runtime sequencing. |
+| Corrected provisional sequence | Accept the single candidate as provisional planning context. | Do not use this sequence. | Return one consolidated set of sequencing corrections. | Accept the sequence but leave runtime work unauthorized. |
+| First capability recommendation | Authorize later staging of candidate 1 only. | Do not stage candidate 1. | Return one consolidated scope correction. | Defer candidate 1; no later package is authorized. |
