@@ -2,6 +2,8 @@
 
 ## Completed Foundation
 
+- Authored Actor-Knowledge Conversation Response — complete pending package review.
+
 - Sprint 1 ✅ Foundation
 - Sprint 2 ✅ Perception
 - Sprint 3 ✅ Narrator

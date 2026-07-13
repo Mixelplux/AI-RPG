@@ -351,6 +351,12 @@
       }
     }
   ],
+  "conversation_actor_knowledge_response": {
+    "response_id": "captain_acknowledges_player_conversation",
+    "target_entity_id": "captain_darvin_grey",
+    "required_knowledge_id": "player_spoke_with_captain",
+    "response_text": "Captain Grey nods once. \"You have heard enough to know the western road is not safe.\""
+  },
   "factions": [
     {
       "faction_id": "town_watch_bryn_shander",

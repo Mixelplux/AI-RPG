@@ -192,6 +192,18 @@ Ideas that are important but not ready for implementation belong in `docs/future
 
 Only `world_state` is persisted. Region Packs remain immutable assets. Scene Snapshots, Perception, and Narration are regenerated after loading.
 
+## Authored Actor-Knowledge Conversation Response
+
+One optional immutable `conversation_actor_knowledge_response` declaration may
+project exact Region Pack-owned text after a successful current-scene
+conversation with its declared present static actor. `GameEngine` snapshots
+that actor's durable membership before the command, completes the established
+candidate transition unchanged, validates and builds the candidate scene, then
+derives the response once from the command-start snapshot. The response is
+read-only result output; it is not World State, history, scene, perception,
+narration, prompt, or save data. Repeated eligible conversations repeat the
+same authored text.
+
 The authored discovery-use boundary projects only authored clue titles and text
 for already discovered clues. One strict Region Pack resolution declaration
 may connect one present static actor, one known discovery, and one open thread.

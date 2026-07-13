@@ -127,6 +127,11 @@ def validate_region(region: dict) -> None:
         errors.append(str(error))
 
     try:
+        validate_conversation_actor_knowledge_response(region)
+    except ValueError as error:
+        errors.append(str(error))
+
+    try:
         validate_conversation_evidence_trace_effect(region)
     except ValueError as error:
         errors.append(str(error))
@@ -271,6 +276,27 @@ def validate_conversation_actor_knowledge_effect(region: dict) -> None:
         raise ValueError(f"{field}.trigger_entity_id must reference a static actor.")
     if effect["actor_entity_id"] not in static_ids:
         raise ValueError(f"{field}.actor_entity_id must reference a static actor.")
+
+
+def validate_conversation_actor_knowledge_response(region: dict) -> None:
+    field = "conversation_actor_knowledge_response"
+    if field not in region:
+        return
+    declaration = region[field]
+    required = {
+        "response_id", "target_entity_id", "required_knowledge_id", "response_text"
+    }
+    if not isinstance(declaration, dict) or set(declaration) != required:
+        raise ValueError(f"{field} fields are invalid.")
+    if any(not isinstance(declaration[name], str) or not declaration[name] for name in required):
+        raise ValueError(f"{field} values must be non-empty strings.")
+    static_ids = {
+        entity.get("entity_id")
+        for entity in region.get("entities", [])
+        if isinstance(entity, dict) and entity.get("persistence") == "static"
+    }
+    if declaration["target_entity_id"] not in static_ids:
+        raise ValueError(f"{field}.target_entity_id must reference a static actor.")
 
 
 def validate_conversation_evidence_trace_effect(region: dict) -> None:

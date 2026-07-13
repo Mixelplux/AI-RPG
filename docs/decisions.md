@@ -680,3 +680,19 @@ Sprints 10.37 through 10.39 only strengthen validation of that established
 state and derive one local non-persistent presentation from it. History and
 Region Pack declarations remain validation inputs rather than a second runtime
 authority; no generic consequence or projection framework is introduced.
+
+## ADR-051 - Actor-Knowledge Conversation Response Is a Non-Persistent Projection
+
+**Status:** Accepted
+
+One exact-keyed immutable Region Pack declaration may supply one response for
+one stable static actor and one required durable membership identifier. After a
+successful current-scene conversation, the engine derives the response from the
+actor's command-start membership only after the existing candidate transition,
+final validation, candidate scene construction, and single live commit all
+succeed. The response is exact authored player-facing text and may repeat on
+every eligible conversation.
+
+This creates no World State, save, migration, history, scene, perception,
+narration, player-knowledge, dialogue, rule-framework, or response-history
+ownership. Failure publishes neither candidate state nor response.

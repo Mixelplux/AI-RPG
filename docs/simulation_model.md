@@ -625,7 +625,17 @@ Static actors now have persistent current knowledge membership in World State, s
 
 ---
 
-## 21. Open Questions
+## 21. Authored Actor-Knowledge Conversation Response
+
+One present static actor may return exact Region Pack-authored text after a
+successful conversation only if it held the required opaque membership at
+command start. The response repeats for later eligible conversations, creates
+no player knowledge or simulation state, and is neither dialogue nor a truth,
+belief, or propagation model.
+
+---
+
+## 22. Open Questions
 
 The following questions are intentionally unresolved:
 

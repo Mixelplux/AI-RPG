@@ -52,6 +52,7 @@ from engine.world_state import (
     validate_world_state
 )
 from engine.actor_knowledge import get_actor_knowledge as get_world_actor_knowledge
+from engine.actor_knowledge_response import derive_conversation_actor_knowledge_response
 from engine.evidence_traces import (
     get_evidence_trace as get_world_evidence_trace,
     get_evidence_traces as get_world_evidence_traces,
@@ -921,6 +922,8 @@ class GameEngine:
             player_input,
             self.scene_snapshot
         )
+        interaction_result["actor_knowledge_response"] = None
+        command_start_actor_knowledge = deepcopy(self.world_state["actor_knowledge"])
 
         if (
             interaction_result["intent"] == "skill_check"
@@ -1026,5 +1029,19 @@ class GameEngine:
 
         self.world_state = candidate_world_state
         self.scene_snapshot = candidate_scene_snapshot
+
+        if (
+            interaction_result["intent"] == "conversation"
+            and interaction_result["success"]
+            and interaction_result.get("target_resolution", {}).get("target_type") == "entity"
+        ):
+            target_entity_id = interaction_result["target_resolution"]["identifier"]
+            interaction_result["actor_knowledge_response"] = (
+                derive_conversation_actor_knowledge_response(
+                    self.region,
+                    target_entity_id,
+                    tuple(command_start_actor_knowledge.get(target_entity_id, [])),
+                )
+            )
 
         return deepcopy(interaction_result)

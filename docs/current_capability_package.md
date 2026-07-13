@@ -1,73 +1,60 @@
-# Review Packet Profiles and Fail-Closed Validation
+# Authored Actor-Knowledge Conversation Response
 
-Status: Complete — accepted by owner.
+Status: Active — owner-approved capability package.
 
 ## Purpose and Owner-Visible Value
 
-Ensure that a packet intended to support an architecture decision cannot be
-mistaken for compact package-completion evidence. New packets declare their
-purpose, preserve authoritative-source boundaries, and fail validation when
-required decision context is absent.
+Permit a present authored static actor to return one exact Region Pack-owned
+response after a successful conversation, but only when that actor held the
+declared durable knowledge identifier at command start. This makes the existing
+actor-knowledge domain visible without adding dialogue, reaction, or rule
+infrastructure.
 
 ## Included Internal Milestones
 
-1. Sprint 10.40 — Packet Profile and Manifest Contract — complete.
-2. Sprint 10.41 — Independent Assembly and Validation Tooling — complete.
-3. Sprint 10.42 — Fixture Tests, Workflow Integration, and Package Closeout — complete and accepted.
-
-The package is complete and accepted after the owner-requested corrections. No
-engine capability or following package is staged.
+1. Sprint 10.43 — Authored contract and architecture boundary — complete.
+2. Sprint 10.44 — Deterministic derivation and conversation integration — complete.
+3. Sprint 10.45 — Presentation, compatibility, verification, and closeout — active.
 
 ## Scope, Ownership, and Compatibility
 
-- This package changes workflow records, packet documentation, and PowerShell
-  tooling only. It does not change engine, Region Pack, World State, narration,
-  persistence, save/load, or save version behavior.
-- `docs/architecture.md`, `docs/simulation_model.md`,
-  `docs/simulation_principles.md`, `docs/roadmap.md`, and `docs/decisions.md`
-  remain repository authorities. Packet-local synthesis is review convenience
-  only and must pin its authoritative sources.
-- New packets use only the approved profiles: `package-review`,
-  `post-package-architecture-review`, and `phase-architecture-review`.
-- Existing archives remain legacy, unprofiled historical artifacts. They are
-  neither rebuilt nor required to meet the new contract.
+- Region Packs may declare exactly one optional immutable,
+  `conversation_actor_knowledge_response`, with exactly `response_id`,
+  `target_entity_id`, `required_knowledge_id`, and `response_text`.
+- The response is an exact authored player-facing projection. World State owns
+  only existing actor-knowledge membership; no response state, history, or save
+  field is added.
+- Eligibility is evaluated against durable command-start knowledge membership,
+  only after a successful current-scene conversation with the declared present
+  stable static actor.
+- The normal conversation candidate, consequences, validation, one Scene
+  Snapshot rebuild when required, and one live publication remain unchanged.
+- Save version remains `1`; Region Packs without the declaration and existing
+  saves retain their behavior.
 
 ## Exclusions
 
-No game behavior, game data, generic document platform, next game capability,
-roadmap selection, commit, merge, save migration, or historical archive rewrite
-is included.
-
-## Expected Files and Systems
-
-- `docs/review_packet_profiles.md`
-- `tools/assemble_review_packet.ps1`
-- `tools/validate_review_packet.ps1`
-- `tools/test_review_packet.ps1`
-- `WORKFLOW.md`, `AGENTS.md`, and `docs/architecture_review_template.md`
-- canonical package, sprint, architecture, decision, roadmap, sprint-log, and
-  handoff records as required for closeout
+No dialogue system, topics, branching, semantic input interpretation,
+disposition, relationship, player knowledge, actor knowledge propagation or
+loss, evidence discovery, AI-generated dialogue, narration integration,
+response persistence, response history, multiple declarations, generic
+conditions, reaction registry, projection bus, generalized consequences, or
+conversation-ordering change.
 
 ## Architecture Decisions and Stop Conditions
 
-Role-based packet membership, artifact-kind distinction, source-pinned
-synthesis, independent archive validation, and legacy-only validation are
-workflow boundaries for this package. Stop for a need to alter existing
-architecture authority, create a generic documentation platform, change engine
-behavior, or enter any `WORKFLOW.md` stop condition.
+The response is a narrow, read-only, non-persistent projection derived once per
+eligible successful result. It cannot mutate Region Pack data, candidate or
+live World State, Scene Snapshot, or membership. Failed validation or Scene
+construction publishes neither state nor response. Stop for a persistence or
+ownership change, an unapproved player-visible behavior, a generic framework,
+or another `WORKFLOW.md` stop condition.
 
 ## Verification, Completion, and Rollback
 
-Focused PowerShell fixture tests, valid and expected-failure packet validation,
-legacy validation, official preflight, the full root test inventory, manifest
-deep agreement, `git diff --check`, and independent final-archive validation
-passed after the corrective validator, matrix, workflow, and packet evidence
-work. The corrective boundary explicitly covers profile-specific
-role/kind rules, Git identity consistency, substantive required content,
-complete portable-path checks, and all independently identified malformed
-fixtures. It also covers role-specific phase dependency, ADR-index, and
-unresolved-decision-context contracts so a generic map cannot satisfy a phase
-review packet.
-Owner acceptance authorizes the final commit and fast-forward merge only; it
-does not define or start a following package. The rollback boundary is this feature branch's workflow and tooling changes;
-there is no data migration or runtime behavior to reverse.
+Focused declaration, derivation, conversation, location, save/load, isolation,
+and rendering tests; relevant existing regressions; Region Pack validation;
+the full root test inventory; official preflight; manifest deep agreement;
+`git diff --check`; and independent `package-review` packet validation are
+required. Rollback is confined to this feature branch; no migration or data
+conversion is introduced.

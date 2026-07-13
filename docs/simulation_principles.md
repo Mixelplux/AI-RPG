@@ -237,6 +237,15 @@ This is procedural completion, not arbitrary procedural generation.
 
 ---
 
+## Authored Actor-Knowledge Conversation Response
+
+**Status:** Implemented
+
+One accepted projection boundary may display exact Region Pack-authored text
+for a present actor who held required durable membership at command start. It
+does not disclose identifiers or membership, create player knowledge, or grant
+authority to narration.
+
 ## Open Design Questions
 
 The following ideas are important but not fully settled:
