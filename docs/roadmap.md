@@ -258,6 +258,13 @@ Work on only one sprint at a time. Do not begin the next sprint automatically.
 
 Status: Complete — ready for owner review. One strict elapsed-time threshold now composes a hidden, source-linked evidence trace with existing time pressure and actor relocation in one atomic candidate transition. Save version remains 1; no generic temporal or consequence framework is introduced.
 
+## Sprint 10.52 - One Declared Discovery-Gated Relocated-Actor Response
+
+Status: Complete — ready for owner review. One strict Elin-only discovery
+response reads command-start West Gate discovery membership after a normal
+local conversation commit. Captain Grey remains unchanged; save version 1,
+singleton non-overlap, and hidden-state boundaries are preserved.
+
 ## Sprint 10.51 - One Declared Resolved-Thread Evidence Trace Consequence
 
 Status: Complete — ready for owner review. One strict resolved-thread declaration adds a hidden,

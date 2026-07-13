@@ -396,6 +396,11 @@
     "required_knowledge_id": "west_road_report_completed",
     "response_text": "Captain Grey gives a firm nod. \"The report is settled. The west-road patrol has its orders.\""
   },
+  "conversation_player_discovery_response": {
+    "target_entity_id": "guard_elin_voss",
+    "required_discovery_id": "west_gate_elin_report_trace",
+    "response_text": "Elin Voss studies the folded order, then nods. \"You found it. The West Gate patrol is moving before the road closes.\""
+  },
   "factions": [
     {
       "faction_id": "town_watch_bryn_shander",

@@ -610,6 +610,14 @@
 
 # Sprint 10.51 - One Declared Resolved-Thread Evidence Trace Consequence
 
+# Sprint 10.52 - One Declared Discovery-Gated Relocated-Actor Response
+
+- Status: Complete — ready for owner review.
+- Adds one strict Elin-only, command-start discovery-gated response after an
+  ordinary successful local conversation, without persistent response state.
+- Captain Grey's existing response remains target-disjoint; no list,
+  precedence, generic dialogue system, or save migration is introduced.
+
 - Status: Complete — ready for owner review.
 - Adds one strict Region Pack declaration that binds the accepted west-road
   thread resolution to a hidden evidence trace at the existing Elin Voss

@@ -231,6 +231,18 @@ One optional immutable `elapsed_time_evidence_trace_effect` declares exactly one
 
 One optional immutable `resolved_thread_actor_relocation_effect` may identify one declared resolved thread, one stable static actor, and one exact destination location. Its identity must not conflict with any other supported authored effect identity in the Region Pack. It is eligible only inside the successful authored clue-presentation resolution transition. The copied candidate records the presentation source first, resolves the thread, adds a material actor-location override and causally linked `actor_moved` history only when needed, validates, builds one final Scene Snapshot, and publishes once. The structured result is only `None`, `{"status": "applied"}`, or `{"status": "no_op"}` and exposes no simulation identifiers. This preserves save version 1 and introduces no generic consequence system.
 
+## Discovery-Gated Relocated-Actor Conversation Response
+
+One optional immutable `conversation_player_discovery_response` binds Elin
+Voss to the existing West Gate discovery. `GameEngine` snapshots player
+discoveries at command start, completes the normal local conversation
+transition, then derives exact authored text only for that resolved target.
+It is read-only: no response state, history, scene, perception, narration,
+prompt, or save data is added. Validation requires the resolved-thread
+relocation actor, its evidence trace, discovery, and destination to agree and
+rejects overlap with Captain Grey's singleton knowledge response. Save version
+remains 1; no response list, precedence, or generic dialogue system is added.
+
 ## Authored Actor-Knowledge Conversation Response
 
 One optional immutable `conversation_actor_knowledge_response` declaration may

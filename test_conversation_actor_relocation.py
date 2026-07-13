@@ -43,6 +43,7 @@ def test_declaration_validation():
     absent = deepcopy(region)
     del absent["resolved_thread_actor_relocation_effect"]
     del absent["resolved_thread_evidence_trace_effect"]
+    del absent["conversation_player_discovery_response"]
     validate_region(absent)
     for value in ([], "effect"):
         invalid = deepcopy(region)
@@ -106,6 +107,7 @@ def test_noop_save_load_and_failure_isolation():
     without_declaration = region_data()
     del without_declaration["resolved_thread_actor_relocation_effect"]
     del without_declaration["resolved_thread_evidence_trace_effect"]
+    del without_declaration["conversation_player_discovery_response"]
     with TemporaryDirectory() as directory:
         path = Path(directory) / "without-relocation.json"
         path.write_text(json.dumps(without_declaration), encoding="utf-8")

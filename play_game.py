@@ -521,6 +521,9 @@ def main() -> None:
         actor_knowledge_response = interaction_result.get("actor_knowledge_response")
         if actor_knowledge_response is not None:
             print(actor_knowledge_response["text"])
+        player_discovery_response = interaction_result.get("player_discovery_response")
+        if player_discovery_response is not None:
+            print(player_discovery_response["text"])
         if interaction_result.get("intent") == "clue_recall":
             print_known_clues(interaction_result["known_clues"])
         if interaction_result.get("intent") == "clue_presentation":

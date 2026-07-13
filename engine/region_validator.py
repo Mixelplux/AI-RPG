@@ -130,6 +130,10 @@ def validate_region(region: dict) -> None:
         validate_conversation_actor_knowledge_response(region)
     except ValueError as error:
         errors.append(str(error))
+    try:
+        validate_conversation_player_discovery_response(region)
+    except ValueError as error:
+        errors.append(str(error))
 
     try:
         validate_conversation_evidence_trace_effect(region)
@@ -475,6 +479,37 @@ def validate_conversation_actor_knowledge_response(region: dict) -> None:
             raise ValueError(
                 f"{field}.required_knowledge_id must match resolved-thread knowledge effect knowledge_id."
             )
+
+
+def validate_conversation_player_discovery_response(region: dict) -> None:
+    field = "conversation_player_discovery_response"
+    if field not in region:
+        return
+    declaration = region[field]
+    required = {"target_entity_id", "required_discovery_id", "response_text"}
+    if not isinstance(declaration, dict) or set(declaration) != required:
+        raise ValueError(f"{field} fields are invalid.")
+    if any(not isinstance(declaration[name], str) or not declaration[name] for name in required):
+        raise ValueError(f"{field} values must be non-empty strings.")
+    static_ids = {item.get("entity_id") for item in region.get("entities", [])
+                  if isinstance(item, dict) and item.get("persistence") == "static"}
+    if declaration["target_entity_id"] not in static_ids:
+        raise ValueError(f"{field}.target_entity_id must reference a static actor.")
+    relocation = region.get("resolved_thread_actor_relocation_effect")
+    if not isinstance(relocation, dict) or declaration["target_entity_id"] != relocation.get("actor_entity_id"):
+        raise ValueError(f"{field}.target_entity_id must match the resolved-thread relocation actor.")
+    discoveries = [item for item in region.get("discovery_declarations", [])
+                   if isinstance(item, dict) and item.get("discovery_id") == declaration["required_discovery_id"]]
+    if len(discoveries) != 1:
+        raise ValueError(f"{field}.required_discovery_id is unknown.")
+    trace = region.get("resolved_thread_evidence_trace_effect")
+    if not isinstance(trace, dict) or discoveries[0].get("trace_id") != trace.get("trace_id"):
+        raise ValueError(f"{field}.required_discovery_id must match the resolved-thread evidence trace.")
+    if discoveries[0].get("location_id") != relocation.get("destination_location_id"):
+        raise ValueError(f"{field}.required_discovery_id must match the relocation destination.")
+    knowledge = region.get("conversation_actor_knowledge_response")
+    if isinstance(knowledge, dict) and knowledge.get("target_entity_id") == declaration["target_entity_id"]:
+        raise ValueError(f"{field}.target_entity_id must not overlap the actor-knowledge response.")
 
 
 def validate_conversation_evidence_trace_effect(region: dict) -> None:
