@@ -4,31 +4,34 @@ Status: Complete.
 
 ## Goal
 
-Close the approved discovery package after a combined implementation checkpoint.
+Close the approved discovery package after the correction checkpoint.
 
 ## Expected Files
 
-- docs/current_capability_package.md
+- engine/game_engine.py
+- engine/world_state.py
+- play_game.py
+- test_discovery.py
+- docs/architecture.md
+- docs/discovery_package_verification.md
 - docs/current_sprint.md
 - docs/current_sprint.yaml
 - docs/current_sprint.json
-- docs/decisions.md
-- docs/next_chat_handoff.md
-- docs/sprint_log.md
 
 ## Acceptance Criteria
 
-- Approved Sprints 10.27 through 10.30 outcomes are complete in checkpoint d61f884.
+- Current-location trace eligibility and authored-membership validation are enforced.
+- Full verification and exact package packet are complete.
 - No next sprint or capability package is staged.
 
 ## Verification
 
-Full suite and package review packet validation.
+Full root suite, focused regressions, Region Pack validation, scripted CLI smoke, and canonical manifest agreement passed through the official interpreter.
 
 ## Canonical Manifest
 
 <!-- CANONICAL-MANIFEST-START -->
 ```
-{"schema_version":"1.0.0","document_type":"current_sprint","sprint_count":1,"project":{"name":"AI Narrative RPG Engine","principles":["provider-neutral","deterministic-core","simulation-owned-truth"]},"sprint":{"id":"10.30","title":"Deterministic Local Investigation and Evidence Discovery Package Closeout","type":"capability-package-closeout","mode":"capability-package-internal","status":"complete","goal":"Close the approved discovery package after a combined implementation checkpoint.","platform":{"official_interpreter":".\\.venv\\Scripts\\python.exe"},"expected_files":{"likely_modified":["docs/current_capability_package.md","docs/current_sprint.md","docs/current_sprint.yaml","docs/current_sprint.json","docs/decisions.md","docs/next_chat_handoff.md","docs/sprint_log.md"],"likely_created":[]},"acceptance_criteria":["Approved Sprints 10.27 through 10.30 outcomes are complete in checkpoint d61f884.","No next sprint or capability package is staged."],"verification":{"focused_commands":[".\\.venv\\Scripts\\python.exe test_discovery.py"],"required_regressions":["All root test scripts through the official interpreter"],"manifest_commands":["JSON/YAML/Markdown parse and deep comparison","git diff --check"],"closeout_commands":["Full suite and package review packet validation"]},"execution_phases":[{"id":"closeout"}],"governance":["Checkpoint d61f884 combined approved Sprints 10.27 through 10.30 without separate fabricated commits.","Future packages retain one focused checkpoint per milestone.","The next sprint and capability package remain undefined and unstaged."],"closeout":{"allowed_terminal_statuses":["complete"],"verification_result":"Pending final verification.","next_sprint":null}}}
+{"schema_version":"1.0.0","document_type":"current_sprint","sprint_count":1,"project":{"name":"AI Narrative RPG Engine","principles":["provider-neutral","deterministic-core","simulation-owned-truth"]},"sprint":{"id":"10.30","title":"Deterministic Local Investigation and Evidence Discovery Package Closeout","type":"capability-package-closeout","mode":"capability-package-internal","status":"complete","goal":"Close the approved discovery package after the correction checkpoint.","platform":{"official_interpreter":".\\.venv\\Scripts\\python.exe"},"expected_files":{"likely_modified":["engine/game_engine.py","engine/world_state.py","play_game.py","test_discovery.py","docs/architecture.md","docs/discovery_package_verification.md","docs/current_sprint.md","docs/current_sprint.yaml","docs/current_sprint.json"],"likely_created":[]},"acceptance_criteria":["Current-location trace eligibility and authored-membership validation are enforced.","Full verification and exact package packet are complete.","No next sprint or capability package is staged."],"verification":{"focused_commands":[".\\.venv\\Scripts\\python.exe test_discovery.py"],"required_regressions":["All root test scripts passed"],"manifest_commands":["JSON/YAML/Markdown parse and deep comparison","git diff --check"],"closeout_commands":["Full suite, scripted CLI smoke, and packet validation passed"]},"execution_phases":[{"id":"closeout"}],"governance":["Correction checkpoint remains within approved package scope.","The next sprint and capability package remain undefined and unstaged."],"closeout":{"allowed_terminal_statuses":["complete"],"verification_result":"Full root suite, focused regressions, Region Pack validation, scripted CLI smoke, and canonical manifest agreement passed through the official interpreter.","next_sprint":null}}}
 ```
 <!-- CANONICAL-MANIFEST-END -->

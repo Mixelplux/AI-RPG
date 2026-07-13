@@ -136,7 +136,11 @@ class GameEngine:
     def investigate(self) -> Dict[str, Any]:
         candidate = copy_world_state(self.world_state)
         location_id = get_player_location_id(candidate)
-        trace_ids = {trace["trace_id"] for trace in candidate["evidence_traces"]}
+        trace_ids = {
+            trace["trace_id"]
+            for trace in candidate["evidence_traces"]
+            if trace["location_id"] == location_id
+        }
         declaration = next((item for item in self.region.get("discovery_declarations", [])
                             if item["location_id"] == location_id and item["trace_id"] in trace_ids
                             and item["discovery_id"] not in candidate["player_discoveries"]), None)

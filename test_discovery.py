@@ -4,6 +4,8 @@ from pathlib import Path
 
 from engine.region_validator import validate_region
 from engine.game_engine import GameEngine
+from engine.save_system import build_save_data, load_game
+from tempfile import TemporaryDirectory
 
 
 def test_discovery_declarations() -> None:
@@ -36,7 +38,34 @@ def test_atomic_local_discovery_and_no_op() -> None:
     assert engine.process_command("investigate")["investigation"]["changed"] is False
 
 
+def test_wrong_location_and_unknown_save_membership_fail_closed() -> None:
+    engine = GameEngine("data/regions/bryn_shander.json")
+    engine.create_evidence_trace(
+        "captain_conversation_gate_trace",
+        "captain_conversation_trace",
+        "bryn_shander_main_street",
+    )
+    before_state, before_scene = engine.get_world_state(), engine.get_scene_snapshot()
+    assert engine.investigate()["changed"] is False
+    assert engine.get_world_state() == before_state
+    assert engine.get_scene_snapshot() == before_scene
+    with TemporaryDirectory() as directory:
+        path = Path(directory) / "bad.json"
+        payload = build_save_data(engine)
+        payload["world_state"]["player_discoveries"] = ["unknown"]
+        path.write_text(json.dumps(payload), encoding="utf-8")
+        try:
+            engine.load(str(path))
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("Unknown discovery membership loaded.")
+        assert engine.get_world_state() == before_state
+        assert engine.get_scene_snapshot() == before_scene
+
+
 if __name__ == "__main__":
     test_discovery_declarations()
     test_atomic_local_discovery_and_no_op()
+    test_wrong_location_and_unknown_save_membership_fail_closed()
     print("Discovery declaration tests passed.")

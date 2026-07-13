@@ -507,6 +507,12 @@ def main() -> None:
             continue
 
         interaction_result = engine.process_command(player_input)
+        if interaction_result.get("intent") == "investigation":
+            investigation = interaction_result.get("investigation", {})
+            if investigation.get("changed"):
+                print(investigation["text"])
+            else:
+                print("You find no new clues here.")
 
         if interaction_result.get("message"):
             print()

@@ -11,6 +11,9 @@
   compatibility, and strict projection exclusions.
 - Full root test inventory, preflight, Region Pack validation, manifest checks,
   and diff check passed. The next sprint and capability package are undefined.
+- Correction checkpoint enforces exact trace locality and validates persisted
+  discovery membership against authored declarations; focused and full
+  verification were rerun.
 
 ## Sprint 10.26 Closeout
 

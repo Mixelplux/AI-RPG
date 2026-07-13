@@ -97,6 +97,14 @@ def validate_world_state(
     if (not isinstance(discoveries, list) or any(not isinstance(item, str) or not item for item in discoveries)
             or len(set(discoveries)) != len(discoveries)):
         raise ValueError("World State player_discoveries must be unique non-empty strings.")
+    if region is not None:
+        declaration_ids = {
+            item.get("discovery_id")
+            for item in region.get("discovery_declarations", [])
+            if isinstance(item, dict)
+        }
+        if any(item not in declaration_ids for item in discoveries):
+            raise ValueError("World State player_discoveries contains an unknown discovery_id.")
 
     validate_pressure_state(world_state["pressures"])
     validate_open_threads(world_state["open_threads"])
