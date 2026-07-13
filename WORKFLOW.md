@@ -93,6 +93,73 @@ Architecture reviews serve two audiences and must separate owner-level conclusio
 
 Do not automatically conduct a new architecture review after every routine extension of an approved pattern. Review again when a package ends, implementation materially diverges, a stop condition occurs, or the next capability crosses an architecture boundary.
 
+### Lightweight capability-sequencing pilot
+
+This controlled pilot replaces the mandatory full architecture review after an
+accepted runtime capability package with a lightweight sequencing check. It
+changes architecture-review cadence only; it does not weaken package review,
+owner authority, atomicity, causal integrity, hidden-state protection, or save
+compatibility.
+
+After each accepted pilot capability package is merged, confirm the committed
+`main` HEAD and clean tree, perform the lightweight check, determine whether
+the next provisional candidate remains valid, and present that candidate for
+explicit owner authorization. Do not stage, branch, or implement it until the
+owner accepts it. Every runtime package still needs one coherent boundary,
+normal implementation verification, a clean committed review-candidate HEAD,
+an independently validated `package-review` archive, final owner review, and
+explicit owner acceptance before merge.
+
+One check may propose no more than three related capability packages. That
+sequence is planning context, not blanket authority: only its first package
+may be presented for immediate acceptance. After each merge, repeat the check
+and obtain explicit authorization for the next package. Codex must never
+automatically continue from one package to the next.
+
+Each check records whether the completed package preserved the expected
+architecture; whether it created a blocker, material risk, or new exclusion;
+whether the next candidate remains the highest-value bounded step; whether a
+full-review trigger applies; whether it remains one coherent package; and
+whether it can preserve atomicity, causal history, hidden-state boundaries,
+and save compatibility. It relies on the latest comprehensive review, current
+committed repository state, completed-package and owner-review evidence, and
+materially relevant architecture, roadmap, ADR, implementation, and test
+evidence. It must not rebuild a comprehensive architecture-review archive
+unless a trigger requires one.
+
+A full architecture review is required if three pilot capability packages have
+completed; the provisional sequence is exhausted; the next direction is
+genuinely uncertain; a new persistent-state domain, save-version change or
+migration, generic effect/condition/consequence/reaction/transaction/dispatch
+framework, precedence system, autonomous schedule/routine/background
+progression/continuous simulation, or generalized handling for multiple
+authored declarations of a currently singleton kind is proposed; package
+review reveals material architecture friction; the candidate cannot use the
+established candidate-state, causal-history, validation, and publication
+patterns; canonical authorities materially conflict; or the evidence is not
+enough for a responsible recommendation. The owner may request a full review
+at any time.
+
+The pilot covers at most three runtime packages, counting from the first one
+authorized after this workflow change. The already accepted elapsed-time
+evidence package is supporting evidence, not a counted pilot package. The
+pilot succeeds only if it reduces packet generation, repeated synthesis, and
+owner back-and-forth without missed conflicts, broader or less coherent scope,
+increased owner intervention or correction cycles, unclear authority, weaker
+package evidence, or weakened atomicity, causal integrity, hidden-state
+protection, or save compatibility.
+
+Pause the pilot and return to a full architecture review whenever a trigger
+applies; a package needs more than one normal consolidated correction cycle;
+the check overlooks a material dependency or conflict; the sequence causes
+scope pressure or package fragmentation; owner interaction increases; workflow
+authority becomes ambiguous; or review evidence becomes materially weaker. Do
+not silently expand the pilot to solve a failure. Use one consolidated
+acceptance matrix for workflow or package findings, allow at most one normal
+consolidated correction cycle, and distinguish blocking defects, required
+corrections, bounded hardening opportunities, and future improvements. Optional
+hardening is not an acceptance blocker.
+
 ### Owner-facing review and report
 
 Use `docs/architecture_review_template.md` for a review. Begin every completion report with a concise plain-language owner summary covering:

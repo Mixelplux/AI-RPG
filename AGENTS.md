@@ -12,7 +12,10 @@ Codex is the implementation agent. Its default unit of work is one approved capa
 - Run proportionate focused checks, required regressions, and each required closeout verification cycle.
 - Complete relevant documentation, ADR work, checkpoint records, and package closeout after successful verification.
 - Provide a concise owner-level outcome first, with detailed evidence only when it supports a meaningful decision.
-- Stop without defining or beginning the next capability package.
+- Stop without defining or beginning the next capability package. During an
+  accepted lightweight-sequencing pilot, perform the documented sequencing
+  check after merge and present only its first candidate for explicit owner
+  authorization; do not stage, branch, or begin that candidate.
 
 Routine implementation choices inside the accepted package do not require owner interruption when they follow established architecture and remain within scope. The lead agent may define internal milestones, maintain their records, proceed sequentially, and prepare the final review packet.
 
@@ -63,7 +66,7 @@ Use the lowest reasoning level capable of completing the coherent work safely.
 
 Codex supplies repository evidence; ChatGPT owns architecture assessment and recommendation. Use the review type in `WORKFLOW.md`: brief health checks for routine internal confirmation, capability-package review at capability boundaries, and deep review for consequential architecture boundaries.
 
-For a required review packet, read `docs/architecture_review_template.md` and assemble the smallest complete evidence packet. Record changed files, verification, manifests, relevant implementation and tests, and pre-assembly and post-cleanup Git status. Do not turn packet assembly into an owner-facing technical essay. Full packets are required only at package completion, material architecture decisions, blocked external reviews, repository-access boundaries, or when explicitly requested.
+For a required review packet, read `docs/architecture_review_template.md` and assemble the smallest complete evidence packet. Record changed files, verification, manifests, relevant implementation and tests, and pre-assembly and post-cleanup Git status. Do not turn packet assembly into an owner-facing technical essay. During the accepted lightweight-sequencing pilot, package completion requires the normal independently validated package-review archive and final owner review, followed by the check defined in `WORKFLOW.md`; it does not by itself require a full architecture-review packet. Full packets remain required when a pilot trigger, material architecture decision, blocked external review, repository-access boundary, or explicit owner request applies.
 
 Select the required review-packet profile before assembly and run its independent
 validator against the completed ZIP before claiming packet completion. Use
