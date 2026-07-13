@@ -1,3 +1,4 @@
+import re
 from typing import Any, Dict
 
 
@@ -75,6 +76,13 @@ def process_player_input(
     if intent == "clue_recall":
         return build_interaction_result(success=True, intent=intent, message="You recall the clues you have found.", action=action)
     if intent == "clue_presentation":
+        if not action["parameters"].get("clue_title") or not action.get("target"):
+            return build_interaction_result(
+                success=False,
+                intent=intent,
+                message="Usage: present <clue title> to <actor>",
+                action=action,
+            )
         return build_interaction_result(success=True, intent=intent, message="You present a clue.", action=action)
 
     if intent == "movement":
@@ -132,7 +140,7 @@ def classify_intent(player_input: str) -> str:
         return "investigation"
     if lowered in {"clues", "known clues"}:
         return "clue_recall"
-    if lowered.startswith("present ") and " to " in lowered:
+    if lowered.startswith("present"):
         return "clue_presentation"
 
     movement_words = ["go", "walk", "move", "travel", "enter", "leave"]
@@ -186,8 +194,9 @@ def build_action(player_input: str, intent: str) -> Dict[str, Any]:
     if intent == "clue_recall":
         return {"type": "recall_clues", "target": None, "parameters": {}, "confidence": 1.0}
     if intent == "clue_presentation":
-        clue, actor = player_input[8:].rsplit(" to ", 1)
-        return {"type": "present_clue", "target": actor.strip() or None, "parameters": {"clue_title": clue.strip()}, "confidence": 1.0}
+        match = re.fullmatch(r"present\s+(.+?)\s+to\s+(.+?)", player_input.strip(), re.IGNORECASE)
+        clue_title, actor = (match.group(1).strip(), match.group(2).strip()) if match else (None, None)
+        return {"type": "present_clue", "target": actor or None, "parameters": {"clue_title": clue_title or None}, "confidence": 1.0}
 
     if intent == "movement":
         return {

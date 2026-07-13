@@ -75,6 +75,15 @@ def prepare_open_thread_candidate(
     thread_id = declaration["thread_id"]
     open_threads = candidate_world_state["open_threads"]
     validate_open_threads(open_threads)
+    resolved_threads = candidate_world_state.get("resolved_threads", {})
+    if thread_id in resolved_threads:
+        return candidate_world_state, {
+            "thread_id": thread_id,
+            "changed": False,
+            "status": "resolved",
+            "history_id": None,
+            "source_history_id": source_history_id,
+        }
     if thread_id in open_threads:
         return candidate_world_state, {
             "thread_id": thread_id,

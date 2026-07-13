@@ -76,12 +76,36 @@ def test_presenting_a_known_clue_resolves_the_open_thread_once() -> None:
     engine = GameEngine("data/regions/bryn_shander.json")
     engine.process_command("talk to captain")
     engine.process_command("investigate")
-    result = engine.process_command("present The Captain's Deliberate Trail to captain")["presentation"]
+    result = engine.process_command("Present The Captain's Deliberate Trail TO Captain")["presentation"]
     assert result["changed"] is True
     assert result["response_text"].startswith("Captain Darvin Grey")
     assert engine.get_open_threads() == {}
     assert set(engine.get_world_state()["resolved_threads"]) == {"bryn_shander_west_road_bandit_report"}
+    history_count = len(engine.query_history(event_type="unresolved_thread_opened"))
     assert engine.process_command("present The Captain's Deliberate Trail to captain")["presentation"]["changed"] is False
+    assert engine.process_command("talk to captain")["success"] is True
+    assert engine.get_open_threads() == {}
+    assert set(engine.get_world_state()["resolved_threads"]) == {"bryn_shander_west_road_bandit_report"}
+    assert len(engine.query_history(event_type="unresolved_thread_opened")) == history_count
+
+
+def test_malformed_presentation_and_resolved_save_compatibility() -> None:
+    engine = GameEngine("data/regions/bryn_shander.json")
+    for command in ("present", "present clue", "present to captain", "present clue to"):
+        result = engine.process_command(command)
+        assert result["intent"] == "clue_presentation" and result["success"] is False
+    engine.process_command("talk to captain")
+    engine.process_command("investigate")
+    engine.process_command("present The Captain's Deliberate Trail to captain")
+    with TemporaryDirectory() as directory:
+        path = Path(directory) / "resolved.json"
+        engine.save(str(path))
+        assert load_game(str(path)).get_world_state()["resolved_threads"] == engine.get_world_state()["resolved_threads"]
+        legacy = build_save_data(GameEngine("data/regions/bryn_shander.json"))
+        del legacy["world_state"]["resolved_threads"]
+        legacy_path = Path(directory) / "legacy.json"
+        legacy_path.write_text(json.dumps(legacy), encoding="utf-8")
+        assert load_game(str(legacy_path)).get_world_state()["resolved_threads"] == {}
 
 
 if __name__ == "__main__":
@@ -89,4 +113,5 @@ if __name__ == "__main__":
     test_atomic_local_discovery_and_no_op()
     test_wrong_location_and_unknown_save_membership_fail_closed()
     test_presenting_a_known_clue_resolves_the_open_thread_once()
+    test_malformed_presentation_and_resolved_save_compatibility()
     print("Discovery declaration tests passed.")
