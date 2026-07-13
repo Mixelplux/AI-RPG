@@ -1,19 +1,19 @@
-# Authored Resolved-Thread Actor Relocation
+# One Declared Elapsed-Time Evidence Trace Consequence
 
 Status: Complete — ready for owner review.
 
 ## Value and Scope
 
-The successful authored clue-presentation resolution for the Bryn Shander west-road report now sends the declared stable guard to the West Gate as durable World State. The package is limited to one optional strict Region Pack declaration, one declared resolved thread, one stable static actor, and one valid destination.
+One explicit accepted advancement across one authored strict elapsed-hour threshold creates one persistent, location-bound evidence trace. The trace remains hidden until the player reaches that location and explicitly investigates. The package includes one optional strict Region Pack declaration, its atomic composition with already supported time pressure and actor-relocation effects, focused tests, documentation, and final review evidence.
 
-## Ownership and Decisions
+## Decisions and Impacts
 
-Region Pack data owns the immutable declaration and rejects an effect identity that conflicts with any other supported Region Pack effect. World State remains the sole owner of runtime actor-location overrides and thread state. The existing clue-presentation candidate composes source history, resolution, one material relocation and its causal history, validates once, builds one Scene Snapshot, and publishes both together. The public result is only `None`, `{"status": "applied"}`, or `{"status": "no_op"}`; simulation identities remain internal. An already-at-destination actor is a successful no-op with no location history. Save version remains 1.
+Region Pack owns immutable declaration policy. World State continues to own elapsed time, evidence traces, history, pressure state, and actor-location overrides. A copied candidate state adds the `time_advanced` source first, then composes pressure, relocation, and evidence preparations deterministically; one validation and one scene build precede publication. The evidence declaration binds `effect_id`, a positive `trigger_elapsed_hours`, `trace_id`, `evidence_id`, and `location_id` to exactly one matching authored discovery declaration at that same location. Existing durable time makes the effect one-shot. Save version remains 1.
 
 ## Exclusions and Rollback
 
-No generic effects, reaction engine, dialogue framework, scheduling, elapsed-time movement, actor knowledge, evidence, pressure change, spawned actors, or save migration is introduced. Rollback is confined to this feature branch.
+No recurring or autonomous time, scheduler, generic effect or transaction framework, automatic discovery, passive evidence, clue presentation, thread changes, actor knowledge, pressure-driven evidence, AI-generated state, or save-version change is authorized. Rollback is confined to this feature branch.
 
-## Completion
+## Verification and Completion
 
-Focused declaration, atomicity, no-op, repeat, scene, target, perception, save/load, and failure-isolation coverage passed. The full official inventory, manifest agreement, preflight, and packet validation are recorded in the final review archive. No next package is staged.
+Focused declaration, threshold, no-op, conflict, atomicity, composition, save/load, investigation, hidden-projection, and full regression checks passed. Final independent `package-review` archive validation is recorded with the clean committed review candidate. No next package is staged.

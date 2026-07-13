@@ -62,6 +62,13 @@
       "trace_id": "captain_conversation_gate_trace",
       "location_id": "bryn_shander_gate_north",
       "text": "Fresh boot prints and a discarded watch tally suggest that Captain Darvin Grey's conversation left a deliberate trail at the gate."
+    },
+    {
+      "discovery_id": "north_gate_second_hour_trace",
+      "title": "The Delayed Watch Mark",
+      "trace_id": "north_gate_second_hour_trace",
+      "location_id": "bryn_shander_gate_north",
+      "text": "A fresh tally cut into the frozen gatepost records a delayed watch change after the second hour."
     }
   ],
   "conversation_unresolved_thread": {
@@ -91,6 +98,13 @@
     "trigger_elapsed_hours": 1,
     "actor_entity_id": "captain_darvin_grey",
     "destination_location_id": "bryn_shander_gate_west"
+  },
+  "elapsed_time_evidence_trace_effect": {
+    "effect_id": "second_hour_leaves_north_gate_trace",
+    "trigger_elapsed_hours": 2,
+    "trace_id": "north_gate_second_hour_trace",
+    "evidence_id": "delayed_watch_mark",
+    "location_id": "bryn_shander_gate_north"
   },
   "pressure_observation_cue": {
     "cue_id": "winter_deepens_observation",

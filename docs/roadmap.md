@@ -254,3 +254,7 @@ Active sprint definitions must include:
 
 Work on only one sprint at a time. Do not begin the next sprint automatically.
 
+## Sprint 10.49 - One Declared Elapsed-Time Evidence Trace Consequence
+
+Status: Complete — ready for owner review. One strict elapsed-time threshold now composes a hidden, source-linked evidence trace with existing time pressure and actor relocation in one atomic candidate transition. Save version remains 1; no generic temporal or consequence framework is introduced.
+

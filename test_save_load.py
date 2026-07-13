@@ -95,7 +95,7 @@ def main():
     post_load_history = loaded_engine.get_history()
 
     assert post_load_wait_result["success"]
-    assert len(post_load_history) == len(history_before_save) + 1
+    assert len(post_load_history) == len(history_before_save) + 2
     assert post_load_history[-1]["history_id"] not in loaded_history_ids
 
     with TemporaryDirectory() as temp_dir:

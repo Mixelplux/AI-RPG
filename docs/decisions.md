@@ -702,3 +702,9 @@ ownership. Failure publishes neither candidate state nor response.
 **Status:** Accepted
 
 An optional Region Pack-owned declaration may bind one already declared resolved thread to one stable static actor and one valid destination. Its singleton `effect_id` must not conflict with any supported authored effect identity in the same Region Pack. Eligibility is trigger-specific: it exists only during the successful authored clue-presentation resolution. The candidate creates the clue-presentation source before both lifecycle and material actor-location history, validates the complete state, builds one Scene Snapshot, and publishes state and scene together. Public result output is restricted to `None`, `{"status": "applied"}`, or `{"status": "no_op"}`; identifiers remain internal. Already-at-destination is a successful no-op with no location history. Version-1 saves continue unchanged. This is not a generic consequence, reaction, rule, condition, dispatcher, or scheduler framework.
+
+## ADR-053 - One Declared Elapsed-Time Threshold May Add One Hidden Evidence Trace
+
+**Status:** Accepted
+
+An optional strict Region Pack declaration may bind one positive elapsed-hour threshold to one stable trace, opaque evidence identity, matching discovery declaration, and location. The existing explicit time transition creates its source history first, then prepares pressure, actor relocation, and trace consequences in a fixed order against one copied candidate before validation, scene construction, and publication. Exact existing traces are no-ops; conflicting identities reject. The trace remains hidden until existing local explicit investigation finds its matching declaration. This preserves save version 1 and does not create a scheduler, generic effect registry, transaction framework, passive cue, or automatic discovery.

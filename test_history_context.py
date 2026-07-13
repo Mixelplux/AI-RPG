@@ -46,7 +46,7 @@ def main():
     assert movement_north_result["success"]
 
     full_history = engine.get_history()
-    assert len(full_history) == 16
+    assert len(full_history) == 17
 
     default_context = engine.get_history_context()
     assert default_context["history_entries"] == full_history[-10:]

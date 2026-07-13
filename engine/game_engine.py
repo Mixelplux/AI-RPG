@@ -703,6 +703,25 @@ class GameEngine:
                 "history_id": actor_result["history_id"],
             }
 
+        evidence_trace_consequence = None
+        trace_effect = self.region.get("elapsed_time_evidence_trace_effect")
+        if trace_effect is not None and (
+            previous_time.get("elapsed_hours", 0)
+            < trace_effect["trigger_elapsed_hours"]
+            <= new_time["elapsed_hours"]
+        ):
+            candidate_world_state, evidence_trace_consequence = (
+                self._prepare_evidence_trace_candidate(
+                    candidate_world_state,
+                    trace_effect["trace_id"],
+                    trace_effect["evidence_id"],
+                    trace_effect["location_id"],
+                    source_history_id,
+                )
+            )
+            evidence_trace_consequence["effect_id"] = trace_effect["effect_id"]
+            evidence_trace_consequence["trigger_elapsed_hours"] = trace_effect["trigger_elapsed_hours"]
+
         validate_world_state(candidate_world_state, self.region)
         candidate_scene_snapshot = build_scene(
             self.region,
@@ -717,6 +736,7 @@ class GameEngine:
             "new_time": new_time,
             "pressure_consequence": deepcopy(pressure_consequence),
             "actor_location_consequence": deepcopy(actor_location_consequence),
+            "evidence_trace_consequence": deepcopy(evidence_trace_consequence),
         }
 
     def get_scene_snapshot(self) -> Dict[str, Any]:

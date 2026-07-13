@@ -147,6 +147,11 @@ def validate_region(region: dict) -> None:
         errors.append(str(error))
 
     try:
+        validate_elapsed_time_evidence_trace_effect(region)
+    except ValueError as error:
+        errors.append(str(error))
+
+    try:
         validate_pressure_observation_cue(region)
     except ValueError as error:
         errors.append(str(error))
@@ -251,6 +256,7 @@ def validate_resolved_thread_actor_relocation_effect(region: dict) -> None:
         "conversation_evidence_trace_effect",
         "elapsed_time_pressure_effect",
         "elapsed_time_actor_relocation_effect",
+        "elapsed_time_evidence_trace_effect",
     )
     effect_ids = []
     for effect_field in effect_fields:
@@ -581,6 +587,48 @@ def validate_elapsed_time_actor_relocation_effect(region: dict) -> None:
     }
     if effect["destination_location_id"] not in location_ids:
         raise ValueError(f"{field}.destination_location_id is unknown.")
+
+
+def validate_elapsed_time_evidence_trace_effect(region: dict) -> None:
+    """Validate the one strict, elapsed-time-specific trace declaration."""
+    field = "elapsed_time_evidence_trace_effect"
+    if field not in region:
+        return
+    effect = region[field]
+    required = {
+        "effect_id", "trigger_elapsed_hours", "trace_id", "evidence_id", "location_id",
+    }
+    if not isinstance(effect, dict) or set(effect) != required:
+        raise ValueError(f"{field} fields are invalid.")
+    for name in ("effect_id", "trace_id", "evidence_id", "location_id"):
+        if not isinstance(effect[name], str) or not effect[name]:
+            raise ValueError(f"{field}.{name} must be a non-empty string.")
+    trigger = effect["trigger_elapsed_hours"]
+    if isinstance(trigger, bool) or not isinstance(trigger, int) or trigger <= 0:
+        raise ValueError(f"{field}.trigger_elapsed_hours must be a positive integer and not a boolean.")
+    locations = {item.get("location_id") for item in region.get("locations", []) if isinstance(item, dict)}
+    if effect["location_id"] not in locations:
+        raise ValueError(f"{field}.location_id is unknown.")
+    discoveries = [item for item in region.get("discovery_declarations", []) if isinstance(item, dict) and item.get("trace_id") == effect["trace_id"]]
+    if len(discoveries) != 1:
+        raise ValueError(f"{field}.trace_id must reference exactly one discovery declaration.")
+    if discoveries[0].get("location_id") != effect["location_id"]:
+        raise ValueError(f"{field}.location_id must match its discovery declaration.")
+    effect_fields = (
+        "conversation_actor_relocation_effect", "conversation_actor_knowledge_effect",
+        "conversation_evidence_trace_effect", "elapsed_time_pressure_effect",
+        "elapsed_time_actor_relocation_effect", "resolved_thread_actor_relocation_effect",
+    )
+    for other_field in effect_fields:
+        other = region.get(other_field)
+        if isinstance(other, dict) and other.get("effect_id") == effect["effect_id"]:
+            raise ValueError(f"{field}.effect_id conflicts with another Region Pack effect identity.")
+    for other in region.get("conversation_pressure_effects", []):
+        if isinstance(other, dict) and other.get("effect_id") == effect["effect_id"]:
+            raise ValueError(f"{field}.effect_id conflicts with another Region Pack effect identity.")
+    conversation_trace = region.get("conversation_evidence_trace_effect")
+    if isinstance(conversation_trace, dict) and conversation_trace.get("trace_id") == effect["trace_id"]:
+        raise ValueError(f"{field}.trace_id conflicts with another authored trace identity.")
 
 
 def validate_pressure_observation_cue(region: dict) -> None:

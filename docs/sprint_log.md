@@ -594,3 +594,10 @@
 - Added World State-owned ordered opaque evidence traces with exact Region Pack locations, version-1 legacy-load normalization, atomic explicit and causal creation, one declared conversation consequence, and defensive inspection.
 - No discovery, interpretation, reliability, actor reaction, player-facing projection, generic framework, or save-version change was added.
 - Checkpoint `7d24e3d` was an early package implementation checkpoint titled for Sprint 10.20 but spanning approved later milestones; later reconciliation commits restored canonical sequencing and auditability without rewriting history.
+
+# Sprint 10.49 - One Declared Elapsed-Time Evidence Trace Consequence
+
+- Status: Complete — ready for owner review.
+- Added one strict positive elapsed-hour Region Pack trace declaration with exact matching discovery and location validation.
+- Composed source-first time, pressure, actor relocation, and hidden evidence preparation in one atomic candidate transition.
+- Verified crossing, no-op, conflicts, save/load, local discovery, hidden projections, rollback injection, and the full root test inventory; save version remains 1.

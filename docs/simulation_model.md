@@ -653,3 +653,7 @@ The following questions are intentionally unresolved:
 Sprint 10.19 adds one authored, deterministic bridge from an accepted resolved conversation to opaque current actor-knowledge membership. The durable source records that the declared transition caused the membership change; it does not decide what was said, heard, understood, true, believed, or reliable. Player-facing discovery and interpretation remain separate future concerns.
 
 These questions should be answered through future design sessions and implementation experience, not solved prematurely.
+
+## Declared Elapsed-Time Evidence
+
+One explicit accepted time advancement may cross one authored strict elapsed-hour threshold and create one hidden, location-bound evidence trace. It remains simulation truth until the player explicitly investigates at the matching location; it creates no continuous ticking, schedules, recurring evidence, passive cue, or automatic discovery.
