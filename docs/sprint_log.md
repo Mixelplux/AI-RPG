@@ -1,5 +1,12 @@
 # Sprint Log
 
+## Sprint 10.48 — Authored Resolved-Thread Actor Relocation
+
+- Status: Complete.
+- Added strict Region Pack-owned resolved-thread relocation policy for the Bryn Shander west-road report and the declared stable guard at the West Gate.
+- The clue-presentation candidate composes source history, resolution lifecycle, material relocation, causal history, validation, and one Scene Snapshot before publication. Already-at-destination remains a successful no-op.
+- Focused relocation, unresolved-thread, actor-location, save/load, conversation, and full repository regression coverage passed with the official interpreter; save version remains 1 and no next package is staged.
+
 ## Authored Actor-Knowledge Conversation Response Package Closeout
 
 - Status: Complete — verification passed; awaiting owner acceptance.

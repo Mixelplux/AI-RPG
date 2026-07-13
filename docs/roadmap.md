@@ -1,5 +1,9 @@
 # Roadmap
 
+## Authored Resolved-Thread Actor Relocation — Complete
+
+The Bryn Shander west-road thread now has one bounded durable world reaction: successful clue presentation sends the declared guard to the West Gate. Save version remains 1; no next package is selected.
+
 ## Completed Foundation
 
 - Authored Actor-Knowledge Conversation Response — complete pending package review.

@@ -171,7 +171,8 @@ class GameEngine:
 
     def present_clue(self, clue_title: str, actor_text: str) -> Dict[str, Any]:
         declaration = self.region.get("conversation_discovery_resolution")
-        result = {"changed": False, "response_text": None, "resolved_observation": None}
+        result = {"changed": False, "response_text": None, "resolved_observation": None,
+                  "actor_location_consequence": None}
         if declaration is None or not isinstance(clue_title, str) or not isinstance(actor_text, str):
             return result
         clue = next((item for item in self.region.get("discovery_declarations", []) if item["title"].casefold() == clue_title.casefold()), None)
@@ -187,15 +188,30 @@ class GameEngine:
         if thread_id not in self.world_state["open_threads"]:
             return result
         candidate = copy_world_state(self.world_state)
-        candidate["open_threads"].pop(thread_id)
         candidate = add_history_entry(candidate, "clue_presented", "Player presented an authored clue.", extra={"target_entity_id": target["identifier"]})
         source_id = candidate["history"][-1]["history_id"]
+        candidate["open_threads"].pop(thread_id)
         candidate["resolved_threads"][thread_id] = {"thread_id": thread_id, "status": "resolved", "resolved_by_history_id": source_id}
         candidate = add_history_entry(candidate, "unresolved_thread_resolved", "Unresolved thread resolved.", extra={"thread_id": thread_id, "status": "resolved", "source_history_id": source_id})
+        relocation = self.region.get("resolved_thread_actor_relocation_effect")
+        if relocation is not None and relocation["resolved_thread_id"] == thread_id:
+            candidate, relocation_result = self._prepare_actor_location_candidate(
+                candidate, relocation["actor_entity_id"],
+                relocation["destination_location_id"], source_id,
+            )
+            result["actor_location_consequence"] = {
+                "effect_id": relocation["effect_id"],
+                "changed": relocation_result["changed"],
+                "actor_entity_id": relocation_result["entity_id"],
+                "previous_location_id": relocation_result["previous_location_id"],
+                "new_location_id": relocation_result["new_location_id"],
+                "history_id": relocation_result["history_id"],
+            }
         validate_world_state(candidate, self.region)
         scene = build_scene(self.region, candidate)
         self.world_state, self.scene_snapshot = candidate, scene
-        return {"changed": True, "response_text": declaration["response_text"], "resolved_observation": declaration["resolved_observation"]}
+        result.update({"changed": True, "response_text": declaration["response_text"], "resolved_observation": declaration["resolved_observation"]})
+        return deepcopy(result)
 
     def create_evidence_trace(self, trace_id: str, evidence_id: str, location_id: str) -> Dict[str, Any]:
         candidate, result = self._prepare_evidence_trace_candidate(

@@ -36,11 +36,11 @@
       "new_level": 25
     }
   ],
-  "conversation_actor_relocation_effect": {
-    "effect_id": "captain_conversation_moves_elin",
-    "trigger_entity_id": "captain_darvin_grey",
+  "resolved_thread_actor_relocation_effect": {
+    "effect_id": "west_road_report_sends_elin_west",
+    "resolved_thread_id": "bryn_shander_west_road_bandit_report",
     "actor_entity_id": "guard_elin_voss",
-    "destination_location_id": "bryn_shander_main_street"
+    "destination_location_id": "bryn_shander_gate_west"
   },
   "conversation_actor_knowledge_effect": {
     "effect_id": "captain_conversation_grants_knowledge",

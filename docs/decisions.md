@@ -696,3 +696,9 @@ every eligible conversation.
 This creates no World State, save, migration, history, scene, perception,
 narration, player-knowledge, dialogue, rule-framework, or response-history
 ownership. Failure publishes neither candidate state nor response.
+
+## ADR-052 - One Resolved Thread May Relocate One Authored Static Actor
+
+**Status:** Accepted
+
+An optional Region Pack-owned declaration may bind one already declared resolved thread to one stable static actor and one valid destination. Eligibility is trigger-specific: it exists only during the successful authored clue-presentation resolution. The candidate creates the clue-presentation source before both lifecycle and material actor-location history, validates the complete state, builds one Scene Snapshot, and publishes state and scene together. Already-at-destination is a successful no-op with no location history. Version-1 saves continue unchanged. This is not a generic consequence, reaction, rule, condition, dispatcher, or scheduler framework.

@@ -22,6 +22,8 @@ Concepts here are design guidance. They do not become implementation requirement
 
 ## Core Model
 
+Resolved authored investigations may have one explicit durable world reaction when an approved Region Pack declaration binds that exact resolution to a stable actor location. Such a reaction is simulation state, not narration, and remains bounded to its authored transition rather than implying general autonomous behavior.
+
 The engine should distinguish between:
 
 - objective world truth

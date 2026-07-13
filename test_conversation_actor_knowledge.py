@@ -92,12 +92,11 @@ def test_matching_material_duplicate_and_boundaries():
     assert additions[-1]["source_history_id"] == conversations[-1]["history_id"]
     assert engine.get_history().index(conversations[-1]) < engine.get_history().index(additions[-1])
     assert result["pressure_consequence"]["changed"]
-    assert result["actor_location_consequence"]["changed"]
+    assert result["actor_location_consequence"] is None
     assert result["unresolved_thread_consequence"]["changed"]
     assert [entry["event_type"] for entry in engine.get_history()] == [
         "player_conversation",
         "pressure_changed",
-        "actor_moved",
         "unresolved_thread_opened",
         "actor_knowledge_added",
         "evidence_trace_added",

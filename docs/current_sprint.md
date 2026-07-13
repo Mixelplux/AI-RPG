@@ -1,39 +1,27 @@
-# Sprint 10.45 — Actor-Knowledge Response Package Closeout
-
-Status: Complete — awaiting owner acceptance.
+# Sprint 10.48 — Authored Resolved-Thread Actor Relocation
 
 ## Goal
 
-Complete presentation, compatibility verification, documentation, and
-package-review closeout for the authored actor-knowledge response.
+Resolve one authored clue-presentation thread and atomically relocate one declared stable actor.
 
 ## Expected Files
 
-- Region Pack, response derivation, validator, game engine, CLI, and focused test.
-- Architecture, simulation, roadmap, ADR, package, sprint, sprint-log, and
-  final review-packet records.
+- Region Pack, GameEngine, Region Pack validator, relocation test, package records, ADR, and final review archive.
 
 ## Acceptance Criteria
 
-- Eligible successful conversations return and display exact authored text;
-  every ineligible or failed conversation returns `null`.
-- Command-start membership, actor presence, repetition, save/load, copy safety,
-  and failure isolation work without response persistence.
-- Documentation, manifests, full verification, and the validated package-review
-  archive agree.
+- A strict Region Pack declaration moves only its declared stable actor at its declared thread-resolution transition.
+- Source-first causal history, no-op and repeat safety, save/load, scene projection, target resolution, perception, and failure isolation hold.
+- No generic consequence framework, save migration, or next package is introduced.
 
 ## Verification
 
-Focused and affected regression tests, all 27 root test scripts, Region Pack
-validation, Markdown/YAML/JSON manifest deep agreement, official preflight,
-`git diff --check`, and independent package-review archive validation passed.
-`next_sprint` is `null`; no sprint is active or staged beyond this completed
-package.
+- Focused and full official-interpreter tests, Region Pack validation, preflight, three-way manifest agreement, diff check, and independent package-review validation.
 
 ## Canonical Manifest
 
 <!-- CANONICAL-MANIFEST-START -->
 ```json
-{"schema_version":"1.0.0","document_type":"current_sprint","sprint_count":1,"project":{"name":"AI Narrative RPG Engine","principles":["provider-neutral","deterministic-core","simulation-owned-truth"]},"sprint":{"id":"10.45","title":"Actor-Knowledge Response Package Closeout","type":"capability-package-internal","mode":"capability-package-internal","status":"complete","goal":"Complete presentation, compatibility verification, documentation, and package-review closeout for the authored actor-knowledge response.","platform":{"official_interpreter":".\\.venv\\Scripts\\python.exe"},"expected_files":{"likely_modified":["data/regions/bryn_shander.json","engine/actor_knowledge_response.py","engine/region_validator.py","engine/game_engine.py","play_game.py","docs/architecture.md","docs/simulation_model.md","docs/simulation_principles.md","docs/roadmap.md","docs/decisions.md","docs/current_capability_package.md","docs/current_sprint.md","docs/current_sprint.yaml","docs/current_sprint.json","docs/sprint_log.md"],"likely_created":["test_actor_knowledge_response.py","handoffs/authored-actor-knowledge-response-<short-head>.zip"]},"acceptance_criteria":["Eligible successful conversations return and display exact authored text; every ineligible or failed conversation returns null.","Command-start membership, actor presence, repetition, save/load, copy safety, and failure isolation are verified without response persistence.","Documentation, manifests, full verification, and an independently validated package-review archive agree."],"verification":{"focused_commands":[".\\.venv\\Scripts\\python.exe test_actor_knowledge_response.py","Relevant actor-knowledge, conversation, location, save/load, narration, and perception regressions"],"required_regressions":["Complete root test inventory through the official interpreter","Region Pack validation"],"manifest_commands":["JSON/YAML/Markdown deep agreement","git diff --check"],"closeout_commands":["Official preflight","Independent package-review archive validation"]},"execution_phases":[{"id":"authored-contract-and-architecture-boundary","status":"complete"},{"id":"deterministic-derivation-and-conversation-integration","status":"complete"},{"id":"presentation-compatibility-verification-and-closeout","status":"complete"}],"governance":["Approved package: Authored Actor-Knowledge Conversation Response.","No sprint is active or staged beyond this completed package.","No next capability package is staged."],"closeout":{"allowed_terminal_statuses":["complete"],"verification_result":"Focused and affected regression tests, all 27 root tests, Region Pack validation, Markdown/YAML/JSON manifest deep agreement, official preflight, git diff --check, and independent package-review packet validation passed.","next_sprint":null}}}
+{"schema_version":"1.0.0","document_type":"current_sprint","sprint_count":1,"project":{"name":"AI Narrative RPG Engine","principles":["provider-neutral","deterministic-core","simulation-owned-truth"]},"sprint":{"id":"10.48","title":"Authored Resolved-Thread Actor Relocation","type":"capability-package-internal","mode":"capability-package-internal","status":"complete","goal":"Resolve one authored clue-presentation thread and atomically relocate one declared stable actor.","platform":{"official_interpreter":".\\.venv\\Scripts\\python.exe"},"expected_files":{"likely_modified":["data/regions/bryn_shander.json","engine/game_engine.py","engine/region_validator.py","docs/architecture.md","docs/simulation_model.md","docs/roadmap.md","docs/decisions.md","docs/current_capability_package.md","docs/current_sprint.md","docs/current_sprint.yaml","docs/current_sprint.json","docs/sprint_log.md"],"likely_created":["test_conversation_actor_relocation.py","handoffs/authored-resolved-thread-actor-relocation-<short-head>.zip"]},"acceptance_criteria":["One valid declared resolution atomically resolves its thread and materially relocates its declared stable actor.","No-op, repeat, save/load, scene, target-resolution, perception, causal-history, and failure-isolation behavior are verified.","The declaration is strict Region Pack policy and no generic consequence framework is introduced."],"verification":{"focused_commands":[".\\.venv\\Scripts\\python.exe test_conversation_actor_relocation.py","Relevant unresolved-thread, actor-location, save/load, and conversation regressions"],"required_regressions":["Complete root test inventory through the official interpreter","Region Pack validation"],"manifest_commands":["JSON/YAML/Markdown deep agreement","git diff --check"],"closeout_commands":["Official preflight","Independent package-review archive validation"]},"execution_phases":[{"id":"contract-and-composition-boundary","status":"complete"},{"id":"atomic-relocation-integration","status":"complete"},{"id":"scenario-persistence-and-closeout","status":"complete"}],"governance":["Approved package: Authored Resolved-Thread Actor Relocation.","No next capability package is staged."],"closeout":{"allowed_terminal_statuses":["complete"],"verification_result":"Focused and full verification passed; final packet validation pending final commit.","next_sprint":null}}}
 ```
 <!-- CANONICAL-MANIFEST-END -->

@@ -163,6 +163,10 @@ def validate_region(region: dict) -> None:
         validate_conversation_discovery_resolution(region)
     except ValueError as error:
         errors.append(str(error))
+    try:
+        validate_resolved_thread_actor_relocation_effect(region)
+    except ValueError as error:
+        errors.append(str(error))
 
     if errors:
         raise ValueError(
@@ -210,6 +214,37 @@ def validate_conversation_discovery_resolution(region: dict) -> None:
     thread = region.get("conversation_unresolved_thread", {})
     if value["target_entity_id"] not in actors or value["required_discovery_id"] not in discoveries or value["required_thread_id"] != thread.get("thread_id"):
         raise ValueError(f"{field} references are invalid.")
+
+
+def validate_resolved_thread_actor_relocation_effect(region: dict) -> None:
+    """Validate the one strict, thread-resolution-specific relocation policy."""
+    field = "resolved_thread_actor_relocation_effect"
+    if field not in region:
+        return
+    effect = region[field]
+    required = {
+        "effect_id", "resolved_thread_id", "actor_entity_id",
+        "destination_location_id",
+    }
+    if not isinstance(effect, dict) or set(effect) != required:
+        raise ValueError(f"{field} fields are invalid.")
+    if any(not isinstance(effect[name], str) or not effect[name] for name in required):
+        raise ValueError(f"{field} values must be non-empty strings.")
+    thread = region.get("conversation_unresolved_thread", {})
+    if effect["resolved_thread_id"] != thread.get("thread_id"):
+        raise ValueError(f"{field}.resolved_thread_id is unknown.")
+    actors = {
+        item.get("entity_id") for item in region.get("entities", [])
+        if isinstance(item, dict) and item.get("persistence") == "static"
+    }
+    if effect["actor_entity_id"] not in actors:
+        raise ValueError(f"{field}.actor_entity_id must reference a static actor.")
+    locations = {
+        item.get("location_id") for item in region.get("locations", [])
+        if isinstance(item, dict)
+    }
+    if effect["destination_location_id"] not in locations:
+        raise ValueError(f"{field}.destination_location_id is unknown.")
 
 
 def validate_conversation_actor_relocation_effect(region: dict) -> None:
