@@ -35,6 +35,13 @@ def test_atomic_local_discovery_and_no_op() -> None:
     result = engine.process_command("investigate")["investigation"]
     assert result["changed"] and result["text"].startswith("Fresh boot prints")
     assert engine.get_player_discoveries() == ("north_gate_captain_trace",)
+    assert engine.get_known_clues() == (({
+        "title": "The Captain's Deliberate Trail",
+        "text": result["text"],
+    }),)
+    recalled = engine.process_command("clues")
+    assert recalled["known_clues"] == list(engine.get_known_clues())
+    assert "north_gate_captain_trace" not in str(recalled["known_clues"])
     assert engine.process_command("investigate")["investigation"]["changed"] is False
 
 
@@ -47,6 +54,7 @@ def test_wrong_location_and_unknown_save_membership_fail_closed() -> None:
     )
     before_state, before_scene = engine.get_world_state(), engine.get_scene_snapshot()
     assert engine.investigate()["changed"] is False
+    assert engine.process_command("known clues")["known_clues"] == []
     assert engine.get_world_state() == before_state
     assert engine.get_scene_snapshot() == before_scene
     with TemporaryDirectory() as directory:

@@ -28,6 +28,7 @@ def print_help() -> None:
     print("- load: Load the saved game.")
     print("- reset: Start a fresh game session.")
     print("- pressures: Show current scoped pressure state.")
+    print("- clues: Recall discovered clues.")
     print("- history: Show recent recorded world history.")
     print("- history recent <count>: Show recent world history.")
     print("- history type <event_type>: Show history by event type.")
@@ -63,6 +64,15 @@ def print_pressures(pressures: dict[str, dict]) -> None:
             f"level={pressure['level']}; "
             f"provenance={provenance['kind']}:{provenance['source_id']}"
         )
+
+
+def print_known_clues(clues: list[dict[str, str]]) -> None:
+    print("\n=== KNOWN CLUES ===")
+    if not clues:
+        print("You have not discovered any clues.")
+        return
+    for clue in clues:
+        print(f"- {clue['title']}: {clue['text']}")
 
 
 def print_history(history: list[dict]) -> None:
@@ -507,6 +517,8 @@ def main() -> None:
             continue
 
         interaction_result = engine.process_command(player_input)
+        if interaction_result.get("intent") == "clue_recall":
+            print_known_clues(interaction_result["known_clues"])
         if interaction_result.get("intent") == "investigation":
             investigation = interaction_result.get("investigation", {})
             if investigation.get("changed"):

@@ -174,7 +174,7 @@ def validate_discovery_declarations(region: dict) -> None:
     for declaration in declarations:
         if not isinstance(declaration, dict):
             raise ValueError(f"{field} entries must be dictionaries.")
-        required = {"discovery_id", "trace_id", "location_id", "text"}
+        required = {"discovery_id", "title", "trace_id", "location_id", "text"}
         if set(declaration) != required:
             raise ValueError(f"{field} fields are invalid.")
         if any(not isinstance(declaration[name], str) or not declaration[name] for name in required):

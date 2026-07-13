@@ -1,97 +1,56 @@
-# Deterministic Local Investigation and Evidence Discovery
+# Authored Discovery Use and Thread Resolution
 
-Status: Complete.
+Status: Active.
 
 ## Purpose and Owner-Visible Value
 
-This package creates the first complete deliberate discovery loop from hidden
-simulation truth to durable player knowledge:
+This approved package closes the current investigation gameplay loop: a player
+can recall an authored clue they previously discovered, present it to an
+eligible present actor, receive the exact authored response, and durably
+resolve the open thread that produced its local evidence.
 
-```text
-world event -> hidden evidence trace -> player investigation -> durable discovery
-```
+## Included Internal Milestones
 
-The player can investigate the current location, discover at most one authored
-clue supported by an existing trace, and retain that discovery through
-save/load. Region Packs own immutable discovery policy and exact player-facing
-observation prose; World State owns mutable truth and discovery membership.
+1. Sprint 10.31 — Player-safe clue recall.
+2. Sprint 10.32 — Persistent resolved-thread representation.
+3. Sprint 10.33 — Strict authored resolution declaration.
+4. Sprint 10.34 — Deterministic discovery-presentation action.
+5. Sprint 10.35 — Atomic thread-resolution transition.
+6. Sprint 10.36 — Player integration and package closeout.
 
-## Architecture Direction and Compatibility
+## Scope, Ownership, and Compatibility
 
-- Evidence traces remain hidden simulation records and keep their existing
-  schema.
-- Player discoveries are separate sparse persistent membership state; history
-  records accepted transitions without replacing current state.
-- Scene Snapshots and perception remain derived. Discovery does not enter
-  ordinary perception, narration, or scene data.
-- Candidate World State preparation, validation, and one final commit preserve
-  atomicity. Inspection APIs return defensive copies and duplicate material
-  operations are successful no-ops where appropriate.
-- Save version remains `1`; compatibility uses the established narrow
-  candidate-load normalization pattern only when needed.
+- Region Packs own immutable resolution declarations, clue labels, exact
+  response prose, and optional resolved observations.
+- World State owns durable discovered-clue membership, open-thread state,
+  resolved-thread state, and causal lifecycle history.
+- Scene Snapshots, perception, and narration remain derived; raw identifiers
+  and lifecycle metadata remain hidden from ordinary player-facing output.
+- Candidate-state preparation, validation, projection rebuilding, and one
+  final live commit preserve atomicity.
+- Save version remains `1`; legacy missing fields normalize narrowly only at
+  load time.
 
-## Accepted Internal Milestones
+## Exclusions
 
-1. Sprint 10.25 — fail-closed narration-history projection.
-2. Sprint 10.26 — narrow resolved-conversation consequence extraction.
-3. Sprint 10.27 — Region Pack discovery declarations and authored discovery
-   text.
-4. Sprint 10.28 — sparse persistent player-discovery representation.
-5. Sprint 10.29 — atomic local discovery transition and durable history.
-6. Sprint 10.30 — deterministic investigation command, full verification, and
-   final package review.
+No generic dialogue, semantic clue interpretation, clue combination, quests,
+objectives, rewards, branching outcomes, generic thread framework, effect
+framework, actor beliefs, checks, evidence reuse, automatic propagation,
+travel, combat, inventory, factions, economy, provider integration, or save
+version `2` is included.
 
-## Boundaries and Exclusions
+## Verification, Completion, and Rollback
 
-The package does not add evidence interpretation, clue combination,
-reliability, certainty, suspicion, belief, truth scores, actor reactions,
-actor-knowledge propagation, unresolved-thread resolution, quests,
-objectives, markers, journals, evidence inventory, trace movement/removal/
-destruction/aging/decay, automatic or remote discovery, multiple discoveries
-per action, random checks, attributes, skills, proficiency, travel, combat,
-schedules, factions, economy, live AI, provider integration, save version `2`,
-trace-schema provenance fields, or unrelated refactors.
+Each milestone requires focused tests, affected regressions, manifest
+agreement, and `git diff --check` before its authorized checkpoint. Package
+closeout requires the full official verification cycle, save/load and
+duplicate-safe tests, a scripted player-facing smoke test, the ADR, and one
+capability-package review packet. The package is recoverable by reverting its
+feature-branch checkpoints; it does not begin another package.
 
-Raw trace IDs, evidence IDs, lifecycle metadata, and causal identifiers must
-never be exposed to the player. Only traces with valid authored discovery
-declarations may be discoverable. Movement, scene entry, ordinary perception,
-narration, and conversation never automatically discover evidence.
+## Meaningful Stop Conditions
 
-## Verification and Meaningful Stop Conditions
-
-Each milestone requires focused tests, affected regressions, canonical manifest
-agreement, and `git diff --check` before its checkpoint. Package closeout adds
-the full required verification cycle, a player-facing investigation playtest,
-and a capability-package review packet.
-
-Stop for conflicting authority; a new ownership or persistence model; a save
-version change; unapproved player-visible behavior; a generic framework or
-broad refactor; discovery requiring interpretation, belief, or reliability;
-trace-schema changes; evidence entering snapshots, ordinary perception, or
-narration; inability to atomically commit discovery and history; material
-narration behavior change from the fail-closed projection; Region Pack prose
-ownership conflict; need for a broad player-knowledge model; material
-repository ambiguity; irreversible risk; or unresolved required verification
-outside safe scope.
-
-## Git, Checkpoints, and Owner Review
-
-Feature branch: `feature/deterministic-evidence-discovery`.
-
-Each completed milestone receives one focused checkpoint commit after its
-required verification. Do not merge, rebase, force-push, or begin another
-capability package. The package is recoverable by reverting its feature-branch
-commits.
-
-Routine in-scope milestone progression needs no owner interruption. A final
-capability-package review records the smallest complete evidence packet and
-returns one owner decision request: accept, reject, defer, or request deeper
-review of this package.
-
-## Closeout Reconciliation
-
-Checkpoint d61f884 implemented the approved outcomes of Sprints 10.27 through
-10.30 together rather than creating a checkpoint per internal milestone. The
-work remained within this approved package and introduced no new owner-level
-architecture boundary. This record does not fabricate separate commits. Future
-packages retain one focused checkpoint per milestone.
+Stop for an ownership conflict, save version change, generic framework, broad
+refactor, unapproved player-visible behavior, loss of atomicity, history used
+as current state, resolved-thread reopening, weakened current-scene targeting,
+or any other condition listed in `WORKFLOW.md`.

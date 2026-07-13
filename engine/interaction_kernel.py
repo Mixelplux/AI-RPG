@@ -72,6 +72,8 @@ def process_player_input(
         )
     if intent == "investigation":
         return build_interaction_result(success=True, intent=intent, message="You investigate the area.", action=action)
+    if intent == "clue_recall":
+        return build_interaction_result(success=True, intent=intent, message="You recall the clues you have found.", action=action)
 
     if intent == "movement":
         return resolve_movement(action, scene_snapshot)
@@ -126,6 +128,8 @@ def classify_intent(player_input: str) -> str:
         return "wait"
     if lowered in {"investigate", "search for clues"}:
         return "investigation"
+    if lowered in {"clues", "known clues"}:
+        return "clue_recall"
 
     movement_words = ["go", "walk", "move", "travel", "enter", "leave"]
     look_words = ["look", "inspect", "examine", "search", "study"]
@@ -175,6 +179,8 @@ def build_action(player_input: str, intent: str) -> Dict[str, Any]:
         }
     if intent == "investigation":
         return {"type": "investigate", "target": None, "parameters": {}, "confidence": 1.0}
+    if intent == "clue_recall":
+        return {"type": "recall_clues", "target": None, "parameters": {}, "confidence": 1.0}
 
     if intent == "movement":
         return {

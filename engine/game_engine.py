@@ -133,6 +133,15 @@ class GameEngine:
     def get_player_discoveries(self) -> tuple[str, ...]:
         return tuple(self.world_state["player_discoveries"])
 
+    def get_known_clues(self) -> tuple[Dict[str, str], ...]:
+        """Return authored, player-safe clues in declaration order."""
+        known_ids = set(self.world_state["player_discoveries"])
+        return tuple(
+            {"title": declaration["title"], "text": declaration["text"]}
+            for declaration in self.region.get("discovery_declarations", [])
+            if declaration["discovery_id"] in known_ids
+        )
+
     def investigate(self) -> Dict[str, Any]:
         candidate = copy_world_state(self.world_state)
         location_id = get_player_location_id(candidate)
@@ -923,6 +932,9 @@ class GameEngine:
             return deepcopy(interaction_result)
         if interaction_result["intent"] == "investigation" and interaction_result["success"]:
             interaction_result["investigation"] = self.investigate()
+            return deepcopy(interaction_result)
+        if interaction_result["intent"] == "clue_recall" and interaction_result["success"]:
+            interaction_result["known_clues"] = list(self.get_known_clues())
             return deepcopy(interaction_result)
 
         target_text = interaction_result["action"].get("target")

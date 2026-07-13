@@ -58,6 +58,7 @@
   "discovery_declarations": [
     {
       "discovery_id": "north_gate_captain_trace",
+      "title": "The Captain's Deliberate Trail",
       "trace_id": "captain_conversation_gate_trace",
       "location_id": "bryn_shander_gate_north",
       "text": "Fresh boot prints and a discarded watch tally suggest that Captain Darvin Grey's conversation left a deliberate trail at the gate."
