@@ -172,7 +172,8 @@ class GameEngine:
     def present_clue(self, clue_title: str, actor_text: str) -> Dict[str, Any]:
         declaration = self.region.get("conversation_discovery_resolution")
         result = {"changed": False, "response_text": None, "resolved_observation": None,
-                  "actor_location_consequence": None, "actor_knowledge_consequence": None}
+                  "actor_location_consequence": None, "actor_knowledge_consequence": None,
+                  "evidence_trace_consequence": None}
         if declaration is None or not isinstance(clue_title, str) or not isinstance(actor_text, str):
             return result
         clue = next((item for item in self.region.get("discovery_declarations", []) if item["title"].casefold() == clue_title.casefold()), None)
@@ -210,6 +211,15 @@ class GameEngine:
             )
             result["actor_knowledge_consequence"] = {
                 "status": "applied" if knowledge_result["changed"] else "no_op"
+            }
+        trace_effect = self.region.get("resolved_thread_evidence_trace_effect")
+        if trace_effect is not None and trace_effect["resolved_thread_id"] == thread_id:
+            candidate, trace_result = self._prepare_evidence_trace_candidate(
+                candidate, trace_effect["trace_id"], trace_effect["evidence_id"],
+                trace_effect["location_id"], source_id,
+            )
+            result["evidence_trace_consequence"] = {
+                "status": "applied" if trace_result["changed"] else "no_op"
             }
         validate_world_state(candidate, self.region)
         scene = build_scene(self.region, candidate)

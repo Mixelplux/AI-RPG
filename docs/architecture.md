@@ -208,6 +208,23 @@ former `player_spoke_with_captain` response is replaced. Knowledge stays hidden
 from ordinary scene, perception, narration, and prompt surfaces. Save version
 remains 1; no response precedence or generic consequence framework is added.
 
+## Declared Resolved-Thread Evidence Trace Consequence
+
+One optional immutable `resolved_thread_evidence_trace_effect` binds the
+existing west-road resolved thread to one stable trace identity, opaque evidence
+identity, one matching discovery declaration, and the exact destination of the
+existing resolved-thread actor relocation. Only the accepted clue-presentation
+resolution may prepare it. After the presentation source, thread resolution,
+relocation, and actor-knowledge preparation, the candidate creates one
+source-linked `evidence_trace_added` history entry before its single validation,
+Scene Snapshot build, and publication. An exact durable trace is a no-op;
+conflicting identity reuse rejects the complete candidate. The trace remains
+hidden from scene, perception, narration, prompts, and conversation responses
+until existing explicit local investigation at the authored location returns
+the exact Region Pack discovery text. Save version remains 1; no response,
+automatic discovery, passive cue, generic trace rule, or consequence framework
+is added.
+
 ## Declared Elapsed-Time Evidence Trace Consequence
 
 One optional immutable `elapsed_time_evidence_trace_effect` declares exactly one positive elapsed-hour threshold, trace identity, evidence identity, and Region Pack location. It must bind exactly one same-location discovery declaration and cannot reuse a supported effect or authored trace identity. Explicit time advancement records `time_advanced` first, then prepares pressure, actor relocation, and evidence consequences in that fixed order on one copied candidate. The trace is source-linked, one-shot through durable elapsed time, and hidden from ordinary scene, perception, narration, and prompt surfaces until existing explicit local investigation discovers its exact authored clue. Save version remains 1; no scheduler, generic consequence registry, or transaction framework is added.

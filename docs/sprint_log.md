@@ -607,3 +607,16 @@
 - Status: Complete — ready for owner review.
 - The existing successful clue-presentation resolution atomically composes its source history, resolved-thread lifecycle, accepted relocation, and one Captain Grey knowledge addition with causal history.
 - The former singleton response requiring `player_spoke_with_captain` is intentionally replaced by one exact resolved-report acknowledgment on a later eligible conversation. Save version remains 1; no response precedence or generic consequence framework was added.
+
+# Sprint 10.51 - One Declared Resolved-Thread Evidence Trace Consequence
+
+- Status: Complete — ready for owner review.
+- Adds one strict Region Pack declaration that binds the accepted west-road
+  thread resolution to a hidden evidence trace at the existing Elin Voss
+  relocation destination.
+- The existing clue-presentation candidate records its source, resolves the
+  thread, then prepares relocation, actor knowledge, and the source-linked
+  evidence trace in deterministic order before one validation, scene build,
+  and publication.
+- Existing explicit investigation is the only discovery path. Save version 1,
+  hidden-state boundaries, and all deferred response systems remain unchanged.

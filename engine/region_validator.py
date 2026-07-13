@@ -176,6 +176,10 @@ def validate_region(region: dict) -> None:
         validate_resolved_thread_actor_knowledge_effect(region)
     except ValueError as error:
         errors.append(str(error))
+    try:
+        validate_resolved_thread_evidence_trace_effect(region)
+    except ValueError as error:
+        errors.append(str(error))
 
     if errors:
         raise ValueError(
@@ -197,9 +201,10 @@ def validate_discovery_declarations(region: dict) -> None:
         if not isinstance(declaration, dict):
             raise ValueError(f"{field} entries must be dictionaries.")
         required = {"discovery_id", "title", "trace_id", "location_id", "text"}
-        if set(declaration) != required:
+        allowed = required | {"evidence_id"}
+        if set(declaration) not in (required, allowed):
             raise ValueError(f"{field} fields are invalid.")
-        if any(not isinstance(declaration[name], str) or not declaration[name] for name in required):
+        if any(not isinstance(declaration[name], str) or not declaration[name] for name in declaration):
             raise ValueError(f"{field} values must be non-empty strings.")
         if declaration["location_id"] not in location_ids:
             raise ValueError(f"{field}.location_id is unknown.")
@@ -302,6 +307,66 @@ def validate_resolved_thread_actor_knowledge_effect(region: dict) -> None:
         "conversation_evidence_trace_effect", "elapsed_time_pressure_effect",
         "elapsed_time_actor_relocation_effect", "elapsed_time_evidence_trace_effect",
         "resolved_thread_actor_relocation_effect",
+    )
+    for other_field in effect_fields:
+        other = region.get(other_field)
+        if isinstance(other, dict) and other.get("effect_id") == effect["effect_id"]:
+            raise ValueError(f"{field}.effect_id conflicts with another Region Pack effect identity.")
+    for other in region.get("conversation_pressure_effects", []):
+        if isinstance(other, dict) and other.get("effect_id") == effect["effect_id"]:
+            raise ValueError(f"{field}.effect_id conflicts with another Region Pack effect identity.")
+
+
+def validate_resolved_thread_evidence_trace_effect(region: dict) -> None:
+    """Validate the one strict resolved-thread-specific trace declaration."""
+    field = "resolved_thread_evidence_trace_effect"
+    if field not in region:
+        return
+    effect = region[field]
+    required = {
+        "effect_id", "resolved_thread_id", "trace_id", "evidence_id", "location_id",
+    }
+    if not isinstance(effect, dict) or set(effect) != required:
+        raise ValueError(f"{field} fields are invalid.")
+    if any(not isinstance(effect[name], str) or not effect[name] for name in required):
+        raise ValueError(f"{field} values must be non-empty strings.")
+    thread = region.get("conversation_unresolved_thread", {})
+    if effect["resolved_thread_id"] != thread.get("thread_id"):
+        raise ValueError(f"{field}.resolved_thread_id is unknown.")
+    location_ids = {
+        item.get("location_id") for item in region.get("locations", [])
+        if isinstance(item, dict)
+    }
+    if effect["location_id"] not in location_ids:
+        raise ValueError(f"{field}.location_id is unknown.")
+    relocation = region.get("resolved_thread_actor_relocation_effect")
+    if not isinstance(relocation, dict) or (
+        relocation.get("resolved_thread_id") != effect["resolved_thread_id"]
+    ):
+        raise ValueError(f"{field} requires a matching resolved-thread actor relocation effect.")
+    if relocation.get("destination_location_id") != effect["location_id"]:
+        raise ValueError(f"{field}.location_id must match the resolved-thread relocation destination.")
+    trace_fields = ("conversation_evidence_trace_effect", "elapsed_time_evidence_trace_effect")
+    for other_field in trace_fields:
+        other = region.get(other_field)
+        if isinstance(other, dict) and other.get("trace_id") == effect["trace_id"]:
+            raise ValueError(f"{field}.trace_id conflicts with another authored trace identity.")
+    discoveries = [
+        item for item in region.get("discovery_declarations", [])
+        if isinstance(item, dict) and item.get("trace_id") == effect["trace_id"]
+    ]
+    if len(discoveries) != 1:
+        raise ValueError(f"{field}.trace_id must reference exactly one discovery declaration.")
+    discovery = discoveries[0]
+    if discovery.get("evidence_id") != effect["evidence_id"]:
+        raise ValueError(f"{field}.evidence_id must match its discovery declaration.")
+    if discovery.get("location_id") != effect["location_id"]:
+        raise ValueError(f"{field}.location_id must match its discovery declaration.")
+    effect_fields = (
+        "conversation_actor_relocation_effect", "conversation_actor_knowledge_effect",
+        "conversation_evidence_trace_effect", "elapsed_time_pressure_effect",
+        "elapsed_time_actor_relocation_effect", "elapsed_time_evidence_trace_effect",
+        "resolved_thread_actor_relocation_effect", "resolved_thread_actor_knowledge_effect",
     )
     for other_field in effect_fields:
         other = region.get(other_field)

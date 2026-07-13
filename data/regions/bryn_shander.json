@@ -48,6 +48,13 @@
     "actor_entity_id": "captain_darvin_grey",
     "knowledge_id": "west_road_report_completed"
   },
+  "resolved_thread_evidence_trace_effect": {
+    "effect_id": "west_road_report_leaves_west_gate_trace",
+    "resolved_thread_id": "bryn_shander_west_road_bandit_report",
+    "trace_id": "west_gate_elin_report_trace",
+    "evidence_id": "elin_west_road_patrol_orders",
+    "location_id": "bryn_shander_gate_west"
+  },
   "conversation_actor_knowledge_effect": {
     "effect_id": "captain_conversation_grants_knowledge",
     "trigger_entity_id": "captain_darvin_grey",
@@ -75,6 +82,14 @@
       "trace_id": "north_gate_second_hour_trace",
       "location_id": "bryn_shander_gate_north",
       "text": "A fresh tally cut into the frozen gatepost records a delayed watch change after the second hour."
+    },
+    {
+      "discovery_id": "west_gate_elin_report_trace",
+      "title": "Elin's West-Road Orders",
+      "trace_id": "west_gate_elin_report_trace",
+      "evidence_id": "elin_west_road_patrol_orders",
+      "location_id": "bryn_shander_gate_west",
+      "text": "A folded patrol order beneath the West Gate brazier records Elin Voss's urgent west-road assignment."
     }
   ],
   "conversation_unresolved_thread": {
@@ -286,6 +301,10 @@
         {
           "direction": "out",
           "location_id": "bryn_shander_main_street"
+        },
+        {
+          "direction": "north",
+          "location_id": "bryn_shander_gate_west"
         }
       ]
     },

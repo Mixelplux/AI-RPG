@@ -1,19 +1,19 @@
-# One Declared Resolved-Thread Actor-Knowledge Acknowledgment
++# One Declared Resolved-Thread Evidence Trace Consequence
 
 Status: Complete — ready for owner review.
 
 ## Value and Scope
 
-One successful authored clue presentation resolves the existing west-road report, preserves its accepted actor relocation, and adds one opaque knowledge membership to Captain Grey. A later eligible conversation returns one exact replacement acknowledgment through the existing singleton response boundary.
+When the existing west-road clue presentation resolves its authored thread, its atomic candidate transition creates one hidden evidence trace at Elin Voss's existing resolved-thread relocation destination. The player may later discover the exact authored text only through the existing explicit local investigation path.
 
 ## Decisions and Impacts
 
-Region Pack owns one strict resolved-thread knowledge declaration and the exact response text. World State continues to own resolved threads, actor locations, actor knowledge, and history. The existing copied clue-presentation candidate records its source first, resolves the thread, prepares relocation, then prepares the source-linked knowledge addition before one validation, one scene build, and one publication. The former `player_spoke_with_captain` singleton response is intentionally replaced, not supplemented. Save version remains 1.
+Region Pack owns one strict optional declaration that binds the resolved thread, trace, evidence, discovery declaration, and relocation destination. World State continues to own resolved-thread state, actor location, actor knowledge, evidence traces, discoveries, and history. The existing candidate records clue_presented, resolves the thread, then prepares relocation, actor knowledge, and the trace in that deterministic order before one validation, scene build, and publication. Save version remains 1.
 
 ## Exclusions and Rollback
 
-No second response, response precedence, direct thread projection, pressure work, generic consequence or transaction framework, dialogue system, AI-generated state, or save-version change is authorized. Rollback is confined to this feature branch.
+No relocated-actor response, conversation response, precedence system, generic consequence framework, automatic discovery, passive cue, recurring evidence, trace movement, save migration, or new persistent domain is authorized. Any preparation, history, validation, or Scene Snapshot failure leaves live World State and Scene Snapshot unchanged.
 
 ## Verification and Completion
 
-Focused declaration, threshold, no-op, conflict, atomicity, composition, save/load, investigation, hidden-projection, and full regression checks passed. Final independent `package-review` archive validation is recorded with the clean committed review candidate. No next package is staged.
+Focused declaration, composition, no-op, conflict, rollback, investigation, hidden-state, save/load, and full-regression evidence passed. Final package-review archive validation is pending the committed review candidate. No next package is staged.

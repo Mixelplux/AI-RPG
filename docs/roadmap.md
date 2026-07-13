@@ -258,3 +258,12 @@ Work on only one sprint at a time. Do not begin the next sprint automatically.
 
 Status: Complete — ready for owner review. One strict elapsed-time threshold now composes a hidden, source-linked evidence trace with existing time pressure and actor relocation in one atomic candidate transition. Save version remains 1; no generic temporal or consequence framework is introduced.
 
+## Sprint 10.51 - One Declared Resolved-Thread Evidence Trace Consequence
+
+Status: Complete — ready for owner review. One strict resolved-thread declaration adds a hidden,
+source-linked evidence trace at the existing relocated actor's authored
+destination during the successful west-road clue presentation. Existing local
+investigation remains the sole player-facing discovery boundary; save version
+remains 1. A discovery-gated relocated-actor response and all generic
+consequence infrastructure remain deferred.
+
