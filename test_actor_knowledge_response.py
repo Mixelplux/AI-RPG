@@ -16,9 +16,9 @@ import play_game
 
 REGION_PATH = "data/regions/bryn_shander.json"
 ACTOR_ID = "captain_darvin_grey"
-KNOWLEDGE_ID = "player_spoke_with_captain"
+KNOWLEDGE_ID = "west_road_report_completed"
 RESPONSE_TEXT = (
-    'Captain Grey nods once. "You have heard enough to know the western road is not safe."'
+    'Captain Grey gives a firm nod. "The report is settled. The west-road patrol has its orders."'
 )
 
 
@@ -77,6 +77,11 @@ def test_command_start_ordering_repetition_and_isolation():
     first = engine.process_command("talk to captain")
     assert first["success"]
     assert first["actor_knowledge_response"] is None
+    assert KNOWLEDGE_ID not in engine.get_actor_knowledge(ACTOR_ID)
+    investigation = engine.process_command("investigate")
+    assert investigation["investigation"]["changed"]
+    presented = engine.process_command("present The Captain's Deliberate Trail to captain")
+    assert presented["presentation"]["changed"]
     assert KNOWLEDGE_ID in engine.get_actor_knowledge(ACTOR_ID)
 
     second = engine.process_command("talk to captain")
@@ -101,6 +106,8 @@ def test_command_start_ordering_repetition_and_isolation():
 def test_failure_isolation_and_save_load():
     engine = GameEngine(REGION_PATH)
     engine.process_command("talk to captain")
+    engine.process_command("investigate")
+    engine.process_command("present The Captain's Deliberate Trail to captain")
     before_state = engine.get_world_state()
     before_scene = engine.scene_snapshot
     with patch.object(game_engine_module, "build_scene", side_effect=RuntimeError("scene")):
@@ -126,7 +133,7 @@ def test_failure_isolation_and_save_load():
 
 def test_gameplay_output():
     output = StringIO()
-    with patch("builtins.input", side_effect=["talk to captain", "talk to captain", "quit"]), redirect_stdout(output):
+    with patch("builtins.input", side_effect=["talk to captain", "investigate", "present The Captain's Deliberate Trail to captain", "talk to captain", "quit"]), redirect_stdout(output):
         play_game.main()
     assert output.getvalue().count(RESPONSE_TEXT) == 1
 

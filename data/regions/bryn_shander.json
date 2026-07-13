@@ -42,6 +42,12 @@
     "actor_entity_id": "guard_elin_voss",
     "destination_location_id": "bryn_shander_gate_west"
   },
+  "resolved_thread_actor_knowledge_effect": {
+    "effect_id": "west_road_report_informs_captain",
+    "resolved_thread_id": "bryn_shander_west_road_bandit_report",
+    "actor_entity_id": "captain_darvin_grey",
+    "knowledge_id": "west_road_report_completed"
+  },
   "conversation_actor_knowledge_effect": {
     "effect_id": "captain_conversation_grants_knowledge",
     "trigger_entity_id": "captain_darvin_grey",
@@ -368,8 +374,8 @@
   "conversation_actor_knowledge_response": {
     "response_id": "captain_acknowledges_player_conversation",
     "target_entity_id": "captain_darvin_grey",
-    "required_knowledge_id": "player_spoke_with_captain",
-    "response_text": "Captain Grey nods once. \"You have heard enough to know the western road is not safe.\""
+    "required_knowledge_id": "west_road_report_completed",
+    "response_text": "Captain Grey gives a firm nod. \"The report is settled. The west-road patrol has its orders.\""
   },
   "factions": [
     {

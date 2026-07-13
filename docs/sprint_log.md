@@ -601,3 +601,9 @@
 - Added one strict positive elapsed-hour Region Pack trace declaration with exact matching discovery and location validation.
 - Composed source-first time, pressure, actor relocation, and hidden evidence preparation in one atomic candidate transition.
 - Verified crossing, no-op, conflicts, save/load, local discovery, hidden projections, rollback injection, and the full root test inventory; save version remains 1.
+
+# Sprint 10.50 - One Declared Resolved-Thread Actor-Knowledge Acknowledgment
+
+- Status: Complete — ready for owner review.
+- The existing successful clue-presentation resolution atomically composes its source history, resolved-thread lifecycle, accepted relocation, and one Captain Grey knowledge addition with causal history.
+- The former singleton response requiring `player_spoke_with_captain` is intentionally replaced by one exact resolved-report acknowledgment on a later eligible conversation. Save version remains 1; no response precedence or generic consequence framework was added.

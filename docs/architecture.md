@@ -194,6 +194,20 @@ Only `world_state` is persisted. Region Packs remain immutable assets. Scene Sna
 
 ## Authored Resolved-Thread Actor Relocation
 
+## Declared Resolved-Thread Actor-Knowledge Acknowledgment
+
+One optional immutable `resolved_thread_actor_knowledge_effect` binds the
+existing authored west-road thread to Captain Darvin Grey and one opaque
+knowledge identity. Only the accepted clue-presentation resolution may prepare
+it. The candidate records the presentation source first, resolves the thread,
+prepares existing relocation, then adds source-linked knowledge history before
+one validation, one scene build, and one publication. The existing singleton
+`conversation_actor_knowledge_response` is retargeted to that membership, so a
+later eligible conversation produces one exact authored acknowledgment; the
+former `player_spoke_with_captain` response is replaced. Knowledge stays hidden
+from ordinary scene, perception, narration, and prompt surfaces. Save version
+remains 1; no response precedence or generic consequence framework is added.
+
 ## Declared Elapsed-Time Evidence Trace Consequence
 
 One optional immutable `elapsed_time_evidence_trace_effect` declares exactly one positive elapsed-hour threshold, trace identity, evidence identity, and Region Pack location. It must bind exactly one same-location discovery declaration and cannot reuse a supported effect or authored trace identity. Explicit time advancement records `time_advanced` first, then prepares pressure, actor relocation, and evidence consequences in that fixed order on one copied candidate. The trace is source-linked, one-shot through durable elapsed time, and hidden from ordinary scene, perception, narration, and prompt surfaces until existing explicit local investigation discovers its exact authored clue. Save version remains 1; no scheduler, generic consequence registry, or transaction framework is added.
