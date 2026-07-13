@@ -10,7 +10,11 @@ from engine.actor_knowledge import (
     validate_actor_knowledge,
 )
 from engine.evidence_traces import validate_evidence_traces
-from engine.unresolved_threads import validate_open_threads, validate_open_thread_integrity
+from engine.unresolved_threads import (
+    validate_open_threads,
+    validate_open_thread_integrity,
+    validate_resolved_thread_integrity,
+)
 
 
 DEFAULT_HISTORY_QUERY_COUNT = 10
@@ -171,6 +175,7 @@ def validate_world_state(
                 raise ValueError("Resolved thread history id is unknown.")
     if region is not None:
         validate_open_thread_integrity(world_state, region)
+        validate_resolved_thread_integrity(world_state, region)
 
 
 def copy_world_state(world_state: Dict[str, Any]) -> Dict[str, Any]:

@@ -1,5 +1,24 @@
 # Sprint Log
 
+## Authored Resolved-Thread Observation and Integrity Package Closeout
+
+- Status: Complete.
+- Sprint 10.37 validates each resolved record against the active Region Pack
+  declaration, one declared opening lifecycle, its source conversation, the
+  declared clue presentation, and one later linked resolution lifecycle.
+  Malformed candidates and loads preserve live state and scene identity.
+- Sprint 10.38 derives only the exact authored observation from already-valid
+  resolved state at the existing declared locations; it stores no prose and
+  treats history as validation evidence, not runtime authority.
+- Sprint 10.39 renders that derived text once in normal scene narration on
+  every eligible visit, including after save/load, and nowhere else.
+- Save version remains 1; no generic consequence system, command, dialogue
+  branch, actor movement, time behavior, or narration-provider work was added.
+- Focused integrity, discovery, unresolved-thread, perception, narration, and
+  save/load tests passed. The full root test inventory, official preflight,
+  canonical manifest agreement, and diff check passed. No following sprint or
+  capability package is defined.
+
 ## Deterministic Local Investigation and Evidence Discovery Package Closeout
 
 - Status: Complete.

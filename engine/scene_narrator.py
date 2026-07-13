@@ -67,6 +67,7 @@ def narrate_scene(perception_snapshot: Dict[str, Any]) -> Dict[str, Any]:
     location = perception["visible"]["location"]
     environment = perception.get("environment", {})
     entities = perception["visible"]["entities"]
+    resolved_thread_observation = perception.get("resolved_thread_observation", {})
 
     location_name = location.get("name", "Unknown Location")
     description_seed = location.get("description_seed", "")
@@ -111,6 +112,9 @@ def narrate_scene(perception_snapshot: Dict[str, Any]) -> Dict[str, Any]:
         description_parts.append(
             "Present here: " + ", ".join(entity_descriptions) + "."
         )
+
+    if resolved_thread_observation:
+        description_parts.append(resolved_thread_observation["text"])
 
     return {
         "title": f"{location_name}, Bryn Shander",

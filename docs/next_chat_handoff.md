@@ -1,6 +1,7 @@
-# Deterministic Local Investigation and Evidence Discovery Complete
+# Authored Resolved-Thread Observation and Integrity Complete
 
-The package is complete on feature/deterministic-evidence-discovery. Checkpoint
-d61f884 combined the approved 10.27 through 10.30 outcomes; reconciliation
-records this truthfully without fabricating separate commits. The next sprint
-and next capability package are undefined and unstaged.
+Sprints 10.37 through 10.39 are complete on
+`codex/authored-resolved-thread-observation`. Resolved-thread causal integrity
+is fail-closed and one exact authored local observation is derived only from
+valid durable state. Save version remains 1. The next sprint and capability
+package are undefined and unstaged pending owner package acceptance.

@@ -232,6 +232,13 @@ Sprint 10.16 establishes sparse persistent actor-knowledge membership for stable
 
 Sprint 10.19 composes one strict immutable resolved-conversation declaration with the accepted candidate transition. It may grant one opaque actor-knowledge identifier to one stable static actor using the new conversation entry as a structural causal source. It adds no conversation-text interpretation, knowledge projection, semantic source policy, or generic consequence system. No following sprint is defined.
 
+Authored Resolved-Thread Observation and Integrity completed through Sprints
+10.37 through 10.39. Resolved-thread records now require declared causal
+lifecycle integrity before acceptance, and one exact authored local observation
+is derived from valid resolved state for normal scene narration. No new
+persistent field, save-version change, generic consequence system, or following
+sprint is defined.
+
 Active sprint definitions must include:
 
 - Goal

@@ -201,6 +201,21 @@ transition, causal resolution history, validation, and scene rebuilding occur
 before one live commit. Version-1 saves missing resolved state normalize empty
 only while loading; the original trigger cannot reopen a resolved thread.
 
+Sprint 10.37 hardens resolved state before it can become authoritative: each
+record must match the active strict resolution declaration, exactly one prior
+declared opening lifecycle, its triggering conversation, the declared clue
+presentation, and exactly one later linked resolution lifecycle. History and
+Region Pack declarations validate current state but do not become alternate
+runtime authorities. Malformed saved state fails before load replacement, and
+failed candidate transitions preserve the live World State and Scene Snapshot.
+
+Sprints 10.38 and 10.39 derive one exact authored resolved observation from
+already-validated `resolved_threads` at the existing declared thread perception
+locations. The observation is non-persistent, contains only authored text, is
+absent elsewhere, and appears once per perception and normal scene narration
+result while remaining available on every later eligible visit and after
+save/load.
+
 Sprint 10.15 hardens the existing unresolved-thread boundary without changing its ownership or save version. Region-aware World State validation now requires each persisted open thread to match the singular active declaration, a prior `player_conversation` targeting that declaration's trigger actor, and exactly one later `unresolved_thread_opened` record with matching identity, `open` status, and source history identifier. Malformed state fails before engine replacement or candidate commit. Lifecycle records remain durable and engine-queryable, but the narration-context projection excludes them alongside existing internal pressure and actor consequence records; location-aware perception remains unchanged.
 
 Sprint 10.16 establishes `world_state.actor_knowledge` as sparse current membership keyed only by stable static actor identity. Immutable Region Pack `knowledge` arrays are validated new-game seeds and are deep-copied only during new-game construction. Version-1 saves missing the field normalize to empty membership during loading and never reseed from Region Pack content. Region-aware validation rejects malformed membership, unknown or unsupported actor identities, duplicate identifiers, and nested metadata. `GameEngine.get_actor_knowledge(actor_id)` returns an immutable tuple without adding knowledge to scenes, perception, narration, prompts, targeting, dialogue, or behavior.

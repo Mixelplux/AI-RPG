@@ -671,3 +671,12 @@ validates, rebuilds the scene, and commits once. Repeats are non-mutating;
 resolved threads cannot reopen through their original trigger. This adds no
 dialogue system, semantic interpretation, branching, quests, or generic state
 machine.
+
+## Authored Resolved-Thread Observation and Integrity ADR Determination
+
+No new ADR is required. ADR-050 already owns sparse resolved-thread state,
+authored observation text, atomic presentation, and version-1 compatibility.
+Sprints 10.37 through 10.39 only strengthen validation of that established
+state and derive one local non-persistent presentation from it. History and
+Region Pack declarations remain validation inputs rather than a second runtime
+authority; no generic consequence or projection framework is introduced.

@@ -5,6 +5,7 @@ from engine.scene_loader import load_region, build_scene
 from engine.perception_builder import build_perception
 from engine.pressure_observation import derive_pressure_observation
 from engine.unresolved_threads import (
+    derive_resolved_thread_observation,
     derive_unresolved_thread_evidence,
     get_open_threads as get_world_open_threads,
     prepare_open_thread_candidate,
@@ -721,6 +722,12 @@ class GameEngine:
             derive_unresolved_thread_evidence(
                 self.world_state["open_threads"],
                 self.region.get("conversation_unresolved_thread"),
+                get_player_location_id(self.world_state),
+            ),
+            derive_resolved_thread_observation(
+                self.world_state["resolved_threads"],
+                self.region.get("conversation_unresolved_thread"),
+                self.region.get("conversation_discovery_resolution"),
                 get_player_location_id(self.world_state),
             ),
         )

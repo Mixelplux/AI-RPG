@@ -60,6 +60,86 @@ def validate_open_thread_integrity(world_state: dict[str, Any], region: dict[str
             raise ValueError("Opening lifecycle record has no persisted thread state.")
 
 
+def validate_resolved_thread_integrity(world_state: dict[str, Any], region: dict[str, Any]) -> None:
+    """Validate resolved state against its declared presentation lifecycle."""
+
+    resolved_threads = world_state["resolved_threads"]
+    declaration = region.get("conversation_discovery_resolution")
+    history = world_state.get("history", [])
+    history_by_id = {
+        entry.get("history_id"): (index, entry)
+        for index, entry in enumerate(history)
+    }
+    openings = [
+        (index, entry)
+        for index, entry in enumerate(history)
+        if entry.get("event_type") == "unresolved_thread_opened"
+    ]
+    resolutions = [
+        (index, entry)
+        for index, entry in enumerate(history)
+        if entry.get("event_type") == "unresolved_thread_resolved"
+    ]
+
+    for thread_id, thread in resolved_threads.items():
+        if declaration is None or declaration.get("required_thread_id") != thread_id:
+            raise ValueError("Resolved thread must match the active Region Pack declaration.")
+
+        presentation = history_by_id.get(thread["resolved_by_history_id"])
+        if presentation is None:
+            raise ValueError("Resolved thread presentation history id is unknown.")
+        presentation_index, presentation_entry = presentation
+        if (
+            presentation_entry.get("event_type") != "clue_presented"
+            or presentation_entry.get("target_entity_id") != declaration["target_entity_id"]
+        ):
+            raise ValueError("Resolved thread source must be its declared clue presentation.")
+
+        matching_openings = [
+            (index, entry)
+            for index, entry in openings
+            if entry.get("thread_id") == thread_id
+        ]
+        if len(matching_openings) != 1:
+            raise ValueError("Resolved thread must have exactly one opening lifecycle record.")
+        opening_index, opening = matching_openings[0]
+        opening_source = history_by_id.get(opening.get("source_history_id"))
+        if opening_source is None:
+            raise ValueError("Resolved thread opening source history id is unknown.")
+        opening_source_index, opening_source_entry = opening_source
+        unresolved_declaration = region.get("conversation_unresolved_thread")
+        if (
+            opening.get("status") != "open"
+            or unresolved_declaration is None
+            or unresolved_declaration.get("thread_id") != thread_id
+            or opening_source_entry.get("event_type") != "player_conversation"
+            or opening_source_entry.get("target_entity_id")
+            != unresolved_declaration["trigger_entity_id"]
+            or not (opening_source_index < opening_index < presentation_index)
+        ):
+            raise ValueError("Resolved thread opening lifecycle record is causally inconsistent.")
+
+        matching_resolutions = [
+            (index, entry)
+            for index, entry in resolutions
+            if entry.get("thread_id") == thread_id
+        ]
+        if len(matching_resolutions) != 1:
+            raise ValueError("Resolved thread must have exactly one resolution lifecycle record.")
+        resolution_index, resolution = matching_resolutions[0]
+        if (
+            resolution.get("status") != "resolved"
+            or resolution.get("source_history_id") != thread["resolved_by_history_id"]
+            or resolution_index <= presentation_index
+        ):
+            raise ValueError("Resolved thread lifecycle record is causally inconsistent.")
+
+    for _, resolution in resolutions:
+        thread_id = resolution.get("thread_id")
+        if thread_id not in resolved_threads:
+            raise ValueError("Resolution lifecycle record has no persisted resolved state.")
+
+
 def get_open_threads(world_state: dict[str, Any]) -> dict[str, dict[str, str]]:
     validate_open_threads(world_state["open_threads"])
     return deepcopy(world_state["open_threads"])
@@ -131,3 +211,26 @@ def derive_unresolved_thread_evidence(
     if thread is None or thread["status"] != "open":
         return []
     return [{"text": declaration["evidence_text"]}]
+
+
+def derive_resolved_thread_observation(
+    resolved_threads: dict[str, dict[str, str]],
+    thread_declaration: dict[str, Any] | None,
+    resolution_declaration: dict[str, Any] | None,
+    location_id: str,
+) -> dict[str, str]:
+    """Project one exact authored observation from already-validated state."""
+
+    if (
+        thread_declaration is None
+        or resolution_declaration is None
+        or location_id not in thread_declaration["perception_location_ids"]
+    ):
+        return {}
+    thread_id = resolution_declaration["required_thread_id"]
+    if (
+        thread_declaration["thread_id"] != thread_id
+        or thread_id not in resolved_threads
+    ):
+        return {}
+    return {"text": resolution_declaration["resolved_observation"]}
