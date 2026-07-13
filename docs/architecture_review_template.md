@@ -10,6 +10,15 @@ State one:
 - Capability-cluster review
 - Deep architecture review
 
+## Review Purpose
+
+State the package or phase boundary and why this review is needed.
+
+## Authoritative Repository State
+
+State reviewed branch and HEAD, the completed package boundary, and the
+authoritative architecture and simulation sources used by the brief.
+
 ## Plain-Language Outcome
 
 In no more than approximately 800 words, answer:
@@ -37,6 +46,8 @@ Avoid file names, function names, schema details, and test mechanics unless they
 
 ## Decision Requested
 
+## Owner Decision Request
+
 End with exactly one requested decision:
 
 - Accept the recommendation
@@ -59,4 +70,3 @@ When needed, keep it clearly separated and cover only decision-relevant evidence
 - focused verification;
 - alternatives and tradeoffs;
 - ADR implications.
-

@@ -1,47 +1,32 @@
-# Sprint 10.39 — Player-Facing Projection, Verification, and Package Closeout
+# Sprint 10.42 — Review Packet Profile Tooling Closeout
 
-Status: Complete.
+Status: Complete — accepted by owner.
 
 ## Goal
 
-Close the Authored Resolved-Thread Observation and Integrity package after
-deriving and rendering one exact authored observation only from authoritative
-validated resolved-thread state.
+Complete corrective closeout for Review Packet Profiles and Fail-Closed Validation.
 
 ## Expected Files
 
-- `engine/world_state.py`
-- `engine/unresolved_threads.py`
-- `engine/game_engine.py`
-- `engine/perception_builder.py`
-- `engine/scene_narrator.py`
-- `test_discovery.py`
-- package closeout records and review packet
+- Review-packet workflow, profile documentation, tools, package and sprint closeout records, and final handoff ZIP.
 
 ## Acceptance Criteria
 
-- Resolved-thread state is accepted only when its declared opening,
-  presentation, and resolution lifecycle links are valid, and failed
-  transitions or loads preserve live World State and Scene Snapshot identity.
-- The exact authored resolved observation is derived from already-validated
-  resolved state at eligible declared locations, appears once per perception
-  and normal narration result, and remains available on later visits and after
-  save/load.
-- No observation prose is persisted; save version remains `1`; no generic
-  consequence system, new command, dialogue branch, actor relocation,
-  time behavior, or next sprint is introduced.
+- Profile role/kind rules, substantive content, identity consistency, portable paths, and the complete malformed-fixture matrix fail closed.
+- The final post-package architecture-review packet includes all directly relevant changed files and detailed verification evidence, then passes independent validation.
+- No game, persistence, or save behavior changes are introduced.
 
 ## Verification
 
-Focused discovery, unresolved-thread, narration, pressure-narration, and
-save/load tests; the full root test inventory; official interpreter preflight;
-manifest agreement; a resolved-thread revisit and save/load smoke test; review
-packet validation; and `git diff --check` passed.
+The focused matrix, syntax parsing, full official root tests, approved preflight,
+manifest agreement, diff check, and independent final-archive validation passed
+after the authoritative-source correction. The owner accepted Sprint 10.42;
+`next_sprint` remains `null`.
 
 ## Canonical Manifest
 
 <!-- CANONICAL-MANIFEST-START -->
-```
-{"schema_version":"1.0.0","document_type":"current_sprint","sprint_count":1,"project":{"name":"AI Narrative RPG Engine","principles":["provider-neutral","deterministic-core","simulation-owned-truth"]},"sprint":{"id":"10.39","title":"Player-Facing Projection, Verification, and Package Closeout","type":"capability-package-closeout","mode":"capability-package-internal","status":"complete","goal":"Close the Authored Resolved-Thread Observation and Integrity package after deriving and rendering one exact authored observation only from authoritative validated resolved-thread state.","platform":{"official_interpreter":".\\.venv\\Scripts\\python.exe"},"expected_files":{"likely_modified":["engine/world_state.py","engine/unresolved_threads.py","engine/game_engine.py","engine/perception_builder.py","engine/scene_narrator.py","test_discovery.py","docs/architecture.md","docs/decisions.md","docs/roadmap.md","docs/sprint_log.md","docs/next_chat_handoff.md","docs/current_capability_package.md","docs/current_sprint.md","docs/current_sprint.yaml","docs/current_sprint.json"],"likely_created":["handoffs/authored-resolved-thread-observation-<short-head>.zip"]},"acceptance_criteria":["Resolved-thread state is accepted only when its declared opening, presentation, and resolution lifecycle links are valid, and failed transitions or loads preserve live World State and Scene Snapshot identity.","The exact authored resolved observation is derived from already-validated resolved state at eligible declared locations, appears once per perception and normal narration result, and remains available on later visits and after save/load.","No observation prose is persisted; save version remains 1; no generic consequence system, new command, dialogue branch, actor relocation, time behavior, or next sprint is introduced."],"verification":{"focused_commands":[".\\.venv\\Scripts\\python.exe test_discovery.py",".\\.venv\\Scripts\\python.exe test_unresolved_thread.py",".\\.venv\\Scripts\\python.exe test_narration_context.py",".\\.venv\\Scripts\\python.exe test_narration_pipeline.py",".\\.venv\\Scripts\\python.exe test_pressure_narration.py",".\\.venv\\Scripts\\python.exe test_save_load.py"],"required_regressions":["All root test scripts passed through the official interpreter"],"manifest_commands":["JSON/YAML/Markdown parse and deep comparison","git diff --check"],"closeout_commands":["Official interpreter preflight passed","Scripted resolved-thread revisit and save/load smoke passed","Review packet assembled and validated"]},"execution_phases":[{"id":"package-closeout"}],"governance":["Approved package: Authored Resolved-Thread Observation and Integrity.","Resolved threads remain authoritative; history and Region Pack declarations validate but do not independently project runtime state.","No next sprint or capability package is staged."],"closeout":{"allowed_terminal_statuses":["complete"],"verification_result":"Focused tests, full root regression suite, official preflight, manifest agreement, and diff check passed.","next_sprint":null}}}
+```json
+{"schema_version":"1.0.0","document_type":"current_sprint","sprint_count":1,"project":{"name":"AI Narrative RPG Engine","principles":["provider-neutral","deterministic-core","simulation-owned-truth"]},"sprint":{"id":"10.42","title":"Review Packet Profile Tooling Closeout","type":"bounded-maintenance","mode":"capability-package-internal","status":"complete","goal":"Complete corrective closeout for Review Packet Profiles and Fail-Closed Validation.","platform":{"official_interpreter":".\\.venv\\Scripts\\python.exe"},"expected_files":{"likely_modified":["WORKFLOW.md","AGENTS.md","docs/architecture_review_template.md","docs/review_packet_profiles.md","tools/assemble_review_packet.ps1","tools/validate_review_packet.ps1","tools/test_review_packet.ps1","docs/current_capability_package.md","docs/sprint_log.md","docs/current_sprint.md","docs/current_sprint.yaml","docs/current_sprint.json"],"likely_created":["handoffs/review-packet-profiles-validation-3ef40be.zip"]},"acceptance_criteria":["Profile role/kind rules, substantive content, identity consistency, portable paths, and the complete malformed-fixture matrix fail closed.","The final post-package architecture-review packet includes all directly relevant changed files and detailed verification evidence, then passes independent validation.","No game, persistence, or save behavior changes are introduced."],"verification":{"focused_commands":["powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tools\\test_review_packet.ps1 -RepoRoot .","PowerShell syntax parsing"],"required_regressions":["All root test scripts passed through the official interpreter"],"manifest_commands":["JSON/YAML/Markdown deep agreement","git diff --check"],"closeout_commands":["Official preflight passed through approved workspace retry","Independent final-packet validation passed"]},"execution_phases":[{"id":"corrective-closeout"}],"governance":["Approved package: Review Packet Profiles and Fail-Closed Validation.","No following package is staged."],"closeout":{"allowed_terminal_statuses":["complete"],"verification_result":"Owner accepted the package; focused matrix, full root regression inventory, manifest agreement, diff check, and independent final archive validation passed. Commit and fast-forward merge are authorized; next_sprint remains null.","next_sprint":null}}}
 ```
 <!-- CANONICAL-MANIFEST-END -->

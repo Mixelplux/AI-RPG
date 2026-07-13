@@ -1,82 +1,73 @@
-# Authored Resolved-Thread Observation and Integrity
+# Review Packet Profiles and Fail-Closed Validation
 
-Status: Complete.
+Status: Complete — accepted by owner.
 
 ## Purpose and Owner-Visible Value
 
-After the player resolves the authored Bryn Shander thread, the world should
-continue to show the exact authored local consequence whenever the player is
-at an eligible declared location. This package makes that durable outcome
-visible without turning it into a quest, dialogue branch, or generic
-consequence system.
+Ensure that a packet intended to support an architecture decision cannot be
+mistaken for compact package-completion evidence. New packets declare their
+purpose, preserve authoritative-source boundaries, and fail validation when
+required decision context is absent.
 
 ## Included Internal Milestones
 
-1. Sprint 10.37 — Resolved-thread authoritative integrity — complete.
-2. Sprint 10.38 — Derived authored resolved observation — complete.
-3. Sprint 10.39 — Player-facing projection, verification, and package closeout — complete.
+1. Sprint 10.40 — Packet Profile and Manifest Contract — complete.
+2. Sprint 10.41 — Independent Assembly and Validation Tooling — complete.
+3. Sprint 10.42 — Fixture Tests, Workflow Integration, and Package Closeout — complete and accepted.
 
-No following sprint is staged.
+The package is complete and accepted after the owner-requested corrections. No
+engine capability or following package is staged.
 
 ## Scope, Ownership, and Compatibility
 
-- World State `resolved_threads` remains the sole authoritative current fact.
-  Region Pack declarations and causal history are validation inputs at the
-  authoritative transition, World State, and load-replacement boundaries.
-- Region Packs retain ownership of the exact `resolved_observation` prose and
-  the existing declared thread perception locations. No new location-policy
-  field is introduced.
-- Perception and narration project already-validated resolved state. They do
-  not treat history as an independent runtime authority.
-- A valid resolved observation remains visible on every eligible later visit
-  and after save/load. “Exactly once” means no duplicate copy in one
-  perception or narration result, not one-time lifetime consumption.
-- Candidate validation, derived projection rebuilding, and one final live
-  commit preserve the existing atomic transition boundary.
-- Save version remains `1`. No persistent field, migration, or legacy
-  normalization rule is added by this package.
+- This package changes workflow records, packet documentation, and PowerShell
+  tooling only. It does not change engine, Region Pack, World State, narration,
+  persistence, save/load, or save version behavior.
+- `docs/architecture.md`, `docs/simulation_model.md`,
+  `docs/simulation_principles.md`, `docs/roadmap.md`, and `docs/decisions.md`
+  remain repository authorities. Packet-local synthesis is review convenience
+  only and must pin its authoritative sources.
+- New packets use only the approved profiles: `package-review`,
+  `post-package-architecture-review`, and `phase-architecture-review`.
+- Existing archives remain legacy, unprofiled historical artifacts. They are
+  neither rebuilt nor required to meet the new contract.
 
 ## Exclusions
 
-No generic consequence system, new persistent domain, new command, dialogue
-branch, actor relocation, time-based behavior, generic thread framework,
-quests, objectives, journal, inventory, actor AI, provider integration, or
-save version `2` is included.
+No game behavior, game data, generic document platform, next game capability,
+roadmap selection, commit, merge, save migration, or historical archive rewrite
+is included.
 
 ## Expected Files and Systems
 
-- `engine/world_state.py`
-- `engine/unresolved_threads.py`
-- `engine/game_engine.py`
-- `engine/perception_builder.py`
-- `engine/scene_narrator.py`
-- `engine/region_validator.py` only if needed to preserve the existing strict
-  declaration contract
-- focused discovery, unresolved-thread, save/load, and narration tests
-- package, sprint, architecture, decision, roadmap, and sprint-log records as
-  required by completed milestones
+- `docs/review_packet_profiles.md`
+- `tools/assemble_review_packet.ps1`
+- `tools/validate_review_packet.ps1`
+- `tools/test_review_packet.ps1`
+- `WORKFLOW.md`, `AGENTS.md`, and `docs/architecture_review_template.md`
+- canonical package, sprint, architecture, decision, roadmap, sprint-log, and
+  handoff records as required for closeout
 
 ## Architecture Decisions and Stop Conditions
 
-ADR-050 owns the resolved-thread state and authored observation boundary. No
-new ADR was required: this package adds Region-aware causal integrity and a
-derived projection using the established ownership boundary.
-
-Stop for a required new persistence model, save-version change, generic
-projection or consequence mechanism, history becoming a second source of
-runtime authority, broad narration refactor, unapproved player-visible scope,
-or any `WORKFLOW.md` stop condition.
+Role-based packet membership, artifact-kind distinction, source-pinned
+synthesis, independent archive validation, and legacy-only validation are
+workflow boundaries for this package. Stop for a need to alter existing
+architecture authority, create a generic documentation platform, change engine
+behavior, or enter any `WORKFLOW.md` stop condition.
 
 ## Verification, Completion, and Rollback
 
-Focused integrity, perception, narration, and save/load tests passed, followed
-by the full root test inventory through the official interpreter. Malformed
-save and live-load atomicity coverage, the scripted player revisit and
-save/load behavior, canonical manifest agreement, official preflight, and
-`git diff --check` passed. The package review packet was assembled after
-closeout verification.
-
-The rollback boundary is this package’s feature-branch changes only. Reverting
-them removes a derived observation and stricter validation without a schema
-migration or save conversion. Package closeout does not choose or start a
-following package.
+Focused PowerShell fixture tests, valid and expected-failure packet validation,
+legacy validation, official preflight, the full root test inventory, manifest
+deep agreement, `git diff --check`, and independent final-archive validation
+passed after the corrective validator, matrix, workflow, and packet evidence
+work. The corrective boundary explicitly covers profile-specific
+role/kind rules, Git identity consistency, substantive required content,
+complete portable-path checks, and all independently identified malformed
+fixtures. It also covers role-specific phase dependency, ADR-index, and
+unresolved-decision-context contracts so a generic map cannot satisfy a phase
+review packet.
+Owner acceptance authorizes the final commit and fast-forward merge only; it
+does not define or start a following package. The rollback boundary is this feature branch's workflow and tooling changes;
+there is no data migration or runtime behavior to reverse.

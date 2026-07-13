@@ -65,6 +65,11 @@ Codex supplies repository evidence; ChatGPT owns architecture assessment and rec
 
 For a required review packet, read `docs/architecture_review_template.md` and assemble the smallest complete evidence packet. Record changed files, verification, manifests, relevant implementation and tests, and pre-assembly and post-cleanup Git status. Do not turn packet assembly into an owner-facing technical essay. Full packets are required only at package completion, material architecture decisions, blocked external reviews, repository-access boundaries, or when explicitly requested.
 
+Select the required review-packet profile before assembly and run its independent
+validator against the completed ZIP before claiming packet completion. Use
+`package-review` for compact package evidence; use architecture profiles only
+when their authored decision and simulation context is present.
+
 ## Verification, Environment, and Closeout
 
 Run focused tests, directly affected regressions, and required syntax or static checks during work. Do not rerun the full official suite after every small edit. At the relevant closeout, run the complete required verification cycle. A documentation-only repair requires manifest/governance validation, `git diff --check`, and directly affected checks unless it could affect implementation behavior.

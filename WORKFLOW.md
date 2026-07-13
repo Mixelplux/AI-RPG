@@ -8,6 +8,10 @@ The default delivery unit is an approved **capability package**: one coherent de
 
 The project protects owner attention as well as implementation safety. **Review fatigue** from excessive low-value review, packets, and approvals is a governance risk: it can create the appearance of oversight while making it harder to notice meaningful product, architecture, and risk decisions. Optimize for fewer meaningful checkpoints, clear plain-language status, strong automated verification, recoverable internal milestones, explicit stop conditions, and preserved owner authority. More text or more approval steps are not inherently safer.
 
+Do not send routine milestone-status handoffs or request continuation authority
+inside an approved package. Continue sequentially and report only a meaningful
+stop condition, a material decision, or final owner-review readiness.
+
 ## Capability-Package Lifecycle
 
 Exactly one sprint may be active at a time. A capability package may contain sequential internal milestones that would previously have been separate small sprints, but all work remains explicitly bounded and testable.
@@ -106,11 +110,20 @@ End every owner-facing architecture review with exactly one decision request: ac
 
 ### Packet and handoff policy
 
+Before assembling any new review packet, select one supported packet profile:
+`package-review`, `post-package-architecture-review`, or
+`phase-architecture-review`. A package-review is compact completion evidence
+and must not claim to select a next capability. Architecture and phase packets
+require authored owner decision context and the profile-specific architecture,
+simulation, scenario, dependency, and ADR material. New packets must pass the
+independent profile validator after ZIP creation; historical archives remain
+legacy artifacts and are not retroactively profiled.
+
 Create a full architecture-review packet only when a capability package is complete, a major architectural decision is required, a package is blocked and needs external review, a repository-access boundary requires it, or the owner explicitly requests it. Internal milestones retain enough records, tests, and checkpoint history to make the final package auditable, but do not generate a full packet merely because an internal milestone completed.
 
 A handoff ZIP is required only when moving across an actual repository-access boundary, moving to an environment without repository access, creating a formal milestone artifact, or when explicitly requested. Within one repository session, continue from stable project records. Do not make the owner a courier for prompts, files, summaries, routine continuation approval, or repeated Git checks.
 
-Architecture-review packets are evidence packages, not the owner-facing recommendation. They contain the smallest complete set of canonical documents, changed or directly relevant implementation files, focused tests, verification evidence, and Git evidence needed to support the decision. When a ZIP is required, use PowerShell `Compress-Archive`, deterministic inventory, exact archive-membership validation, readability checks, temporary-assembly cleanup, and recorded Git evidence. Generated content must stay under `.build\`, `.artifacts\`, or `handoffs\` according to repository policy. Packaging success remains independent from application-test success.
+Architecture-review packets are evidence packages, not the owner-facing recommendation. They contain the smallest complete set of canonical documents, every directly relevant changed implementation or documentation file, focused tests, detailed verification evidence, and Git evidence needed to support the decision. For every new profiled packet, use `tools\assemble_review_packet.ps1` (its canonical `ZipArchive` process), then `tools\validate_review_packet.ps1`; do not use `Compress-Archive` because nested portable member paths must be preserved exactly. Record deterministic inventory, exact archive-membership validation, readability checks, temporary-assembly cleanup, and Git evidence. Generated content must stay under `.build\`, `.artifacts\`, or `handoffs\` according to repository policy. Packaging success remains independent from application-test success.
 
 Capture Git status separately as pre-assembly source status and post-cleanup final status.
 

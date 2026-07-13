@@ -1,5 +1,27 @@
 # Sprint Log
 
+## Review Packet Profiles and Fail-Closed Validation Package Closeout
+
+- Status: Complete — accepted by owner.
+- Established explicit package, post-package architecture, and phase review
+  profiles; packets now declare role-based membership, artifact kinds, source
+  pins, and a self-checking manifest.
+- The independent validator fails closed for missing decision context, stale
+  synthesis sources, malformed authored inputs, unsafe or duplicate entries,
+  and manifest tampering. Legacy archives remain readable only under the
+  intentionally limited legacy mode.
+- The source-role contract now binds each required authority to its exact
+  repository path and requires bundled bytes plus every synthesis pin to agree
+  with that authority. The focused matrix, full root test inventory, manifest
+  agreement, diff check, and independent final packet validation passed before
+  owner review. No engine, persistence, or save behavior
+  changed, and no following capability package is staged.
+- The phase profile now rejects generic or shallow dependency maps, ADR indexes,
+  and unresolved decision context; its valid fixture carries separate,
+  role-appropriate decision material.
+- Owner acceptance authorized the final commit and fast-forward merge. No
+  following capability package is defined or staged.
+
 ## Authored Resolved-Thread Observation and Integrity Package Closeout
 
 - Status: Complete.
