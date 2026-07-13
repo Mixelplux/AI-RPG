@@ -167,6 +167,34 @@ class GameEngine:
         return {"changed": True, "discovery_id": declaration["discovery_id"],
                 "text": declaration["text"], "history_id": candidate["history"][-1]["history_id"]}
 
+    def present_clue(self, clue_title: str, actor_text: str) -> Dict[str, Any]:
+        declaration = self.region.get("conversation_discovery_resolution")
+        result = {"changed": False, "response_text": None, "resolved_observation": None}
+        if declaration is None or not isinstance(clue_title, str) or not isinstance(actor_text, str):
+            return result
+        clue = next((item for item in self.region.get("discovery_declarations", []) if item["title"].casefold() == clue_title.casefold()), None)
+        target = self.resolve_target(actor_text)
+        if (clue is None or clue["discovery_id"] != declaration["required_discovery_id"]
+                or clue["discovery_id"] not in self.world_state["player_discoveries"]
+                or target["status"] != "resolved" or target["target_type"] != "entity"
+                or target["identifier"] != declaration["target_entity_id"]):
+            return result
+        thread_id = declaration["required_thread_id"]
+        if thread_id in self.world_state["resolved_threads"]:
+            return result
+        if thread_id not in self.world_state["open_threads"]:
+            return result
+        candidate = copy_world_state(self.world_state)
+        candidate["open_threads"].pop(thread_id)
+        candidate = add_history_entry(candidate, "clue_presented", "Player presented an authored clue.", extra={"target_entity_id": target["identifier"]})
+        source_id = candidate["history"][-1]["history_id"]
+        candidate["resolved_threads"][thread_id] = {"thread_id": thread_id, "status": "resolved", "resolved_by_history_id": source_id}
+        candidate = add_history_entry(candidate, "unresolved_thread_resolved", "Unresolved thread resolved.", extra={"thread_id": thread_id, "status": "resolved", "source_history_id": source_id})
+        validate_world_state(candidate, self.region)
+        scene = build_scene(self.region, candidate)
+        self.world_state, self.scene_snapshot = candidate, scene
+        return {"changed": True, "response_text": declaration["response_text"], "resolved_observation": declaration["resolved_observation"]}
+
     def create_evidence_trace(self, trace_id: str, evidence_id: str, location_id: str) -> Dict[str, Any]:
         candidate, result = self._prepare_evidence_trace_candidate(
             copy_world_state(self.world_state), trace_id, evidence_id, location_id
@@ -935,6 +963,9 @@ class GameEngine:
             return deepcopy(interaction_result)
         if interaction_result["intent"] == "clue_recall" and interaction_result["success"]:
             interaction_result["known_clues"] = list(self.get_known_clues())
+            return deepcopy(interaction_result)
+        if interaction_result["intent"] == "clue_presentation" and interaction_result["success"]:
+            interaction_result["presentation"] = self.present_clue(interaction_result["action"]["parameters"]["clue_title"], interaction_result["action"]["target"] or "")
             return deepcopy(interaction_result)
 
         target_text = interaction_result["action"].get("target")

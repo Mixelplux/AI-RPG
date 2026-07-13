@@ -73,6 +73,13 @@
     ],
     "evidence_text": "Watch patrols at the North Gate speak in low voices about the unanswered bandit report on the western road."
   },
+  "conversation_discovery_resolution": {
+    "target_entity_id": "captain_darvin_grey",
+    "required_discovery_id": "north_gate_captain_trace",
+    "required_thread_id": "bryn_shander_west_road_bandit_report",
+    "response_text": "Captain Darvin Grey studies the trail, then nods. ‘That is enough to confirm the report. I will send a patrol west at once.’",
+    "resolved_observation": "The watch's low-voiced concern has given way to purposeful orders."
+  },
   "elapsed_time_pressure_effect": {
     "effect_id": "winter_deepens_after_first_hour",
     "trigger_elapsed_hours": 1,

@@ -154,6 +154,10 @@ def validate_region(region: dict) -> None:
         validate_discovery_declarations(region)
     except ValueError as error:
         errors.append(str(error))
+    try:
+        validate_conversation_discovery_resolution(region)
+    except ValueError as error:
+        errors.append(str(error))
 
     if errors:
         raise ValueError(
@@ -184,6 +188,23 @@ def validate_discovery_declarations(region: dict) -> None:
         if declaration["discovery_id"] in seen:
             raise ValueError(f"Duplicate discovery_id: {declaration['discovery_id']}.")
         seen.add(declaration["discovery_id"])
+
+
+def validate_conversation_discovery_resolution(region: dict) -> None:
+    field = "conversation_discovery_resolution"
+    if field not in region:
+        return
+    value = region[field]
+    required = {"target_entity_id", "required_discovery_id", "required_thread_id", "response_text", "resolved_observation"}
+    if not isinstance(value, dict) or set(value) != required:
+        raise ValueError(f"{field} fields are invalid.")
+    if any(not isinstance(value[name], str) or not value[name] for name in required):
+        raise ValueError(f"{field} values must be non-empty strings.")
+    actors = {item.get("entity_id") for item in region.get("entities", []) if isinstance(item, dict) and item.get("persistence") == "static"}
+    discoveries = {item.get("discovery_id") for item in region.get("discovery_declarations", []) if isinstance(item, dict)}
+    thread = region.get("conversation_unresolved_thread", {})
+    if value["target_entity_id"] not in actors or value["required_discovery_id"] not in discoveries or value["required_thread_id"] != thread.get("thread_id"):
+        raise ValueError(f"{field} references are invalid.")
 
 
 def validate_conversation_actor_relocation_effect(region: dict) -> None:

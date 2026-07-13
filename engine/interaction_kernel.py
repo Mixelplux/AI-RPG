@@ -74,6 +74,8 @@ def process_player_input(
         return build_interaction_result(success=True, intent=intent, message="You investigate the area.", action=action)
     if intent == "clue_recall":
         return build_interaction_result(success=True, intent=intent, message="You recall the clues you have found.", action=action)
+    if intent == "clue_presentation":
+        return build_interaction_result(success=True, intent=intent, message="You present a clue.", action=action)
 
     if intent == "movement":
         return resolve_movement(action, scene_snapshot)
@@ -130,6 +132,8 @@ def classify_intent(player_input: str) -> str:
         return "investigation"
     if lowered in {"clues", "known clues"}:
         return "clue_recall"
+    if lowered.startswith("present ") and " to " in lowered:
+        return "clue_presentation"
 
     movement_words = ["go", "walk", "move", "travel", "enter", "leave"]
     look_words = ["look", "inspect", "examine", "search", "study"]
@@ -181,6 +185,9 @@ def build_action(player_input: str, intent: str) -> Dict[str, Any]:
         return {"type": "investigate", "target": None, "parameters": {}, "confidence": 1.0}
     if intent == "clue_recall":
         return {"type": "recall_clues", "target": None, "parameters": {}, "confidence": 1.0}
+    if intent == "clue_presentation":
+        clue, actor = player_input[8:].rsplit(" to ", 1)
+        return {"type": "present_clue", "target": actor.strip() or None, "parameters": {"clue_title": clue.strip()}, "confidence": 1.0}
 
     if intent == "movement":
         return {

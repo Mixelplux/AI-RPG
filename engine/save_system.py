@@ -66,6 +66,8 @@ def load_save_data(save_path: str) -> Dict[str, Any]:
         save_data["world_state"]["actor_location_overrides"] = {}
     if "open_threads" not in save_data["world_state"]:
         save_data["world_state"]["open_threads"] = {}
+    if "resolved_threads" not in save_data["world_state"]:
+        save_data["world_state"]["resolved_threads"] = {}
     if "actor_knowledge" not in save_data["world_state"]:
         save_data["world_state"]["actor_knowledge"] = {}
     if "evidence_traces" not in save_data["world_state"]:

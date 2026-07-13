@@ -53,10 +53,11 @@ def validate_open_thread_integrity(world_state: dict[str, Any], region: dict[str
                 or opening.get("source_history_id") != thread["created_by_history_id"]
                 or opening_index <= source_index):
             raise ValueError("Open thread lifecycle record is causally inconsistent.")
+    resolved_threads = world_state.get("resolved_threads", {})
     for _, opening in openings:
         thread_id = opening.get("thread_id")
-        if thread_id not in open_threads:
-            raise ValueError("Opening lifecycle record has no persisted open thread.")
+        if thread_id not in open_threads and thread_id not in resolved_threads:
+            raise ValueError("Opening lifecycle record has no persisted thread state.")
 
 
 def get_open_threads(world_state: dict[str, Any]) -> dict[str, dict[str, str]]:

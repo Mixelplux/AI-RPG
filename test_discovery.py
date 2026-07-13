@@ -72,8 +72,21 @@ def test_wrong_location_and_unknown_save_membership_fail_closed() -> None:
         assert engine.get_scene_snapshot() == before_scene
 
 
+def test_presenting_a_known_clue_resolves_the_open_thread_once() -> None:
+    engine = GameEngine("data/regions/bryn_shander.json")
+    engine.process_command("talk to captain")
+    engine.process_command("investigate")
+    result = engine.process_command("present The Captain's Deliberate Trail to captain")["presentation"]
+    assert result["changed"] is True
+    assert result["response_text"].startswith("Captain Darvin Grey")
+    assert engine.get_open_threads() == {}
+    assert set(engine.get_world_state()["resolved_threads"]) == {"bryn_shander_west_road_bandit_report"}
+    assert engine.process_command("present The Captain's Deliberate Trail to captain")["presentation"]["changed"] is False
+
+
 if __name__ == "__main__":
     test_discovery_declarations()
     test_atomic_local_discovery_and_no_op()
     test_wrong_location_and_unknown_save_membership_fail_closed()
+    test_presenting_a_known_clue_resolves_the_open_thread_once()
     print("Discovery declaration tests passed.")

@@ -29,6 +29,7 @@ def print_help() -> None:
     print("- reset: Start a fresh game session.")
     print("- pressures: Show current scoped pressure state.")
     print("- clues: Recall discovered clues.")
+    print("- present <clue title> to <actor>: Present a discovered clue.")
     print("- history: Show recent recorded world history.")
     print("- history recent <count>: Show recent world history.")
     print("- history type <event_type>: Show history by event type.")
@@ -519,6 +520,9 @@ def main() -> None:
         interaction_result = engine.process_command(player_input)
         if interaction_result.get("intent") == "clue_recall":
             print_known_clues(interaction_result["known_clues"])
+        if interaction_result.get("intent") == "clue_presentation":
+            presentation = interaction_result["presentation"]
+            print(presentation["response_text"] if presentation["changed"] else "You cannot present that clue here.")
         if interaction_result.get("intent") == "investigation":
             investigation = interaction_result.get("investigation", {})
             if investigation.get("changed"):

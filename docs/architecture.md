@@ -192,6 +192,15 @@ Ideas that are important but not ready for implementation belong in `docs/future
 
 Only `world_state` is persisted. Region Packs remain immutable assets. Scene Snapshots, Perception, and Narration are regenerated after loading.
 
+The authored discovery-use boundary projects only authored clue titles and text
+for already discovered clues. One strict Region Pack resolution declaration
+may connect one present static actor, one known discovery, and one open thread.
+`world_state.resolved_threads` is sparse durable current state; it is mutually
+exclusive with `open_threads`. Candidate presentation history, open-to-resolved
+transition, causal resolution history, validation, and scene rebuilding occur
+before one live commit. Version-1 saves missing resolved state normalize empty
+only while loading; the original trigger cannot reopen a resolved thread.
+
 Sprint 10.15 hardens the existing unresolved-thread boundary without changing its ownership or save version. Region-aware World State validation now requires each persisted open thread to match the singular active declaration, a prior `player_conversation` targeting that declaration's trigger actor, and exactly one later `unresolved_thread_opened` record with matching identity, `open` status, and source history identifier. Malformed state fails before engine replacement or candidate commit. Lifecycle records remain durable and engine-queryable, but the narration-context projection excludes them alongside existing internal pressure and actor consequence records; location-aware perception remains unchanged.
 
 Sprint 10.16 establishes `world_state.actor_knowledge` as sparse current membership keyed only by stable static actor identity. Immutable Region Pack `knowledge` arrays are validated new-game seeds and are deep-copied only during new-game construction. Version-1 saves missing the field normalize to empty membership during loading and never reseed from Region Pack content. Region-aware validation rejects malformed membership, unknown or unsupported actor identities, duplicate identifiers, and nested metadata. `GameEngine.get_actor_knowledge(actor_id)` returns an immutable tuple without adding knowledge to scenes, perception, narration, prompts, targeting, dialogue, or behavior.

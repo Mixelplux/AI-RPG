@@ -53,6 +53,7 @@ def create_initial_world_state(region: Dict[str, Any]) -> Dict[str, Any]:
         "pressures": build_initial_pressure_state(region),
         "actor_location_overrides": {},
         "open_threads": {},
+        "resolved_threads": {},
         "actor_knowledge": build_initial_actor_knowledge(region),
         "evidence_traces": [],
         "player_discoveries": [],
@@ -87,6 +88,8 @@ def validate_world_state(
 
     if "open_threads" not in world_state:
         raise ValueError("World State is missing open_threads.")
+    if "resolved_threads" not in world_state:
+        raise ValueError("World State is missing resolved_threads.")
     if "actor_knowledge" not in world_state:
         raise ValueError("World State is missing actor_knowledge.")
     if "evidence_traces" not in world_state:
@@ -108,6 +111,16 @@ def validate_world_state(
 
     validate_pressure_state(world_state["pressures"])
     validate_open_threads(world_state["open_threads"])
+    if not isinstance(world_state["resolved_threads"], dict):
+        raise ValueError("World State resolved_threads must be a dictionary.")
+    for thread_id, record in world_state["resolved_threads"].items():
+        if (not isinstance(thread_id, str) or not thread_id or not isinstance(record, dict)
+                or set(record) != {"thread_id", "status", "resolved_by_history_id"}
+                or record["thread_id"] != thread_id or record["status"] != "resolved"
+                or not isinstance(record["resolved_by_history_id"], str) or not record["resolved_by_history_id"]):
+            raise ValueError("World State resolved_threads records are invalid.")
+    if set(world_state["open_threads"]) & set(world_state["resolved_threads"]):
+        raise ValueError("A thread cannot be both open and resolved.")
     validate_actor_knowledge(world_state["actor_knowledge"], region)
     validate_evidence_traces(world_state["evidence_traces"], region)
 
@@ -153,6 +166,9 @@ def validate_world_state(
         for thread in world_state["open_threads"].values():
             if thread["created_by_history_id"] not in history_ids:
                 raise ValueError("Open thread source history id is unknown.")
+        for thread in world_state["resolved_threads"].values():
+            if thread["resolved_by_history_id"] not in history_ids:
+                raise ValueError("Resolved thread history id is unknown.")
     if region is not None:
         validate_open_thread_integrity(world_state, region)
 

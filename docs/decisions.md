@@ -652,3 +652,22 @@ Missing version-1 legacy membership normalizes to empty on load. Discovery and
 trace internals do not enter Scene Snapshots, perception, narration, dialogue,
 targeting, actor knowledge, quests, inventories, interpretation, or generic
 frameworks.
+
+## ADR-050 - Authored Clue Presentation Resolves One Open Thread Atomically
+
+**Status:** Accepted
+
+Region Packs own the one strict resolution declaration, authored clue title,
+exact response, and resolved observation. World State owns sparse
+`resolved_threads`; an entry contains only the thread identity, `resolved`
+status, and the presentation history identity. Missing legacy version-1 state
+normalizes empty only during loading.
+
+The engine accepts a presentation only when the player already knows the exact
+authored clue, the declared static actor is currently present, and the required
+thread is explicitly open. It prepares presentation history, removes the open
+state, creates resolved state, adds causally linked resolution history,
+validates, rebuilds the scene, and commits once. Repeats are non-mutating;
+resolved threads cannot reopen through their original trigger. This adds no
+dialogue system, semantic interpretation, branching, quests, or generic state
+machine.
