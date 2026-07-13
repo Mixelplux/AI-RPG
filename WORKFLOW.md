@@ -114,6 +114,14 @@ Architecture-review packets are evidence packages, not the owner-facing recommen
 
 Capture Git status separately as pre-assembly source status and post-cleanup final status.
 
+### Handoff artifact retention
+
+Assemble a review packet in a temporary directory outside the repository working tree. Temporary packet content must never appear in captured Git status. Name a review candidate `<package-slug>-<short-head>.zip`; the packet manifest must enumerate every archive member exactly, and the evidence must record the exact branch, HEAD, clean `git_status`, commands, and results used to create it. A corrected candidate may replace an earlier candidate only after archive creation, manifest comparison, and archive-integrity verification succeed. Remove its temporary assembly directory immediately afterward.
+
+After package acceptance and merge, retain exactly one canonical accepted ZIP for that package, with the suffix matching the accepted review HEAD. Remove only superseded candidate ZIPs for that same package; preserve unrelated accepted archives and unresolved review candidates. Confirm that `handoffs\` contains no temporary extraction or assembly directories before capturing final Git evidence.
+
+Use `tools\cleanup_handoff_candidates.ps1` for a dry-run-first cleanup of a completed package. It requires a package slug and accepted short HEAD, fails if the accepted archive is absent, and only removes matching superseded candidate ZIPs plus explicitly named temporary directories under `handoffs\`. Run it without `-Apply` to review the exact paths, then rerun with `-Apply` only when the preview is correct. Do not delete an artifact whose package status or purpose is ambiguous.
+
 ## Model and Reasoning Routing
 
 - **Low reasoning:** mechanical setup or closeout, approved documentation edits, established validation, package generation, archive inspection, Git evidence, and deterministic cleanup.
