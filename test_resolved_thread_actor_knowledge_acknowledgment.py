@@ -47,6 +47,8 @@ def test_declaration_validation():
     bad = deepcopy(region); bad["resolved_thread_actor_knowledge_effect"]["resolved_thread_id"] = "missing"; invalid(bad, "unknown")
     bad = deepcopy(region); bad["resolved_thread_actor_knowledge_effect"]["actor_entity_id"] = "guard_elin_voss"; invalid(bad, "Captain Grey")
     bad = deepcopy(region); bad["resolved_thread_actor_knowledge_effect"]["effect_id"] = region["resolved_thread_actor_relocation_effect"]["effect_id"]; invalid(bad, "conflicts")
+    bad = deepcopy(region); bad["conversation_actor_knowledge_response"]["target_entity_id"] = "guard_elin_voss"; invalid(bad, "must match resolved-thread")
+    bad = deepcopy(region); bad["conversation_actor_knowledge_response"]["required_knowledge_id"] = "unrelated"; invalid(bad, "must match resolved-thread")
 
 
 def test_atomic_resolution_response_noop_and_hidden_state():
@@ -92,8 +94,41 @@ def test_rollback_and_save_load():
         assert reloaded.process_command("talk to captain")["actor_knowledge_response"] == {"text": TEXT}
 
 
+def test_preexisting_knowledge_noop_composition_and_history_failure_rollback():
+    engine = GameEngine(REGION_PATH)
+    engine.process_command("talk to captain")
+    engine.add_actor_knowledge(ACTOR_ID, KNOWLEDGE_ID)
+    before_additions = len(engine.query_history(event_type="actor_knowledge_added"))
+    engine.process_command("investigate")
+    original_validate, original_build = game_engine_module.validate_world_state, game_engine_module.build_scene
+    counts = {"validate": 0, "build": 0}
+    with patch.object(game_engine_module, "validate_world_state", side_effect=lambda *a, **k: (counts.__setitem__("validate", counts["validate"] + 1), original_validate(*a, **k))[1]), patch.object(game_engine_module, "build_scene", side_effect=lambda *a, **k: (counts.__setitem__("build", counts["build"] + 1), original_build(*a, **k))[1]):
+        result = engine.process_command("present The Captain's Deliberate Trail to captain")["presentation"]
+    assert result["changed"] and result["actor_location_consequence"] == {"status": "applied"}
+    assert result["actor_knowledge_consequence"] == {"status": "no_op"}
+    assert engine.get_actor_knowledge(ACTOR_ID).count(KNOWLEDGE_ID) == 1
+    assert len(engine.query_history(event_type="actor_knowledge_added")) == before_additions
+    assert counts == {"validate": 1, "build": 1}
+    assert THREAD_ID in engine.get_world_state()["resolved_threads"]
+
+    engine = GameEngine(REGION_PATH); engine.process_command("talk to captain"); engine.process_command("investigate")
+    before_state, live_state, before_scene = engine.get_world_state(), engine.world_state, engine.scene_snapshot
+    original_add = game_engine_module.add_history_entry
+    def fail_knowledge_history(candidate, event_type, *args, **kwargs):
+        if event_type == "actor_knowledge_added": raise RuntimeError("knowledge history")
+        return original_add(candidate, event_type, *args, **kwargs)
+    with patch.object(game_engine_module, "add_history_entry", side_effect=fail_knowledge_history):
+        try: engine.process_command("present The Captain's Deliberate Trail to captain")
+        except RuntimeError as error: assert "knowledge history" in str(error)
+        else: raise AssertionError("Expected knowledge-history failure")
+    assert engine.get_world_state() == before_state and engine.world_state is live_state
+    assert engine.scene_snapshot is before_scene
+    assert THREAD_ID not in engine.get_world_state()["resolved_threads"]
+    assert KNOWLEDGE_ID not in engine.get_actor_knowledge(ACTOR_ID)
+
+
 def main():
-    test_declaration_validation(); test_atomic_resolution_response_noop_and_hidden_state(); test_rollback_and_save_load()
+    test_declaration_validation(); test_atomic_resolution_response_noop_and_hidden_state(); test_rollback_and_save_load(); test_preexisting_knowledge_noop_composition_and_history_failure_rollback()
     print("Resolved-thread actor-knowledge acknowledgment tests passed.")
 
 

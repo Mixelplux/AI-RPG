@@ -397,6 +397,19 @@ def validate_conversation_actor_knowledge_response(region: dict) -> None:
     }
     if declaration["target_entity_id"] not in static_ids:
         raise ValueError(f"{field}.target_entity_id must reference a static actor.")
+    resolved_thread_effect = region.get("resolved_thread_actor_knowledge_effect")
+    if (
+        isinstance(resolved_thread_effect, dict)
+        and {"actor_entity_id", "knowledge_id"}.issubset(resolved_thread_effect)
+    ):
+        if declaration["target_entity_id"] != resolved_thread_effect["actor_entity_id"]:
+            raise ValueError(
+                f"{field}.target_entity_id must match resolved-thread knowledge effect actor_entity_id."
+            )
+        if declaration["required_knowledge_id"] != resolved_thread_effect["knowledge_id"]:
+            raise ValueError(
+                f"{field}.required_knowledge_id must match resolved-thread knowledge effect knowledge_id."
+            )
 
 
 def validate_conversation_evidence_trace_effect(region: dict) -> None:
