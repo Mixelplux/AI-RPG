@@ -156,7 +156,16 @@ Infrastructure-only packages that intentionally create no player-visible behavio
 - Do not substitute bundled, system, Windows Store, alternate, `uv`, or fallback Python environments.
 - Record exact verification commands, exit codes, outcomes, artifact paths, and whether Codex or the owner ran each command.
 
-Treat `Access is denied` or an unable-to-create-process result from the official interpreter as a Codex workspace-context failure, not evidence that `.venv` is unhealthy. Do not recreate `.venv`, change permissions, elevate Codex, or substitute another interpreter. Stop before implementation while the preflight is blocked and use this remediation: reopen `D:\AI RPG` directly as the Codex workspace, or open `AI RPG.code-workspace`, then rerun the startup gate. Do not repeatedly seek owner approval for the same diagnosis. Once the preflight succeeds, continue routine in-scope work without another owner interruption. Never report owner-executed evidence as Codex-executed or claim blocked validation passed.
+If the official interpreter returns `Access is denied` or cannot create a
+process, first confirm the repository root, branch, and working-tree state
+once. When those checks identify the expected repository, retry the exact
+official-interpreter command using the available workspace permission or
+approval mechanism. Do not recreate `.venv`, change permissions, elevate
+Codex, or substitute another interpreter. Continue normally when the
+authorized retry succeeds. Treat preflight as blocked, and ask to reopen
+`D:\AI RPG` or `AI RPG.code-workspace`, only when both attempts fail or the
+repository/workspace evidence shows a mismatch. Never report owner-executed
+evidence as Codex-executed or claim blocked validation passed.
 
 ## Git and Recovery Policy
 
