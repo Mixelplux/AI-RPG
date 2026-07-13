@@ -1,6 +1,6 @@
 # Authored Actor-Knowledge Conversation Response
 
-Status: Active — owner-approved capability package.
+Status: Complete — implementation and package closeout complete; awaiting owner acceptance.
 
 ## Purpose and Owner-Visible Value
 
@@ -14,7 +14,7 @@ infrastructure.
 
 1. Sprint 10.43 — Authored contract and architecture boundary — complete.
 2. Sprint 10.44 — Deterministic derivation and conversation integration — complete.
-3. Sprint 10.45 — Presentation, compatibility, verification, and closeout — active.
+3. Sprint 10.45 — Presentation, compatibility, verification, and closeout — complete.
 
 ## Scope, Ownership, and Compatibility
 
@@ -53,8 +53,10 @@ or another `WORKFLOW.md` stop condition.
 ## Verification, Completion, and Rollback
 
 Focused declaration, derivation, conversation, location, save/load, isolation,
-and rendering tests; relevant existing regressions; Region Pack validation;
-the full root test inventory; official preflight; manifest deep agreement;
-`git diff --check`; and independent `package-review` packet validation are
-required. Rollback is confined to this feature branch; no migration or data
-conversion is introduced.
+and rendering tests; relevant existing regressions; Region Pack validation; all
+27 root test scripts; official preflight; canonical manifest deep agreement;
+`git diff --check`; and independent `package-review` packet validation passed.
+The final package-review archive will be regenerated for owner review from the
+documentation-closeout commit. Save version remains `1`; `next_sprint` remains
+`null`; no next capability package is selected or staged. Rollback is confined
+to this feature branch; no migration or data conversion is introduced.
