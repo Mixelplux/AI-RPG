@@ -245,6 +245,25 @@ def validate_resolved_thread_actor_relocation_effect(region: dict) -> None:
     }
     if effect["destination_location_id"] not in locations:
         raise ValueError(f"{field}.destination_location_id is unknown.")
+    effect_fields = (
+        "conversation_actor_relocation_effect",
+        "conversation_actor_knowledge_effect",
+        "conversation_evidence_trace_effect",
+        "elapsed_time_pressure_effect",
+        "elapsed_time_actor_relocation_effect",
+    )
+    effect_ids = []
+    for effect_field in effect_fields:
+        candidate = region.get(effect_field)
+        if isinstance(candidate, dict) and isinstance(candidate.get("effect_id"), str):
+            effect_ids.append(candidate["effect_id"])
+    for candidate in region.get("conversation_pressure_effects", []):
+        if isinstance(candidate, dict) and isinstance(candidate.get("effect_id"), str):
+            effect_ids.append(candidate["effect_id"])
+    if effect["effect_id"] in effect_ids:
+        raise ValueError(
+            f"{field}.effect_id conflicts with another Region Pack effect identity."
+        )
 
 
 def validate_conversation_actor_relocation_effect(region: dict) -> None:

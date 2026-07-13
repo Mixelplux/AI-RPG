@@ -200,12 +200,7 @@ class GameEngine:
                 relocation["destination_location_id"], source_id,
             )
             result["actor_location_consequence"] = {
-                "effect_id": relocation["effect_id"],
-                "changed": relocation_result["changed"],
-                "actor_entity_id": relocation_result["entity_id"],
-                "previous_location_id": relocation_result["previous_location_id"],
-                "new_location_id": relocation_result["new_location_id"],
-                "history_id": relocation_result["history_id"],
+                "status": "applied" if relocation_result["changed"] else "no_op"
             }
         validate_world_state(candidate, self.region)
         scene = build_scene(self.region, candidate)

@@ -194,7 +194,7 @@ Only `world_state` is persisted. Region Packs remain immutable assets. Scene Sna
 
 ## Authored Resolved-Thread Actor Relocation
 
-One optional immutable `resolved_thread_actor_relocation_effect` may identify one declared resolved thread, one stable static actor, and one exact destination location. It is eligible only inside the successful authored clue-presentation resolution transition. The copied candidate records the presentation source first, resolves the thread, adds a material actor-location override and causally linked `actor_moved` history only when needed, validates, builds one final Scene Snapshot, and publishes once. The structured result exposes only whether the relocation was applied or was a successful no-op. This preserves save version 1 and introduces no generic consequence system.
+One optional immutable `resolved_thread_actor_relocation_effect` may identify one declared resolved thread, one stable static actor, and one exact destination location. Its identity must not conflict with any other supported authored effect identity in the Region Pack. It is eligible only inside the successful authored clue-presentation resolution transition. The copied candidate records the presentation source first, resolves the thread, adds a material actor-location override and causally linked `actor_moved` history only when needed, validates, builds one final Scene Snapshot, and publishes once. The structured result is only `None`, `{"status": "applied"}`, or `{"status": "no_op"}` and exposes no simulation identifiers. This preserves save version 1 and introduces no generic consequence system.
 
 ## Authored Actor-Knowledge Conversation Response
 

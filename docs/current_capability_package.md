@@ -8,7 +8,7 @@ The successful authored clue-presentation resolution for the Bryn Shander west-r
 
 ## Ownership and Decisions
 
-Region Pack data owns the immutable declaration. World State remains the sole owner of runtime actor-location overrides and thread state. The existing clue-presentation candidate composes source history, resolution, one material relocation and its causal history, validates once, builds one Scene Snapshot, and publishes both together. An already-at-destination actor is a successful no-op with no location history. Save version remains 1.
+Region Pack data owns the immutable declaration and rejects an effect identity that conflicts with any other supported Region Pack effect. World State remains the sole owner of runtime actor-location overrides and thread state. The existing clue-presentation candidate composes source history, resolution, one material relocation and its causal history, validates once, builds one Scene Snapshot, and publishes both together. The public result is only `None`, `{"status": "applied"}`, or `{"status": "no_op"}`; simulation identities remain internal. An already-at-destination actor is a successful no-op with no location history. Save version remains 1.
 
 ## Exclusions and Rollback
 
