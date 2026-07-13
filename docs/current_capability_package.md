@@ -1,6 +1,6 @@
 # Authored Discovery Use and Thread Resolution
 
-Status: Active.
+Status: Complete.
 
 ## Purpose and Owner-Visible Value
 
