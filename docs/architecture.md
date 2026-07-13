@@ -430,6 +430,20 @@ Destination resolution does not execute travel. It must not move the player, cal
 
 `GameEngine` remains the gameplay-facing facade. Front ends should not call lower-level destination-resolution modules directly.
 
+## Evidence Traces and Deterministic Local Discovery
+
+Evidence traces are hidden opaque World State records with an exact location.
+Region Packs own immutable discovery declarations and player-facing text.
+World State owns sparse discovered declaration identifiers. The investigation
+command routes through the Interaction Kernel and GameEngine, considers only
+traces at the player current location, and selects at most one eligible
+declaration in authored order. A material discovery and durable history entry
+validate and commit atomically with the rebuilt Scene Snapshot. Unknown saved
+membership identifiers fail Region-aware validation; missing version-1 legacy
+membership normalizes empty. Trace and discovery internals do not enter Scene
+Snapshots, ordinary perception, narration packets, dialogue, targeting, or
+actor knowledge.
+
 ## Sprint 10.19 Conversation Actor-Knowledge Consequence
 
 One optional immutable `conversation_actor_knowledge_effect` composes with the successful resolved-conversation candidate transition. Its declared trigger actor, receiving stable static actor, and opaque knowledge identifier add one absent membership only after the new accepted `player_conversation` entry exists in the candidate. That entry is the structural `source_history_id` of the resulting `actor_knowledge_added` entry. Existing pressure, actor-location, and unresolved-thread consequences retain their candidate composition; final validation and one Scene Snapshot build precede the sole live commit. Duplicate knowledge adds no membership or lifecycle entry while the new successful conversation still records normally. The declaration is not persisted or replayed, and knowledge remains absent from scene, perception, narration, dialogue, targeting, and CLI behavior.
