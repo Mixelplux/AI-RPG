@@ -281,3 +281,11 @@ Watch Mark can return Captain Grey from the West Gate to the North Gate through
 one exact atomic presentation path. No precedence, discovery consumption, new
 persistence, or save-version change was added.
 
+## Sprint 10.54 - One Declared One-Hour West-Road Exit Traversal
+
+Status: Complete â€” ready for owner review. One strict directed West Gate to
+Western Trade Road declaration composes existing elapsed-time consequences and
+completed player movement in one atomic candidate transition. All other routes
+remain instantaneous; save version remains 1 and general travel remains
+deferred.
+

@@ -725,3 +725,26 @@ prepares material `actor_moved` history with a backward source reference,
 validates, rebuilds the scene, and publishes once. At the North Gate relocation
 is a no-op with no duplicate move history. Discovery is not consumed, save
 version remains 1, and no generic consequence or presentation framework exists.
+
+## ADR-055 - One Declared One-Hour West-Road Exit Traversal Is Atomic
+
+**Status:** Accepted
+
+One optional strict Region Pack declaration may name only the existing directed
+West Gate to Western Trade Road connection and a duration of exactly one hour.
+The existing local movement command remains the player entry point; every other
+route stays instantaneous. This is not general travel-duration metadata.
+
+The engine prepares elapsed time and its `time_advanced` source history from
+the command-start West Gate before changing player location. Existing threshold
+consequences are then prepared with their required backward references to that
+source history. Completed `player_movement` history follows those records and
+uses the final time and destination. No in-transit state, departure/arrival
+history kind, source scene, or post-time/pre-movement scene exists.
+
+The complete candidate validates and builds one destination Scene Snapshot
+before it replaces live World State and scene. Any preparation, history,
+validation, or scene-build failure publishes neither elapsed time, consequence,
+movement, nor partial scene. Existing state and history structures preserve
+save version 1 compatibility. General travel, bidirectional inference,
+pathfinding, encounters, schedules, and route frameworks remain deferred.

@@ -156,6 +156,11 @@ def validate_region(region: dict) -> None:
         errors.append(str(error))
 
     try:
+        validate_one_hour_west_road_exit_traversal(region)
+    except ValueError as error:
+        errors.append(str(error))
+
+    try:
         validate_pressure_observation_cue(region)
     except ValueError as error:
         errors.append(str(error))
@@ -854,6 +859,41 @@ def validate_elapsed_time_evidence_trace_effect(region: dict) -> None:
     conversation_trace = region.get("conversation_evidence_trace_effect")
     if isinstance(conversation_trace, dict) and conversation_trace.get("trace_id") == effect["trace_id"]:
         raise ValueError(f"{field}.trace_id conflicts with another authored trace identity.")
+
+
+def validate_one_hour_west_road_exit_traversal(region: dict) -> None:
+    """Validate the one supported time-costed directed traversal declaration."""
+    field = "one_hour_west_road_exit_traversal"
+    if field not in region:
+        return
+    declaration = region[field]
+    required = {"source_location_id", "destination_location_id", "duration_hours"}
+    if not isinstance(declaration, dict) or set(declaration) != required:
+        raise ValueError(f"{field} fields are invalid.")
+    for name in ("source_location_id", "destination_location_id"):
+        if not isinstance(declaration[name], str) or not declaration[name]:
+            raise ValueError(f"{field}.{name} must be a non-empty string.")
+    if declaration["duration_hours"] != 1 or isinstance(declaration["duration_hours"], bool):
+        raise ValueError(f"{field}.duration_hours must be exactly one hour.")
+    locations = {
+        location.get("location_id"): location
+        for location in region.get("locations", [])
+        if isinstance(location, dict)
+    }
+    source = locations.get(declaration["source_location_id"])
+    if source is None or declaration["destination_location_id"] not in locations:
+        raise ValueError(f"{field} must reference known locations.")
+    if declaration["source_location_id"] != "bryn_shander_gate_west":
+        raise ValueError(f"{field}.source_location_id must be the West Gate.")
+    if declaration["destination_location_id"] != "outside_trade_road_west":
+        raise ValueError(f"{field}.destination_location_id must be the Western Trade Road.")
+    destinations = {
+        exit_data.get("location_id")
+        for exit_data in source.get("connected_locations", [])
+        if isinstance(exit_data, dict)
+    }
+    if declaration["destination_location_id"] not in destinations:
+        raise ValueError(f"{field} endpoints must be directly connected.")
 
 
 def validate_pressure_observation_cue(region: dict) -> None:

@@ -695,12 +695,13 @@ class GameEngine:
         narration_context = self.get_narration_context(player_input)
         return build_narration_preview_packet(narration_context)
 
-    def advance_time(self, duration_hours: int = 1) -> Dict[str, Any]:
-        previous_time = get_time(self.world_state)
+    def _prepare_time_advance_candidate(
+        self, candidate_world_state: Dict[str, Any], duration_hours: int
+    ) -> tuple[Dict[str, Any], Dict[str, Any]]:
+        """Prepare one time transition without validating, building, or publishing."""
+        previous_time = get_time(candidate_world_state)
         new_time = advance_time_by_hours(previous_time, duration_hours)
-        location_id = get_player_location_id(self.world_state)
-
-        candidate_world_state = copy_world_state(self.world_state)
+        location_id = get_player_location_id(candidate_world_state)
         candidate_world_state = set_time(candidate_world_state, new_time)
         candidate_world_state = add_history_entry(
             candidate_world_state,
@@ -775,15 +776,7 @@ class GameEngine:
             evidence_trace_consequence["effect_id"] = trace_effect["effect_id"]
             evidence_trace_consequence["trigger_elapsed_hours"] = trace_effect["trigger_elapsed_hours"]
 
-        validate_world_state(candidate_world_state, self.region)
-        candidate_scene_snapshot = build_scene(
-            self.region,
-            candidate_world_state
-        )
-        self.world_state = candidate_world_state
-        self.scene_snapshot = candidate_scene_snapshot
-
-        return {
+        return candidate_world_state, {
             "duration_hours": duration_hours,
             "previous_time": previous_time,
             "new_time": new_time,
@@ -791,6 +784,47 @@ class GameEngine:
             "actor_location_consequence": deepcopy(actor_location_consequence),
             "evidence_trace_consequence": deepcopy(evidence_trace_consequence),
         }
+
+    def advance_time(self, duration_hours: int = 1) -> Dict[str, Any]:
+        candidate_world_state, result = self._prepare_time_advance_candidate(
+            copy_world_state(self.world_state), duration_hours
+        )
+        validate_world_state(candidate_world_state, self.region)
+        candidate_scene_snapshot = build_scene(self.region, candidate_world_state)
+        self.world_state = candidate_world_state
+        self.scene_snapshot = candidate_scene_snapshot
+        return result
+
+    def _is_declared_one_hour_west_road_traversal(
+        self, interaction_result: Dict[str, Any]
+    ) -> bool:
+        declaration = self.region.get("one_hour_west_road_exit_traversal")
+        return (
+            interaction_result.get("intent") == "movement"
+            and interaction_result.get("success")
+            and isinstance(declaration, dict)
+            and get_player_location_id(self.world_state)
+            == declaration.get("source_location_id")
+            and interaction_result.get("destination_location_id")
+            == declaration.get("destination_location_id")
+        )
+
+    def _complete_declared_one_hour_west_road_traversal(
+        self, interaction_result: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Commit the one supported timed traversal as one outer transition."""
+        declaration = self.region["one_hour_west_road_exit_traversal"]
+        candidate_world_state, time_result = self._prepare_time_advance_candidate(
+            copy_world_state(self.world_state), declaration["duration_hours"]
+        )
+        candidate_world_state = apply_interaction(
+            candidate_world_state, interaction_result
+        )
+        validate_world_state(candidate_world_state, self.region)
+        candidate_scene_snapshot = build_scene(self.region, candidate_world_state)
+        self.world_state = candidate_world_state
+        self.scene_snapshot = candidate_scene_snapshot
+        return time_result
 
     def get_scene_snapshot(self) -> Dict[str, Any]:
         return deepcopy(self.scene_snapshot)
@@ -1085,6 +1119,14 @@ class GameEngine:
                     interaction_result["message"] = (
                         "No matching target is present in the current scene."
                     )
+
+        if self._is_declared_one_hour_west_road_traversal(interaction_result):
+            interaction_result["time_advancement"] = (
+                self._complete_declared_one_hour_west_road_traversal(
+                    interaction_result
+                )
+            )
+            return deepcopy(interaction_result)
 
         candidate_world_state = apply_interaction(
             self.world_state,

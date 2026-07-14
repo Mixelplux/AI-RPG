@@ -1,5 +1,18 @@
 # Sprint Log
 
+## Sprint 10.54 â€” One Declared One-Hour West-Road Exit Traversal
+
+- Status: Complete â€” ready for owner review.
+- Added one strict optional Region Pack declaration for the exact directed West
+  Gate to Western Trade Road exit and a duration of exactly one hour.
+- The command-start source location remains authoritative while one candidate
+  prepares `time_advanced`, existing causal time effects, and completed
+  `player_movement` history in that order, then validates and publishes one
+  destination scene.
+- Focused and all 33 official-interpreter root test scripts passed, including
+  rollback, threshold, save/load, route-isolation, and affected regressions.
+  Save version remains 1; no next package is staged.
+
 ## Sprint 10.48 — Authored Resolved-Thread Actor Relocation
 
 - Status: Complete.

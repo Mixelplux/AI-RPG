@@ -542,6 +542,17 @@ then one validation, scene build, and publication complete the transition.
 Already being at the North Gate is a relocation no-op with no `actor_moved`
 history. Discovery remains unconsumed and save version remains 1.
 
+## One-Hour West-Road Exit Traversal
+
+One optional immutable `one_hour_west_road_exit_traversal` declaration supports
+only the existing directed West Gate to Western Trade Road exit with duration
+one hour. On the exact local movement, `GameEngine` prepares the existing time
+transition at the command-start source, then applies completed movement in the
+same candidate. History is time source, any causal time consequences, then
+player movement. Validation and one destination Scene Snapshot build precede
+the sole publication. All other movement remains instantaneous; there is no
+general travel system or save-schema change.
+
 ## Sprint 10.19 Conversation Actor-Knowledge Consequence
 
 One optional immutable `conversation_actor_knowledge_effect` composes with the successful resolved-conversation candidate transition. Its declared trigger actor, receiving stable static actor, and opaque knowledge identifier add one absent membership only after the new accepted `player_conversation` entry exists in the candidate. That entry is the structural `source_history_id` of the resulting `actor_knowledge_added` entry. Existing pressure, actor-location, and unresolved-thread consequences retain their candidate composition; final validation and one Scene Snapshot build precede the sole live commit. Duplicate knowledge adds no membership or lifecycle entry while the new successful conversation still records normally. The declaration is not persisted or replayed, and knowledge remains absent from scene, perception, narration, dialogue, targeting, and CLI behavior.

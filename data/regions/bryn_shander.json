@@ -135,6 +135,11 @@
     "evidence_id": "delayed_watch_mark",
     "location_id": "bryn_shander_gate_north"
   },
+  "one_hour_west_road_exit_traversal": {
+    "source_location_id": "bryn_shander_gate_west",
+    "destination_location_id": "outside_trade_road_west",
+    "duration_hours": 1
+  },
   "pressure_observation_cue": {
     "cue_id": "winter_deepens_observation",
     "pressure_id": "bryn_shander_winter",
