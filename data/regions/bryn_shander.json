@@ -430,6 +430,13 @@
     "required_discovery_id": "west_gate_elin_report_trace",
     "response_text": "Elin Voss studies the folded order, then nods. \"You found it. The West Gate patrol is moving before the road closes.\""
   },
+  "conversation_affordance": {
+    "affordance_id": "west_gate_elin_orders_conversation",
+    "location_id": "bryn_shander_gate_west",
+    "target_entity_id": "guard_elin_voss",
+    "required_discovery_id": "west_gate_elin_report_trace",
+    "display_text": "Elin Voss is at the West Gate with the patrol orders. You can speak with her about them."
+  },
   "factions": [
     {
       "faction_id": "town_watch_bryn_shander",

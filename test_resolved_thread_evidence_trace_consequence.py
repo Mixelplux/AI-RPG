@@ -51,6 +51,7 @@ def test_declaration_validation_and_compatibility():
     absent = deepcopy(region)
     del absent["resolved_thread_evidence_trace_effect"]
     del absent["conversation_player_discovery_response"]
+    del absent["conversation_affordance"]
     validate_region(absent)
     for field in ("effect_id", "resolved_thread_id", "trace_id", "evidence_id", "location_id"):
         bad = deepcopy(region)

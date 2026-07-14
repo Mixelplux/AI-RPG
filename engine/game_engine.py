@@ -54,6 +54,7 @@ from engine.world_state import (
 from engine.actor_knowledge import get_actor_knowledge as get_world_actor_knowledge
 from engine.actor_knowledge_response import derive_conversation_actor_knowledge_response
 from engine.player_discovery_response import derive_conversation_player_discovery_response
+from engine.conversation_affordance import derive_conversation_affordance
 from engine.evidence_traces import (
     get_evidence_trace as get_world_evidence_trace,
     get_evidence_traces as get_world_evidence_traces,
@@ -858,6 +859,12 @@ class GameEngine:
                 self.region.get("conversation_unresolved_thread"),
                 self.region.get("conversation_discovery_resolution"),
                 get_player_location_id(self.world_state),
+            ),
+            derive_conversation_affordance(
+                self.region,
+                get_player_location_id(self.world_state),
+                self.scene_snapshot,
+                tuple(self.world_state["player_discoveries"]),
             ),
         )
 

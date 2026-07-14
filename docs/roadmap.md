@@ -296,3 +296,10 @@ Gate to Western Trade Road traversal now adds one hidden, source-linked trace
 only after completed movement. Existing local investigation is the sole clue
 projection; save version remains 1 and general arrival effects remain deferred.
 
+## Sprint 10.56 - One Derived Discovery-Gated Conversation Affordance
+
+Status: Complete - ready for owner review. One exact Elin Voss conversation affordance is derived only
+from West Gate location, visible targetable actor presence, and the existing
+West-Road Orders discovery. It adds no opportunity state, history, command,
+parser, persistence, or save-schema behavior; save version remains 1.
+

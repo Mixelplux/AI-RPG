@@ -33,7 +33,7 @@ def resolve_and_arrive(engine, discover=False):
 
 def test_validation():
     region = data(); validate_region(region)
-    absent = deepcopy(region); del absent["conversation_player_discovery_response"]; validate_region(absent)
+    absent = deepcopy(region); del absent["conversation_player_discovery_response"]; del absent["conversation_affordance"]; validate_region(absent)
     for field in ("target_entity_id", "required_discovery_id", "response_text"):
         bad=deepcopy(region); del bad["conversation_player_discovery_response"][field]; invalid(bad,"fields are invalid")
         bad=deepcopy(region); bad["conversation_player_discovery_response"][field]=""; invalid(bad,"non-empty strings")

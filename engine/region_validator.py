@@ -136,6 +136,11 @@ def validate_region(region: dict) -> None:
         errors.append(str(error))
 
     try:
+        validate_conversation_affordance(region)
+    except ValueError as error:
+        errors.append(str(error))
+
+    try:
         validate_conversation_evidence_trace_effect(region)
     except ValueError as error:
         errors.append(str(error))
@@ -592,6 +597,72 @@ def validate_conversation_player_discovery_response(region: dict) -> None:
     knowledge = region.get("conversation_actor_knowledge_response")
     if isinstance(knowledge, dict) and knowledge.get("target_entity_id") == declaration["target_entity_id"]:
         raise ValueError(f"{field}.target_entity_id must not overlap the actor-knowledge response.")
+
+
+def validate_conversation_affordance(region: dict) -> None:
+    """Validate the one strict authored player-safe conversation affordance."""
+
+    field = "conversation_affordance"
+    if field not in region:
+        return
+    declaration = region[field]
+    required = {
+        "affordance_id", "location_id", "target_entity_id",
+        "required_discovery_id", "display_text",
+    }
+    if not isinstance(declaration, dict) or set(declaration) != required:
+        raise ValueError(f"{field} fields are invalid.")
+    if any(not isinstance(declaration[name], str) or not declaration[name] for name in required):
+        raise ValueError(f"{field} values must be non-empty strings.")
+
+    locations = {
+        location.get("location_id")
+        for location in region.get("locations", [])
+        if isinstance(location, dict)
+    }
+    if declaration["location_id"] not in locations:
+        raise ValueError(f"{field}.location_id is unknown.")
+
+    actors = [
+        entity for entity in region.get("entities", [])
+        if isinstance(entity, dict)
+        and entity.get("persistence") == "static"
+        and entity.get("entity_id") == declaration["target_entity_id"]
+    ]
+    if len(actors) != 1:
+        raise ValueError(f"{field}.target_entity_id must reference one static actor.")
+    actor = actors[0]
+    if not isinstance(actor.get("name"), str) or not actor["name"]:
+        raise ValueError(f"{field}.target_entity_id requires a player-facing actor name.")
+
+    discoveries = [
+        item for item in region.get("discovery_declarations", [])
+        if isinstance(item, dict)
+        and item.get("discovery_id") == declaration["required_discovery_id"]
+    ]
+    if len(discoveries) != 1:
+        raise ValueError(f"{field}.required_discovery_id is unknown.")
+
+    response = region.get("conversation_player_discovery_response")
+    if (
+        not isinstance(response, dict)
+        or response.get("target_entity_id") != declaration["target_entity_id"]
+        or response.get("required_discovery_id") != declaration["required_discovery_id"]
+    ):
+        raise ValueError(
+            f"{field} must match one discovery-gated conversation response actor and discovery."
+        )
+
+    relocation = region.get("resolved_thread_actor_relocation_effect")
+    actor_can_be_present = actor.get("location") == declaration["location_id"] or (
+        isinstance(relocation, dict)
+        and relocation.get("actor_entity_id") == declaration["target_entity_id"]
+        and relocation.get("destination_location_id") == declaration["location_id"]
+    )
+    if not actor_can_be_present:
+        raise ValueError(
+            f"{field}.target_entity_id cannot be present at declaration location."
+        )
 
 
 def validate_conversation_evidence_trace_effect(region: dict) -> None:

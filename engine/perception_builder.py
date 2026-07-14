@@ -7,6 +7,7 @@ def build_perception(
     pressure_cues: list[Dict[str, str]] | None = None,
     unresolved_thread_evidence: list[Dict[str, str]] | None = None,
     resolved_thread_observation: Dict[str, str] | None = None,
+    conversation_affordance: Dict[str, str] | None = None,
 ) -> Dict[str, Any]:
     """
     Convert a Scene Snapshot into a Perception Snapshot.
@@ -57,4 +58,6 @@ def build_perception(
         "unresolved_thread_evidence": deepcopy(unresolved_thread_evidence or []),
 
         "resolved_thread_observation": deepcopy(resolved_thread_observation or {}),
+
+        "conversation_affordance": deepcopy(conversation_affordance or {}),
     }

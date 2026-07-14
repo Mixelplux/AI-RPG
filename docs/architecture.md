@@ -571,6 +571,31 @@ conversation, actor knowledge, or thread observation. Existing local
 `investigate` remains the sole discovery boundary. Repeated arrivals retain
 normal movement and time behavior but add no duplicate trace history.
 
+## Discovery-Gated Conversation Affordance
+
+One optional immutable `conversation_affordance` declaration may name one
+affordance identity, one Region Pack location, one stable static actor, one
+existing player discovery, and exact display text. The declaration is valid
+only when its actor-and-discovery pair exactly matches the existing
+`conversation_player_discovery_response`, its location exists, and the actor is
+authored at that location or can reach it through the existing resolved-thread
+relocation declaration.
+
+`GameEngine.get_player_perception()` derives the affordance from only the
+player's current location, visible static actor presence in the current scene,
+and owned player discovery membership. The optional singleton projection has
+only `affordance_id`, `display_text`, `command_text`, and
+`target_display_name`; it exposes no entity, discovery, evidence, history, or
+eligibility internals. `command_text` is informational deterministic text for
+the existing `talk` command. It does not add parsing, aliases, execution
+tokens, or command authority.
+
+The derived record may appear on every eligible perception reconstruction,
+including re-entry and save/load. It creates no World State, history, causal
+reference, acknowledgement, once-only presentation, transaction, persistence,
+or save-schema behavior. Existing conversation and target-resolution paths
+remain independently authoritative when the player uses `talk`.
+
 ## Sprint 10.19 Conversation Actor-Knowledge Consequence
 
 One optional immutable `conversation_actor_knowledge_effect` composes with the successful resolved-conversation candidate transition. Its declared trigger actor, receiving stable static actor, and opaque knowledge identifier add one absent membership only after the new accepted `player_conversation` entry exists in the candidate. That entry is the structural `source_history_id` of the resulting `actor_knowledge_added` entry. Existing pressure, actor-location, and unresolved-thread consequences retain their candidate composition; final validation and one Scene Snapshot build precede the sole live commit. Duplicate knowledge adds no membership or lifecycle entry while the new successful conversation still records normally. The declaration is not persisted or replayed, and knowledge remains absent from scene, perception, narration, dialogue, targeting, and CLI behavior.

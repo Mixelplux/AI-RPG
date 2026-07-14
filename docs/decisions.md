@@ -773,3 +773,29 @@ ordinary diagnostics. Existing explicit local investigation is the sole
 discovery boundary. This preserves save version 1 and introduces no general
 arrival-effect mechanism, route hook, encounter system, generic effect
 dispatch, automatic discovery, or travel generalization.
+
+## ADR-057 - One Discovery-Gated Conversation Affordance Is a Pure Player-Safe Projection
+
+**Status:** Accepted
+
+One optional strict Region Pack `conversation_affordance` declaration may bind
+one affordance identity, location, stable static actor, required player
+discovery, and authored display text. The declaration is valid only when the
+location and actor are supported by existing actor-location rules and the exact
+actor-and-discovery pair already has a declared discovery-gated conversation
+response.
+
+Perception derives the singleton only from current player location, visible
+targetable static-actor presence, and player discovery membership. Its record
+contains only `affordance_id`, `display_text`, deterministic `command_text`,
+and `target_display_name`. It does not expose entity, discovery, response,
+evidence, actor-knowledge, pressure, history, causal, or eligibility data.
+
+The projection is informational and may repeat whenever the player-safe
+perception is rebuilt. It adds no opportunity World State, history, causal
+record, acknowledgement, once-only display state, persistence, migration,
+transaction, lifecycle, consumption, parser change, or command behavior.
+Existing `talk` execution independently resolves the target and revalidates
+conversation eligibility. Multiple affordances, priority, ordering, scoring,
+condition languages, action types, and generic affordance infrastructure remain
+deferred.
