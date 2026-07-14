@@ -99,14 +99,20 @@ def test_projection_and_existing_talk_authority():
 
     assert engine.process_command("talk to elin")["player_discovery_response"] is None
     assert engine.process_command("investigate")["investigation"]["discovery_id"] == DISCOVERY
-    world_before = engine.get_world_state()
-    scene_before = engine.scene_snapshot
     perception = engine.get_player_perception()
     assert perception["conversation_affordance"] == AFFORDANCE
     assert set(perception["conversation_affordance"]) == set(AFFORDANCE)
     assert DISCOVERY not in repr(perception["conversation_affordance"])
     assert ACTOR not in repr(perception["conversation_affordance"])
     assert engine.get_narration()["description"].find(AFFORDANCE["display_text"]) == -1
+    result = engine.process_command(perception["conversation_affordance"]["command_text"])
+    assert result["success"]
+    assert result["player_discovery_response"] == {
+        "text": engine.region["conversation_player_discovery_response"]["response_text"]
+    }
+
+    world_before = engine.get_world_state()
+    scene_before = engine.scene_snapshot
 
     perception["conversation_affordance"]["display_text"] = "changed"
     assert engine.get_player_perception()["conversation_affordance"] == AFFORDANCE

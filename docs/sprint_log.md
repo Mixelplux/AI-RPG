@@ -3,6 +3,10 @@
 ## Sprint 10.56 - One Derived Discovery-Gated Conversation Affordance
 
 - Status: Complete - ready for owner review.
+- Governance correction: the focused architecture was approved, implementation
+  began without the required separate implementation authorization, and the
+  owner later ratified the existing work only for one correction cycle and
+  renewed review. It was not originally owner-authorized for implementation.
 - Staged one strict optional Region Pack declaration and one pure, repeatable
   perception projection for the exact existing Elin Voss West-Road Orders
   conversation at the West Gate.

@@ -27,6 +27,14 @@ required discovery, and display text. Projection contains only `affordance_id`,
 World State, history, causal reference, persistence, acknowledgement, or
 once-only presentation state is introduced. Save version remains 1.
 
+## Governance Correction
+
+The focused architecture was approved, but implementation began without the
+required separate implementation authorization. The owner subsequently ratified
+the existing work only for this one governance-and-test correction and renewed
+owner review. This record does not represent retrospective original
+implementation authorization.
+
 ## Exclusions and Rollback
 
 No durable opportunity, multiple affordances, ordering, priority, scoring,
