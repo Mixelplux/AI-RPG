@@ -110,10 +110,14 @@ normal implementation verification, a clean committed review-candidate HEAD,
 an independently validated `package-review` archive, final owner review, and
 explicit owner acceptance before merge.
 
-One check may propose no more than three related capability packages. That
-sequence is planning context, not blanket authority: only its first package
-may be presented for immediate acceptance. After each merge, repeat the check
-and obtain explicit authorization for the next package. Codex must never
+One full architecture review may establish a planning horizon of no more than
+three related runtime capability packages. The horizon is planning context,
+not blanket authority: only one package within it may be owner-authorized at a
+time. After each merge, repeat the lightweight check; while the horizon is
+active, that check may add, replace, or revise the next candidate, including
+after the provisional sequence originally named by the full review is
+exhausted. Every proposed or revised candidate still requires explicit owner
+authorization before staging, branching, or implementation. Codex must never
 automatically continue from one package to the next.
 
 Each check records whether the completed package preserved the expected
@@ -127,9 +131,10 @@ materially relevant architecture, roadmap, ADR, implementation, and test
 evidence. It must not rebuild a comprehensive architecture-review archive
 unless a trigger requires one.
 
-A full architecture review is required if three pilot capability packages have
-completed; the provisional sequence is exhausted; the next direction is
-genuinely uncertain; a new persistent-state domain, save-version change or
+A full architecture review is required before further runtime-package
+authorization if three runtime capability packages within the active planning
+horizon have completed; the next direction is genuinely uncertain; a new
+persistent-state domain, save-version change or
 migration, generic effect/condition/consequence/reaction/transaction/dispatch
 framework, precedence system, autonomous schedule/routine/background
 progression/continuous simulation, or generalized handling for multiple
@@ -140,11 +145,13 @@ patterns; canonical authorities materially conflict; or the evidence is not
 enough for a responsible recommendation. The owner may request a full review
 at any time.
 
-The pilot covers at most three runtime packages, counting from the first one
-authorized after this workflow change. The already accepted elapsed-time
-evidence package is supporting evidence, not a counted pilot package. The
-pilot succeeds only if it reduces packet generation, repeated synthesis, and
-owner back-and-forth without missed conflicts, broader or less coherent scope,
+The pilot covers at most three runtime packages within each planning horizon,
+counting from the first package owner-authorized under that horizon. The
+already accepted elapsed-time evidence package is supporting evidence, not a
+counted pilot package. A horizon must not be used to invent weak candidates or
+divide one coherent capability into artificial fragments. The pilot succeeds
+only if it reduces packet generation, repeated synthesis, and owner
+back-and-forth without missed conflicts, broader or less coherent scope,
 increased owner intervention or correction cycles, unclear authority, weaker
 package evidence, or weakened atomicity, causal integrity, hidden-state
 protection, or save compatibility.
