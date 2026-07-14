@@ -80,9 +80,49 @@ def test_strict_declaration_validation():
     invalid = deepcopy(region)
     invalid["one_hour_west_road_exit_traversal"]["destination_location_id"] = WEST_GATE
     expect_invalid(invalid, "endpoints")
+    effect_owners = {
+        "conversation_pressure_effects": region["conversation_pressure_effects"][0]["effect_id"],
+        "conversation_discovery_actor_relocation": region[
+            "conversation_discovery_actor_relocation"
+        ]["effect_id"],
+        "resolved_thread_actor_relocation_effect": region[
+            "resolved_thread_actor_relocation_effect"
+        ]["effect_id"],
+        "resolved_thread_actor_knowledge_effect": region[
+            "resolved_thread_actor_knowledge_effect"
+        ]["effect_id"],
+        "resolved_thread_evidence_trace_effect": region[
+            "resolved_thread_evidence_trace_effect"
+        ]["effect_id"],
+        "conversation_actor_knowledge_effect": region[
+            "conversation_actor_knowledge_effect"
+        ]["effect_id"],
+        "conversation_evidence_trace_effect": region[
+            "conversation_evidence_trace_effect"
+        ]["effect_id"],
+        "elapsed_time_pressure_effect": region[
+            "elapsed_time_pressure_effect"
+        ]["effect_id"],
+        "elapsed_time_actor_relocation_effect": region[
+            "elapsed_time_actor_relocation_effect"
+        ]["effect_id"],
+        "elapsed_time_evidence_trace_effect": region[
+            "elapsed_time_evidence_trace_effect"
+        ]["effect_id"],
+    }
+    for owner, effect_id in effect_owners.items():
+        invalid = deepcopy(region)
+        invalid["west_road_arrival_evidence_trace"]["effect_id"] = effect_id
+        expect_invalid(invalid, "effect_id conflicts")
     invalid = deepcopy(region)
+    invalid["conversation_actor_relocation_effect"] = {
+        "effect_id": "optional_conversation_relocation",
+        "trigger_entity_id": "captain_darvin_grey",
+        "actor_entity_id": "captain_darvin_grey",
+        "destination_location_id": WEST_GATE,
+    }
     invalid["west_road_arrival_evidence_trace"]["effect_id"] = (
-        region["elapsed_time_evidence_trace_effect"]["effect_id"]
+        "optional_conversation_relocation"
     )
     expect_invalid(invalid, "effect_id conflicts")
     invalid = deepcopy(region)
@@ -93,6 +133,14 @@ def test_strict_declaration_validation():
         region["elapsed_time_evidence_trace_effect"]["trace_id"]
     )
     expect_invalid(invalid, "trace_id conflicts")
+    invalid = deepcopy(region)
+    invalid["west_road_arrival_evidence_trace"]["evidence_id"] = (
+        region["elapsed_time_evidence_trace_effect"]["evidence_id"]
+    )
+    invalid["discovery_declarations"][-1]["evidence_id"] = (
+        region["elapsed_time_evidence_trace_effect"]["evidence_id"]
+    )
+    expect_invalid(invalid, "evidence_id conflicts")
     invalid = deepcopy(region)
     invalid["discovery_declarations"].append(
         deepcopy(region["discovery_declarations"][-1])

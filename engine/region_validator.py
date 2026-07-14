@@ -963,6 +963,7 @@ def validate_west_road_arrival_evidence_trace(region: dict) -> None:
 
     effect_fields = (
         "conversation_actor_relocation_effect",
+        "conversation_discovery_actor_relocation",
         "conversation_actor_knowledge_effect",
         "conversation_evidence_trace_effect",
         "elapsed_time_pressure_effect",
