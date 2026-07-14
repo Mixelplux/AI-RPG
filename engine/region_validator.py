@@ -173,6 +173,10 @@ def validate_region(region: dict) -> None:
     except ValueError as error:
         errors.append(str(error))
     try:
+        validate_conversation_discovery_actor_relocation(region)
+    except ValueError as error:
+        errors.append(str(error))
+    try:
         validate_resolved_thread_actor_relocation_effect(region)
     except ValueError as error:
         errors.append(str(error))
@@ -232,6 +236,74 @@ def validate_conversation_discovery_resolution(region: dict) -> None:
     thread = region.get("conversation_unresolved_thread", {})
     if value["target_entity_id"] not in actors or value["required_discovery_id"] not in discoveries or value["required_thread_id"] != thread.get("thread_id"):
         raise ValueError(f"{field} references are invalid.")
+
+
+def validate_conversation_discovery_actor_relocation(region: dict) -> None:
+    """Validate one exact delayed-watch presentation relocation declaration."""
+    field = "conversation_discovery_actor_relocation"
+    if field not in region:
+        return
+    effect = region[field]
+    required = {
+        "effect_id", "target_entity_id", "required_discovery_id",
+        "actor_entity_id", "destination_location_id", "response_text",
+    }
+    if not isinstance(effect, dict) or set(effect) != required:
+        raise ValueError(f"{field} fields are invalid.")
+    if any(not isinstance(effect[name], str) or not effect[name] for name in required):
+        raise ValueError(f"{field} values must be non-empty strings.")
+    static_ids = {
+        item.get("entity_id") for item in region.get("entities", [])
+        if isinstance(item, dict) and item.get("persistence") == "static"
+    }
+    if effect["target_entity_id"] not in static_ids:
+        raise ValueError(f"{field}.target_entity_id must reference a static actor.")
+    if effect["actor_entity_id"] not in static_ids:
+        raise ValueError(f"{field}.actor_entity_id must reference a static actor.")
+    if (effect["target_entity_id"] != "captain_darvin_grey"
+            or effect["actor_entity_id"] != "captain_darvin_grey"):
+        raise ValueError(f"{field} target and relocated actor must be Captain Grey.")
+    location_ids = {
+        item.get("location_id") for item in region.get("locations", [])
+        if isinstance(item, dict)
+    }
+    if effect["destination_location_id"] not in location_ids:
+        raise ValueError(f"{field}.destination_location_id is unknown.")
+    if effect["destination_location_id"] != "bryn_shander_gate_north":
+        raise ValueError(f"{field}.destination_location_id must be the North Gate.")
+    discoveries = [
+        item for item in region.get("discovery_declarations", [])
+        if isinstance(item, dict)
+        and item.get("discovery_id") == effect["required_discovery_id"]
+    ]
+    if len(discoveries) != 1:
+        raise ValueError(f"{field}.required_discovery_id is unknown.")
+    discovery = discoveries[0]
+    delayed_trace = region.get("elapsed_time_evidence_trace_effect")
+    if (not isinstance(delayed_trace, dict)
+            or delayed_trace.get("trigger_elapsed_hours") != 2
+            or discovery.get("trace_id") != delayed_trace.get("trace_id")
+            or discovery.get("location_id") != delayed_trace.get("location_id")):
+        raise ValueError(f"{field}.required_discovery_id must match the delayed-watch trace.")
+    existing_presentation = region.get("conversation_discovery_resolution")
+    if (isinstance(existing_presentation, dict)
+            and existing_presentation.get("target_entity_id") == effect["target_entity_id"]
+            and existing_presentation.get("required_discovery_id") == effect["required_discovery_id"]):
+        raise ValueError(f"{field} must not overlap the existing thread-resolution presentation pair.")
+    effect_fields = (
+        "conversation_actor_relocation_effect", "conversation_actor_knowledge_effect",
+        "conversation_evidence_trace_effect", "elapsed_time_pressure_effect",
+        "elapsed_time_actor_relocation_effect", "elapsed_time_evidence_trace_effect",
+        "resolved_thread_actor_relocation_effect", "resolved_thread_actor_knowledge_effect",
+        "resolved_thread_evidence_trace_effect",
+    )
+    for other_field in effect_fields:
+        other = region.get(other_field)
+        if isinstance(other, dict) and other.get("effect_id") == effect["effect_id"]:
+            raise ValueError(f"{field}.effect_id conflicts with another Region Pack effect identity.")
+    for other in region.get("conversation_pressure_effects", []):
+        if isinstance(other, dict) and other.get("effect_id") == effect["effect_id"]:
+            raise ValueError(f"{field}.effect_id conflicts with another Region Pack effect identity.")
 
 
 def validate_resolved_thread_actor_relocation_effect(region: dict) -> None:

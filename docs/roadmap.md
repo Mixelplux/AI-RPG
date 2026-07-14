@@ -274,3 +274,10 @@ investigation remains the sole player-facing discovery boundary; save version
 remains 1. A discovery-gated relocated-actor response and all generic
 consequence infrastructure remain deferred.
 
+## Sprint 10.53 - One Declared Delayed-Watch Discovery Actor Recall
+
+Status: Complete — ready for owner review. The existing second-hour Delayed
+Watch Mark can return Captain Grey from the West Gate to the North Gate through
+one exact atomic presentation path. No precedence, discovery consumption, new
+persistence, or save-version change was added.
+

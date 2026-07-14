@@ -108,6 +108,14 @@
     "response_text": "Captain Darvin Grey studies the trail, then nods. ‘That is enough to confirm the report. I will send a patrol west at once.’",
     "resolved_observation": "The watch's low-voiced concern has given way to purposeful orders."
   },
+  "conversation_discovery_actor_relocation": {
+    "effect_id": "delayed_watch_mark_recalls_captain",
+    "target_entity_id": "captain_darvin_grey",
+    "required_discovery_id": "north_gate_second_hour_trace",
+    "actor_entity_id": "captain_darvin_grey",
+    "destination_location_id": "bryn_shander_gate_north",
+    "response_text": "Captain Grey studies the delayed watch mark, then straightens. \"I am returning to the North Gate to address this lapse at once.\""
+  },
   "elapsed_time_pressure_effect": {
     "effect_id": "winter_deepens_after_first_hour",
     "trigger_elapsed_hours": 1,

@@ -708,3 +708,20 @@ An optional Region Pack-owned declaration may bind one already declared resolved
 **Status:** Accepted
 
 An optional strict Region Pack declaration may bind one positive elapsed-hour threshold to one stable trace, opaque evidence identity, matching discovery declaration, and location. The existing explicit time transition creates its source history first, then prepares pressure, actor relocation, and trace consequences in a fixed order against one copied candidate before validation, scene construction, and publication. Exact existing traces are no-ops; conflicting identities reject. The trace remains hidden until existing local explicit investigation finds its matching declaration. This preserves save version 1 and does not create a scheduler, generic effect registry, transaction framework, passive cue, or automatic discovery.
+
+## ADR-054 - One Declared Delayed-Watch Discovery May Recall Captain Grey Atomically
+
+**Status:** Accepted
+
+The existing `present` interaction already resolves a local actor and an exact
+player discovery. One optional strict Region Pack declaration binds only the
+delayed-watch discovery, Captain Grey as target and relocated actor, the North
+Gate, and one exact authored response.
+
+`GameEngine.present_clue` selects this path solely by local target identity and
+exact discovery identity. The west-road path uses another discovery, so no list,
+ordering, or precedence policy is needed. The candidate adds `clue_presented`,
+prepares material `actor_moved` history with a backward source reference,
+validates, rebuilds the scene, and publishes once. At the North Gate relocation
+is a no-op with no duplicate move history. Discovery is not consumed, save
+version remains 1, and no generic consequence or presentation framework exists.

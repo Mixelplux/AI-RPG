@@ -171,19 +171,52 @@ class GameEngine:
                 "text": declaration["text"], "history_id": candidate["history"][-1]["history_id"]}
 
     def present_clue(self, clue_title: str, actor_text: str) -> Dict[str, Any]:
-        declaration = self.region.get("conversation_discovery_resolution")
         result = {"changed": False, "response_text": None, "resolved_observation": None,
                   "actor_location_consequence": None, "actor_knowledge_consequence": None,
                   "evidence_trace_consequence": None}
-        if declaration is None or not isinstance(clue_title, str) or not isinstance(actor_text, str):
+        if not isinstance(clue_title, str) or not isinstance(actor_text, str):
             return result
         clue = next((item for item in self.region.get("discovery_declarations", []) if item["title"].casefold() == clue_title.casefold()), None)
         target = self.resolve_target(actor_text)
-        if (clue is None or clue["discovery_id"] != declaration["required_discovery_id"]
-                or clue["discovery_id"] not in self.world_state["player_discoveries"]
-                or target["status"] != "resolved" or target["target_type"] != "entity"
-                or target["identifier"] != declaration["target_entity_id"]):
+        if (clue is None or clue["discovery_id"] not in self.world_state["player_discoveries"]
+                or target["status"] != "resolved" or target["target_type"] != "entity"):
             return result
+        declaration = self.region.get("conversation_discovery_resolution")
+        recall = self.region.get("conversation_discovery_actor_relocation")
+        resolution_matches = (
+            isinstance(declaration, dict)
+            and clue["discovery_id"] == declaration["required_discovery_id"]
+            and target["identifier"] == declaration["target_entity_id"]
+        )
+        recall_matches = (
+            isinstance(recall, dict)
+            and clue["discovery_id"] == recall["required_discovery_id"]
+            and target["identifier"] == recall["target_entity_id"]
+        )
+        if not resolution_matches and not recall_matches:
+            return result
+        if recall_matches:
+            candidate = copy_world_state(self.world_state)
+            candidate = add_history_entry(
+                candidate, "clue_presented", "Player presented an authored clue.",
+                extra={"target_entity_id": target["identifier"]},
+            )
+            source_id = candidate["history"][-1]["history_id"]
+            candidate, relocation_result = self._prepare_actor_location_candidate(
+                candidate, recall["actor_entity_id"],
+                recall["destination_location_id"], source_id,
+            )
+            validate_world_state(candidate, self.region)
+            scene = build_scene(self.region, candidate)
+            self.world_state, self.scene_snapshot = candidate, scene
+            result.update({
+                "changed": True,
+                "response_text": recall["response_text"],
+                "actor_location_consequence": {
+                    "status": "applied" if relocation_result["changed"] else "no_op"
+                },
+            })
+            return deepcopy(result)
         thread_id = declaration["required_thread_id"]
         if thread_id in self.world_state["resolved_threads"]:
             return result

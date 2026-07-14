@@ -531,6 +531,17 @@ membership normalizes empty. Trace and discovery internals do not enter Scene
 Snapshots, ordinary perception, narration packets, dialogue, targeting, or
 actor knowledge.
 
+## Delayed-Watch Discovery Actor Recall
+
+One optional immutable `conversation_discovery_actor_relocation` declaration
+binds The Delayed Watch Mark to locally resolved Captain Grey and the North
+Gate. Exact discovery/target pair selection keeps it structurally separate from
+the west-road presentation, without ordering or precedence. The existing
+clue-presented source and non-committing relocation helper prepare a candidate,
+then one validation, scene build, and publication complete the transition.
+Already being at the North Gate is a relocation no-op with no `actor_moved`
+history. Discovery remains unconsumed and save version remains 1.
+
 ## Sprint 10.19 Conversation Actor-Knowledge Consequence
 
 One optional immutable `conversation_actor_knowledge_effect` composes with the successful resolved-conversation candidate transition. Its declared trigger actor, receiving stable static actor, and opaque knowledge identifier add one absent membership only after the new accepted `player_conversation` entry exists in the candidate. That entry is the structural `source_history_id` of the resulting `actor_knowledge_added` entry. Existing pressure, actor-location, and unresolved-thread consequences retain their candidate composition; final validation and one Scene Snapshot build precede the sole live commit. Duplicate knowledge adds no membership or lifecycle entry while the new successful conversation still records normally. The declaration is not persisted or replayed, and knowledge remains absent from scene, perception, narration, dialogue, targeting, and CLI behavior.

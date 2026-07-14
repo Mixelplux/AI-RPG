@@ -47,6 +47,7 @@ def main():
     malformed = deepcopy(engine.region); malformed["elapsed_time_evidence_trace_effect"]["trace_id"] = malformed["conversation_evidence_trace_effect"]["trace_id"]
     rejected(malformed, "trace_id conflicts")
     malformed = deepcopy(engine.region); del malformed["elapsed_time_evidence_trace_effect"]
+    del malformed["conversation_discovery_actor_relocation"]
     validate_region(malformed)
 
     before_scene = engine.scene_snapshot
