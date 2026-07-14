@@ -90,6 +90,14 @@
       "evidence_id": "elin_west_road_patrol_orders",
       "location_id": "bryn_shander_gate_west",
       "text": "A folded patrol order beneath the West Gate brazier records Elin Voss's urgent west-road assignment."
+    },
+    {
+      "discovery_id": "western_trade_road_patrol_marker",
+      "title": "The Exposed Patrol Marker",
+      "trace_id": "western_trade_road_arrival_trace",
+      "evidence_id": "western_trade_road_patrol_marker",
+      "location_id": "outside_trade_road_west",
+      "text": "Your arrival at the western road exposes a wind-scoured patrol marker beneath the drift, pointing back toward Bryn Shander's gate."
     }
   ],
   "conversation_unresolved_thread": {
@@ -139,6 +147,14 @@
     "source_location_id": "bryn_shander_gate_west",
     "destination_location_id": "outside_trade_road_west",
     "duration_hours": 1
+  },
+  "west_road_arrival_evidence_trace": {
+    "effect_id": "west_road_arrival_exposes_patrol_marker",
+    "source_location_id": "bryn_shander_gate_west",
+    "destination_location_id": "outside_trade_road_west",
+    "trace_id": "western_trade_road_arrival_trace",
+    "evidence_id": "western_trade_road_patrol_marker",
+    "discovery_id": "western_trade_road_patrol_marker"
   },
   "pressure_observation_cue": {
     "cue_id": "winter_deepens_observation",

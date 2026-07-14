@@ -748,3 +748,28 @@ validation, or scene-build failure publishes neither elapsed time, consequence,
 movement, nor partial scene. Existing state and history structures preserve
 save version 1 compatibility. General travel, bidirectional inference,
 pathfinding, encounters, schedules, and route frameworks remain deferred.
+
+## ADR-056 - One Declared Western Trade Road Arrival May Make One Hidden Trace Discoverable
+
+**Status:** Accepted
+
+One optional strict Region Pack declaration may bind only the accepted directed
+West Gate to Western Trade Road one-hour traversal to one unique trace, opaque
+evidence identity, and matching discovery declaration at the Western Trade
+Road. It represents evidence created, exposed, or made locally discoverable by
+that completed arrival. Arbitrary pre-existing roadside evidence must not be
+modeled as physically caused by player movement.
+
+The existing outer traversal candidate prepares elapsed time, existing crossed
+time consequences, completed `player_movement`, and then the absent trace. The
+new `evidence_trace_added` record references the completed movement history,
+not `time_advanced`. Validation and one destination Scene Snapshot construction
+precede one live publication. Existing traces are no-ops, while normal time and
+movement still complete.
+
+The trace and opaque identity remain hidden from movement output, destination
+scenes, narration, perception, targeting, conversation, actor knowledge, and
+ordinary diagnostics. Existing explicit local investigation is the sole
+discovery boundary. This preserves save version 1 and introduces no general
+arrival-effect mechanism, route hook, encounter system, generic effect
+dispatch, automatic discovery, or travel generalization.

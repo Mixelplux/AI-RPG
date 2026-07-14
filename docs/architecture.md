@@ -553,6 +553,24 @@ player movement. Validation and one destination Scene Snapshot build precede
 the sole publication. All other movement remains instantaneous; there is no
 general travel system or save-schema change.
 
+## Western Trade Road Arrival Discovery
+
+One optional immutable `west_road_arrival_evidence_trace` declaration binds
+only the accepted West Gate to Western Trade Road one-hour traversal to one
+hidden trace and matching local discovery declaration. The trace represents
+evidence created, exposed, or made locally discoverable by the completed
+arrival; it does not describe arbitrary pre-existing roadside evidence as
+physically caused by player movement.
+
+After existing time preparation and completed `player_movement`, the traversal
+candidate prepares the absent trace with the new movement history identifier as
+its backward `source_history_id`. Final validation and one destination Scene
+Snapshot build still precede the sole publication. The trace does not enter the
+movement result, Scene Snapshot, perception, narration, targeting,
+conversation, actor knowledge, or thread observation. Existing local
+`investigate` remains the sole discovery boundary. Repeated arrivals retain
+normal movement and time behavior but add no duplicate trace history.
+
 ## Sprint 10.19 Conversation Actor-Knowledge Consequence
 
 One optional immutable `conversation_actor_knowledge_effect` composes with the successful resolved-conversation candidate transition. Its declared trigger actor, receiving stable static actor, and opaque knowledge identifier add one absent membership only after the new accepted `player_conversation` entry exists in the candidate. That entry is the structural `source_history_id` of the resulting `actor_knowledge_added` entry. Existing pressure, actor-location, and unresolved-thread consequences retain their candidate composition; final validation and one Scene Snapshot build precede the sole live commit. Duplicate knowledge adds no membership or lifecycle entry while the new successful conversation still records normally. The declaration is not persisted or replayed, and knowledge remains absent from scene, perception, narration, dialogue, targeting, and CLI behavior.

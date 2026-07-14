@@ -54,6 +54,7 @@ def test_declaration_validation():
     validate_region(region)
     absent = deepcopy(region)
     del absent["one_hour_west_road_exit_traversal"]
+    del absent["west_road_arrival_evidence_trace"]
     validate_region(absent)
     for invalid_value in ([], [deepcopy(region["one_hour_west_road_exit_traversal"])]):
         invalid = deepcopy(region)
@@ -95,12 +96,14 @@ def test_exact_atomic_time_costed_traversal_and_history_order():
     assert engine.scene_snapshot is not before_scene
     history = engine.get_history()
     assert [entry["event_type"] for entry in history] == [
-        "time_advanced", "pressure_changed", "actor_moved", "player_movement"
+        "time_advanced", "pressure_changed", "actor_moved", "player_movement",
+        "evidence_trace_added",
     ]
     assert history[1]["source_history_id"] == history[0]["history_id"]
     assert history[2]["source_history_id"] == history[0]["history_id"]
     assert history[3]["location"] == WEST_ROAD
     assert history[3]["time"] == engine.get_world_state()["time"]
+    assert history[4]["source_history_id"] == history[3]["history_id"]
 
 
 def test_second_hour_trace_once_and_undeclared_routes_unchanged():
@@ -143,7 +146,7 @@ def test_save_load_before_after_and_no_replay():
         history = reloaded.get_history()
         reloaded.process_command("go east")
         reloaded.process_command("go west")
-        assert len(reloaded.query_history(event_type="evidence_trace_added")) == 1
+        assert len(reloaded.query_history(event_type="evidence_trace_added")) == 2
         assert reloaded.get_history()[:len(history)] == history
         assert build_save_data(reloaded)["save_version"] == 1
 

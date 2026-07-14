@@ -161,6 +161,11 @@ def validate_region(region: dict) -> None:
         errors.append(str(error))
 
     try:
+        validate_west_road_arrival_evidence_trace(region)
+    except ValueError as error:
+        errors.append(str(error))
+
+    try:
         validate_pressure_observation_cue(region)
     except ValueError as error:
         errors.append(str(error))
@@ -894,6 +899,86 @@ def validate_one_hour_west_road_exit_traversal(region: dict) -> None:
     }
     if declaration["destination_location_id"] not in destinations:
         raise ValueError(f"{field} endpoints must be directly connected.")
+
+
+def validate_west_road_arrival_evidence_trace(region: dict) -> None:
+    """Validate the one supported traversal-completion discovery policy."""
+
+    field = "west_road_arrival_evidence_trace"
+    if field not in region:
+        return
+    declaration = region[field]
+    required = {
+        "effect_id", "source_location_id", "destination_location_id",
+        "trace_id", "evidence_id", "discovery_id",
+    }
+    if not isinstance(declaration, dict) or set(declaration) != required:
+        raise ValueError(f"{field} fields are invalid.")
+    if any(not isinstance(declaration[name], str) or not declaration[name]
+           for name in required):
+        raise ValueError(f"{field} values must be non-empty strings.")
+
+    traversal = region.get("one_hour_west_road_exit_traversal")
+    if not isinstance(traversal, dict):
+        raise ValueError(f"{field} requires the one-hour West-Road traversal.")
+    if (
+        declaration["source_location_id"] != traversal.get("source_location_id")
+        or declaration["destination_location_id"]
+        != traversal.get("destination_location_id")
+    ):
+        raise ValueError(f"{field} must match the one-hour traversal endpoints.")
+    if declaration["source_location_id"] != "bryn_shander_gate_west":
+        raise ValueError(f"{field}.source_location_id must be the West Gate.")
+    if declaration["destination_location_id"] != "outside_trade_road_west":
+        raise ValueError(
+            f"{field}.destination_location_id must be the Western Trade Road."
+        )
+
+    discoveries = [
+        item for item in region.get("discovery_declarations", [])
+        if isinstance(item, dict)
+        and item.get("discovery_id") == declaration["discovery_id"]
+    ]
+    if len(discoveries) != 1:
+        raise ValueError(f"{field}.discovery_id must reference exactly one discovery declaration.")
+    discovery = discoveries[0]
+    if discovery.get("trace_id") != declaration["trace_id"]:
+        raise ValueError(f"{field}.trace_id must match its discovery declaration.")
+    if discovery.get("evidence_id") != declaration["evidence_id"]:
+        raise ValueError(f"{field}.evidence_id must match its discovery declaration.")
+    if discovery.get("location_id") != declaration["destination_location_id"]:
+        raise ValueError(f"{field}.discovery_id must be at the Western Trade Road.")
+
+    trace_fields = (
+        "conversation_evidence_trace_effect",
+        "elapsed_time_evidence_trace_effect",
+        "resolved_thread_evidence_trace_effect",
+    )
+    for other_field in trace_fields:
+        other = region.get(other_field)
+        if isinstance(other, dict) and other.get("trace_id") == declaration["trace_id"]:
+            raise ValueError(f"{field}.trace_id conflicts with another authored trace identity.")
+        if isinstance(other, dict) and other.get("evidence_id") == declaration["evidence_id"]:
+            raise ValueError(f"{field}.evidence_id conflicts with another authored evidence identity.")
+
+    effect_fields = (
+        "conversation_actor_relocation_effect",
+        "conversation_actor_knowledge_effect",
+        "conversation_evidence_trace_effect",
+        "elapsed_time_pressure_effect",
+        "elapsed_time_actor_relocation_effect",
+        "elapsed_time_evidence_trace_effect",
+        "resolved_thread_actor_relocation_effect",
+        "resolved_thread_actor_knowledge_effect",
+        "resolved_thread_evidence_trace_effect",
+    )
+    for other_field in effect_fields:
+        other = region.get(other_field)
+        if isinstance(other, dict) and other.get("effect_id") == declaration["effect_id"]:
+            raise ValueError(f"{field}.effect_id conflicts with another Region Pack effect identity.")
+    for other in region.get("conversation_pressure_effects", []):
+        if isinstance(other, dict) and other.get("effect_id") == declaration["effect_id"]:
+            raise ValueError(f"{field}.effect_id conflicts with another Region Pack effect identity.")
 
 
 def validate_pressure_observation_cue(region: dict) -> None:

@@ -820,6 +820,16 @@ class GameEngine:
         candidate_world_state = apply_interaction(
             candidate_world_state, interaction_result
         )
+        arrival_trace = self.region.get("west_road_arrival_evidence_trace")
+        if isinstance(arrival_trace, dict):
+            movement_history_id = candidate_world_state["history"][-1]["history_id"]
+            candidate_world_state, _ = self._prepare_evidence_trace_candidate(
+                candidate_world_state,
+                arrival_trace["trace_id"],
+                arrival_trace["evidence_id"],
+                arrival_trace["destination_location_id"],
+                movement_history_id,
+            )
         validate_world_state(candidate_world_state, self.region)
         candidate_scene_snapshot = build_scene(self.region, candidate_world_state)
         self.world_state = candidate_world_state

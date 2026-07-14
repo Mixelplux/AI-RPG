@@ -289,3 +289,10 @@ completed player movement in one atomic candidate transition. All other routes
 remain instantaneous; save version remains 1 and general travel remains
 deferred.
 
+## Sprint 10.55 - One Declared Western Trade Road Arrival Discovery
+
+Status: Complete - ready for owner review. The exact accepted one-hour West
+Gate to Western Trade Road traversal now adds one hidden, source-linked trace
+only after completed movement. Existing local investigation is the sole clue
+projection; save version remains 1 and general arrival effects remain deferred.
+
