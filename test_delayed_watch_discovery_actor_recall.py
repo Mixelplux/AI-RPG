@@ -158,10 +158,100 @@ def test_ineligible_noop_rollback_and_save_load():
         assert loaded.present_clue(TITLE, "captain")["actor_location_consequence"] == {"status": "no_op"}
 
 
+def test_selective_history_rollback_and_direct_target_ineligibility():
+    for failed_event in ("clue_presented", "actor_moved"):
+        engine = GameEngine(REGION)
+        reach_captain_with_mark(engine)
+        before_state, live_state, before_scene = (
+            engine.get_world_state(), engine.world_state, engine.scene_snapshot
+        )
+        before_history = engine.get_history()
+        original_add = game_engine_module.add_history_entry
+
+        def fail_selected(candidate, event_type, *args, **kwargs):
+            if event_type == failed_event:
+                raise RuntimeError(failed_event)
+            return original_add(candidate, event_type, *args, **kwargs)
+
+        with patch.object(game_engine_module, "add_history_entry", side_effect=fail_selected):
+            try:
+                engine.present_clue(TITLE, "captain")
+            except RuntimeError as error:
+                assert str(error) == failed_event
+            else:
+                raise AssertionError("Expected selective history failure.")
+        assert engine.get_world_state() == before_state and engine.world_state is live_state
+        assert engine.scene_snapshot == before_scene and engine.scene_snapshot is before_scene
+        assert engine.resolve_target("captain")["identifier"] == CAPTAIN
+        assert engine.get_history() == before_history
+
+    engine = GameEngine(REGION)
+    assert engine.process_command("wait")["success"]
+    assert engine.process_command("wait")["success"]
+    assert engine.process_command("investigate")["investigation"]["discovery_id"] == DISCOVERY
+    before_state, before_scene = engine.get_world_state(), engine.scene_snapshot
+    before_history = engine.get_history()
+    assert not engine.present_clue(TITLE, "elin")["changed"]
+    assert engine.get_world_state() == before_state and engine.scene_snapshot is before_scene
+    assert not engine.present_clue(TITLE, "captain")["changed"]
+    assert engine.get_world_state() == before_state and engine.scene_snapshot is before_scene
+    assert engine.get_history() == before_history
+
+
+def test_exact_noop_counts_and_pre_presentation_save_load_path():
+    engine = GameEngine(REGION)
+    reach_captain_with_mark(engine)
+    assert engine.present_clue(TITLE, "captain")["actor_location_consequence"] == {"status": "applied"}
+    assert engine.process_command("go east")["success"]
+    assert engine.process_command("go north")["success"]
+    source_count = len(engine.query_history(event_type="clue_presented"))
+    moved_count = len(engine.query_history(event_type="actor_moved"))
+    original_validate, original_build = game_engine_module.validate_world_state, game_engine_module.build_scene
+    calls = {"validate": 0, "build": 0}
+    with patch.object(game_engine_module, "validate_world_state", side_effect=lambda *a, **k: (calls.__setitem__("validate", calls["validate"] + 1), original_validate(*a, **k))[1]), patch.object(game_engine_module, "build_scene", side_effect=lambda *a, **k: (calls.__setitem__("build", calls["build"] + 1), original_build(*a, **k))[1]):
+        result = engine.present_clue(TITLE, "captain")
+    assert result["changed"] and result["response_text"] == RESPONSE
+    assert result["actor_location_consequence"] == {"status": "no_op"}
+    assert calls == {"validate": 1, "build": 1}
+    assert len(engine.query_history(event_type="clue_presented")) == source_count + 1
+    assert len(engine.query_history(event_type="actor_moved")) == moved_count
+    assert "fired" not in repr(engine.get_world_state())
+    assert engine.resolve_target("captain")["identifier"] == CAPTAIN
+
+    with TemporaryDirectory() as directory:
+        path = Path(directory) / "before-presentation.json"
+        saved = GameEngine(REGION)
+        assert saved.process_command("wait")["success"]
+        assert saved.process_command("wait")["success"]
+        assert saved.process_command("investigate")["investigation"]["discovery_id"] == DISCOVERY
+        saved.save(str(path))
+        loaded = load_game(str(path))
+        assert DISCOVERY in loaded.get_player_discoveries()
+        assert loaded.resolve_target("captain")["status"] != "resolved"
+        assert loaded.process_command("go south")["success"]
+        assert loaded.process_command("go east")["success"]
+        assert loaded.process_command("go north")["success"]
+        result = loaded.present_clue(TITLE, "captain")
+        assert result["response_text"] == RESPONSE
+        source, moved = loaded.get_history()[-2:]
+        assert source["event_type"] == "clue_presented"
+        assert moved["event_type"] == "actor_moved"
+        assert moved["source_history_id"] == source["history_id"]
+        loaded.save(str(path))
+        reloaded = load_game(str(path))
+        assert reloaded.process_command("go east")["success"]
+        assert reloaded.process_command("go north")["success"]
+        moved_count = len(reloaded.query_history(event_type="actor_moved"))
+        assert reloaded.present_clue(TITLE, "captain")["actor_location_consequence"] == {"status": "no_op"}
+        assert len(reloaded.query_history(event_type="actor_moved")) == moved_count
+
+
 def main():
     test_strict_declaration_validation_and_pair_non_overlap()
     test_end_to_end_atomic_recall_and_path_separation()
     test_ineligible_noop_rollback_and_save_load()
+    test_selective_history_rollback_and_direct_target_ineligibility()
+    test_exact_noop_counts_and_pre_presentation_save_load_path()
     print("Delayed-watch discovery actor recall tests passed.")
 
 
