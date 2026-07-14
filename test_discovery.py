@@ -98,7 +98,11 @@ def test_presenting_a_known_clue_resolves_the_open_thread_once() -> None:
     engine.process_command("investigate")
     result = engine.process_command("Present The Captain's Deliberate Trail TO Captain")["presentation"]
     assert result["changed"] is True
-    assert result["response_text"].startswith("Captain Darvin Grey")
+    assert result["response_text"] == (
+        "Captain Darvin Grey studies the trail, then nods. "
+        "‘That is enough to confirm the report. I will send a patrol west at once.’"
+    )
+    assert "Ã¢â‚¬" not in result["response_text"]
     assert engine.get_open_threads() == {}
     assert set(engine.get_world_state()["resolved_threads"]) == {"bryn_shander_west_road_bandit_report"}
     history_count = len(engine.query_history(event_type="unresolved_thread_opened"))

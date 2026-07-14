@@ -22,7 +22,7 @@ def resolve_spawn_count(rule: Dict[str, Any]) -> int:
 
 
 def load_region(path: str) -> Dict[str, Any]:
-    with open(path, "r") as f:
+    with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
 
