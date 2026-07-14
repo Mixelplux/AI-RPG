@@ -5,6 +5,7 @@ from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
 import engine.game_engine as game_engine_module
+import engine.world_update as world_update_module
 from engine.game_engine import GameEngine
 from engine.region_validator import validate_region
 from engine.save_system import build_save_data, load_game
@@ -30,6 +31,22 @@ def expect_invalid(region, fragment):
         assert fragment in str(error), str(error)
         return
     raise AssertionError("Expected invalid Region Pack.")
+
+
+def assert_complete_rollback(engine, before_state, before_scene):
+    live_state = engine.get_world_state()
+    assert live_state == before_state
+    assert live_state["time"] == before_state["time"]
+    assert live_state["player"]["current_location_id"] == (
+        before_state["player"]["current_location_id"]
+    )
+    assert live_state["pressures"] == before_state["pressures"]
+    assert live_state["actor_location_overrides"] == (
+        before_state["actor_location_overrides"]
+    )
+    assert live_state["evidence_traces"] == before_state["evidence_traces"]
+    assert live_state["history"] == before_state["history"]
+    assert engine.scene_snapshot is before_scene
 
 
 def test_declaration_validation():
@@ -150,8 +167,75 @@ def test_complete_rollback_at_preparation_and_publication_boundaries():
                 pass
             else:
                 raise AssertionError(f"Expected {target} failure.")
-        assert engine.get_world_state() == before_state
-        assert engine.scene_snapshot is before_scene
+        assert_complete_rollback(engine, before_state, before_scene)
+
+
+def test_event_specific_history_and_evidence_rollback():
+    original_add_history = game_engine_module.add_history_entry
+    original_movement_add_history = world_update_module.add_history_entry
+    for event_type in (
+        "time_advanced",
+        "pressure_changed",
+        "actor_moved",
+        "player_movement",
+    ):
+        engine = west_gate_engine()
+        before_state, before_scene = engine.get_world_state(), engine.scene_snapshot
+
+        def fail_exact_event(candidate, *args, **kwargs):
+            actual_event_type = kwargs.get("event_type", args[0] if args else None)
+            if actual_event_type == event_type:
+                raise RuntimeError(event_type)
+            return original_add_history(candidate, *args, **kwargs)
+
+        def fail_movement_event(candidate, *args, **kwargs):
+            actual_event_type = kwargs.get("event_type", args[0] if args else None)
+            if actual_event_type == event_type:
+                raise RuntimeError(event_type)
+            return original_movement_add_history(candidate, *args, **kwargs)
+
+        patch_target = patch.object(
+            world_update_module if event_type == "player_movement" else game_engine_module,
+            "add_history_entry",
+            side_effect=(fail_movement_event if event_type == "player_movement" else fail_exact_event),
+        )
+        with patch_target:
+            try:
+                engine.process_command("go west")
+            except RuntimeError as error:
+                assert str(error) == event_type
+            else:
+                raise AssertionError(f"Expected {event_type} failure.")
+        assert_complete_rollback(engine, before_state, before_scene)
+
+    for failure_target in ("evidence_trace_added", "_prepare_evidence_trace_candidate"):
+        engine = west_gate_engine()
+        engine.world_state["time"]["elapsed_hours"] = 1
+        before_state, before_scene = engine.get_world_state(), engine.scene_snapshot
+        if failure_target == "evidence_trace_added":
+            def fail_trace_history(candidate, *args, **kwargs):
+                actual_event_type = kwargs.get("event_type", args[0] if args else None)
+                if actual_event_type == "evidence_trace_added":
+                    raise RuntimeError(actual_event_type)
+                return original_add_history(candidate, *args, **kwargs)
+
+            patch_target = patch.object(
+                game_engine_module, "add_history_entry", side_effect=fail_trace_history
+            )
+        else:
+            patch_target = patch.object(
+                game_engine_module.GameEngine,
+                "_prepare_evidence_trace_candidate",
+                side_effect=RuntimeError(failure_target),
+            )
+        with patch_target:
+            try:
+                engine.process_command("go west")
+            except RuntimeError as error:
+                assert str(error) in {"evidence_trace_added", failure_target}
+            else:
+                raise AssertionError(f"Expected {failure_target} failure.")
+        assert_complete_rollback(engine, before_state, before_scene)
 
 
 def main():
@@ -160,6 +244,7 @@ def main():
     test_second_hour_trace_once_and_undeclared_routes_unchanged()
     test_save_load_before_after_and_no_replay()
     test_complete_rollback_at_preparation_and_publication_boundaries()
+    test_event_specific_history_and_evidence_rollback()
     print("One-hour West-Road exit traversal tests passed.")
 
 

@@ -1,8 +1,8 @@
 # Sprint Log
 
-## Sprint 10.54 â€” One Declared One-Hour West-Road Exit Traversal
+## Sprint 10.54 - One Declared One-Hour West-Road Exit Traversal
 
-- Status: Complete â€” ready for owner review.
+- Status: Complete - ready for owner review.
 - Added one strict optional Region Pack declaration for the exact directed West
   Gate to Western Trade Road exit and a duration of exactly one hour.
 - The command-start source location remains authoritative while one candidate

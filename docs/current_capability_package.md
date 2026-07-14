@@ -1,6 +1,6 @@
 # One Declared One-Hour West-Road Exit Traversal
 
-Status: Complete â€” ready for owner review.
+Status: Complete - ready for owner review.
 
 ## Value and Scope
 
