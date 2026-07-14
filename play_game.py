@@ -1,8 +1,25 @@
+import sys
+
 from engine.game_engine import GameEngine
 
 
 REGION_PATH = "data/regions/bryn_shander.json"
 SAVE_PATH = "saves/savegame.json"
+
+
+def configure_stdout() -> None:
+    """Use UTF-8 for interactive output when the active stream can configure it."""
+    reconfigure = getattr(sys.stdout, "reconfigure", None)
+    if reconfigure is not None and sys.stdout.encoding != "utf-8":
+        reconfigure(encoding="utf-8")
+
+
+def print_clue_presentation(presentation: dict) -> None:
+    print(
+        presentation["response_text"]
+        if presentation["changed"]
+        else "You cannot present that clue here."
+    )
 
 
 def print_narration(narration: dict) -> None:
@@ -343,6 +360,7 @@ def parse_history_query(player_input: str) -> dict:
 
 
 def main() -> None:
+    configure_stdout()
     engine = GameEngine.start_new(REGION_PATH)
 
     print("\n=== AI Narrative RPG ===")
@@ -528,7 +546,7 @@ def main() -> None:
             print_known_clues(interaction_result["known_clues"])
         if interaction_result.get("intent") == "clue_presentation":
             presentation = interaction_result["presentation"]
-            print(presentation["response_text"] if presentation["changed"] else "You cannot present that clue here.")
+            print_clue_presentation(presentation)
         if interaction_result.get("intent") == "investigation":
             investigation = interaction_result.get("investigation", {})
             if investigation.get("changed"):

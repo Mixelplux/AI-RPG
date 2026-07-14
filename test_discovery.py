@@ -1,5 +1,7 @@
 import json
 from copy import deepcopy
+from contextlib import redirect_stdout
+from io import StringIO
 from pathlib import Path
 
 from engine.region_validator import validate_region
@@ -7,6 +9,8 @@ from engine.game_engine import GameEngine
 from engine.save_system import build_save_data, load_game
 from tempfile import TemporaryDirectory
 from unittest.mock import patch
+
+import play_game
 
 
 THREAD_ID = "bryn_shander_west_road_bandit_report"
@@ -103,6 +107,8 @@ def test_presenting_a_known_clue_resolves_the_open_thread_once() -> None:
         "‘That is enough to confirm the report. I will send a patrol west at once.’"
     )
     assert "Ã¢â‚¬" not in result["response_text"]
+    assert "Ã¢â‚¬Ëœ" not in result["response_text"]
+    assert "Ã¢â‚¬â„¢" not in result["response_text"]
     assert engine.get_open_threads() == {}
     assert set(engine.get_world_state()["resolved_threads"]) == {"bryn_shander_west_road_bandit_report"}
     history_count = len(engine.query_history(event_type="unresolved_thread_opened"))
@@ -235,6 +241,32 @@ def test_resolved_observation_is_rendered_once_on_each_eligible_visit() -> None:
     assert engine.get_narration()["description"].count(observation) == 1
 
 
+def test_cli_clue_presentation_output_preserves_authored_unicode() -> None:
+    output = StringIO()
+    with (
+        patch(
+            "builtins.input",
+            side_effect=[
+                "talk to captain",
+                "investigate",
+                "present The Captain's Deliberate Trail to captain",
+                "quit",
+            ],
+        ),
+        redirect_stdout(output),
+    ):
+        play_game.main()
+
+    rendered = output.getvalue()
+    expected = (
+        "Captain Darvin Grey studies the trail, then nods. "
+        "‘That is enough to confirm the report. I will send a patrol west at once.’"
+    )
+    assert expected in rendered
+    assert "Ã¢â‚¬Ëœ" not in rendered
+    assert "Ã¢â‚¬â„¢" not in rendered
+
+
 if __name__ == "__main__":
     test_discovery_declarations()
     test_atomic_local_discovery_and_no_op()
@@ -245,4 +277,5 @@ if __name__ == "__main__":
     test_failed_resolved_transition_preserves_live_identity()
     test_resolved_observation_is_derived_locally_and_persists_through_save_load()
     test_resolved_observation_is_rendered_once_on_each_eligible_visit()
+    test_cli_clue_presentation_output_preserves_authored_unicode()
     print("Discovery declaration tests passed.")
