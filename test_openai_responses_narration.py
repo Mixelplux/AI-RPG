@@ -33,6 +33,15 @@ def main():
     assert "reasoning" not in calls[0][2]
     assert calls[0][2]["store"] is False and calls[0][2]["max_output_tokens"] == 256
     assert engine.get_world_state() == before
+    class RefusalResponse:
+        status = "completed"
+        output_text = ""
+        output = [type("Item", (), {"content": [type("Content", (), {"type": "refusal"})()]})()]
+    try:
+        build_openai_responses_narration_source_result(prompt, lambda *_: RefusalResponse())
+        raise AssertionError("refusal accepted")
+    except NarrationProviderError as error:
+        assert (error.stage, error.reason) == ("provider_response", "refusal")
     os.environ.pop("OPENAI_API_KEY", None)
     try:
         build_openai_responses_narration_source_result(prompt, fake)

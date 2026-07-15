@@ -71,6 +71,12 @@ def build_openai_responses_narration_source_result(
         raise NarrationProviderError("provider_response", "failed_status")
     if status != "completed":
         raise NarrationProviderError("provider_response", "unexpected_response_shape")
+    if any(
+        getattr(content, "type", None) == "refusal"
+        for item in (getattr(response, "output", None) or [])
+        for content in (getattr(item, "content", None) or [])
+    ):
+        raise NarrationProviderError("provider_response", "refusal")
     if not isinstance(text, str) or not text.strip():
         raise NarrationProviderError("provider_response", "empty_output")
     if len(text) > OPENAI_MAX_OUTPUT_CHARACTERS:

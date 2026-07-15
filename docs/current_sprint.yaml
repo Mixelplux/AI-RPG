@@ -58,19 +58,19 @@ sprint:
     - id: package-and-sprint-staging
       status: complete
     - id: dependency-and-tokenizer-preflight
-      status: pending
+      status: complete
     - id: isolated-openai-adapter
-      status: pending
+      status: complete
     - id: pipeline-and-failure-integration
-      status: pending
+      status: complete
     - id: deterministic-fake-transport-tests
-      status: pending
+      status: complete
     - id: regression-and-live-smoke
-      status: pending
+      status: complete
     - id: adr-and-closeout
-      status: pending
+      status: complete
     - id: review-archive
-      status: pending
+      status: complete
   governance:
     - 'Included: one OpenAI Responses API adapter behind the existing provider-neutral source seam; fixed model gpt-4.1-mini with no reasoning field; exact local tokenizer limit; one opt-in live smoke request; deterministic fake-transport tests; ADR and package-review closeout.'
     - 'Excluded: other providers or models, provider registry or framework, streaming, retries, tools, asynchronous work, provider conversation state, normal-gameplay calls, World State or history mutation, persistence, save migration, caches, generic tokenizer or plugin systems, and any following package.'
