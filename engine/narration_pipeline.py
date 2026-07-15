@@ -223,12 +223,12 @@ def _build_preview_from_candidate(
     except ValueError as error:
         return build_narration_preview_failure_packet(
             narration_context,
-            candidate,
+            {},
             "candidate_validation",
             str(error),
             narration_request=narration_request,
             narration_prompt=narration_prompt,
-            source_result=source_result,
+            source_result={},
         )
 
     pressure_cue = narration_context["pressure_cue"]
