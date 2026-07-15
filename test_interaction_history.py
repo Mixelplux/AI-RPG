@@ -194,11 +194,9 @@ def main():
     assert skill_result["skill_check"]["check_name"] == "athletics"
 
     narration_preview = loaded_engine.get_narration_preview("look around")
-    assert narration_preview["accepted"]
-    assert narration_preview["display_text"] == (
-        "The street remains quiet. "
-        "The cold has become noticeably more severe."
-    )
+    assert narration_preview["accepted"] is False
+    assert narration_preview["failure_stage"] == "provider_configuration"
+    assert narration_preview["display_text"] == ""
 
     loaded_engine.reset()
     assert loaded_engine.get_world_state()["history"] == []

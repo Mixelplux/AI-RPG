@@ -1,48 +1,30 @@
-# Sprint 10.56 - One Derived Discovery-Gated Conversation Affordance
+# Sprint 10.57 - One OpenAI Responses Narration Preview Source
 
-Status: Complete - ready for renewed owner review.
+Status: Complete - ready for owner review.
 
 ## Goal
 
-Surface one existing Elin Voss discovery-gated conversation as a pure,
-repeatable, player-safe affordance while preserving the existing `talk` command
-as the sole authority.
+Replace the fixed sample used by the explicit narration-preview command with one synchronous, untrusted, read-only OpenAI Responses API source while keeping normal gameplay independent of provider availability.
 
 ## Expected Files
 
-- Region Pack, strict validator, pure affordance derivation, perception
-  projection, focused tests, canonical package records, ADR, and one
-  package-review archive.
+- Isolated OpenAI adapter, narration pipeline integration, deterministic and opt-in live-smoke tests, pinned dependencies, affected authorities, ADR, canonical package records, and one package-review archive.
 
 ## Acceptance Criteria
 
-- One exact singleton declaration binds the West Gate, static Guard Elin Voss,
-  and the existing West-Road Orders discovery to exact authored display text.
-- Perception projects only `affordance_id`, `display_text`, `command_text`, and
-  `target_display_name` when location, visible targetable actor, and owned
-  discovery all match.
-- Projection remains repeatable and nonauthoritative with no opportunity state,
-  history, acknowledgement, command or parser behavior, persistence, or schema change.
-- Existing `talk to Elin` independently applies normal targeting, presence, and
-  discovery-gated conversation checks. Save version remains 1.
+- The explicit preview uses only `openai_responses_preview`, fixed `gpt-4.1-mini with no reasoning field`, 20-second timeout, zero retries, disabled response storage, no tools or provider conversation state, and a 256-token output ceiling.
+- Credentials use only `OPENAI_API_KEY`; exact local fixed-model token counting rejects complete request input above 8,000 tokens before transport; bounded failures fail closed.
+- Provider prose remains untrusted through source-result and narration-output validation, with no raw response, exception, identifier, usage, secret, or generated prose retained outside accepted preview output.
+- Automated tests use a fake transport with no network; normal gameplay never invokes the provider; no World State, history, time, scene, persistence, or save-version mutation occurs.
 
 ## Verification
 
-- Correction-cycle focused and full official-interpreter tests, Region Pack
-  validation, canonical-record agreement, preflight, diff check, and independent
-  package-review archive validation passed.
-
-## Governance Correction
-
-The focused architecture was approved, but implementation began without the
-required separate implementation authorization. The owner ratified the existing
-work only for this one correction cycle and renewed owner review; it was not
-originally owner-authorized for implementation.
+- Focused adapter, existing narration-boundary, affected regression, full root inventory, Region Pack, canonical-record, preflight, diff, live-smoke, and independently validated package-review checks.
 
 ## Canonical Manifest
 
 <!-- CANONICAL-MANIFEST-START -->
 ```json
-{"schema_version":"1.0.0","document_type":"current_sprint","sprint_count":1,"project":{"name":"AI Narrative RPG Engine","principles":["provider-neutral","deterministic-core","simulation-owned-truth"]},"sprint":{"id":"10.56","title":"One Derived Discovery-Gated Conversation Affordance","type":"capability-package","mode":"capability-package","status":"complete","goal":"Surface one existing Elin Voss discovery-gated conversation as a pure, repeatable, player-safe affordance while preserving the existing talk command as the sole authority.","platform":{"official_interpreter":".\\.venv\\Scripts\\python.exe"},"expected_files":{"likely_modified":["data/regions/bryn_shander.json","engine/perception_builder.py","engine/game_engine.py","engine/region_validator.py","docs/architecture.md","docs/roadmap.md","docs/decisions.md","docs/current_capability_package.md","docs/current_sprint.md","docs/current_sprint.yaml","docs/current_sprint.json","docs/sprint_log.md"],"likely_created":["engine/conversation_affordance.py","test_discovery_gated_conversation_affordance.py","handoffs/discovery-gated-conversation-affordance-<short-head>.zip"]},"acceptance_criteria":["One optional strict singleton Region Pack declaration binds the West Gate, static Guard Elin Voss, and the existing West-Road Orders discovery to one authored display text and no unsupported fields.","Perception derives exactly one record containing affordance_id, display_text, command_text, and target_display_name only when the player is at the declared location, the named static actor is visible and targetable, and the player owns the exact discovery.","Eligible projection may repeat without state, history, acknowledgement, command, parser, persistence, or save-schema changes; existing talk independently revalidates normal conversation eligibility.","Save version remains 1; no multiple affordances, ordering, priority, conditions, action types, lifecycle, consumption, hidden-state eligibility, or following package is staged."],"verification":{"focused_commands":[".\\.venv\\Scripts\\python.exe test_discovery_gated_conversation_affordance.py","Affected perception, narration, conversation, discovery, relocation, Region Pack, and save/load regressions"],"required_regressions":["Complete root test inventory through the official interpreter","Region Pack validation"],"manifest_commands":["JSON/YAML/Markdown deep agreement","git diff --check"],"closeout_commands":["Official preflight","Independent package-review archive validation"]},"execution_phases":[{"id":"contract-and-staging","status":"complete"},{"id":"affordance-projection","status":"complete"},{"id":"verification-and-closeout","status":"complete"}],"governance":["Focused architecture was approved, but implementation began without the required separate implementation authorization.","Owner ratified the existing work only for this one governance-and-test correction and renewed owner review; it was not originally owner-authorized for implementation.","Excluded: durable opportunities, opportunity history or causal references, acknowledged or once-only display state, commands or parser changes, generic affordance framework, multiple declarations, ordering, priority, scoring, action types, condition language, lifecycle, consumption, hidden-state eligibility, World State additions, save migration, and any following package.","The exact supported fixture is the Elin Voss conversation gated by west_gate_elin_report_trace at the West Gate."],"closeout":{"allowed_terminal_statuses":["complete"],"verification_result":"Correction-cycle focused and full official-interpreter verification, Region Pack validation, and independent package-review archive validation passed for the committed review candidate.","next_sprint":null}}}
+{"schema_version":"1.0.0","document_type":"current_sprint","sprint_count":1,"project":{"name":"AI Narrative RPG Engine","principles":["provider-neutral","deterministic-core","simulation-owned-truth"]},"sprint":{"id":"10.57","title":"One OpenAI Responses Narration Preview Source","type":"capability-package","mode":"capability-package","status":"complete","goal":"Replace the fixed sample used by the explicit narration preview command with one synchronous, untrusted, read-only OpenAI Responses API source while keeping normal gameplay independent of provider availability.","platform":{"official_interpreter":".\\.venv\\Scripts\\python.exe"},"expected_files":{"likely_modified":["engine/narration_source.py","engine/narration_pipeline.py","engine/game_engine.py","docs/architecture.md","docs/roadmap.md","docs/decisions.md","docs/current_capability_package.md","docs/current_sprint.md","docs/current_sprint.yaml","docs/current_sprint.json","docs/sprint_log.md"],"likely_created":["requirements.txt","test_openai_responses_narration.py","tools/run_openai_responses_live_smoke.py","handoffs/openai-responses-narration-preview-<short-head>.zip"]},"acceptance_criteria":["The explicit narration preview command uses only the isolated openai_responses_preview source, configured synchronously with gpt-4.1-mini with no reasoning field, a 20-second timeout, zero retries, disabled response storage, no tools or provider conversation state, and at most 256 output tokens.","The adapter reads only OPENAI_API_KEY, counts the complete instructions and input locally with the fixed model's exact supported tokenizer encoding, rejects a missing key or input above 8000 tokens before transport, and returns only the approved bounded failure stages.","Provider text is accepted only after complete-response, nonempty, bounded extraction, strict source-result-envelope, and independent narration-output validation; no raw response, exception, identifier, usage, secret, or generated text is retained outside the accepted preview packet.","Automated tests use an injected fake transport and make no network calls; ordinary gameplay never invokes the provider; preview success or failure leaves World State, history, time, scene, persistence, and save version 1 unchanged."],"verification":{"focused_commands":[".\\.venv\\Scripts\\python.exe test_openai_responses_narration.py",".\\.venv\\Scripts\\python.exe test_narration_source.py",".\\.venv\\Scripts\\python.exe test_narration_pipeline.py"],"required_regressions":["Complete root test inventory through the official interpreter","Region Pack validation","Explicit opt-in one-request live integration smoke after deterministic checks pass"],"manifest_commands":["JSON/YAML/Markdown deep agreement","git diff --check"],"closeout_commands":["Official preflight with required openai and tiktoken modules","Independent package-review archive validation"]},"execution_phases":[{"id":"package-and-sprint-staging","status":"complete"},{"id":"dependency-and-tokenizer-preflight","status":"pending"},{"id":"isolated-openai-adapter","status":"pending"},{"id":"pipeline-and-failure-integration","status":"pending"},{"id":"deterministic-fake-transport-tests","status":"pending"},{"id":"regression-and-live-smoke","status":"pending"},{"id":"adr-and-closeout","status":"pending"},{"id":"review-archive","status":"pending"}],"governance":["Included: one OpenAI Responses API adapter behind the existing provider-neutral source seam; fixed model gpt-4.1-mini with no reasoning field; exact local tokenizer limit; one opt-in live smoke request; deterministic fake-transport tests; ADR and package-review closeout.","Excluded: other providers or models, provider registry or framework, streaming, retries, tools, asynchronous work, provider conversation state, normal-gameplay calls, World State or history mutation, persistence, save migration, caches, generic tokenizer or plugin systems, and any following package.","Provider output is untrusted, preview-only, nonauthoritative, read-only, nonpersistent, and replaceable by a future local adapter without simulation changes.","Credentials are read only from OPENAI_API_KEY and are never displayed, persisted, logged, tested, prompted, saved, or archived."],"closeout":{"allowed_terminal_statuses":["complete"],"verification_result":"Focused, full, Region Pack, manifest, diff, and owner-run live smoke verification passed.","next_sprint":null}}}
 ```
 <!-- CANONICAL-MANIFEST-END -->

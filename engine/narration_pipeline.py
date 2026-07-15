@@ -13,17 +13,18 @@ from engine.narration_request import (
     validate_narration_request_packet,
 )
 from engine.narration_source import (
-    NARRATION_SOURCE_FIXED_SAMPLE,
+    NARRATION_SOURCE_OPENAI_RESPONSES,
     NARRATION_SOURCE_SCHEMA,
     NARRATION_SOURCE_VERSION,
-    build_fixed_sample_narration_source_result,
+    build_openai_responses_narration_source_result,
+    NarrationProviderError,
     validate_narration_source_result_packet,
 )
 
 
 NARRATION_PIPELINE_SCHEMA = "ai_rpg.narration_pipeline_packet"
 NARRATION_PIPELINE_VERSION = 1
-NARRATION_PIPELINE_SOURCE = NARRATION_SOURCE_FIXED_SAMPLE
+NARRATION_PIPELINE_SOURCE = NARRATION_SOURCE_OPENAI_RESPONSES
 
 NarrationSourceBuilder = Callable[[Dict[str, Any]], Dict[str, Any]]
 NarrationRequestBuilder = Callable[[Dict[str, Any]], Dict[str, Any]]
@@ -33,7 +34,7 @@ NarrationPromptBuilder = Callable[[Dict[str, Any]], Dict[str, Any]]
 def build_narration_preview_packet(
     narration_context: Dict[str, Any],
     source_builder: NarrationSourceBuilder = (
-        build_fixed_sample_narration_source_result
+        build_openai_responses_narration_source_result
     ),
     request_builder: NarrationRequestBuilder = build_narration_request_packet,
     prompt_builder: NarrationPromptBuilder = build_narration_prompt_packet,
@@ -114,6 +115,11 @@ def build_narration_preview_packet(
 
     try:
         source_result = source_builder(deepcopy(narration_prompt))
+    except NarrationProviderError as error:
+        return build_narration_preview_failure_packet(
+            narration_context, {}, error.stage, error.reason, narration_request,
+            narration_prompt, {},
+        )
     except Exception as error:
         return build_narration_preview_failure_packet(
             narration_context,
@@ -185,12 +191,15 @@ def validate_narration_preview_candidate(
     source_result = {
         "schema": NARRATION_SOURCE_SCHEMA,
         "version": NARRATION_SOURCE_VERSION,
-        "source": NARRATION_SOURCE_FIXED_SAMPLE,
+        "source": NARRATION_SOURCE_OPENAI_RESPONSES,
         "source_prompt": deepcopy(narration_prompt),
         "candidate": deepcopy(candidate),
         "metadata": {
             "candidate_trust": "untrusted",
-            "generation": "fixed_sample_only",
+            "generation": "provider_generated",
+            "provider": "openai",
+            "api": "responses",
+            "model": "gpt-4.1-mini",
         },
     }
     return _build_preview_from_candidate(

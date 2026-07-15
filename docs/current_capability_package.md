@@ -1,51 +1,41 @@
-# One Derived Discovery-Gated Conversation Affordance
+# One OpenAI Responses Narration Preview Source
 
 Status: Complete - ready for owner review.
 
 ## Value and Scope
 
-One existing meaningful Elin Voss conversation becomes visibly actionable when
-the player is at the West Gate, Elin is visibly present and targetable, and the
-player already owns the West-Road Orders discovery. The affordance is a derived
-player-safe perception fact, not an opportunity entity or command authority.
+The explicit `narration preview <player input>` path will use one real OpenAI
+Responses source instead of fixed sample prose. The source remains optional,
+untrusted, read-only, nonauthoritative, synchronous, and replaceable. Normal
+gameplay never waits for or calls it.
 
 ## Included Milestones
 
-1. Stage the canonical Sprint 10.56 record and validate one exact optional
-   `conversation_affordance` Region Pack declaration.
-2. Derive one exact player-safe affordance record from player location, scene
-   actor presence, and player discovery membership, and add it to perception.
-3. Prove repeatability, hidden-state isolation, independent existing-talk
-   revalidation, save/load reconstruction, documentation, ADR, and package-review
-   closeout.
+1. Stage Sprint 10.57 and verify the dependency/tokenizer preflight.
+2. Add one adapter-local OpenAI source and bounded fail-closed pipeline path.
+3. Prove request adaptation, local limits, response handling, no-network fake
+   tests, regressions, one opt-in smoke request, ADR, and archive closeout.
 
 ## Decisions and Impacts
 
-The declaration contains only an affordance identity, location, static target,
-required discovery, and display text. Projection contains only `affordance_id`,
-`display_text`, deterministic `command_text`, and `target_display_name`. No
-World State, history, causal reference, persistence, acknowledgement, or
-once-only presentation state is introduced. Save version remains 1.
-
-## Governance Correction
-
-The focused architecture was approved, but implementation began without the
-required separate implementation authorization. The owner subsequently ratified
-the existing work only for this one governance-and-test correction and renewed
-owner review. This record does not represent retrospective original
-implementation authorization.
+The fixed model is `gpt-4.1-mini with no reasoning field`; generation uses the synchronous Responses
+API with a 20-second timeout, zero automatic retries, no storage, no tools,
+no provider conversation state, an 8,000-token local input ceiling, and a
+256-token output ceiling. Accepted provider text still passes the existing
+source-result and narration-output boundaries. Save version remains 1.
 
 ## Exclusions and Rollback
 
-No durable opportunity, multiple affordances, ordering, priority, scoring,
-generic condition language, action type, lifecycle, consumption, command or
-parser change, actor knowledge, evidence, pressure, history, future-effect,
-hidden-intent eligibility, generic framework, or save migration is permitted.
-Removing the declaration or projection returns perception to its prior shape;
-no durable rollback is needed.
+No provider framework, second model/provider, streaming, retrying,
+asynchronous/background work, routine gameplay use, persistence, cache,
+World State/history mutation, save migration, generic tokenizer system, or
+following package is permitted. Replacing the adapter with the prior fixed
+source removes provider access without durable rollback.
 
 ## Verification and Completion
 
-Focused and full official-interpreter verification, Region Pack validation,
-canonical-record agreement, preflight, diff check, and independent
-package-review archive validation passed. No following package is staged.
+Automated tests inject a fake transport and must make zero real requests. One
+separately invoked live smoke request is permitted after deterministic checks.
+Completion requires full verification, ADR-058, canonical-record agreement,
+a clean committed review candidate, and an independently validated
+package-review archive. No next package is selected.

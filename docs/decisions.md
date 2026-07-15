@@ -799,3 +799,20 @@ Existing `talk` execution independently resolves the target and revalidates
 conversation eligibility. Multiple affordances, priority, ordering, scoring,
 condition languages, action types, and generic affordance infrastructure remain
 deferred.
+
+## ADR-058 - Provider-Backed Narration Remains Explicit, Untrusted, Cost-Bounded, and Preview-Only
+
+**Status:** Accepted
+
+The explicit narration-preview command may use one adapter-local synchronous
+OpenAI Responses source with fixed `gpt-4.1-mini`, a 20-second timeout, zero
+retries, no reasoning field, no tools, no streaming, no provider conversation
+state, `store=False`, an exact 8,000-token local input ceiling, and a
+256-token output ceiling. Provider output is untrusted and must pass the
+existing source-result and narration-output validation boundaries before
+display. It is nonpersistent and has no simulation authority.
+
+Automated tests use injected fake transport only. One opt-in owner-run live
+smoke is allowed and records only a sanitized pass/fail line. Provider failures
+fail closed without affecting normal gameplay. This establishes no provider
+framework; a later local source may use the same seam.
