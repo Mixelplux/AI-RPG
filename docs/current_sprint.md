@@ -1,38 +1,48 @@
-# Sprint 10.59 - Regression Provider Isolation and 10.58 Evidence Carry-Forward
+# Sprint 10.60 - Player-Forward Bryn Shander Vertical-Slice Evaluation
 
-Status: Ready for independent review.
+Status: Active.
 
 ## Goal
 
-Make the affected regression fail closed regardless of host provider credentials,
-prove provider-safe behavior offline, and record an offline disposition for the
-preserved Sprint 10.58 evidence. Sprint 10.58 remains terminally blocked.
+Evaluate the existing deterministic Bryn Shander vertical slice from a player's
+point of view and identify material player-facing weaknesses without changing
+gameplay or making provider requests.
 
 ## Expected Files
 
-- `test_interaction_history.py`
-- `.artifacts/narration-evaluation-10.59/offline-10.58-evidence-review.md`
+- `.artifacts/player-forward-evaluation-10.60/player-journey-transcript.md`
+- `.artifacts/player-forward-evaluation-10.60/evaluation-worksheet.md`
+- `.artifacts/player-forward-evaluation-10.60/aggregate-findings.md`
+- `.artifacts/player-forward-evaluation-10.60/verification.md`
 - The four canonical package and sprint records
 
 ## Acceptance Criteria
 
-- Zero live provider/API requests.
-- The affected regression scopes `OPENAI_API_KEY` absent, restores it, and uses a deterministic client-construction guard.
-- Focused checks demonstrate the existing `provider_configuration` failure without provider transport even when a host credential is visible.
-- The five Sprint 10.58 worksheets and aggregate report remain unchanged and receive an explicit offline carry-forward disposition.
-- No production provider, persistence, or save-version behavior changes.
+- A fresh deterministic journey covers supported North Gate orientation, Captain
+  Grey interaction, investigation and discovery, clue use or presentation,
+  elapsed time and player-visible change, movement toward West Gate, and
+  causally connected world memory.
+- Each meaningful step records actual player-visible behavior, evaluation
+  ratings and rationales, inferability of the next action, and friction.
+- The elapsed-time North Gate state is assessed against accepted Sprint 10.58
+  carry-forward observations without rerunning narration or assuming its cause.
+- Findings rank material player friction, identify likely existing layers, and
+  recommend one next bounded capability from player-forward evidence only.
+- No gameplay, parser, narration, provider, region, persistence, save-version,
+  or UI behavior changes; zero live provider/API requests.
 
 ## Verification
 
-- Focused affected regression passed with a visible host credential; its scoped absent credential returned `provider_configuration`, the client-construction guard was not called, and restoration was asserted.
-- All root regression scripts passed in a child process with `OPENAI_API_KEY` removed before Python started; provider-boundary tests use fake transport or source where a dummy key is required.
-- Offline Sprint 10.58 evidence review passed. The five worksheets and aggregate are unchanged; the five observations are accepted with bounded caveats as carry-forward evidence, while Sprint 10.58 remains blocked.
-- JSON/YAML/Markdown deep agreement and `git diff --check` are required at final closeout.
+- Official-interpreter preflight; canonical JSON/YAML/Markdown deep agreement;
+  and `git diff --check`.
+- Provider-safe deterministic gameplay and persistence regressions relevant to
+  the journey, plus deterministic evaluation-evidence consistency checks.
+- Assembly and independent validation of the committed `package-review` archive.
 
 ## Canonical Manifest
 
 <!-- CANONICAL-MANIFEST-START -->
 ```json
-{"schema_version":"1.0.0","document_type":"current_sprint","sprint_count":1,"project":{"name":"AI Narrative RPG Engine","principles":["provider-neutral","deterministic-core","simulation-owned-truth"]},"sprint":{"id":"10.59","title":"Regression Provider Isolation and 10.58 Evidence Carry-Forward","type":"capability-package","mode":"capability-package","status":"review_ready","goal":"Make the affected regression fail closed regardless of host provider credentials, verify it with deterministic transport isolation, and record an offline disposition for the preserved Sprint 10.58 evidence without making any provider request.","predecessor":{"id":"10.58","status":"blocked","terminal":true,"reason":"five-request cap breached by an unintended sixth request during closeout regression","evidence_disposition":"accepted_with_bounded_caveats"},"platform":{"official_interpreter":".\\.venv\\Scripts\\python.exe"},"expected_files":{"likely_modified":["test_interaction_history.py","docs/current_capability_package.md","docs/current_sprint.md","docs/current_sprint.yaml","docs/current_sprint.json"],"likely_created":[".artifacts/narration-evaluation-10.59/offline-10.58-evidence-review.md"]},"acceptance_criteria":["Sprint 10.59 makes zero live provider/API requests and does not rerun or alter any Sprint 10.58 scenario or artifact.","The interaction-history regression scopes OPENAI_API_KEY absent for its provider-configuration assertion, restores the prior environment after the scope, and has a deterministic guard that prevents real client construction if isolation breaks.","Focused provider-safe checks prove the corrected assertion passes when a host credential is visible, reaches the existing provider_configuration failure result, and never constructs provider transport.","Offline review verifies the five preserved Sprint 10.58 worksheets and aggregate report remain unchanged, internally consistent, and independent of the sixth request; it records an explicit carry-forward disposition while Sprint 10.58 remains blocked.","No production provider behavior, model, save version, persistence, provider selection, retries, streaming, asynchronous work, automatic narration, or cache changes."],"verification":{"staging_commands":["Official-interpreter preflight through the established workspace procedure","JSON/YAML/Markdown deep agreement","git diff --check"],"focused_commands":["test_interaction_history.py with deterministic provider guard and visible-host-key simulation","test_openai_responses_narration.py under deterministic fake transport","test_narration_pipeline.py with injected fake source","offline worksheet and aggregate consistency validation"],"closeout_commands":["Canonical manifest deep agreement","git diff --check","safe review-packet validation when a review candidate is assembled"]},"execution_phases":[{"id":"package-and-sprint-staging","status":"complete"},{"id":"regression-provider-isolation","status":"complete"},{"id":"provider-safe-verification","status":"complete"},{"id":"offline-10.58-evidence-review","status":"complete"},{"id":"closeout-preparation","status":"complete"}],"governance":["Sprint 10.58 remains terminally blocked and is never rewritten as complete.","The preserved Sprint 10.58 worksheets and aggregate findings are read-only carry-forward candidates; no artifact is regenerated, modified, overwritten, or deleted.","All verification must deterministically remove or intercept provider access before transport. A visible host credential must not enable an ordinary regression test to reach a provider.","Excluded: any live provider request, provider/model change, production provider semantic change, automatic narration, persistence or save-version change, provider selection, retries, streaming, asynchronous work, caching, and any following package."],"closeout":{"allowed_terminal_statuses":["complete","blocked"],"verification_result":"Provider-safe focused checks and credential-cleared full regression passed with zero live provider requests. Offline review accepted the five preserved Sprint 10.58 observations as carry-forward evidence with bounded caveats; Sprint 10.58 remains terminally blocked. Sprint 10.59 is ready for independent review.","next_sprint":null}}}
+{"schema_version":"1.0.0","document_type":"current_sprint","sprint_count":1,"project":{"name":"AI Narrative RPG Engine","principles":["provider-neutral","deterministic-core","simulation-owned-truth"]},"sprint":{"id":"10.60","title":"Player-Forward Bryn Shander Vertical-Slice Evaluation","type":"capability-package","mode":"capability-package","status":"active","goal":"Evaluate the existing deterministic Bryn Shander vertical slice from a player's point of view and identify the smallest material player-facing weaknesses without implementing gameplay changes or making provider requests.","predecessor":{"id":"10.59","status":"complete","review_state":"merged"},"platform":{"official_interpreter":".\\.venv\\Scripts\\python.exe","save_version":1,"provider_requests":"forbidden"},"expected_files":{"likely_modified":["docs/current_capability_package.md","docs/current_sprint.md","docs/current_sprint.yaml","docs/current_sprint.json"],"likely_created":[".artifacts/player-forward-evaluation-10.60/player-journey-transcript.md",".artifacts/player-forward-evaluation-10.60/evaluation-worksheet.md",".artifacts/player-forward-evaluation-10.60/aggregate-findings.md",".artifacts/player-forward-evaluation-10.60/verification.md","handoffs/player-forward-bryn-shander-evaluation-10.60-<short-head>.zip"]},"acceptance_criteria":["A fresh deterministic GameEngine journey covers supported North Gate orientation, Captain Grey interaction, local investigation and discovery, clue use or presentation, time passage and visible change, movement toward West Gate, West Gate investigation, and causally connected world memory.","Each meaningful journey step records actual player-visible input and output, state transitions relevant to player understanding, evaluation dimensions, inferred-next-action status, and friction rationale.","The elapsed-time North Gate state is specifically assessed against the accepted Sprint 10.58 minor_drift, bounded_gap, and ambiguous_direction observations without rerunning narration or assuming narration is the cause.","Aggregate findings rank every material issue, identify its likely existing architectural layer, and recommend one next bounded capability based on observed player experience only.","No gameplay, parser, narration, provider, authored region, discovery, consequence, persistence, save-version, or UI behavior changes; zero live provider/API requests."],"verification":{"staging_commands":["Official-interpreter preflight through the established workspace procedure","Canonical JSON/YAML/Markdown deep agreement","git diff --check"],"focused_commands":["Provider-safe deterministic gameplay and persistence regressions relevant to the journey","Deterministic evaluation evidence consistency checks","Review-packet assembly and independent package-review validation"],"closeout_commands":["Official-interpreter preflight","Canonical manifest deep agreement","git diff --check","Clean committed review-candidate Git evidence"]},"execution_phases":[{"id":"package-and-sprint-staging","status":"complete"},{"id":"deterministic-player-journey","status":"active"},{"id":"findings-and-protected-state-checks","status":"pending"},{"id":"verification-and-review-candidate","status":"pending"}],"governance":["Sprint 10.58 remains terminally blocked; its preserved evidence is read-only carry-forward context.","No provider or API request, including openai_responses_preview, is permitted. Tests must be provider-safe.","This is evaluation-first: findings do not authorize a fix or a following package.","Exactly one active sprint is staged. Save version remains 1 and next_sprint remains null."],"closeout":{"allowed_terminal_statuses":["complete","blocked"],"verification_result":null,"next_sprint":null}}}
 ```
 <!-- CANONICAL-MANIFEST-END -->
