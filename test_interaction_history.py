@@ -1,4 +1,5 @@
 from copy import deepcopy
+import os
 from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
@@ -193,10 +194,19 @@ def main():
     assert skill_result["success"]
     assert skill_result["skill_check"]["check_name"] == "athletics"
 
-    narration_preview = loaded_engine.get_narration_preview("look around")
-    assert narration_preview["accepted"] is False
-    assert narration_preview["failure_stage"] == "provider_configuration"
-    assert narration_preview["display_text"] == ""
+    original_key = os.environ.get("OPENAI_API_KEY")
+    original_key_present = "OPENAI_API_KEY" in os.environ
+    with patch.dict(os.environ, {"OPENAI_API_KEY": ""}), patch(
+        "engine.narration_source.OpenAI",
+        side_effect=AssertionError("provider client construction is forbidden"),
+    ) as provider_client:
+        narration_preview = loaded_engine.get_narration_preview("look around")
+        assert narration_preview["accepted"] is False
+        assert narration_preview["failure_stage"] == "provider_configuration"
+        assert narration_preview["display_text"] == ""
+        provider_client.assert_not_called()
+    assert ("OPENAI_API_KEY" in os.environ) is original_key_present
+    assert os.environ.get("OPENAI_API_KEY") == original_key
 
     loaded_engine.reset()
     assert loaded_engine.get_world_state()["history"] == []

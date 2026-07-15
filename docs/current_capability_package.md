@@ -1,41 +1,23 @@
-# One OpenAI Responses Narration Preview Source
+# Sprint 10.59 - Regression Provider Isolation and 10.58 Evidence Carry-Forward
 
-Status: Complete - ready for owner review.
+Status: Ready for independent review.
 
 ## Value and Scope
 
-The explicit `narration preview <player input>` path will use one real OpenAI
-Responses source instead of fixed sample prose. The source remains optional,
-untrusted, read-only, nonauthoritative, synchronous, and replaceable. Normal
-gameplay never waits for or calls it.
+This bounded recovery package prevents an ordinary regression test from turning a visible host credential into a live provider request. It preserves and reviews the five authorized Sprint 10.58 observations offline. Sprint 10.58 remains terminally blocked because its request cap was breached.
 
-## Included Milestones
+## Completed Work
 
-1. Stage Sprint 10.57 and verify the dependency/tokenizer preflight.
-2. Add one adapter-local OpenAI source and bounded fail-closed pipeline path.
-3. Prove request adaptation, local limits, response handling, no-network fake
-   tests, regressions, one opt-in smoke request, ADR, and archive closeout.
+1. Staged Sprint 10.59 with Sprint 10.58 as its terminally blocked predecessor.
+2. Scoped the affected regression's credential absent, restored it after the assertion, and guarded provider-client construction.
+3. Passed focused guarded verification with a visible host credential and the full root regression suite with the credential removed before tests started.
+4. Recorded an offline disposition accepting the five preserved Sprint 10.58 observations as carry-forward evidence with bounded caveats.
+5. Made zero live provider requests and left save version 1 unchanged.
 
-## Decisions and Impacts
+## Exclusions
 
-The fixed model is `gpt-4.1-mini with no reasoning field`; generation uses the synchronous Responses
-API with a 20-second timeout, zero automatic retries, no storage, no tools,
-no provider conversation state, an 8,000-token local input ceiling, and a
-256-token output ceiling. Accepted provider text still passes the existing
-source-result and narration-output boundaries. Save version remains 1.
+No live request, provider/model change, production provider-semantic change, automatic narration, persistence or save-version change, provider selection, retry, streaming, asynchronous work, cache, or following package is allowed.
 
-## Exclusions and Rollback
+## Independent Review State
 
-No provider framework, second model/provider, streaming, retrying,
-asynchronous/background work, routine gameplay use, persistence, cache,
-World State/history mutation, save migration, generic tokenizer system, or
-following package is permitted. Replacing the adapter with the prior fixed
-source removes provider access without durable rollback.
-
-## Verification and Completion
-
-Automated tests inject a fake transport and must make zero real requests. One
-separately invoked live smoke request is permitted after deterministic checks.
-Completion requires full verification, ADR-058, canonical-record agreement,
-a clean committed review candidate, and an independently validated
-package-review archive. No next package is selected.
+Sprint 10.59 is ready for independent review. Sprint 10.58 remains blocked regardless of its evidence disposition; no following package is selected or staged.
