@@ -816,3 +816,68 @@ Automated tests use injected fake transport only. One opt-in owner-run live
 smoke is allowed and records only a sanitized pass/fail line. Provider failures
 fail closed without affecting normal gameplay. This establishes no provider
 framework; a later local source may use the same seam.
+
+## ADR-059 - Character Information and Spatial Projection Use Minimum Sufficient World Detail
+
+**Status:** Accepted
+
+The engine models, resolves, and persists only the detail needed for meaningful
+player experience. Important world structure and gameplay are authored
+explicitly. Detail required by a current action may be realized temporarily,
+and becomes durable only when later gameplay materially depends on it. The
+engine does not model possibilities merely because they could occur. **Depth
+must earn persistence. Complexity must earn implementation. Player experience
+is the justification for both.**
+
+World truth is authoritative simulation state and remains distinct from a
+character's current perception, broad familiarity, and selectively acquired
+information or belief. Perception may project observable changes without
+exposing hidden causes: observing Captain Grey leave does not disclose why he
+left unless that reason is legitimately known. Familiarity supplies plausible
+stable background understanding, not automatic current knowledge. It may
+coexist with stale understanding of a place; recent change does not update an
+absent character merely because world truth changed. Acquired information or
+belief is explicit only when a future simulation, interaction, narration,
+inference, or continuity need depends on the character having encountered it.
+Information from another source can remain a claim or belief rather than
+established truth. Where the timing or provenance of such explicit information
+matters, existing causal-history or provenance mechanisms are preferred over a
+comprehensive timestamped knowledge ledger.
+
+Information remains at the coarsest useful granularity. It may be selectively
+promoted from a broad report, such as fires in part of a city, to a named
+building or detailed circumstances only when player interest, simulation
+consequence, narrative relevance, or continuity justifies that narrower durable
+detail. Incidental events, objects, observations, and location details are not
+to be catalogued by default. A categorical location-familiarity direction,
+potentially resembling unfamiliar, familiar, and local, is promising but its
+levels, names, and semantics are not frozen. Familiarity never automatically
+grants current, hidden, recently changed, or otherwise unknown information.
+
+The authored map represents established macro spatial relationships, not every
+physical path or complete local geometry. Player-facing movement should project
+natural spatial orientation--for example, that Main Street continues south from
+the North Gate--while compass directions normally support orientation rather
+than define the whole movement abstraction. Projection must respect what the
+character can perceive, legitimately knows through familiarity, or has
+explicitly learned; engine topology alone never justifies revealing a
+destination.
+
+The macro graph is not an exhaustive traversal list. Future bounded work may
+resolve the local detail necessary for a plausible action such as using an
+alley, rooftop, sewer, building, climb, shortcut, or wilderness route, while
+remaining consistent with established world truth. The intended layering is
+durable authored macro geography, already-authored or play-significant local
+facts, and otherwise unresolved local detail temporarily realized for the
+action. A temporarily realized local fact becomes persistent only when future
+gameplay materially depends on it.
+
+This ADR is architectural direction, not authorization to implement a complete
+knowledge graph, universal belief or familiarity system, comprehensive
+timestamped knowledge ledger, complete spatial simulation, rooftop graph,
+building geometry, procedural spatial simulation, dynamic traversal framework,
+or universal world-detail model. Future capability packages must implement only
+the smallest subset justified by observed player-facing need. It guides future
+solutions to the Sprint 10.60 findings on natural spatial orientation,
+meaningful-action discoverability, observable state change, elapsed-time
+presentation, and discovery/use presentation.
