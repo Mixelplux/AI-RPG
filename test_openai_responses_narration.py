@@ -42,6 +42,19 @@ def main():
         raise AssertionError("refusal accepted")
     except NarrationProviderError as error:
         assert (error.stage, error.reason) == ("provider_response", "refusal")
+    for status, reason in (("incomplete", "incomplete_max_output_tokens"), ("failed", "failed_status"), (None, "unexpected_response_shape")):
+        response = type("Response", (), {"status": status, "output_text": "", "output": [], "incomplete_details": type("Detail", (), {"reason": "max_output_tokens"})()})()
+        try:
+            build_openai_responses_narration_source_result(prompt, lambda *_: response)
+            raise AssertionError("invalid response accepted")
+        except NarrationProviderError as error:
+            assert error.stage == "provider_response" and error.reason == reason
+    oversized = type("Response", (), {"status": "completed", "output_text": "x" * 4001, "output": []})()
+    try:
+        build_openai_responses_narration_source_result(prompt, lambda *_: oversized)
+        raise AssertionError("oversized response accepted")
+    except NarrationProviderError as error:
+        assert error.stage == "provider_response"
     os.environ.pop("OPENAI_API_KEY", None)
     try:
         build_openai_responses_narration_source_result(prompt, fake)
