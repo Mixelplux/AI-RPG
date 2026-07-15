@@ -1,6 +1,6 @@
 # Sprint 10.60 - Player-Forward Bryn Shander Vertical-Slice Evaluation
 
-Status: Active.
+Status: Ready for independent review.
 
 ## Value and Scope
 
@@ -22,7 +22,8 @@ continuity, responsiveness, and memory.  It does not change gameplay.
 
 ## Completion
 
-The package is complete when its deterministic journey, worksheet, aggregate
-findings, protected-state checks, canonical manifests, provider-safe focused
-checks, and independently validated review archive are complete on one clean
-committed feature-branch candidate. `next_sprint` remains `null`.
+The deterministic journey, worksheet, aggregate findings, protected-state
+checks, canonical manifests, provider-safe focused checks, and independently
+validated review archive are complete on one clean committed feature-branch
+candidate. The package is ready for independent/owner review; `next_sprint`
+remains `null`.
