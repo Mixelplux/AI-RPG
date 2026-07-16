@@ -11,6 +11,7 @@ from engine.unresolved_threads import (
     prepare_open_thread_candidate,
 )
 from engine.scene_narrator import narrate_scene
+from engine.navigation_projection import derive_navigation_projection
 from engine.interaction_kernel import process_player_input
 from engine.world_update import apply_interaction
 from engine.region_validator import validate_region
@@ -865,6 +866,10 @@ class GameEngine:
                 get_player_location_id(self.world_state),
                 self.scene_snapshot,
                 tuple(self.world_state["player_discoveries"]),
+            ),
+            derive_navigation_projection(
+                self.scene_snapshot,
+                self.region.get("locations", []),
             ),
         )
 

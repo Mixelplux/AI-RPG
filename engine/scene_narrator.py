@@ -51,6 +51,23 @@ def format_spawned_entity_label(template: str, count: int) -> str:
     return f"{count} {readable}s"
 
 
+def format_navigation(routes: List[Dict[str, str]]) -> str | None:
+    """Render immediate, player-safe routes in natural spatial language."""
+
+    if not routes:
+        return None
+
+    phrases = [
+        f"{route['destination_name']} lies {route['direction']}."
+        for route in routes
+        if route.get("direction") and route.get("destination_name")
+    ]
+    if not phrases:
+        return None
+
+    return "From here, " + " ".join(phrases)
+
+
 def narrate_scene(perception_snapshot: Dict[str, Any]) -> Dict[str, Any]:
     """
     Convert a Perception Snapshot into a structured narrative object.
@@ -68,6 +85,7 @@ def narrate_scene(perception_snapshot: Dict[str, Any]) -> Dict[str, Any]:
     environment = perception.get("environment", {})
     entities = perception["visible"]["entities"]
     resolved_thread_observation = perception.get("resolved_thread_observation", {})
+    navigation = perception.get("navigation", {})
 
     location_name = location.get("name", "Unknown Location")
     description_seed = location.get("description_seed", "")
@@ -116,9 +134,14 @@ def narrate_scene(perception_snapshot: Dict[str, Any]) -> Dict[str, Any]:
     if resolved_thread_observation:
         description_parts.append(resolved_thread_observation["text"])
 
+    navigation_text = format_navigation(navigation.get("routes", []))
+    if navigation_text:
+        description_parts.append(navigation_text)
+
     return {
         "title": f"{location_name}, Bryn Shander",
         "description": "\n\n".join(description_parts),
         "visible_entities": visible_entity_names,
+        "navigation": deepcopy(navigation.get("routes", [])),
         "player_prompt": "What do you do?"
     }
