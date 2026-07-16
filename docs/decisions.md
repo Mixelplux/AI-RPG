@@ -30,7 +30,7 @@ The world should not react to every player action. Player actions may leave evid
 
 This decision preserves emergent storytelling while avoiding the impossible task of simulating every minor action.
 
-See also: `docs/simulation_principles.md` and `docs/future_design.md`.
+See also: `docs/simulation_principles.md`.
 
 ---
 
