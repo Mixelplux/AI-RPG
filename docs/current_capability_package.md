@@ -1,29 +1,21 @@
+# Current Capability Package
+
+No capability package is currently active or authorized. The most recent
+terminal package record is retained below for identity and closeout context.
+
+## Most Recent Terminal Package
+
 # Sprint 10.60 - Player-Forward Bryn Shander Vertical-Slice Evaluation
 
-Status: Ready for independent review.
+Status: Complete.
 
-## Value and Scope
+Review state: Merged.
 
-Evaluate the implemented Bryn Shander vertical slice entirely from a new
-player's perspective.  The package records deterministic, player-visible
-evidence for orientation, affordances, motivation, interaction naturalness,
-continuity, responsiveness, and memory.  It does not change gameplay.
+No following capability package is authorized, staged, branched, or started.
+`next_sprint` remains `null`.
 
-## Boundaries
+## Terminal Sprint State
 
-- Use fresh `GameEngine` state and existing Bryn Shander data only.
-- Make zero provider/API requests and do not run narration-preview scenarios.
-- Preserve all Sprint 10.58 evidence; reference its accepted observations only
-  as bounded supporting context.
-- Keep save version `1` and make no production, content, parser, provider,
-  persistence, or UI changes.
-- Create only evaluation evidence, package records, validation evidence, and a
-  compact `package-review` candidate archive.
-
-## Completion
-
-The deterministic journey, worksheet, aggregate findings, protected-state
-checks, canonical manifests, provider-safe focused checks, and independently
-validated review archive are complete on one clean committed feature-branch
-candidate. The package is ready for independent/owner review; `next_sprint`
-remains `null`.
+- Sprint 10.58 — terminally blocked.
+- Sprint 10.59 — complete and merged.
+- Sprint 10.60 — complete and merged.

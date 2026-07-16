@@ -1,33 +1,21 @@
+# Current Sprint Record
+
+No sprint is currently active. The most recent terminal sprint record is
+retained below for identity and closeout context.
+
+## Most Recent Terminal Sprint
+
 # Sprint 10.60 - Player-Forward Bryn Shander Vertical-Slice Evaluation
 
-Status: Ready for independent review.
+Status: Complete.
 
-## Goal
+Review state: Merged.
 
-Evaluate the existing deterministic Bryn Shander vertical slice from a player's point of view without changing gameplay or making provider requests.
+`next_sprint` is `null`. No following sprint is authorized, staged, or
+started.
 
-## Expected Files
+## Terminal Sprint State
 
-- `.artifacts/player-forward-evaluation-10.60/player-journey-transcript.md`
-- `.artifacts/player-forward-evaluation-10.60/evaluation-worksheet.md`
-- `.artifacts/player-forward-evaluation-10.60/aggregate-findings.md`
-- The four canonical package and sprint records
-
-## Acceptance Criteria
-
-- The deterministic player journey, findings, and protected-state evidence are complete.
-- Material player friction is ranked with likely existing layers; no correction is implemented.
-- Save version remains `1`, `next_sprint` remains `null`, Sprint 10.58 remains terminally blocked, and zero provider/API requests occur.
-
-## Verification
-
-- Provider-safe focused regressions passed; canonical records deeply agree; `git diff --check` passed.
-- The package-review archive was assembled and independently validated.
-
-## Canonical Manifest
-
-<!-- CANONICAL-MANIFEST-START -->
-```json
-{"schema_version":"1.0.0","document_type":"current_sprint","sprint_count":1,"project":{"name":"AI Narrative RPG Engine","principles":["provider-neutral","deterministic-core","simulation-owned-truth"]},"sprint":{"id":"10.60","title":"Player-Forward Bryn Shander Vertical-Slice Evaluation","type":"capability-package","mode":"capability-package","status":"review_ready","goal":"Evaluate the existing deterministic Bryn Shander vertical slice from a player's point of view and identify the smallest material player-facing weaknesses without implementing gameplay changes or making provider requests.","predecessor":{"id":"10.59","status":"complete","review_state":"merged"},"platform":{"official_interpreter":".\\.venv\\Scripts\\python.exe","save_version":1,"provider_requests":"forbidden"},"expected_files":{"likely_modified":["docs/current_capability_package.md","docs/current_sprint.md","docs/current_sprint.yaml","docs/current_sprint.json"],"likely_created":[".artifacts/player-forward-evaluation-10.60/player-journey-transcript.md",".artifacts/player-forward-evaluation-10.60/evaluation-worksheet.md",".artifacts/player-forward-evaluation-10.60/aggregate-findings.md","handoffs/sprint-10.60-player-forward-bryn-shander-<short-head>.zip"]},"acceptance_criteria":["A fresh deterministic GameEngine journey covers supported North Gate orientation, Captain Grey interaction, local investigation and discovery, clue use or presentation, time passage and visible change, movement toward West Gate, West Gate investigation, and causally connected world memory.","Each meaningful journey step records actual player-visible input and output, state transitions relevant to player understanding, evaluation dimensions, inferred-next-action status, and friction rationale.","The elapsed-time North Gate state is specifically assessed against accepted Sprint 10.58 carry-forward observations without rerunning narration or assuming narration is the cause.","Aggregate findings rank every material issue, identify its likely existing architectural layer, and recommend one next bounded capability based on observed player experience only.","No gameplay, parser, narration, provider, authored region, discovery, consequence, persistence, save-version, or UI behavior changes; zero live provider/API requests."],"verification":{"staging_commands":["Official-interpreter preflight through the established workspace procedure","Canonical JSON/YAML/Markdown deep agreement","git diff --check"],"focused_commands":["Provider-safe deterministic gameplay and persistence regressions relevant to the journey","Deterministic evaluation evidence consistency checks","Review-packet assembly and independent package-review validation"],"closeout_commands":["Official-interpreter preflight","Canonical manifest deep agreement","git diff --check","Clean committed review-candidate Git evidence"]},"execution_phases":[{"id":"package-and-sprint-staging","status":"complete"},{"id":"deterministic-player-journey","status":"complete"},{"id":"findings-and-protected-state-checks","status":"complete"},{"id":"verification-and-review-candidate","status":"complete"}],"governance":["Sprint 10.58 remains terminally blocked; its preserved evidence is read-only carry-forward context.","No provider or API request, including openai_responses_preview, is permitted. Tests must be provider-safe.","This is evaluation-first: findings do not authorize a fix or a following package.","Save version remains 1 and next_sprint remains null."],"closeout":{"allowed_terminal_statuses":["complete","blocked"],"verification_result":"The deterministic player journey, findings, protected-state and evidence checks completed. Provider-safe focused regressions passed; canonical Markdown, JSON, and YAML deeply agree; git diff --check passed; and the package-review archive was assembled and independently validated. Zero live provider/API requests occurred.","next_sprint":null}}}
-```
-<!-- CANONICAL-MANIFEST-END -->
+- Sprint 10.58 — terminally blocked.
+- Sprint 10.59 — complete and merged.
+- Sprint 10.60 — complete and merged.
