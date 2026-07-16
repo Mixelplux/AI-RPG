@@ -12,10 +12,11 @@ param(
     [Parameter()]
     [string[]]$RequiredDocument = @(
         "AGENTS.md",
+        "PROJECT.md",
+        "WORKFLOW.md",
+        "docs/current_capability_package.md",
         "docs/current_sprint.md",
-        "docs/current_sprint.yaml",
-        "docs/current_sprint.json",
-        "docs/next_chat_handoff.md"
+        "docs/current_sprint.json"
     ),
 
     [Parameter()]
@@ -177,6 +178,26 @@ if ($null -ne $resolvedRepoRoot) {
         }
         else {
             Add-Check -Name "document-$document" -Status "FAIL" -Detail "Missing required document: $documentPath"
+        }
+    }
+
+    $recordValidatorPath = Join-Path $resolvedRepoRoot "tools\validate_project_records.ps1"
+    if (-not (Test-Path -LiteralPath $recordValidatorPath -PathType Leaf)) {
+        Add-Check -Name "project-record-validation" -Status "FAIL" -Detail "Missing project-record validator: $recordValidatorPath"
+    }
+    else {
+        try {
+            $global:LASTEXITCODE = 0
+            $validatorOutput = & $recordValidatorPath -ProjectRoot $resolvedRepoRoot 2>&1 | Out-String
+            if ($LASTEXITCODE -eq 0) {
+                Add-Check -Name "project-record-validation" -Status "PASS" -Detail "Current project records validated."
+            }
+            else {
+                Add-Check -Name "project-record-validation" -Status "FAIL" -Detail "Current project record validation failed: $($validatorOutput.Trim())"
+            }
+        }
+        catch {
+            Add-Check -Name "project-record-validation" -Status "FAIL" -Detail $_.Exception.Message
         }
     }
 
