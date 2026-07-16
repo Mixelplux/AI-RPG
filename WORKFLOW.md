@@ -32,8 +32,8 @@ Read the task-start files defined in `AGENTS.md`.
 Confirm:
 
 - the package or maintenance task is owner-authorized;
-- the active sprint belongs to the authorized package;
-- the sprint defines its goal, expected files, acceptance criteria, and verification;
+- any active sprint belongs to the authorized package; zero active sprints is valid while idle;
+- once a first sprint or milestone is staged, it defines its goal, expected files, acceptance criteria, and verification;
 - scope, exclusions, and completion conditions are defined.
 
 Do not invent missing scope.
@@ -165,6 +165,14 @@ After merge or completion:
 - report the authoritative repository state;
 - preserve `next_sprint` as `null` unless separately authorized;
 - do not stage, branch, define, or implement another capability automatically.
+
+After the owner explicitly authorizes selection of a new capability package,
+Codex may make that package `current_capability_package` and stage its first
+sprint or milestone. Validate its records, scope, exclusions, and completion
+conditions; only then may bounded implementation begin. Codex must not make
+this transition independently. Package selection authorization, candidate
+acceptance, and merge authorization are separate owner decisions; none implies
+another.
 
 Architecture or sequencing analysis may recommend a next candidate. Implementation requires separate owner authorization.
 

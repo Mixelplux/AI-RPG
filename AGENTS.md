@@ -10,6 +10,11 @@ Codex is the repository implementation and verification agent.
 - Make routine in-scope implementation decisions without interrupting the owner.
 - Never start, stage, or select the next capability package automatically.
 
+After the owner separately authorizes package selection, follow `WORKFLOW.md`
+to make that package current and stage its first sprint or milestone. Begin
+bounded implementation only after that staging. Candidate acceptance and merge
+authorization remain separate owner decisions.
+
 ## Context Loading
 
 `AGENTS.md` is the standing execution contract.
@@ -66,7 +71,7 @@ Preserve unless explicitly superseded:
 - AI/provider output is untrusted and has no simulation authority;
 - provider behavior fails closed;
 - persistent state changes preserve atomicity and save compatibility;
-- exactly one sprint is active;
+- zero or one sprint may be active; zero is valid while idle;
 - canonical package and sprint records remain consistent;
 - no next package begins automatically.
 
