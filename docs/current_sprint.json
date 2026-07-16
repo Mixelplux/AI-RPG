@@ -40,7 +40,7 @@
       {"id": "review-candidate", "status": "complete"}
     ],
     "governance": [
-      "Exactly one active sprint is staged.",
+      "No sprint or capability package is currently active or staged.",
       "The projection is derived from current-scene exits and authored geography; it is not persistent World State.",
       "No parser expansion, movement redesign, provider/API request, or follow-on capability is authorized.",
       "Save version remains 1 and next_sprint remains null."
