@@ -14,10 +14,18 @@ raises a material ownership, boundary, persistence, or phase-level question.
 package and sprint records, and `docs/architecture_review_template.md` when
 preparing an owner review.
 
-**Rules:** Use the lightest review type that answers the question. Bind the
-review to an exact branch and HEAD, separate decision-relevant technical
-evidence from the owner brief, and end with one owner decision request. A
-recommendation does not authorize staging or starting a capability.
+**Rules:** Select explicitly among a sprint health check for routine internal
+confirmation, a capability-package review at a capability boundary, and a
+deep architecture review for consequential boundaries. A deep review is
+required for a new persistent domain or schema, save-compatibility change,
+established ownership change, autonomous simulation, generic infrastructure,
+live AI authority, material canonical-lore ownership change, serious
+contradiction, or close consequential alternatives. Escalate to a full review
+as well when a package is blocked for external review, a repository-access
+boundary requires it, or the owner requests one. Bind the review to an exact
+branch and HEAD, separate decision-relevant technical evidence from the owner
+brief, and end with one owner decision request. A recommendation does not
+authorize staging or starting a capability.
 
 ## Capability Sequencing and Planning Horizon
 
@@ -28,10 +36,22 @@ horizon, or a phase dependency decision.
 `docs/roadmap.md`, `docs/decisions.md`, `docs/simulation_model.md`,
 `docs/simulation_principles.md`, and the current package and sprint records.
 
-**Rules:** Recommend only bounded candidates justified by player or project
-value and established dependencies. Preserve the one-active-sprint rule; do
-not define, branch, stage, or implement a recommendation until separately
-authorized by the owner.
+**Rules:** A full architecture review may establish a horizon of up to three
+related runtime packages. The horizon is planning context, not implementation
+authority: only one package may be owner-authorized at a time. After every
+merged package, run a lightweight sequencing check against the latest
+committed evidence; it may retain, replace, or revise the next candidate, but
+each candidate still needs explicit owner authorization before staging,
+branching, or implementation. Return to a full review before further package
+authorization when the horizon is exhausted, direction is uncertain, a deep
+review trigger applies, evidence is insufficient, or the check exposes a
+material dependency, authority conflict, scope pressure, or loss of atomicity,
+causal integrity, hidden-state protection, or save compatibility. A full
+review also replaces the lightweight check when a package needs more than one
+normal consolidated correction cycle, owner interaction or scope fragmentation
+increases, workflow authority becomes ambiguous, or review evidence weakens.
+A full review interrupts lightweight sequencing rather than extending it. Do
+not fragment one coherent capability merely to extend a horizon.
 
 ## Review-Packet Assembly and Validation
 
