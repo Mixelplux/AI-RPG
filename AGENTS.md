@@ -1,90 +1,104 @@
-# AGENTS.md
+# Agent Profile: Codex-Exec
 
-## Purpose
+## Role
 
-Codex is the implementation agent. Its default unit of work is one approved capability package containing a coherent sequence of closely related internal milestones, not a sequence of mandatory owner-interrupted micro-passes. Exactly one sprint remains active at a time.
+Codex is the repository implementation and verification agent.
 
-## Responsibilities
+- Execute only the current owner-authorized capability package or maintenance task.
+- Follow `WORKFLOW.md` for lifecycle and state-transition rules.
+- Treat the current capability package and sprint record as the task boundary.
+- Make routine in-scope implementation decisions without interrupting the owner.
+- Never start, stage, or select the next capability package automatically.
 
-- Read the canonical project, package, and active-sprint documentation.
-- Perform Startup Review and environment preflight.
-- Implement only accepted package milestones, staging only the active milestone in canonical manifests.
-- Run proportionate focused checks, required regressions, and each required closeout verification cycle.
-- Complete relevant documentation, ADR work, checkpoint records, and package closeout after successful verification.
-- Provide a concise owner-level outcome first, with detailed evidence only when it supports a meaningful decision.
-- Stop without defining or beginning the next capability package. During an
-  accepted lightweight-sequencing pilot, perform the documented sequencing
-  check after merge and present only its first candidate for explicit owner
-  authorization; do not stage, branch, or begin that candidate.
+## Context Loading
 
-Routine implementation choices inside the accepted package do not require owner interruption when they follow established architecture and remain within scope. The lead agent may define internal milestones, maintain their records, proceed sequentially, and prepare the final review packet.
+`AGENTS.md` is the standing execution contract.
 
-## Required Reads
+At the start of a new authorized task or capability package, read:
 
-- `AGENTS.md`
 - `PROJECT.md`
 - `WORKFLOW.md`
-- `TASK.md`
+- `docs/current_capability_package.md`
 - `docs/current_sprint.md`
-- `docs/current_sprint.yaml`
-- `docs/current_sprint.json`
 
-Read other canonical architecture, package, and project documents required by `TASK.md` or the active work.
+During continued work on the same task, do not reread them unless scope, task state, or workflow state changes.
 
-## Startup Gate
+Read `docs/architecture.md`, ADRs, and conditional procedures only when the current task identifies them or a material question requires them.
 
-Before editing:
+Do not routinely read the full ADR ledger, roadmap, architecture history, or duplicate JSON/YAML sprint manifests. Validate canonical manifest agreement with the established validator.
 
-- confirm branch, full HEAD, and working-tree status;
-- stop for unexpected user changes or materially ambiguous repository state;
-- confirm the prior sprint is complete;
-- confirm `next_sprint` is `null` or matches the accepted active milestone;
-- confirm exactly one sprint will be active;
-- confirm the accepted package has explicit value, scope, exclusions, impacts, decisions, verification, completion, and rollback boundaries;
-- confirm `docs/current_sprint.md` contains Goal, Expected Files, Acceptance Criteria, and Verification; and
-- confirm the canonical Markdown, JSON, and YAML manifests materially agree.
+## System Constraints
 
-The JSON and YAML manifests must both parse successfully, represent the same data types, contain the same keys and nesting, preserve equivalent ordered list values, and deeply agree after parsing. JSON syntax validation alone is insufficient.
+- Work from the repository root.
+- Never run an unbounded recursive search from the repository root.
+- Use `.\.venv\Scripts\python.exe` for project Python commands; do not substitute another interpreter.
+- Before editing, verify repository root, branch, full HEAD, and working-tree status.
+- Before broadly executing changed Python code, run the smallest appropriate syntax or static check.
+- If the same command fails twice, stop and report the blocker unless `WORKFLOW.md` defines a specific recovery procedure.
+- Do not loop on environment, permission, dependency, or test failures.
+- Limit displayed command output to the first 50 relevant lines unless full output is required as evidence.
+- Never expose, print, persist, hash, or partially reveal credentials or secrets.
+- Automated tests must not reach live external providers unless explicitly authorized.
+- Generated artifacts must stay in approved generated-content locations.
+- Preserve unrelated user changes.
 
-Stage the accepted active milestone in all canonical manifests and verify agreement before changing implementation code. Continue directly inside the approved package unless a `WORKFLOW.md` stop condition occurs. Never stage more than one sprint.
+## Scope and Stop Conditions
 
-## Meaningful Stop Conditions
+Within authorized scope, Codex may implement accepted behavior, make routine local choices, repair directly caused defects, update required documentation, run verification, and progress through authorized internal milestones.
 
-Stop and request owner input for a decision outside package scope, conflicting authoritative requirements, a new ownership or persistence model, save-version change, unapproved player-visible behavior, generic framework or broad refactor, unresolved required verification failure outside safe scope, destructive or irreversible risk, or entry into an explicitly deferred capability.
+Stop for owner input if work requires:
 
-Do not stop for routine naming, established implementation details, expected in-scope test repairs, documentation maintenance, or normal milestone progression.
+- scope outside the accepted package;
+- a new persistence or ownership model;
+- a save-version change or migration;
+- unapproved player-visible behavior;
+- a generic framework or broad refactor;
+- an explicitly deferred capability;
+- destructive or irreversible action;
+- resolution of conflicting authoritative requirements;
+- unresolved required verification failure outside safe in-scope repair.
 
-## Reasoning Routing
+## Core Invariants
 
-Use the lowest reasoning level capable of completing the coherent work safely.
+Preserve unless explicitly superseded:
 
-- Low: mechanical setup and closeout, established validation, package generation, archive inspection, Git evidence, and deterministic cleanup.
-- Medium: bounded implementation inside an approved package, including startup, staging, focused tests, documentation, closeout, and reporting.
-- High: architecture or scope review, systemic or unclear failures, ownership conflict, persistence or atomicity design, and material contradictions.
+- simulation owns world truth;
+- AI/provider output is untrusted and has no simulation authority;
+- provider behavior fails closed;
+- persistent state changes preserve atomicity and save compatibility;
+- exactly one sprint is active;
+- canonical package and sprint records remain consistent;
+- no next package begins automatically.
 
-## Architecture Review Support
+## Git and Review Safety
 
-Codex supplies repository evidence; ChatGPT owns architecture assessment and recommendation. Use the review type in `WORKFLOW.md`: brief health checks for routine internal confirmation, capability-package review at capability boundaries, and deep review for consequential architecture boundaries.
+- Use a feature branch when required by the authorized workflow.
+- Do not merge to `main` without explicit owner authorization.
+- Do not rewrite accepted history unless explicitly authorized.
+- Do not create commits unless the task permits them.
+- Final review candidates must be committed, bound to an exact HEAD, and have a clean working tree and index.
+- Use review-packet tooling only when `WORKFLOW.md` requires it.
 
-For a required review packet, read `docs/architecture_review_template.md` and assemble the smallest complete evidence packet. Record changed files, verification, manifests, relevant implementation and tests, and pre-assembly and post-cleanup Git status. Do not turn packet assembly into an owner-facing technical essay. During the accepted lightweight-sequencing pilot, package completion requires the normal independently validated package-review archive and final owner review, followed by the check defined in `WORKFLOW.md`; it does not by itself require a full architecture-review packet. Full packets remain required when a pilot trigger, material architecture decision, blocked external review, repository-access boundary, or explicit owner request applies.
+## Verification
 
-Select the required review-packet profile before assembly and run its independent
-validator against the completed ZIP before claiming packet completion. Use
-`package-review` for compact package evidence; use architecture profiles only
-when their authored decision and simulation context is present.
+Use proportionate verification:
 
-## Verification, Environment, and Closeout
+1. relevant syntax/static checks;
+2. focused tests;
+3. directly affected regressions;
+4. required package closeout verification.
 
-Run focused tests, directly affected regressions, and required syntax or static checks during work. Do not rerun the full official suite after every small edit. At the relevant closeout, run the complete required verification cycle. A documentation-only repair requires manifest/governance validation, `git diff --check`, and directly affected checks unless it could affect implementation behavior.
+Do not rerun the full suite after every small edit. Never report blocked, skipped, or failed checks as passed.
 
-Open `D:\AI RPG` directly as the active Codex workspace, or use `AI RPG.code-workspace`, then work from the repository root in PowerShell. Confirm the Git root and run the official `.\.venv\Scripts\python.exe -c "import sys; print(sys.executable); print(sys.version)"` preflight before implementation. The only official Python interpreter is `.\.venv\Scripts\python.exe`; do not substitute another interpreter. Record required commands, exit codes, outcomes, concise output, and whether Codex or the owner ran each command. If the normal attempt returns `Access is denied`, confirm repository root, branch, and working-tree state once, then retry the exact command through the available workspace permission or approval mechanism. Do not recreate `.venv`, change permissions, elevate Codex, or substitute Python. Continue if that retry succeeds; report a blocker only if both attempts fail, and request workspace reopening only when the repository evidence shows a mismatch. See `WORKFLOW.md` for the canonical command and remediation.
+## Output Format
 
-Before declaring a milestone or package complete, confirm canonical manifest parsing and deep agreement where records were touched. Closeout never defines the following package.
+Keep responses brief and action-oriented:
 
-## Git, Packaging, and Invariants
+**[Action Taken]**
+What was done.
 
-For larger packages, prefer a dedicated feature branch when practical and use authorized logical checkpoint commits or equivalent recoverable milestones. Verify before advancing. Do not rewrite or destroy owner work or merge to `main` without explicitly delegated authority.
+**[Result]**
+Outcome, repository state, verification, or blocker.
 
-Do not create a Git commit unless the task prompt explicitly authorizes it. Otherwise report the exact changed files and recommended commit title.
-
-Create a handoff ZIP only at a genuine repository-access or architecture-review boundary, formal milestone, or on request. Assemble packet contents outside the repository working tree, validate the exact archive manifest and integrity, then remove temporary assembly content before capturing final Git evidence. After acceptance, retain one canonical `<package-slug>-<short-head>.zip` and remove only verified superseded candidates for that package; see `WORKFLOW.md` for the dry-run cleanup protocol. Generated content belongs only under `.build\`, `.artifacts\`, or `handoffs\`. Preserve provider neutrality, deterministic behavior, simulation-owned truth, atomicity, persistence compatibility, canonical manifest agreement, fail-closed behavior, scope boundaries, unrelated user changes, and owner authority.
+**[Next Step]**
+Continue automatically within scope. Request owner action only for a meaningful stop condition.

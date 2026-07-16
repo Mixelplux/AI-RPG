@@ -1,601 +1,167 @@
-# Architecture
+# System Architecture
 
-Version: 0.10.10
+## Purpose
 
-## Current Engine Pipeline
+This document is a concise map of the current AI Narrative RPG Engine architecture.
 
+Detailed architectural decisions belong in `docs/decisions.md`. Package-specific requirements belong in the current capability package.
+
+Do not add sprint history, full schemas, test inventories, or implementation walkthroughs here.
+
+## Tech Stack
+
+- Python 3.13
+- CLI gameplay interface
+- JSON Region Packs for authored world content
+- Version-1 World State saves
+- OpenAI Responses narration preview behind provider-neutral engine boundaries
+
+## Directory Map
+
+```text
+/
+├─ engine/          Simulation, interaction, state, projection, persistence, narration
+├─ data/regions/    Immutable authored Region Packs
+├─ docs/            Architecture, ADRs, workflow, package, and sprint records
+├─ tools/           Validation, preflight, and review-packet tooling
+├─ handoffs/        Review and handoff artifacts
+├─ .artifacts/      Temporary evaluation evidence
+├─ play_game.py     CLI entry point
+└─ test_*.py        Automated tests
+```
+
+## Runtime Flow
+
+```text
 Player Input
-↓
+    ↓
 Interaction Kernel
-↓
-Interaction Result
-↓
-World Update
-↓
-World State
-↓
-Scene Builder
-↓
+    ↓
+Structured Interaction Result
+    ↓
+GameEngine
+    ↓
+Candidate State Transition
+    ↓
+Validated World State
+    ↓
 Scene Snapshot
-↓
-Perception Builder
-↓
-Player Perception
-↓
-Narrator / UI
+    ↓
+Player-Safe Projection
+    ↓
+CLI or Narration Preview
+```
 
-## Narration Preview Boundary
+`GameEngine` is the gameplay-facing orchestration boundary. Player-facing code must not directly mutate lower-level state.
 
-The implemented deterministic preview path is:
+## Sources of Truth
+
+### World State
+
+`world_state` owns mutable persistent simulation truth, including accepted runtime state such as:
+
+- player location, time, and weather;
+- durable history;
+- pressures and thread state;
+- actor location changes;
+- actor knowledge;
+- evidence traces and player discoveries.
+
+### Region Packs
+
+Region Packs are immutable authored content.
+
+They define locations, connections, actors, descriptions, initial values, and bounded authored declarations.
+
+Runtime state may use Region Pack policy, but Region Packs themselves do not become mutable state.
+
+### Derived Projection
+
+Scene Snapshots, player perception, affordances, and narration context are derived from authoritative state and authored content.
+
+They do not own persistent simulation state.
+
+## Persistent Transitions
+
+Material state changes use the established candidate-state pattern:
+
+```text
+Copy current state
+    ↓
+Prepare source event and consequences
+    ↓
+Validate completed candidate
+    ↓
+Build required derived scene
+    ↓
+Publish once
+```
+
+Failures must not leave partial durable mutation.
+
+Durable causal references use stable backward `history_id` references.
+
+Save version remains `1` until an explicitly authorized change defines compatibility or migration behavior.
+
+## Character Information and Spatial Projection
+
+Keep these concepts separate:
+
+- **World truth:** what is actually true.
+- **Perception:** what the character can currently observe.
+- **Familiarity:** broad background understanding.
+- **Acquired information or belief:** selectively retained information encountered during play.
+
+Player-facing projection must not expose hidden causes or information merely because the engine knows it.
+
+Use minimum sufficient world detail:
+
+- author important structure;
+- resolve incidental detail only when needed;
+- persist it only when future gameplay materially depends on it.
+
+The authored map represents macro spatial relationships, not every possible traversal path. Spatial presentation should favor natural orientation over a raw compass-direction grid.
+
+See ADR-059 for governing detail.
+
+## Narration Boundary
 
 ```text
 Bounded Narration Context
     ↓
-Validated Narration Request
+Validated Provider-Neutral Request
     ↓
-Validated Provider-Neutral Prompt
+Validated Prompt
     ↓
 Untrusted Candidate Source
     ↓
-Strict Source-Result Validation
+Source-Result Validation
     ↓
-Independent Candidate-Output Validation
+Narration-Output Validation
     ↓
-Preview Display Text
+Preview Display
 ```
 
-This is a presentation-only path. It has no simulation authority, does not persist narration artifacts, and does not replace normal deterministic gameplay narration.
+The current live source is an explicit OpenAI Responses preview.
 
-## Source of Truth
+Narration:
 
-`world_state` is the persistent runtime source of truth for mutable state.
+- is preview-only;
+- is untrusted until validated;
+- has no simulation authority;
+- does not persist prose;
+- does not run automatically during normal gameplay;
+- must fail closed without changing deterministic gameplay.
 
-Currently owned by `world_state`:
+## Context Loading
 
-- Player current location
-- Current weather
-- Current time
-- World history entries
-- Persistent scoped pressures
-- Runtime actor-location overrides
-- Persistent open unresolved threads
-- Persistent actor knowledge membership for stable static actors
+Do not read this file for every routine implementation turn.
 
-Region Packs provide static world data and initial values only.
+Read it when:
 
-Region Pack fields that appear mutable in meaning, including entity state, entity knowledge, relationships, economy, security, and population, remain immutable seeds or static data until a future sprint explicitly migrates their runtime ownership into `world_state` or another persistent simulation-owned structure. They must not be treated as mutable runtime truth merely because they are projected into a Scene Snapshot.
+- the current task affects an architectural boundary;
+- ownership or persistence is unclear;
+- the capability package explicitly references it;
+- a material architecture conflict must be resolved.
 
-Scene Snapshots are derived views built from Region Pack data plus `world_state`. Scene Snapshots are not persistent state.
-
-
-
-## Simulation Model Boundary
-
-`docs/simulation_model.md` describes how the world should conceptually behave. It is the behavioral counterpart to this architecture document.
-
-Architecture describes implemented or scheduled software structure.
-
-Simulation model describes conceptual world behavior such as truth, knowledge, pressures, affordances, time, perception, routine abstraction, and AI responsibility.
-
-Concepts in `docs/simulation_model.md` do not become implementation requirements until scheduled by a sprint.
-
-## Phase 2 Direction
-
-Phase 2 remains **World Evolution Foundations**.
-
-Phase 1 established world representation. Sprint 9 completed the first Phase 2 milestone by establishing durable world memory, explicit simulation-owned time advancement, bounded historical context, and safe narration boundaries.
-
-Sprint 9 is closed as **World Memory and Safe Narration Foundations**. It completed history and time prerequisites but did not complete World Evolution Foundations as a whole. Persistent unresolved threads, time-based pressure drift, runtime actor state, actor knowledge, evidence, consequences, schedules, affordances, and opportunity surfacing remain future capabilities.
-
-Sprint 10.1 closed the first Phase 2B capability: **Persistent Resolved Conversation Memory**. The subsequent architecture and scope review selected **Persistent Scoped Pressure Representation** as Sprint 10.2. Sprint 10.2 is complete and closed out.
-
-The implementation keeps the existing `GameEngine` command path intact: `Interaction Kernel -> GameEngine -> current-scene target resolution -> World Update -> world_state.history`. A successful resolved conversation becomes a durable accepted event only when the normal command path succeeds and target resolution returns a resolved entity with stable identity.
-
-Major feature systems such as combat, companions, economy simulation, faction warfare, full NPC AI, and full travel simulation remain deferred until the underlying world-evolution foundations exist.
-
-Sprint 10.2 establishes a representation-only ownership boundary. Current pressure state belongs in a persistent `world_state.pressures` dictionary keyed by stable pressure identity. `initial_pressures` is the exact optional top-level Region Pack field for immutable seeds. If present, it is a validated list of exact pressure records; Region Pack provenance must identify the containing pack's exact `region_id`. Seeds are deep-copied only during new-game construction.
-
-Canonical runtime World State always requires the pressure dictionary. During loading only, copied version-1 legacy save data missing `pressures` normalizes to an empty dictionary before strict validation and engine construction. This normalization does not modify or reapply Region Pack seeds. A present malformed pressure value fails validation, and save version 1 remains unchanged.
-
-The initial pressure contract supports region and location scopes, an integer level from 0 through 100, and Region Pack provenance. The exact read boundary is `GameEngine.get_pressures()` for the complete keyed dictionary and `GameEngine.get_pressure(pressure_id)` for one copied record or `None`. Both return defensive deep copies without state, time, history, or scene-rebuild effects. The required `pressures` CLI command routes through `get_pressures()` and never accesses durable state directly. Mutation, history of pressure changes, time drift, projection, AI creation, unresolved-thread representation, and generic ongoing-condition frameworks remain outside Sprint 10.2.
-
-Sprint 10.2 is complete. The verified implementation covered the representation-only boundary, the Region Pack seed contract, load-only legacy normalization, and read-only pressure inspection.
-
-Sprint 10.3 adds the exact gameplay-facing operation `GameEngine.set_pressure_level(pressure_id, new_level)`. It accepts an exact level rather than a delta. Pure pressure mutation remains in or near `engine/pressure_state.py`, while `GameEngine` prepares a copied candidate world state, adds exactly one engine-identified `pressure_changed` history entry for a material change, validates the completed candidate, and commits pressure and history together through one final assignment. Validation or history failure commits neither. A no-op creates no history and does not replace durable state. The entry records current durable time without advancing it and records pressure scope rather than player location. The operation does not rebuild scene state or invoke narration.
-
-Sprint 10.4 adds the linked pressure-transition operation `GameEngine.set_pressure_level_from_event(pressure_id, new_level, source_history_id)`. The source history entry is already durable, is referenced by stable `history_id`, and remains read-only outside the pressure-consequence commit. `engine/world_state.py` performs narrow backward-only referential-integrity validation for `source_history_id`, while `GameEngine` resolves the source entry, orchestrates copied candidate state, reuses the exact pressure-mutation boundary, constructs the linked `pressure_changed` history entry, validates the completed candidate, and commits once. A material change mutates one pressure and records one linked consequence atomically. A validated no-op confirms the source reference, returns without durable mutation, and creates no history. Existing unlinked history, including Sprint 10.3 pressure history, remains valid through save/load. Pressure state still remains unprojected into scenes, perception, narration, and autonomous simulation.
-
-Sprint 10.5 adds the strict optional Region Pack field `conversation_pressure_effects`. Each exact declaration maps one `target_entity_id` that resolves to exactly one Region Pack entity to one existing seeded `pressure_id` and one integer `new_level` from 0 through 100. Region Pack data owns this immutable policy; Region validation owns exact shape, uniqueness, identifier, range, and cross-reference validation before gameplay. The Interaction Kernel, World Update, Pressure State, and World State remain unaware of effect policy.
-
-For a matching resolved conversation, `GameEngine` copies durable world state, adds the normal `player_conversation` source first, captures its engine-owned `history_id`, resolves the one declaration, and uses a private non-committing form of the Sprint 10.4 linked-transition logic to prepare the exact pressure mutation and linked `pressure_changed` consequence in the same candidate. It validates the completed candidate and builds the required candidate scene before assigning live world state once and replacing `scene_snapshot`. An unmatched conversation remains source-only. A matching same-level conversation commits its new source but creates no consequence history. Save version 1 persists the resulting pressure and causal history without persisting or replaying Region Pack declarations.
-
-This first automatic gameplay-event-to-pressure-consequence path remains deliberately bounded. It does not add generic effect rules, multiple consequences, deltas, predicates, ordering, event replay, schedulers, autonomous progression, pressure projection, narration coupling, runtime pressure creation, actor state, unresolved threads, or new commands.
-
-Sprint 10.6 adds the canonical read-only pressure-applicability boundary. `engine/pressure_state.py` owns the pure operation: it validates the pressure collection, filters only records whose region scope exactly matches the loaded Region Pack `region_id` or whose location scope exactly matches the requested location, deep-copies the results, and orders them by sorted `pressure_id`. It remains independent of player movement, Region Pack scenes, history, narration, perception, and runtime effects.
-
-`GameEngine.get_applicable_pressures(location_id=None)` is the gameplay facade. It resolves an omitted identifier from the player's durable current location, rejects non-string, empty, and non-canonical explicit locations, delegates scope filtering to the pressure-domain operation, and returns the copy-safe result without modifying world state, pressure state, history, time, weather, Region Pack data, player location, or the scene snapshot. Applicability is scope membership only; it does not imply activity, visibility, perceptibility, importance, narration eligibility, or escalation eligibility.
-
-## Completed
-
-- Region Pack
-- Scene Loader / Scene Builder
-- Perception Builder
-- Narrator
-- Interaction Kernel
-- World Update
-- GameEngine
-- Playable CLI Loop
-- Deterministic movement
-- Region validation
-- Persistent player location
-- Persistent weather ownership
-- Persistent time ownership
-- Durable world history skeleton
-- Explicit time advancement operation
-- Read-only world history query
-- Bounded history query defaults
-- Stable history entry identity
-- Bounded history context packet
-- Narration context boundary
-- Narration output contract
-- Narration pipeline stub
-- Deterministic narration candidate-source boundary
-- Deterministic narration request packet contract
-- Deterministic narration prompt packet contract
-- Strict narration source-result validation contract
-- Deterministic structured skill checks
-- Structured skill-check command routing
-- Scene-bound target resolution
-- Known-destination resolution without travel execution
-- Persistent scoped pressure representation
-- Explicit atomic pressure-level change with durable history
-- Causally referenced pressure transition
-
-## In Progress
-
-- Phase 2 - World Evolution Foundations
-
-## Post-Sprint-9 Architecture Review
-
-The post-Sprint-9 architecture review reached these decisions:
-
-- Sprint 9 is complete. Do not assume or define Sprint 9.14.
-- The completed milestone is **World Memory and Safe Narration Foundations**.
-- The narration context, request, prompt, source, source-result, output, and preview boundaries are sufficient for the current deterministic preview.
-- Narration infrastructure should remain frozen except for defect correction or changes required by an immediate bounded consumer.
-- Real AI provider integration is deferred. It is not required for history, time, pressures, actor state, evidence, consequences, schedules, travel, or other simulation-owned capabilities.
-- The immediate next project activity is a focused playable vertical-slice review, not a feature sprint.
-- After that review, the next implementation should begin a new Phase 2B milestone rather than extending Sprint 9. Persistent scoped pressures or unresolved threads are the leading candidate, subject to the vertical-slice findings.
-
-`GameEngine` remains the appropriate gameplay-facing facade. Its command routing should continue to grow only through bounded capabilities. Do not introduce a command bus, provider registry, plugin framework, dependency-injection framework, or broad handler abstraction without an immediate consumer.
-
-## Known Architectural Debt
-
-The following issues are real but do not block later bounded reactive-world capabilities:
-
-- The untrusted narration candidate and the enriched validated narration result currently use the same narration-output schema and version despite having different supported shapes. Separate or version these contracts before real provider integration.
-- Narration preview packets repeat substantial context through request, prompt, source-result, candidate, validated-output, and display fields. Preserve the current tested boundary for now and simplify only when a real provider or runtime consumer demonstrates the required shape.
-- Request and prompt validation are not uniformly exact at every nested level. Reassess exact-field behavior before external packet producers are introduced.
-- Runtime ownership of actor state, actor knowledge, relationships, economy, security, and population remains unresolved. Resolve ownership before implementing actor knowledge, schedules, or pressure-driven mutation of those values.
-- The current elapsed-hours clock is sufficient for narrow deterministic pressure drift but not for schedules, calendar-sensitive behavior, or substantive travel duration.
-
-## Architecture Boundary
-
-Architecture describes systems that exist now or are scheduled for implementation.
-
-Broader world-behavior ideas belong in `docs/simulation_principles.md`.
-
-Ideas that are important but not ready for implementation belong in `docs/future_design.md`.
-
-
-## Persistence
-
-Only `world_state` is persisted. Region Packs remain immutable assets. Scene Snapshots, Perception, and Narration are regenerated after loading.
-
-## Authored Resolved-Thread Actor Relocation
-
-## Declared Resolved-Thread Actor-Knowledge Acknowledgment
-
-One optional immutable `resolved_thread_actor_knowledge_effect` binds the
-existing authored west-road thread to Captain Darvin Grey and one opaque
-knowledge identity. Only the accepted clue-presentation resolution may prepare
-it. The candidate records the presentation source first, resolves the thread,
-prepares existing relocation, then adds source-linked knowledge history before
-one validation, one scene build, and one publication. The existing singleton
-`conversation_actor_knowledge_response` is retargeted to that membership, so a
-later eligible conversation produces one exact authored acknowledgment; the
-former `player_spoke_with_captain` response is replaced. Knowledge stays hidden
-from ordinary scene, perception, narration, and prompt surfaces. Save version
-remains 1; no response precedence or generic consequence framework is added.
-
-## Declared Resolved-Thread Evidence Trace Consequence
-
-One optional immutable `resolved_thread_evidence_trace_effect` binds the
-existing west-road resolved thread to one stable trace identity, opaque evidence
-identity, one matching discovery declaration, and the exact destination of the
-existing resolved-thread actor relocation. Only the accepted clue-presentation
-resolution may prepare it. After the presentation source, thread resolution,
-relocation, and actor-knowledge preparation, the candidate creates one
-source-linked `evidence_trace_added` history entry before its single validation,
-Scene Snapshot build, and publication. An exact durable trace is a no-op;
-conflicting identity reuse rejects the complete candidate. The trace remains
-hidden from scene, perception, narration, prompts, and conversation responses
-until existing explicit local investigation at the authored location returns
-the exact Region Pack discovery text. Save version remains 1; no response,
-automatic discovery, passive cue, generic trace rule, or consequence framework
-is added.
-
-## Declared Elapsed-Time Evidence Trace Consequence
-
-One optional immutable `elapsed_time_evidence_trace_effect` declares exactly one positive elapsed-hour threshold, trace identity, evidence identity, and Region Pack location. It must bind exactly one same-location discovery declaration and cannot reuse a supported effect or authored trace identity. Explicit time advancement records `time_advanced` first, then prepares pressure, actor relocation, and evidence consequences in that fixed order on one copied candidate. The trace is source-linked, one-shot through durable elapsed time, and hidden from ordinary scene, perception, narration, and prompt surfaces until existing explicit local investigation discovers its exact authored clue. Save version remains 1; no scheduler, generic consequence registry, or transaction framework is added.
-
-One optional immutable `resolved_thread_actor_relocation_effect` may identify one declared resolved thread, one stable static actor, and one exact destination location. Its identity must not conflict with any other supported authored effect identity in the Region Pack. It is eligible only inside the successful authored clue-presentation resolution transition. The copied candidate records the presentation source first, resolves the thread, adds a material actor-location override and causally linked `actor_moved` history only when needed, validates, builds one final Scene Snapshot, and publishes once. The structured result is only `None`, `{"status": "applied"}`, or `{"status": "no_op"}` and exposes no simulation identifiers. This preserves save version 1 and introduces no generic consequence system.
-
-## Discovery-Gated Relocated-Actor Conversation Response
-
-One optional immutable `conversation_player_discovery_response` binds Elin
-Voss to the existing West Gate discovery. `GameEngine` snapshots player
-discoveries at command start, completes the normal local conversation
-transition, then derives exact authored text only for that resolved target.
-It is read-only: no response state, history, scene, perception, narration,
-prompt, or save data is added. Validation requires the resolved-thread
-relocation actor, its evidence trace, discovery, and destination to agree and
-rejects overlap with Captain Grey's singleton knowledge response. Save version
-remains 1; no response list, precedence, or generic dialogue system is added.
-
-## Authored Actor-Knowledge Conversation Response
-
-One optional immutable `conversation_actor_knowledge_response` declaration may
-project exact Region Pack-owned text after a successful current-scene
-conversation with its declared present static actor. `GameEngine` snapshots
-that actor's durable membership before the command, completes the established
-candidate transition unchanged, validates and builds the candidate scene, then
-derives the response once from the command-start snapshot. The response is
-read-only result output; it is not World State, history, scene, perception,
-narration, prompt, or save data. Repeated eligible conversations repeat the
-same authored text.
-
-The authored discovery-use boundary projects only authored clue titles and text
-for already discovered clues. One strict Region Pack resolution declaration
-may connect one present static actor, one known discovery, and one open thread.
-`world_state.resolved_threads` is sparse durable current state; it is mutually
-exclusive with `open_threads`. Candidate presentation history, open-to-resolved
-transition, causal resolution history, validation, and scene rebuilding occur
-before one live commit. Version-1 saves missing resolved state normalize empty
-only while loading; the original trigger cannot reopen a resolved thread.
-
-Sprint 10.37 hardens resolved state before it can become authoritative: each
-record must match the active strict resolution declaration, exactly one prior
-declared opening lifecycle, its triggering conversation, the declared clue
-presentation, and exactly one later linked resolution lifecycle. History and
-Region Pack declarations validate current state but do not become alternate
-runtime authorities. Malformed saved state fails before load replacement, and
-failed candidate transitions preserve the live World State and Scene Snapshot.
-
-Sprints 10.38 and 10.39 derive one exact authored resolved observation from
-already-validated `resolved_threads` at the existing declared thread perception
-locations. The observation is non-persistent, contains only authored text, is
-absent elsewhere, and appears once per perception and normal scene narration
-result while remaining available on every later eligible visit and after
-save/load.
-
-Sprint 10.15 hardens the existing unresolved-thread boundary without changing its ownership or save version. Region-aware World State validation now requires each persisted open thread to match the singular active declaration, a prior `player_conversation` targeting that declaration's trigger actor, and exactly one later `unresolved_thread_opened` record with matching identity, `open` status, and source history identifier. Malformed state fails before engine replacement or candidate commit. Lifecycle records remain durable and engine-queryable, but the narration-context projection excludes them alongside existing internal pressure and actor consequence records; location-aware perception remains unchanged.
-
-Sprint 10.16 establishes `world_state.actor_knowledge` as sparse current membership keyed only by stable static actor identity. Immutable Region Pack `knowledge` arrays are validated new-game seeds and are deep-copied only during new-game construction. Version-1 saves missing the field normalize to empty membership during loading and never reseed from Region Pack content. Region-aware validation rejects malformed membership, unknown or unsupported actor identities, duplicate identifiers, and nested metadata. `GameEngine.get_actor_knowledge(actor_id)` returns an immutable tuple without adding knowledge to scenes, perception, narration, prompts, targeting, dialogue, or behavior.
-
-Sprint 10.17 adds the exact `GameEngine.add_actor_knowledge(actor_id, knowledge_id)` transition. It prepares a copied candidate, validates the static actor and non-empty identifier, appends one absent identifier to sparse membership, adds one `actor_knowledge_added` durable history entry, validates the completed candidate against the active Region Pack, and assigns World State once. Duplicate additions are no-ops that preserve live World State and the Scene Snapshot. The history record remains queryable but is excluded from narration context; this transition does not project knowledge or introduce acquisition policy, source, certainty, truth, provenance, evidence, dialogue, or behavior.
-
-Sprint 10.18 adds `GameEngine.add_actor_knowledge_from_event(actor_id, knowledge_id, source_history_id)`. It requires one existing earlier durable event and records that structural backward reference on a material `actor_knowledge_added` entry while atomically committing one membership addition and one history entry. Duplicates still validate the source but preserve live World State and Scene Snapshot with no new history. `source_history_id` is structural rather than semantic: it grants no evidence, truth, witness, certainty, reliability, provenance, or acquisition policy. Source-free historical entries remain valid through version-1 saves, and lifecycle history remains excluded from narration context.
-
-Sprint 10.14 adds `world_state.open_threads`, a sparse dictionary keyed by immutable Region Pack thread identity. Each record contains exactly its identity, the sole supported status `open`, and the stable `created_by_history_id` for the accepted conversation that opened it. The reference must resolve to durable history. During loading only, version-1 saves missing `open_threads` normalize to an empty dictionary; authored declarations are not replayed. Region Pack content owns each thread's description, trigger actor, perception locations, and evidence text.
-
-`GameEngine` composes a matching resolved conversation, existing bounded consequences, one open-thread record, and an `unresolved_thread_opened` history event in one candidate state. Validation and scene rebuilding complete before one live commit. Repeating the trigger does not duplicate the record or opening event.
-
-Open-thread perception is derived and read-only: it returns authored evidence only at a declared applicable location. It exposes no objective, completion instruction, map marker, status label, raw runtime record, actor knowledge, or resolution behavior.
-
-Every future persistent world-state expansion must define default initialization and compatibility for saves created before the new field existed. A broad migration framework is not required in advance, but compatibility must be explicit in the sprint that adds the field.
-
-`GameEngine` exposes save and load operations to gameplay front ends. Persistence serialization and reconstruction remain implemented by the save system behind that engine API.
-
-`world_state.history` stores durable records of events the simulation has accepted as having happened. Each new history entry receives a stable `history_id`, plus an event type and summary, with location and time recorded when available. History identifiers are assigned by the engine when the entry is created, stored directly on the durable entry, and preserved through save/load. Loading a save must not regenerate existing history identifiers.
-
-History is persistent world state; scene snapshots, perception, and narration remain derived views and do not own history truth. History identifiers make accepted events referenceable by future systems, but they do not interpret history, summarize history, or turn durable history into active memory.
-
-History can be queried through a read-only `GameEngine` facade by recent count, event type, and location. A single history entry can also be looked up by `history_id` through a narrow read-only `GameEngine` facade. Querying or looking up history returns existing durable entries without mutating `world_state.history`, advancing time, creating history entries, or triggering world evolution.
-
-Normal history access is bounded by default using a single safe recent-entry count. Plain CLI history review and filtered history review use this bounded query path unless an explicit smaller or larger count is provided through a supported command. Durable history remains persisted simulation truth, but it is not active memory and should not be passed casually into narration or future simulation context.
-
-`GameEngine.get_history_context(...)` exposes a deterministic, read-only, bounded history context packet for future handoff boundaries. Sprint 9.6 packet shape is:
-
-- `schema`: `ai_rpg.history_context_packet`
-- `version`: `1`
-- `limit`: the bounded entry limit used for the packet
-- `default_limit`: the normal safe history-query default
-- `max_limit`: the maximum supported history-context count
-- `current_time`: a copy of current durable world time
-- `player.current_location_id`: current player location from durable world state
-- `history_entries`: bounded recent accepted history entries, including stable `history_id` values
-
-The context packet defaults to the same safe recent history count as normal bounded history queries and rejects explicit counts above its documented maximum. It never returns full durable history by default. Included entries preserve existing event type, summary, location, time, and other accepted entry fields without interpretation, summarization, relevance scoring, or AI narration. The packet is a copy-safe handoff structure; callers cannot mutate durable `world_state.history` through it.
-
-`world_state.history` now also records resolved-conversation events when the normal command path succeeds and scene target resolution identifies a resolved entity. Sprint 10.1 conversation entries use the existing engine-owned `history_id`, record the resolved target identity from deterministic target resolution rather than raw player text, and store only the durable fact that a conversation was initiated.
-
-Those entries add `target_entity_id` and `target_display_name` alongside the existing history fields. They do not establish dialogue content, topics, claims, promises, actor knowledge, beliefs, relationships, emotional state, consequences, pressures, or time advancement.
-
-`GameEngine.get_narration_context(...)` exposes a deterministic, read-only narration context packet for future narration handoff boundaries. Sprint 9.7 packet shape is:
-
-- `schema`: `ai_rpg.narration_context_packet`
-- `version`: `1`
-- `player_input`: the raw player input supplied for context construction
-- `current_time`: a copy of current durable world time
-- `player.current_location_id`: current player location from durable world state
-- `scene_snapshot`: a copy of the current derived scene snapshot
-- `history_context`: the bounded Sprint 9.6 history context packet
-- `boundary`: the read-only narration input rule and drift guardrail
-
-The narration context packet defines what a future narrator may see. It is not narration output, not an AI call, not simulation authority, and not world evolution. Building the packet does not advance time, create history entries, alter history identifiers, summarize history, reinterpret events, rank relevance, or mutate durable world state.
-
-Future narration may use known scene facts for grounded atmospheric description, but atmospheric prose must not become durable world truth unless the engine records it. For example, if the scene contains a blizzard, narration may describe cold weather, but may not mention the player's gloves unless gloves are present in player state or context. The narrator can describe; the engine decides what is true.
-
-`GameEngine.validate_narration_output(...)` exposes a deterministic, read-only contract for future narration output. Sprint 9.8 packet shape is:
-
-- `schema`: `ai_rpg.narration_output_packet`
-- `version`: `1`
-- `narration_text`: presentational prose string
-- `contract`: a copy of the narration output contract, including authority and drift limits
-
-The narration output contract defines what a future narrator may return before any AI model is called. It accepts only schema/version metadata and a `narration_text` string, then returns a copy-safe packet with contract metadata. It rejects unsupported structured fields and structured attempts to mutate world state, mutate history, advance time, create quests, create rumors, create pressures, update actor knowledge, add NPC schedules, add evidence, add consequences, add entities, add locations, add exits, alter inventory, add player conditions, or update NPC relationship state.
-
-Narration output is presentational prose only. It is not accepted world truth, not simulation authority, not history, not time advancement, not world evolution, and not AI integration. Validating narration output does not mutate durable world state, advance time, create history entries, alter history identifiers, call an AI model, or make freeform prose durable.
-
-This contract is structural rather than semantic. It does not attempt to fully prove whether freeform narration contains invented details. Freeform narration drift is controlled by context limits, prompt rules, this output contract, and later review or validation layers. For example, narration may describe a blizzard if the context contains a blizzard, but should not mention gloves unless gloves are present in context. Narration output may be shown later, but it is not accepted world truth.
-
-`GameEngine.get_narration_preview(...)` exposes a deterministic narration pipeline stub that sequences the narration context and narration output boundaries through a fixed sample candidate. Sprint 9.9 packet shape is:
-
-- `schema`: `ai_rpg.narration_pipeline_packet`
-- `version`: `1`
-- `accepted`: whether the fixed sample candidate validated successfully
-- `source`: `fixed_sample_prose`
-- `narration_context`: a copied narration context packet
-- `candidate`: the fixed candidate that was validated
-- `validated_output`: the validated narration output packet when accepted
-- `display_text`: validated text copied from the narration output contract
-
-The pipeline stub consumes narration context, supplies fixed sample prose only, validates that prose through the narration output contract, and returns a dedicated preview/display packet. It does not generate prose from player input or world data, does not call an AI model, does not replace gameplay narration, and does not persist narration output. The preview display is a copy-safe stub boundary, not a narration authority. If the fixed candidate is rejected, the packet reports the failure before any display text is returned.
-
-The preview command may display the validated fixed sample text, but the displayed text is not accepted world truth. It remains presentational only and does not create history, advance time, mutate state, or alter saved data.
-
-`GameEngine.get_narration_preview(...)` now routes candidate production through a deterministic narration candidate-source boundary. Sprint 9.10 packet shape is:
-
-- `schema`: `ai_rpg.narration_pipeline_packet`
-- `version`: `1`
-- `accepted`: whether the candidate source produced a valid candidate and the output validator accepted it
-- `source`: `fixed_sample_prose`
-- `narration_context`: a copied narration context packet passed to the source
-- `source_result`: the untrusted source result copied from the candidate boundary
-- `candidate`: the untrusted narration-output candidate copied from the source result
-- `validated_output`: the validated narration output packet when accepted
-- `display_text`: validated text copied from the narration output contract, or empty text on failure
-- `failure_stage`: bounded failure category when the source or validation fails
-- `error`: bounded diagnostic text when the source or validation fails
-
-The candidate source receives narration context rather than mutable world state. Source output is untrusted and must pass through `validate_narration_output_packet(...)` before any display text is returned. Raw source text is never displayed directly. If the source raises, returns a malformed result, or produces an invalid candidate, the pipeline fails closed with empty display text.
-
-Failed candidate production does not mutate state, advance time, create history, persist narration, or interrupt normal deterministic gameplay. The deterministic fixed-sample source remains the only implemented source. No AI provider, prompt system, or external service exists yet.
-
-`GameEngine.get_narration_preview(...)` now also routes the fixed source through a deterministic narration request packet. Sprint 9.11 packet shape is:
-
-- `schema`: `ai_rpg.narration_request_packet`
-- `version`: `1`
-- `mode`: `preview`
-- `narration_context`: a copied narration context packet
-- `expected_output`: the expected narration-output schema/version and output contract metadata
-- `constraints`: stable machine-readable narration constraints
-
-The request packet is provider-neutral, read-only, and copy-safe. It is built only from the already bounded narration context and fixed contract metadata. It contains no provider-specific system messages, user messages, credentials, or payload formats, and it grants no simulation authority. The pipeline validates request structure before invoking the source, then validates the returned candidate through the existing output contract before display. Request-construction or request-validation failure fails closed with empty display text. The request does not access mutable world state directly, does not add full durable history, and does not persist requests or source results.
-
-`GameEngine.get_narration_preview(...)` now also routes the validated request through a deterministic narration prompt packet before the fixed source. Sprint 9.12 packet shape is:
-
-- `schema`: `ai_rpg.narration_prompt_packet`
-- `version`: `1`
-- `mode`: `preview`
-- `originating_request`: the validated narration-request packet schema, version, and mode
-- `expected_output`: the expected narration-output schema/version and prose-only format guidance
-- `instructions`: provider-neutral narration rules that preserve simulation authority, prose-only output, and fail-closed behavior
-- `deterministic_input`: a copy-safe deterministic representation of the bounded narration request input
-
-The prompt packet sits between the validated narration request and the untrusted fixed source. It is constructed only from the validated request packet, remains copy-safe, and preserves deterministic request data without retaining live mutable references. Prompt validation occurs before source invocation. The fixed source receives the prompt packet rather than raw context, raw world state, or raw request data. The source remains deterministic and continues returning only the existing sample prose.
-
-Prompt construction or validation failure fails closed with empty display text. The source output still passes through `validate_narration_output_packet(...)` before display, so prompt failure and source failure remain distinct from output validation. The preview sequence is therefore:
-
-1. Build bounded narration context.
-2. Build and validate the narration request packet.
-3. Build and validate the narration prompt packet.
-4. Pass the prompt packet to the fixed candidate source.
-5. Validate the returned candidate through the narration-output contract.
-6. Expose display text only after successful validation.
-
-The prompt packet does not introduce simulation authority, persistence, provider integration, model settings, retries, streaming, or raw world-state access. If the prompt or source path fails, display text stays empty and the preview remains non-authoritative.
-
-`GameEngine.get_narration_preview(...)` now also routes the validated prompt through a strict narration source-result validation boundary before candidate extraction. Sprint 9.13 packet shape is:
-
-- `schema`: `ai_rpg.narration_source_result`
-- `version`: `1`
-- `source`: `fixed_sample_prose`
-- `source_prompt`: the validated narration-prompt packet that was supplied to the source
-- `candidate`: the untrusted narration-output candidate copied from the validated source result
-- `metadata`: exact fixed metadata containing `candidate_trust: untrusted` and `generation: fixed_sample_only`
-
-The source-result envelope is untrusted until it passes strict validation immediately after source invocation. Validation accepts only the documented top-level fields, rejects unsupported extras, requires the source prompt to validate and match the originating validated prompt, and enforces exact metadata values. Validation returns a deep copy so callers cannot mutate the supplied source result or originating prompt through the validated packet.
-
-Candidate extraction occurs only from the validated source-result packet. That means the pipeline first validates the complete source-result envelope, then extracts the candidate, and only then validates candidate prose through the existing narration-output contract. Source-result validation failure is distinct from candidate-output validation failure.
-
-Failed source-result validation uses a bounded `source_result_validation` stage, returns empty display text, and does not copy malformed raw source payloads into preview inspection fields. Raw invalid candidate prose is not copied into source-result-validation failures. The fixed source remains deterministic and still returns only `The street remains quiet.` The source-result boundary does not add simulation authority, durable facts, provider integration, or world-state mutation.
-
-`world_state.time` can be advanced by an explicit simulation-owned operation. Sprint 9.2 supports a narrow fixed-duration `wait` command that increments durable elapsed time by one hour and records the previous and new time in history. This operation does not trigger world evolution, pressures, schedules, travel duration, recovery, decay, escalation, opportunity loss, or autonomous NPC behavior.
-
-## Session Lifecycle
-
-## Persistent Static Actor Location
-
-Named static actors remain authored in the Region Pack. World State owns only sparse `actor_location_overrides`, keyed by the existing stable `entity_id`. One canonical resolver chooses the runtime override when present and otherwise the authored location; scene construction uses that boundary so downstream perception and target resolution naturally reflect movement. Spawned templates remain independent derived scene content. Material actor movement and the rebuilt current scene commit together only after candidate validation succeeds.
-
-Sprint 10.12 permits one optional immutable `conversation_actor_relocation_effect` declaration. A matching resolved conversation prepares its durable conversation source, any material actor move and backward causal reference, completed World State validation, and one rebuilt scene before the existing single live commit. A repeated matching conversation remains durable but creates no false movement when the actor is already at the destination. This is a bounded content policy, not a generic consequence dispatcher.
-
-Sprint 10.13 adds one optional immutable `elapsed_time_actor_relocation_effect`. Its exact declaration names one elapsed-hour threshold, one seeded named static actor, and one known destination. The existing `advance_time` candidate transition evaluates the same crossing rule used by elapsed-time pressure consequences, then prepares any material `actor_moved` entry after the pressure consequence and links both to the same `time_advanced` source. Durable elapsed time and effective actor location provide one-shot behavior without a fired flag. Final World State validation, scene construction, and live publication remain singular; `wait` continues using that shared boundary.
-
-## Elapsed-Time Pressure Consequence
-
-## Authored Pressure Observation
-
-Sprint 10.9 adds one derived, non-persistent observation cue. Canonical applicability is necessary but not sufficient: one validated immutable Region Pack declaration names the pressure, minimum level, and authored text. `GameEngine` derives the cue on perception reads and passes only cue identity, pressure identity, and text to perception. Raw pressure state never enters the Scene Snapshot or perception.
-
-Sprint 10.10 carries that already-derived zero-or-one cue through the existing deterministic narration context, request, and prompt boundaries. Perception remains the only authority for applicability, threshold, and perceptibility. Narration packets receive only cue identity, pressure identity, and exact authored text; pressure-change history records are excluded from narration context so raw levels, scope internals, and causal identifiers do not leak through bounded history. After the existing source-result and candidate-output validation succeeds, the engine deterministically composes the exact cue into validated display text exactly once. Empty-cue behavior is unchanged, failure output remains empty, and no narration artifact is persisted.
-
-Sprint 10.7 completes the Sprint 10.5 through 10.7 pressure capability cluster: one declared conversation consequence, canonical read-only pressure applicability, and one declared elapsed-time consequence. One optional immutable Region Pack declaration, `elapsed_time_pressure_effect`, may target one seeded pressure and one exact level. `GameEngine.advance_time` evaluates it only when accepted advancement satisfies `previous_elapsed_hours < trigger_elapsed_hours <= new_elapsed_hours`. Time calculation remains pure in `timekeeper`; declaration validation belongs to `region_validator`; pressure preparation remains in `pressure_state`.
-
-The engine prepares time, the `time_advanced` source record, any material linked `pressure_changed` consequence, validation, and the rebuilt scene against a copied World State before committing World State and scene once. A same-level target is a validated consequence no-op: time and source history commit, but pressure history does not. Durable elapsed time supplies one-shot behavior, so no fired flag or other persistence field exists.
-
-Sprint 10.8 corrects command orchestration to conform to ADR-041: a successful `wait` returns immediately after `advance_time`, so the command performs no generic interaction application and has exactly one validation, one scene build, and one live commit boundary.
-
-`GameSession` owns construction of new, loaded, and reset gameplay sessions. `GameEngine` remains the gameplay-facing orchestration facade and delegates lifecycle construction to the session layer.
-
-
-## Command Routing
-
-Player-facing commands should enter through the existing gameplay command path. The Interaction Kernel converts supported player input patterns into structured interaction results. `GameEngine` remains responsible for routing those results to the appropriate engine behavior.
-
-Sprint 8.2 extends this principle to explicit skill-check commands. The CLI may display skill-check results, but it must not bypass `GameEngine` by calling `engine.skill_check` directly.
-
-Sprint 9.2 extends this principle to the explicit `wait` command. The Interaction Kernel recognizes the narrow command shape, and `GameEngine` performs the time advancement through the gameplay-facing facade.
-
-Sprint 9.3 exposes narrow history review commands through the CLI, while keeping the query behavior behind the `GameEngine` facade. Front ends may request recent, event-type, or location-filtered history, but they do not interpret history or mutate history internals.
-
-Sprint 9.4 requires normal history review paths to use bounded query defaults. Full durable history access may remain available for internal inspection, but it is not the default gameplay or CLI review path.
-
-Sprint 9.5 adds stable history entry identity. The CLI may expose a narrow `history id <history_id>` review command, but front ends still do not assign, alter, reinterpret, or mutate history identifiers.
-
-Sprint 9.6 adds a narrow `history context` review path for the bounded history context packet. Front ends may display the packet for manual review, but they must not treat it as full memory, reinterpret history, summarize history, omit identifiers, or trigger world evolution.
-
-Sprint 9.7 adds a narrow `narration context <player input>` review path for the narration context packet. Front ends may inspect the packet for debugging, but they must not treat it as final narration, create durable facts from atmospheric prose, call an AI model, validate generated narration, add equipment or exposure mechanics, or trigger world evolution.
-
-Sprint 9.8 adds a narrow `narration output` review path for the narration output contract and fixed sample validation. Front ends may inspect the contract or confirm that a structured mutation sample is rejected, but they must not call an AI model, generate final AI narration, replace existing gameplay output with narration output, create durable facts from prose, implement semantic prose analysis, or trigger world evolution.
-
-Sprint 9.9 adds a narrow `narration preview <player input>` review path for the deterministic narration pipeline stub. Front ends may inspect the preview packet or display the fixed sample prose returned by the pipeline, but they must not treat it as generated narration, introduce provider integration, persist narration, or trigger world evolution.
-
-Sprint 9.10 adds a deterministic narration candidate-source boundary beneath the preview path. Front ends may still inspect the preview packet or display the validated fixed sample prose, but source output is now treated as untrusted until the existing narration output contract accepts it. Source failures, malformed results, and invalid candidates fail closed without display text, state mutation, history creation, or time advancement.
-
-Sprint 9.11 adds a deterministic narration request packet between narration context and the candidate source. Front ends may still inspect the preview packet or display the validated fixed sample prose, but the candidate source now receives the request packet rather than raw narration context. Request-construction and request-validation failures fail closed without display text, state mutation, history creation, or time advancement.
-
-## Skills
-
-The skill system begins with deterministic check resolution. `engine.skill_check` returns structured results containing the check name, target difficulty, deterministic result value, and success state. `GameEngine.perform_skill_check` is the gameplay-facing entry point.
-
-Skill-check commands should be routed through the normal command-processing flow. The Interaction Kernel may identify explicit skill-check command patterns and produce structured interaction results; `GameEngine` then resolves the check.
-
-The current implementation does not include dice rolling, character progression, inventory modifiers, combat rules, broad natural-language parsing, or AI adjudication. Front ends depend on `GameEngine`, not the lower-level skill-check module.
-
-
-## Target Resolution
-
-Target resolution is a deterministic support layer between parsed player intent and simulation behavior. Its first scope is current-scene resolution only: visible entities and available exits.
-
-The resolver should answer what current-scene thing the player appears to be referring to, not decide whether an action succeeds, perform travel, search off-scene locations, consult NPC memory, or invoke AI interpretation.
-
-`GameEngine` remains the gameplay-facing facade. Front ends should not call lower-level target-resolution modules directly.
-
-Sprint 8.3 introduces this layer narrowly so future systems such as conversation, examination, interaction, and destination travel can share one deterministic target-resolution boundary.
-
-
-## Destination Resolution
-
-Destination resolution is a deterministic support layer for player commands that refer to places, such as "head to the blacksmith" or "go to the inn".
-
-Sprint 8.4 scopes this layer to identifying known locations from loaded region data. Destination resolution produces structured results that say whether a destination was resolved, ambiguous, or unknown.
-
-Destination resolution does not execute travel. It must not move the player, calculate a route, perform fast travel, advance time, trigger encounters, or narrate a journey. Those behaviors belong to later travel and world-simulation systems.
-
-`GameEngine` remains the gameplay-facing facade. Front ends should not call lower-level destination-resolution modules directly.
-
-## Evidence Traces and Deterministic Local Discovery
-
-Evidence traces are hidden opaque World State records with an exact location.
-Region Packs own immutable discovery declarations and player-facing text.
-World State owns sparse discovered declaration identifiers. The investigation
-command routes through the Interaction Kernel and GameEngine, considers only
-traces at the player current location, and selects at most one eligible
-declaration in authored order. A material discovery and durable history entry
-validate and commit atomically with the rebuilt Scene Snapshot. Unknown saved
-membership identifiers fail Region-aware validation; missing version-1 legacy
-membership normalizes empty. Trace and discovery internals do not enter Scene
-Snapshots, ordinary perception, narration packets, dialogue, targeting, or
-actor knowledge.
-
-## Delayed-Watch Discovery Actor Recall
-
-One optional immutable `conversation_discovery_actor_relocation` declaration
-binds The Delayed Watch Mark to locally resolved Captain Grey and the North
-Gate. Exact discovery/target pair selection keeps it structurally separate from
-the west-road presentation, without ordering or precedence. The existing
-clue-presented source and non-committing relocation helper prepare a candidate,
-then one validation, scene build, and publication complete the transition.
-Already being at the North Gate is a relocation no-op with no `actor_moved`
-history. Discovery remains unconsumed and save version remains 1.
-
-## One-Hour West-Road Exit Traversal
-
-One optional immutable `one_hour_west_road_exit_traversal` declaration supports
-only the existing directed West Gate to Western Trade Road exit with duration
-one hour. On the exact local movement, `GameEngine` prepares the existing time
-transition at the command-start source, then applies completed movement in the
-same candidate. History is time source, any causal time consequences, then
-player movement. Validation and one destination Scene Snapshot build precede
-the sole publication. All other movement remains instantaneous; there is no
-general travel system or save-schema change.
-
-## Western Trade Road Arrival Discovery
-
-One optional immutable `west_road_arrival_evidence_trace` declaration binds
-only the accepted West Gate to Western Trade Road one-hour traversal to one
-hidden trace and matching local discovery declaration. The trace represents
-evidence created, exposed, or made locally discoverable by the completed
-arrival; it does not describe arbitrary pre-existing roadside evidence as
-physically caused by player movement.
-
-After existing time preparation and completed `player_movement`, the traversal
-candidate prepares the absent trace with the new movement history identifier as
-its backward `source_history_id`. Final validation and one destination Scene
-Snapshot build still precede the sole publication. The trace does not enter the
-movement result, Scene Snapshot, perception, narration, targeting,
-conversation, actor knowledge, or thread observation. Existing local
-`investigate` remains the sole discovery boundary. Repeated arrivals retain
-normal movement and time behavior but add no duplicate trace history.
-
-## Discovery-Gated Conversation Affordance
-
-One optional immutable `conversation_affordance` declaration may name one
-affordance identity, one Region Pack location, one stable static actor, one
-existing player discovery, and exact display text. The declaration is valid
-only when its actor-and-discovery pair exactly matches the existing
-`conversation_player_discovery_response`, its location exists, and the actor is
-authored at that location or can reach it through the existing resolved-thread
-relocation declaration.
-
-`GameEngine.get_player_perception()` derives the affordance from only the
-player's current location, visible static actor presence in the current scene,
-and owned player discovery membership. The optional singleton projection has
-only `affordance_id`, `display_text`, `command_text`, and
-`target_display_name`; it exposes no entity, discovery, evidence, history, or
-eligibility internals. `command_text` is informational deterministic text for
-the existing `talk` command. It does not add parsing, aliases, execution
-tokens, or command authority.
-
-The derived record may appear on every eligible perception reconstruction,
-including re-entry and save/load. It creates no World State, history, causal
-reference, acknowledgement, once-only presentation, transaction, persistence,
-or save-schema behavior. Existing conversation and target-resolution paths
-remain independently authoritative when the player uses `talk`.
-
-## Sprint 10.19 Conversation Actor-Knowledge Consequence
-
-One optional immutable `conversation_actor_knowledge_effect` composes with the successful resolved-conversation candidate transition. Its declared trigger actor, receiving stable static actor, and opaque knowledge identifier add one absent membership only after the new accepted `player_conversation` entry exists in the candidate. That entry is the structural `source_history_id` of the resulting `actor_knowledge_added` entry. Existing pressure, actor-location, and unresolved-thread consequences retain their candidate composition; final validation and one Scene Snapshot build precede the sole live commit. Duplicate knowledge adds no membership or lifecycle entry while the new successful conversation still records normally. The declaration is not persisted or replayed, and knowledge remains absent from scene, perception, narration, dialogue, targeting, and CLI behavior.
+For ordinary bounded work, use the current capability package, current sprint, and specifically named ADRs.

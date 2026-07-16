@@ -1,47 +1,16 @@
-# TASK.md
+# Current Task
 
-## Current Task
+The authorized implementation scope is defined by:
 
-Implement only the current sprint defined in:
+* `docs/current_capability_package.md`
+* `docs/current_sprint.md`
 
-- `docs/current_sprint.md`
+Implement only the active sprint within the authorized capability package.
 
-Before writing code, read:
+The sprint must define its goal, expected files, acceptance criteria, and verification.
 
-- `AGENTS.md`
-- `PROJECT.md`
-- `docs/development_workflow.md`
-- `docs/project_constitution.md`
-- `docs/architecture.md`
-- `docs/current_sprint.md`
-- `docs/project_structure.md`
-- `docs/roadmap.md`
-- `docs/decisions.md`
+Do not invent missing task requirements or expand scope.
 
-## Required Behavior
+Follow `AGENTS.md` for execution rules and `WORKFLOW.md` for task lifecycle and verification.
 
-Perform the mandatory Startup Review.
-
-Confirm `docs/current_sprint.md` contains:
-
-- Goal
-- Expected Files
-- Acceptance Criteria
-- Verification
-
-For an owner-approved capability package recorded in
-`docs/current_capability_package.md`, the lead agent may define and stage one
-accepted internal milestone at a time, then progress sequentially without
-routine owner interruption. Exactly one sprint remains active and all canonical
-manifest, verification, and meaningful-stop-condition rules still apply.
-
-If any section is missing, stop and request only the missing sprint definition.
-
-Do not invent missing sprint details.
-
-Do not begin work outside the accepted package or begin the next capability
-package automatically.
-
-Do not modify files outside the current sprint scope unless reporting the need first.
-
-Run the documented verification command before declaring completion.
+Additional architecture or ADR context should be read only when the current package or sprint identifies it or the work requires it.
