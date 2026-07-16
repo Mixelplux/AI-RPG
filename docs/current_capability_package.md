@@ -1,6 +1,18 @@
+# Current Capability Package
+
+No capability package is currently active or authorized. The most recent
+terminal package record is retained below for identity and closeout context.
+
+## Most Recent Terminal Package
+
 # Sprint 10.61 - Derived Player-Safe Navigation Projection
 
-Status: Ready for independent review.
+Status: Complete.
+
+Review state: Merged.
+
+No following capability package is authorized, staged, branched, or started.
+`next_sprint` remains `null`.
 
 ## Value and Scope
 
@@ -26,5 +38,6 @@ behavior, or Region Pack gameplay content.
 
 The derived projection, scene presentation, focused player-safety,
 non-mutation, determinism, movement, and save/load coverage are complete.
-Provider-safe regressions passed. The package is ready for independent review
-on a committed, clean feature-branch candidate; `next_sprint` remains `null`.
+Provider-safe regressions passed. The accepted candidate was strict
+fast-forward merged into `main`; no following capability package is active or
+authorized, and `next_sprint` remains `null`.
