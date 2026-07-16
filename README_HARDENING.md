@@ -24,13 +24,13 @@ Open PowerShell in the AI Narrative RPG Engine repository. Review `git status` a
 Extract the ZIP into a temporary folder. Run the package validator from the extracted package root:
 
 ```powershell
-pwsh -NoProfile -File .\tools\validate_hardening_package.ps1 -PackageRoot .
+pwsh -NoProfile -File .\tools\validate_project_records.ps1 -ProjectRoot .
 ```
 
 If `pwsh` is not installed but Windows PowerShell is available, the same script can be run with:
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\validate_hardening_package.ps1 -PackageRoot .
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\validate_project_records.ps1 -ProjectRoot .
 ```
 
 The validator must report that all three manifests agree, required files exist, policy invariants hold, and both PowerShell scripts parse.
@@ -70,7 +70,7 @@ Follow `docs\workflow\AGENTS_WORKFLOW_PATCH.md`. Add the canonical toolchain rul
 From the repository root, run:
 
 ```powershell
-pwsh -NoProfile -File .\tools\validate_hardening_package.ps1 -PackageRoot .
+pwsh -NoProfile -File .\tools\validate_project_records.ps1 -ProjectRoot .
 ```
 
 This does not use Python.
