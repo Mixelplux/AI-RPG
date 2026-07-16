@@ -2,35 +2,35 @@
   "schema_version": "1.0.0",
   "document_type": "current_sprint",
   "sprint_count": 1,
-  "active_sprint": null,
-  "active_capability_package": null,
+  "active_sprint": "10.62",
+  "active_capability_package": "10.62",
   "project": {
     "name": "AI Narrative RPG Engine",
     "principles": ["provider-neutral", "deterministic-core", "simulation-owned-truth"]
   },
   "sprint": {
-    "id": "10.61",
-    "title": "Derived Player-Safe Navigation Projection",
+    "id": "10.62",
+    "title": "Derived Player-Safe Contextual Action Projection",
     "type": "capability-package",
     "mode": "capability-package",
-    "status": "complete",
-    "review_state": "merged",
-    "goal": "Project immediate player-perceivable navigation opportunities into natural scene presentation without giving the projection simulation authority or changing the established movement path.",
-    "predecessor": {"id": "10.60", "status": "complete", "review_state": "merged"},
+    "status": "review_ready",
+    "review_state": "independent_review_pending",
+    "goal": "Project fixed, legitimate contextual action opportunities into player-safe scene presentation without changing the established command and resolver paths.",
+    "predecessor": {"id": "10.61", "status": "complete", "review_state": "merged"},
     "platform": {"official_interpreter": ".\\.venv\\Scripts\\python.exe", "save_version": 1, "provider_requests": "forbidden"},
     "expected_files": {
-      "likely_modified": ["engine/perception_builder.py", "engine/scene_narrator.py", "engine/game_engine.py", "docs/current_capability_package.md", "docs/current_sprint.md", "docs/current_sprint.json"],
-      "likely_created": ["engine/navigation_projection.py", "test_navigation_projection.py", "handoffs/derived-player-safe-navigation-projection-10.61-<short-head>.zip"]
+      "likely_modified": ["engine/game_engine.py", "engine/perception_builder.py", "engine/scene_narrator.py", "docs/current_capability_package.md", "docs/current_sprint.md", "docs/current_sprint.json"],
+      "likely_created": ["engine/action_eligibility.py", "engine/contextual_action_projection.py", "test_contextual_action_projection.py", "handoffs/derived-player-safe-contextual-action-projection-10.62-<short-head>.zip"]
     },
     "acceptance_criteria": [
-      "A direct, authored current-scene route is presented with natural orientation and destination language.",
-      "The projection contains no internal identifiers, no non-adjacent geography, and no route whose destination cannot be safely presented.",
-      "Repeated projection is deterministic and non-mutating; save/load and the existing movement path remain compatible.",
-      "Save version remains 1; provider/API requests are forbidden; next_sprint remains null."
+      "Only the four authorized opportunity categories are projected as deterministic, player-safe natural-language text.",
+      "Existing investigation and clue-presentation eligibility rules are reused without creating a second resolver or generic action framework.",
+      "Projection derivation is non-mutating and nonpersistent, reconstructs after save/load, and save version remains 1.",
+      "Stale displayed opportunities remain independently validated by existing deterministic resolvers and next_sprint remains null."
     ],
     "verification": {
       "staging_commands": ["Official-interpreter preflight through the established workspace procedure", "Canonical record validation", "git diff --check"],
-      "focused_commands": ["Focused navigation projection tests", "Affected movement, scene narration, perception, and save/load regressions", "Provider-safe regressions only"],
+      "focused_commands": ["Focused contextual action projection tests", "Affected movement, conversation, investigation, discovery, clue presentation, narration, and save/load regressions", "Provider-safe regressions only"],
       "closeout_commands": ["Official-interpreter preflight", "Canonical record validation", "git diff --check", "Clean committed review-candidate Git evidence", "Required review-packet assembly and validation"]
     },
     "execution_phases": [
@@ -40,14 +40,13 @@
       {"id": "review-candidate", "status": "complete"}
     ],
     "governance": [
-      "No sprint or capability package is currently active or staged.",
-      "The projection is derived from current-scene exits and authored geography; it is not persistent World State.",
-      "No parser expansion, movement redesign, provider/API request, or follow-on capability is authorized.",
+      "The projection is derived presentation only and is not persistent World State.",
+      "No parser, declaration, schema, provider, save-version, generic-action, or generic-affordance expansion is authorized.",
       "Save version remains 1 and next_sprint remains null."
     ],
     "closeout": {
       "allowed_terminal_statuses": ["complete", "blocked"],
-      "verification_result": "Focused navigation tests and the complete local deterministic regression suite passed. No live provider/API request occurred; provider coverage used fake transport only. The candidate preserves save version 1 and next_sprint null. The accepted candidate was strict-fast-forward merged into main.",
+      "verification_result": "Focused contextual-action coverage, affected regressions, and the complete local deterministic suite passed. No live provider request occurred. The candidate preserves save version 1 and next_sprint null.",
       "next_sprint": null
     }
   }

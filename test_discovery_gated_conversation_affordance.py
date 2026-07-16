@@ -104,7 +104,7 @@ def test_projection_and_existing_talk_authority():
     assert set(perception["conversation_affordance"]) == set(AFFORDANCE)
     assert DISCOVERY not in repr(perception["conversation_affordance"])
     assert ACTOR not in repr(perception["conversation_affordance"])
-    assert engine.get_narration()["description"].find(AFFORDANCE["display_text"]) == -1
+    assert AFFORDANCE["display_text"] in engine.get_narration()["description"]
     result = engine.process_command(perception["conversation_affordance"]["command_text"])
     assert result["success"]
     assert result["player_discovery_response"] == {

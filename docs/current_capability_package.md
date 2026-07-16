@@ -1,43 +1,40 @@
-# Current Capability Package
+# Sprint 10.62 - Derived Player-Safe Contextual Action Projection
 
-No capability package is currently active or authorized. The most recent
-terminal package record is retained below for identity and closeout context.
+Status: Ready for independent review.
 
-## Most Recent Terminal Package
-
-# Sprint 10.61 - Derived Player-Safe Navigation Projection
-
-Status: Complete.
-
-Review state: Merged.
-
-No following capability package is authorized, staged, branched, or started.
-`next_sprint` remains `null`.
+Review state: Independent review pending.
 
 ## Value and Scope
 
-Make immediate, legitimate movement opportunities legible in scene narration by
-deriving a player-safe navigation projection from the existing current-scene
-exits and authored location data. The projection is nonpersistent and does not
-change command interpretation, movement resolution, save format, provider
-behavior, or Region Pack gameplay content.
+Derive a fixed, nonpersistent, player-safe set of contextual action opportunities
+from existing authoritative state and authored declarations. The projection is
+presentation only and has no simulation authority.
+
+## Authorized Categories
+
+- Speak with a visible, uniquely targetable, named static actor.
+- Investigate the current location when an undiscovered declared discovery is
+  currently eligible through the existing investigation path.
+- Present an already discovered clue to a visible authored target only when the
+  existing deterministic clue-presentation path currently accepts it.
+- Surface the existing discovery-gated conversation affordance through its
+  existing player-safe projection.
 
 ## Boundaries
 
-- Surface only directly connected exits in the current scene whose destination
-  is authored and has a player-facing name.
-- Use natural spatial language; do not show location identifiers, global map
-  topology, hidden locations, or implementation data.
-- Reuse the existing movement resolution and state-mutation path unchanged.
-- Keep save version `1`, `next_sprint` `null`, and all provider/API requests
-  forbidden.
-- Do not begin contextual action surfacing, elapsed-time narration, parser
-  expansion, travel redesign, or another capability.
+- Reuse or narrowly extract existing investigation and clue-presentation
+  eligibility rules; do not duplicate resolver authority.
+- Produce deterministic natural-language opportunity text only; never expose
+  identifiers, hidden state, command syntax, or eligibility reasons.
+- Do not change parsing, action resolution, declarations, Region Packs, save
+  data, or save version. Save version remains `1`.
+- The projection is derived afresh, non-mutating, and absent from saves.
+- No generic action or affordance framework, persistent menu state, provider
+  work, or following package is authorized. `next_sprint` remains `null`.
 
 ## Completion
 
-The derived projection, scene presentation, focused player-safety,
-non-mutation, determinism, movement, and save/load coverage are complete.
-Provider-safe regressions passed. The accepted candidate was strict
-fast-forward merged into `main`; no following capability package is active or
-authorized, and `next_sprint` remains `null`.
+Implementation and focused category, negative, non-mutation, stale-action,
+save/load, affected-regression, and full deterministic suite coverage passed.
+The result is ready for independent review once committed with its validated
+package-review archive. `next_sprint` remains `null`.

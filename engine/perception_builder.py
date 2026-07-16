@@ -9,6 +9,7 @@ def build_perception(
     resolved_thread_observation: Dict[str, str] | None = None,
     conversation_affordance: Dict[str, str] | None = None,
     navigation_projection: Dict[str, Any] | None = None,
+    contextual_action_projection: Dict[str, Any] | None = None,
 ) -> Dict[str, Any]:
     """
     Convert a Scene Snapshot into a Perception Snapshot.
@@ -63,4 +64,8 @@ def build_perception(
         "conversation_affordance": deepcopy(conversation_affordance or {}),
 
         "navigation": deepcopy(navigation_projection or {"routes": []}),
+
+        "contextual_actions": deepcopy(
+            contextual_action_projection or {"opportunities": []}
+        ),
     }

@@ -56,6 +56,11 @@ from engine.actor_knowledge import get_actor_knowledge as get_world_actor_knowle
 from engine.actor_knowledge_response import derive_conversation_actor_knowledge_response
 from engine.player_discovery_response import derive_conversation_player_discovery_response
 from engine.conversation_affordance import derive_conversation_affordance
+from engine.action_eligibility import (
+    find_eligible_investigation_discovery,
+    is_clue_presentation_acceptable,
+)
+from engine.contextual_action_projection import derive_contextual_action_projection
 from engine.evidence_traces import (
     get_evidence_trace as get_world_evidence_trace,
     get_evidence_traces as get_world_evidence_traces,
@@ -150,14 +155,7 @@ class GameEngine:
     def investigate(self) -> Dict[str, Any]:
         candidate = copy_world_state(self.world_state)
         location_id = get_player_location_id(candidate)
-        trace_ids = {
-            trace["trace_id"]
-            for trace in candidate["evidence_traces"]
-            if trace["location_id"] == location_id
-        }
-        declaration = next((item for item in self.region.get("discovery_declarations", [])
-                            if item["location_id"] == location_id and item["trace_id"] in trace_ids
-                            and item["discovery_id"] not in candidate["player_discoveries"]), None)
+        declaration = find_eligible_investigation_discovery(self.region, candidate)
         result = {"changed": False, "discovery_id": None, "text": None, "history_id": None}
         if declaration is None:
             return result
@@ -180,23 +178,17 @@ class GameEngine:
             return result
         clue = next((item for item in self.region.get("discovery_declarations", []) if item["title"].casefold() == clue_title.casefold()), None)
         target = self.resolve_target(actor_text)
-        if (clue is None or clue["discovery_id"] not in self.world_state["player_discoveries"]
-                or target["status"] != "resolved" or target["target_type"] != "entity"):
+        if not is_clue_presentation_acceptable(
+            self.region, self.world_state, clue, target
+        ):
             return result
         declaration = self.region.get("conversation_discovery_resolution")
         recall = self.region.get("conversation_discovery_actor_relocation")
-        resolution_matches = (
-            isinstance(declaration, dict)
-            and clue["discovery_id"] == declaration["required_discovery_id"]
-            and target["identifier"] == declaration["target_entity_id"]
-        )
         recall_matches = (
             isinstance(recall, dict)
             and clue["discovery_id"] == recall["required_discovery_id"]
             and target["identifier"] == recall["target_entity_id"]
         )
-        if not resolution_matches and not recall_matches:
-            return result
         if recall_matches:
             candidate = copy_world_state(self.world_state)
             candidate = add_history_entry(
@@ -847,6 +839,12 @@ class GameEngine:
             applicable,
             self.region.get("pressure_observation_cue"),
         )
+        conversation_affordance = derive_conversation_affordance(
+            self.region,
+            get_player_location_id(self.world_state),
+            self.scene_snapshot,
+            tuple(self.world_state["player_discoveries"]),
+        )
         return build_perception(
             self.scene_snapshot,
             [] if cue is None else [cue],
@@ -861,15 +859,16 @@ class GameEngine:
                 self.region.get("conversation_discovery_resolution"),
                 get_player_location_id(self.world_state),
             ),
-            derive_conversation_affordance(
-                self.region,
-                get_player_location_id(self.world_state),
-                self.scene_snapshot,
-                tuple(self.world_state["player_discoveries"]),
-            ),
+            conversation_affordance,
             derive_navigation_projection(
                 self.scene_snapshot,
                 self.region.get("locations", []),
+            ),
+            derive_contextual_action_projection(
+                self.region,
+                self.world_state,
+                self.scene_snapshot,
+                conversation_affordance,
             ),
         )
 

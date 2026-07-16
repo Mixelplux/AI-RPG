@@ -68,6 +68,13 @@ def format_navigation(routes: List[Dict[str, str]]) -> str | None:
     return "From here, " + " ".join(phrases)
 
 
+def format_contextual_actions(opportunities: List[str]) -> str | None:
+    """Render already player-safe, advisory opportunity text."""
+
+    texts = [text for text in opportunities if isinstance(text, str) and text]
+    return " ".join(texts) if texts else None
+
+
 def narrate_scene(perception_snapshot: Dict[str, Any]) -> Dict[str, Any]:
     """
     Convert a Perception Snapshot into a structured narrative object.
@@ -86,6 +93,7 @@ def narrate_scene(perception_snapshot: Dict[str, Any]) -> Dict[str, Any]:
     entities = perception["visible"]["entities"]
     resolved_thread_observation = perception.get("resolved_thread_observation", {})
     navigation = perception.get("navigation", {})
+    contextual_actions = perception.get("contextual_actions", {})
 
     location_name = location.get("name", "Unknown Location")
     description_seed = location.get("description_seed", "")
@@ -138,10 +146,17 @@ def narrate_scene(perception_snapshot: Dict[str, Any]) -> Dict[str, Any]:
     if navigation_text:
         description_parts.append(navigation_text)
 
+    contextual_action_text = format_contextual_actions(
+        contextual_actions.get("opportunities", [])
+    )
+    if contextual_action_text:
+        description_parts.append(contextual_action_text)
+
     return {
         "title": f"{location_name}, Bryn Shander",
         "description": "\n\n".join(description_parts),
         "visible_entities": visible_entity_names,
         "navigation": deepcopy(navigation.get("routes", [])),
+        "contextual_actions": deepcopy(contextual_actions.get("opportunities", [])),
         "player_prompt": "What do you do?"
     }
