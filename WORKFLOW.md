@@ -180,11 +180,40 @@ Architecture or sequencing analysis may recommend a next candidate. Implementati
 
 # Handoff Rules
 
-For Codex prompts:
+## Classification and Authority
 
-- place the recommended reasoning level immediately below `Project: AI Narrative RPG Engine`;
-- keep context-transfer or copy blocks limited to operational context and instructions;
-- place owner approve, revise, reject, or authorize requests outside the copy block or in a separately labeled owner-action section.
+Classify every handoff by its purpose:
+
+- **Execution handoff (Chat → Codex):** perform one already-authorized bounded objective.
+- **Review handoff (Codex → Chat):** independently assess a completed candidate.
+- **Escalation (Codex → Chat/owner):** report material ambiguity, missing authority, or a decision that Codex cannot make.
+- **Owner action:** a separately identified request for the owner to approve, revise, reject, or authorize something.
+
+The transport destination does not confer decision authority. For example, “copy to new chat” and “copy to Codex” identify where context is sent, not who has owner authority.
+
+A context-transfer block intended for a new chat or Codex contains operational context and instructions only. Do not end it with an approval, rejection, revision, or authorization request unless that recipient is explicitly the decision owner. Put owner-action requests outside the context-transfer block or in a separately labeled **Owner action** section.
+
+For Codex prompts, place the recommended reasoning level immediately below `Project: AI Narrative RPG Engine`.
+
+## Content Discipline
+
+Use a pointer-first, necessity-tested handoff. Include information only when the receiver would realistically be unable to execute, review, or safely stop without it.
+
+Prefer reliable canonical pointers over reproduced history, rationale, or logs: commit SHAs and branches; canonical document paths; ADR, capability-package, or sprint identifiers; file paths; evidence or review-packet references; and line ranges when useful. Do not use a line range as the sole durable identity for important material.
+
+This is a default discipline, not an absolute prohibition: include the context necessary for safe execution or review, but do not duplicate canonical state, long logs, or historical explanation when a reliable pointer is sufficient.
+
+## Receiving-Side Validation
+
+Before acting on a handoff, determine that it provides:
+
+- one bounded objective;
+- sufficient information to execute or review that objective;
+- clear authority already granted for the requested action;
+- explicit material constraints and stop conditions; and
+- a testable or observable completion condition.
+
+If material scope, authority, or execution information is missing, stop and escalate rather than infer new scope or authority. Do not escalate for harmless omissions that do not affect safe execution or review.
 
 ---
 
