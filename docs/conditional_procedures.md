@@ -102,10 +102,9 @@ mutate simulation truth.
 **Trigger:** Work proposes a save-version change, a compatibility migration,
 or a persistence-model change.
 
-**Load:** `AGENTS.md`, `WORKFLOW.md`, `docs/architecture.md`,
-`docs/schemas/savegame_schema.md`, the applicable ADRs in
-`docs/decisions.md`, and the directly affected save/load implementation and
-tests.
+**Load:** `AGENTS.md`, `WORKFLOW.md`, `docs/architecture.md`, the applicable
+ADRs in `docs/decisions.md`, and the directly affected save/load
+implementation and tests.
 
 **Rules:** Stop for owner authorization before implementation. Define the
 version transition, compatibility behavior, atomicity, and verification before
