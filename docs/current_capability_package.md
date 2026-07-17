@@ -1,47 +1,49 @@
-# Current Capability Package
+# Sprint 10.64 - One Derived Player-Safe Elapsed-Time Transition Observation
 
-No capability package is currently active or authorized. The most recent
-terminal package record is retained below for identity and closeout context.
+Status: Planned.
 
-## Most Recent Terminal Package
-
-# Sprint 10.63 - One-Time Consequence-Bearing Conversation Response
-
-Status: Complete.
-
-Review state: Merged.
-
-No following capability package is authorized, staged, branched, or started.
-`next_sprint` remains `null`.
+Review state: Staged for bounded implementation.
 
 ## Goal
 
-Correct the repeated Elin consequence-bearing response found in playtesting.
-The response may occur once after its qualifying discovery and must record the
-declared patrol-dispatch consequence as canonical history so it cannot recur.
+For the existing accepted one-hour `wait` transition, derive one deterministic,
+nonpersistent, player-safe observation that says an hour passed and, when
+applicable, names one material change in the presence of an authored actor
+visible at the command start.
 
 ## Authorized Scope
 
-- Reuse canonical World State history to establish whether the declared West
-  Gate patrol-dispatch consequence has already occurred.
-- Apply that declared consequence atomically with the first eligible Elin
-  conversation, and suppress the special response and its affordance after it.
-- Preserve ordinary conversations, deterministic behavior, save version `1`,
-  save/load behavior, and the player-safe derived projection boundary.
-- Add focused coverage for first use, repeat prevention, no duplicate
-  consequence, and save/load persistence.
+- Operate only on the accepted one-hour `wait` transition and preserve its
+  existing simulation-owned candidate-state transition.
+- Compare only command-start and completed player-visible scene state to derive
+  one presentation result after the transition has been accepted.
+- Emit deterministic, bounded wording: `An hour passes.` followed, when
+  applicable, by `{actor display name} is no longer at the {location name}.`
+  for one visible actor's material absence from the current location.
+- Keep the observation derived, non-mutating, nonpersistent, and reconstructible
+  from the transition inputs; it must not become World State, history, save
+  data, or narration context.
+- Preserve existing actor-location authority, player-safe projection boundaries,
+  save/load compatibility, and save version `1`.
 
 ## Boundaries
 
-- Do not add a generic dialogue-consumption flag or system.
-- Do not change parsing, region-pack scope beyond the one declaration, save
-  schema/version, providers, or contextual-cue wording.
-- Do not start another package; `next_sprint` remains `null`.
+- Do not add a generic scene-diff, World State comparison, transition, or
+  elapsed-time narration framework.
+- Do not add persistent World State fields, history event types, observation
+  history, parser or command changes, migrations, or save-version changes.
+- Do not reveal cause, trigger, history identifier, pressure, evidence,
+  internal consequence identifier, or other simulation-only information.
+- Do not cover travel transitions, automatic investigation or discovery, later
+  discovery/use presentation, AI/provider-generated prose, provider changes,
+  or unrelated Sprint 10.60 findings.
+- `next_sprint` remains `null`; no following package is authorized.
 
 ## Completion
 
-Focused conversation, discovery, evidence, thread-resolution, relocation,
-travel, contextual-action projection, narration-preview, and save/load
-regressions passed. The accepted candidate was strict-fast-forward merged into
-`main`; no following capability package is active or authorized, and
-`next_sprint` remains `null`.
+The bounded implementation must prove deterministic one-hour wording, one
+eligible visible-actor absence observation, no observation when no qualifying
+visible change occurs, non-mutation and non-persistence, and affected wait,
+actor-relocation, save/load, interaction, narration-preview, and provider-safe
+regressions. A separately authorized review candidate is required after
+implementation; staging alone does not authorize implementation or review.

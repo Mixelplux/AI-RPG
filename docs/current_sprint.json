@@ -2,52 +2,53 @@
   "schema_version": "1.0.0",
   "document_type": "current_sprint",
   "sprint_count": 1,
-  "active_sprint": null,
-  "active_capability_package": null,
+  "active_sprint": "10.64",
+  "active_capability_package": "10.64",
   "project": {
     "name": "AI Narrative RPG Engine",
     "principles": ["provider-neutral", "deterministic-core", "simulation-owned-truth"]
   },
   "sprint": {
-    "id": "10.63",
-    "title": "One-Time Consequence-Bearing Conversation Response",
-    "type": "correctness-correction",
-    "mode": "maintenance",
-    "status": "complete",
-    "review_state": "merged",
-    "goal": "Make the discovery-gated Elin patrol-dispatch response and its declared canonical consequence occur exactly once.",
-    "predecessor": {"id": "10.62", "status": "complete", "review_state": "merged"},
+    "id": "10.64",
+    "title": "One Derived Player-Safe Elapsed-Time Transition Observation",
+    "type": "capability-package",
+    "mode": "capability-package",
+    "status": "planned",
+    "review_state": "staged_for_bounded_implementation",
+    "goal": "For the accepted one-hour wait transition, derive one deterministic, nonpersistent, player-safe observation from command-start and completed player-visible state that says an hour passed and, when applicable, one authored actor is no longer present.",
+    "predecessor": {"id": "10.63", "status": "complete", "review_state": "merged"},
     "platform": {"official_interpreter": ".\\.venv\\Scripts\\python.exe", "save_version": 1, "provider_requests": "forbidden"},
     "expected_files": {
-      "likely_modified": ["data/regions/bryn_shander.json", "engine/player_discovery_response.py", "engine/conversation_affordance.py", "engine/game_engine.py", "engine/region_validator.py", "test_discovery_gated_relocated_actor_response.py", "test_discovery_gated_conversation_affordance.py", "docs/current_capability_package.md", "docs/current_sprint.md", "docs/current_sprint.json"],
-      "likely_created": ["handoffs/one-time-consequence-bearing-conversation-response-10.63-<short-head>.zip"]
+      "likely_modified": ["engine/game_engine.py", "test_time_actor_relocation.py", "test_save_load.py", "docs/current_capability_package.md", "docs/current_sprint.md", "docs/current_sprint.json"],
+      "likely_created": ["engine/elapsed_time_transition_observation.py", "test_elapsed_time_transition_observation.py", "handoffs/derived-player-safe-elapsed-time-transition-observation-10.64-<short-head>.zip"]
     },
     "acceptance_criteria": [
-      "Before the qualifying discovery, the Elin patrol-dispatch response remains unavailable.",
-      "The first eligible Elin conversation returns the authored response and applies one canonical patrol-dispatch consequence.",
-      "Subsequent Elin conversations do not repeat the response or consequence, including after save/load.",
-      "Existing unrelated conversations and nonpersistent player-safe projection behavior remain intact; save version remains 1 and next_sprint remains null."
+      "A successful accepted one-hour wait returns `An hour passes.`; a qualifying actor absence appends `{actor display name} is no longer at the {location name}.` Exact wording is deterministic and bounded to this transition.",
+      "When a material authored actor visible at wait start is no longer present at the same player location after the transition, the output names only that actor and their current-location absence in fixed deterministic selection order.",
+      "The observation derives only from command-start and completed player-visible scene state and adds no World State, history, save data, narration context, or simulation authority.",
+      "No hidden cause, trigger, history identifier, pressure, evidence, internal consequence identifier, or other simulation-only state is disclosed.",
+      "No qualifying visible change adds no actor-change clause; travel and non-wait transitions remain outside scope, save version remains 1, and next_sprint remains null."
     ],
     "verification": {
       "staging_commands": ["Official-interpreter preflight through the established workspace procedure", "Canonical record validation", "git diff --check"],
-      "focused_commands": ["Focused conversation response and affordance tests", "Affected discovery, evidence, thread-resolution, relocation, travel, contextual-action, narration-preview, and save/load regressions", "Provider-safe regressions only"],
+      "focused_commands": ["Focused elapsed-time transition observation tests", "Affected wait/time relocation, interaction history, save/load, perception, and narration-preview regressions", "Provider-safe regressions only; provider requests are forbidden"],
       "closeout_commands": ["Official-interpreter preflight", "Canonical record validation", "git diff --check", "Clean committed review-candidate Git evidence", "Required review-packet assembly and validation"]
     },
     "execution_phases": [
       {"id": "package-and-sprint-staging", "status": "complete"},
-      {"id": "one-time-consequence-correction", "status": "complete"},
-      {"id": "focused-verification", "status": "complete"},
-      {"id": "review-candidate", "status": "complete"}
+      {"id": "derived-wait-transition-observation", "status": "planned"},
+      {"id": "focused-verification", "status": "planned"},
+      {"id": "review-candidate", "status": "planned"}
     ],
     "governance": [
-      "No sprint or capability package is currently active or staged.",
-      "Use canonical World State history for the declared one-time patrol-dispatch consequence; do not add a generic dialogue-consumption flag or system.",
-      "Keep save version 1 and preserve save/load compatibility.",
-      "Do not change player-facing contextual-cue wording, parsing, providers, or next_sprint."
+      "Simulation owns the accepted wait transition and all persistent truth; the observation is deterministic, player-safe, derived presentation only.",
+      "Use only command-start and completed player-visible scene state; do not introduce generic scene-diff or World State comparison infrastructure.",
+      "Do not add persistence, history, parser, command, provider, narration architecture, migration, or save-version changes. Save version remains 1.",
+      "Provider requests are forbidden for automated verification, and next_sprint remains null."
     ],
     "closeout": {
       "allowed_terminal_statuses": ["complete", "blocked"],
-      "verification_result": "Focused response and affordance coverage, affected regressions, and all 38 local deterministic tests passed. No live provider request occurred. Save version remains 1 and next_sprint remains null. The accepted candidate was strict-fast-forward merged into main.",
+      "verification_result": "Staged only: canonical records and diff hygiene must validate before the staging commit. Implementation verification remains pending; provider requests are forbidden and save version remains 1.",
       "next_sprint": null
     }
   }

@@ -1,52 +1,54 @@
-# Current Sprint Record
+# Sprint 10.64 - One Derived Player-Safe Elapsed-Time Transition Observation
 
-No sprint is currently active. The most recent terminal sprint record is
-retained below for identity and closeout context.
+Status: Planned.
 
-## Most Recent Terminal Sprint
+Review state: Staged for bounded implementation.
 
-# Sprint 10.63 - One-Time Consequence-Bearing Conversation Response
-
-Status: Complete.
-
-Review state: Merged.
-
-`next_sprint` is `null`. No following sprint is authorized, staged, or
-started.
+`next_sprint` remains `null`.
 
 ## Goal
 
-Make the discovery-gated Elin patrol-dispatch response and its declared world
-consequence occur exactly once, using canonical persistent state.
+For one accepted one-hour `wait`, derive deterministic player-safe presentation
+from authoritative command-start and completed player-visible state: communicate
+that an hour passed and, when applicable, one material authored-actor presence
+change such as a previously visible actor no longer being present.
 
 ## Expected Files
 
-- `data/regions/bryn_shander.json`
-- `engine/player_discovery_response.py`
-- `engine/conversation_affordance.py`
 - `engine/game_engine.py`
-- `engine/region_validator.py`
-- `test_discovery_gated_relocated_actor_response.py`
-- `test_discovery_gated_conversation_affordance.py`
+- `engine/elapsed_time_transition_observation.py`
+- `test_elapsed_time_transition_observation.py`
+- `test_time_actor_relocation.py`
+- `test_save_load.py`
 - `docs/current_capability_package.md`
 - `docs/current_sprint.md`
 - `docs/current_sprint.json`
 
 ## Acceptance Criteria
 
-- The special response remains unavailable before the qualifying discovery.
-- The first eligible Elin conversation returns the authored response and
-  applies one durable patrol-dispatch consequence.
-- Later Elin conversations neither return the special response nor reapply
-  the consequence, including after save/load.
-- Other Elin and actor conversations retain their existing behavior; derived
-  player-safe projection remains non-mutating and cue wording is unchanged.
+- A successful accepted one-hour `wait` returns `An hour passes.`; a qualifying
+  actor absence appends `{actor display name} is no longer at the {location
+  name}.` Exact wording is deterministic and bounded to this transition.
+- When one material authored actor was visible at wait start and is no longer
+  present at the same player location after the accepted transition, the output
+  includes only that actor's player-safe display name and current-location
+  absence in fixed deterministic selection order.
+- The observation derives only from command-start and completed player-visible
+  scene state; it neither changes World State nor adds history, save data,
+  narration context, or simulation authority.
+- No hidden cause, trigger, history identifier, pressure, evidence, internal
+  consequence identifier, or other simulation-only state is disclosed.
+- No qualifying visible change produces no actor-change clause; travel and
+  non-wait transitions remain outside this sprint. Save version remains `1` and
+  `next_sprint` remains `null`.
 
 ## Verification
 
-- Official-interpreter preflight and canonical-record validation passed.
-- Focused affected conversation, discovery, evidence, thread-resolution,
-  relocation, travel, contextual-action, narration-preview, and save/load
-  tests passed.
-- The accepted candidate was strict-fast-forward merged into `main`; no
-  following sprint is active or authorized, and `next_sprint` remains `null`.
+- Official-interpreter preflight and canonical-record validation passed at
+  staging; `git diff --check` passed.
+- Focused transition-observation tests must cover baseline elapsed wording,
+  qualifying visible actor absence, no qualifying change, deterministic choice,
+  non-mutation, hidden-state non-disclosure, and save/load non-persistence.
+- Affected wait/time relocation, interaction history, save/load, perception,
+  narration-preview, and existing provider-safe regressions must pass. Automated
+  verification must not send provider requests.
