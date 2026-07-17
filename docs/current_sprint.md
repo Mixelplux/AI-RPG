@@ -1,10 +1,18 @@
+# Current Sprint Record
+
+No sprint is currently active. The most recent terminal sprint record is
+retained below for identity and closeout context.
+
+## Most Recent Terminal Sprint
+
 # Sprint 10.64 - One Derived Player-Safe Elapsed-Time Transition Observation
 
-Status: Ready for independent review.
+Status: Complete.
 
-Review state: Independent review pending.
+Review state: Merged.
 
-`next_sprint` remains `null`.
+`next_sprint` is `null`. No following sprint is authorized, staged, or
+started.
 
 ## Goal
 
@@ -47,8 +55,12 @@ change such as a previously visible actor no longer being present.
 - Official-interpreter preflight, syntax checks, canonical-record validation,
   and `git diff --check` passed.
 - Focused transition-observation coverage passed for baseline wording,
-  qualifying actor absence, no qualifying change, deterministic selection,
-  non-mutation, hidden-state non-disclosure, and save/load non-persistence.
+  qualifying visible actor absence, no qualifying change, deterministic
+  selection, non-mutation, hidden-state non-disclosure, and save/load
+  non-persistence.
 - Time actor-relocation, time-pressure, time-evidence-trace, interaction-history,
   save/load, narration-context, narration-pipeline, and fake-transport OpenAI
   Responses regressions passed. No live provider request occurred.
+- The accepted candidate was strict-fast-forward merged into `main`; no
+  following sprint is active or authorized, save version remains `1`, and
+  `next_sprint` remains `null`.

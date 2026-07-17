@@ -2,8 +2,8 @@
   "schema_version": "1.0.0",
   "document_type": "current_sprint",
   "sprint_count": 1,
-  "active_sprint": "10.64",
-  "active_capability_package": "10.64",
+  "active_sprint": null,
+  "active_capability_package": null,
   "project": {
     "name": "AI Narrative RPG Engine",
     "principles": ["provider-neutral", "deterministic-core", "simulation-owned-truth"]
@@ -13,8 +13,8 @@
     "title": "One Derived Player-Safe Elapsed-Time Transition Observation",
     "type": "capability-package",
     "mode": "capability-package",
-    "status": "review_ready",
-    "review_state": "independent_review_pending",
+    "status": "complete",
+    "review_state": "merged",
     "goal": "For the accepted one-hour wait transition, derive one deterministic, nonpersistent, player-safe observation from command-start and completed player-visible state that says an hour passed and, when applicable, one authored actor is no longer present.",
     "predecessor": {"id": "10.63", "status": "complete", "review_state": "merged"},
     "platform": {"official_interpreter": ".\\.venv\\Scripts\\python.exe", "save_version": 1, "provider_requests": "forbidden"},
@@ -41,6 +41,7 @@
       {"id": "review-candidate", "status": "complete"}
     ],
     "governance": [
+      "No sprint or capability package is currently active or staged.",
       "Simulation owns the accepted wait transition and all persistent truth; the observation is deterministic, player-safe, derived presentation only.",
       "Use only command-start and completed player-visible scene state; do not introduce generic scene-diff or World State comparison infrastructure.",
       "Do not add persistence, history, parser, command, provider, narration architecture, migration, or save-version changes. Save version remains 1.",
@@ -48,7 +49,7 @@
     ],
     "closeout": {
       "allowed_terminal_statuses": ["complete", "blocked"],
-      "verification_result": "Official-interpreter preflight and syntax checks passed. Focused elapsed-time transition-observation coverage and affected time actor-relocation, pressure, evidence-trace, interaction-history, save/load, narration-context, narration-pipeline, and fake-transport provider regressions passed. No live provider request occurred. Save version remains 1 and next_sprint remains null.",
+      "verification_result": "Official-interpreter preflight and syntax checks passed. Focused elapsed-time transition-observation coverage and affected time actor-relocation, pressure, evidence-trace, interaction-history, save/load, narration-context, narration-pipeline, and fake-transport provider regressions passed. No live provider request occurred. The accepted candidate was strict-fast-forward merged into main. No sprint or capability package remains active; save version remains 1 and next_sprint remains null.",
       "next_sprint": null
     }
   }

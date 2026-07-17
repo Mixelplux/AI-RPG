@@ -1,8 +1,18 @@
+# Current Capability Package
+
+No capability package is currently active or authorized. The most recent
+terminal package record is retained below for identity and closeout context.
+
+## Most Recent Terminal Package
+
 # Sprint 10.64 - One Derived Player-Safe Elapsed-Time Transition Observation
 
-Status: Ready for independent review.
+Status: Complete.
 
-Review state: Independent review pending.
+Review state: Merged.
+
+No following capability package is authorized, staged, branched, or started.
+`next_sprint` remains `null`.
 
 ## Goal
 
@@ -47,5 +57,6 @@ the completed same-location scene, in existing scene order, and otherwise
 returns only `An hour passes.` Focused observation coverage and affected
 time-effect, interaction-history, save/load, narration-context, narration
 pipeline, and fake-transport provider regressions passed. No live provider
-request occurred. The committed candidate awaits independent review; save
-version remains `1` and `next_sprint` remains `null`.
+request occurred. The accepted candidate was strict-fast-forward merged into
+`main`; no following capability package is active or authorized, save version
+remains `1`, and `next_sprint` remains `null`.
