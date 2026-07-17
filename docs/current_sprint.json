@@ -2,8 +2,8 @@
   "schema_version": "1.0.0",
   "document_type": "current_sprint",
   "sprint_count": 1,
-  "active_sprint": "10.63",
-  "active_capability_package": "10.63",
+  "active_sprint": null,
+  "active_capability_package": null,
   "project": {
     "name": "AI Narrative RPG Engine",
     "principles": ["provider-neutral", "deterministic-core", "simulation-owned-truth"]
@@ -13,8 +13,8 @@
     "title": "One-Time Consequence-Bearing Conversation Response",
     "type": "correctness-correction",
     "mode": "maintenance",
-    "status": "review_ready",
-    "review_state": "candidate_prepared",
+    "status": "complete",
+    "review_state": "merged",
     "goal": "Make the discovery-gated Elin patrol-dispatch response and its declared canonical consequence occur exactly once.",
     "predecessor": {"id": "10.62", "status": "complete", "review_state": "merged"},
     "platform": {"official_interpreter": ".\\.venv\\Scripts\\python.exe", "save_version": 1, "provider_requests": "forbidden"},
@@ -40,13 +40,14 @@
       {"id": "review-candidate", "status": "complete"}
     ],
     "governance": [
+      "No sprint or capability package is currently active or staged.",
       "Use canonical World State history for the declared one-time patrol-dispatch consequence; do not add a generic dialogue-consumption flag or system.",
       "Keep save version 1 and preserve save/load compatibility.",
       "Do not change player-facing contextual-cue wording, parsing, providers, or next_sprint."
     ],
     "closeout": {
       "allowed_terminal_statuses": ["complete", "blocked"],
-      "verification_result": "Focused response and affordance coverage, affected regressions, and all 38 local deterministic tests passed. No live provider request occurred. Save version remains 1 and next_sprint remains null.",
+      "verification_result": "Focused response and affordance coverage, affected regressions, and all 38 local deterministic tests passed. No live provider request occurred. Save version remains 1 and next_sprint remains null. The accepted candidate was strict-fast-forward merged into main.",
       "next_sprint": null
     }
   }

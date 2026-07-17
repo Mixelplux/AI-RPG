@@ -1,10 +1,18 @@
+# Current Sprint Record
+
+No sprint is currently active. The most recent terminal sprint record is
+retained below for identity and closeout context.
+
+## Most Recent Terminal Sprint
+
 # Sprint 10.63 - One-Time Consequence-Bearing Conversation Response
 
-Status: Ready for independent review.
+Status: Complete.
 
-Review state: Candidate prepared.
+Review state: Merged.
 
-`next_sprint` is `null`.
+`next_sprint` is `null`. No following sprint is authorized, staged, or
+started.
 
 ## Goal
 
@@ -36,10 +44,9 @@ consequence occur exactly once, using canonical persistent state.
 
 ## Verification
 
-- Official-interpreter preflight through the established workspace procedure
-  and canonical-record validation pass.
+- Official-interpreter preflight and canonical-record validation passed.
 - Focused affected conversation, discovery, evidence, thread-resolution,
   relocation, travel, contextual-action, narration-preview, and save/load
-  tests pass.
-- `git diff --check`, a clean committed review candidate, and the required
-  review-packet assembly and validation pass.
+  tests passed.
+- The accepted candidate was strict-fast-forward merged into `main`; no
+  following sprint is active or authorized, and `next_sprint` remains `null`.

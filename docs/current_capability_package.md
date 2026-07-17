@@ -1,8 +1,18 @@
+# Current Capability Package
+
+No capability package is currently active or authorized. The most recent
+terminal package record is retained below for identity and closeout context.
+
+## Most Recent Terminal Package
+
 # Sprint 10.63 - One-Time Consequence-Bearing Conversation Response
 
-Status: Ready for independent review.
+Status: Complete.
 
-Review state: Candidate prepared.
+Review state: Merged.
+
+No following capability package is authorized, staged, branched, or started.
+`next_sprint` remains `null`.
 
 ## Goal
 
@@ -32,5 +42,6 @@ declared patrol-dispatch consequence as canonical history so it cannot recur.
 
 Focused conversation, discovery, evidence, thread-resolution, relocation,
 travel, contextual-action projection, narration-preview, and save/load
-regressions pass. A committed review candidate and required review packet are
-prepared on a feature branch; merge remains owner-authorized.
+regressions passed. The accepted candidate was strict-fast-forward merged into
+`main`; no following capability package is active or authorized, and
+`next_sprint` remains `null`.
