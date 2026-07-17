@@ -1,66 +1,48 @@
-# Current Sprint Record
+# Sprint 10.65 - One Player-Safe Local Route Guidance Projection
 
-No sprint is currently active. The most recent terminal sprint record is
-retained below for identity and closeout context.
+Status: Active.
 
-## Most Recent Terminal Sprint
+Review state: Staged.
 
-# Sprint 10.64 - One Derived Player-Safe Elapsed-Time Transition Observation
-
-Status: Complete.
-
-Review state: Merged.
-
-`next_sprint` is `null`. No following sprint is authorized, staged, or
-started.
+`next_sprint` is `null`. This is the active, owner-authorized capability
+package; no following sprint is authorized or staged.
 
 ## Goal
 
-For one accepted one-hour `wait`, derive deterministic player-safe presentation
-from authoritative command-start and completed player-visible state: communicate
-that an hour passed and, when applicable, one material authored-actor presence
-change such as a previously visible actor no longer being present.
+Derive one deterministic, player-safe presentation of the current scene's
+immediate traversable connections as natural local route cues, without turning
+navigation into a compass grid or destination-routing system.
 
 ## Expected Files
 
+- `engine/navigation_projection.py`
 - `engine/game_engine.py`
-- `engine/elapsed_time_transition_observation.py`
-- `test_elapsed_time_transition_observation.py`
-- `test_time_actor_relocation.py`
-- `test_save_load.py`
+- `test_navigation_projection.py`
 - `docs/current_capability_package.md`
 - `docs/current_sprint.md`
 - `docs/current_sprint.json`
 
 ## Acceptance Criteria
 
-- A successful accepted one-hour `wait` returns `An hour passes.`; a qualifying
-  actor absence appends `{actor display name} is no longer at the {location
-  name}.` Exact wording is deterministic and bounded to this transition.
-- When one material authored actor was visible at wait start and is no longer
-  present at the same player location after the accepted transition, the output
-  includes only that actor's player-safe display name and current-location
-  absence in fixed deterministic selection order.
-- The observation derives only from command-start and completed player-visible
-  scene state; it neither changes World State nor adds history, save data,
-  narration context, or simulation authority.
-- No hidden cause, trigger, history identifier, pressure, evidence, internal
-  consequence identifier, or other simulation-only state is disclosed.
-- No qualifying visible change produces no actor-change clause; travel and
-  non-wait transitions remain outside this sprint. Save version remains `1` and
-  `next_sprint` remains `null`.
+- Route cues describe only immediate, traversable connections from the current
+  player scene; they do not describe the relative position of non-adjacent or
+  merely known destinations.
+- Cues are deterministic, player-safe, and phrased as natural local routes,
+  for example `Main Street continues south into town.`
+- Local orientation may be included only where it meaningfully describes an
+  immediate route; the result is not a raw compass grid.
+- Structural connectivity remains authoritative and separate from the derived
+  presentation projection; movement behavior is unchanged.
+- The projection adds no World State, history, save data, narration context,
+  provider authority, migration, or save-version change. `next_sprint` remains
+  `null`.
 
 ## Verification
 
-- Official-interpreter preflight, syntax checks, canonical-record validation,
-  and `git diff --check` passed.
-- Focused transition-observation coverage passed for baseline wording,
-  qualifying visible actor absence, no qualifying change, deterministic
-  selection, non-mutation, hidden-state non-disclosure, and save/load
-  non-persistence.
-- Time actor-relocation, time-pressure, time-evidence-trace, interaction-history,
-  save/load, narration-context, narration-pipeline, and fake-transport OpenAI
-  Responses regressions passed. No live provider request occurred.
-- The accepted candidate was strict-fast-forward merged into `main`; no
-  following sprint is active or authorized, save version remains `1`, and
-  `next_sprint` remains `null`.
+- Official-interpreter preflight, canonical-record validation, and `git diff
+  --check` pass for staging.
+- Focused local-route projection coverage proves immediate-only selection,
+  deterministic cue wording and order, optional-orientation boundaries,
+  non-persistence, and non-disclosure of nonlocal destination relationships.
+- Affected navigation, movement, scene, save/load, narration-context, and
+  provider-safe regressions pass. No live provider request occurs.

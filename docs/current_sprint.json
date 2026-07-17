@@ -2,54 +2,54 @@
   "schema_version": "1.0.0",
   "document_type": "current_sprint",
   "sprint_count": 1,
-  "active_sprint": null,
-  "active_capability_package": null,
+  "active_sprint": "10.65",
+  "active_capability_package": "10.65",
   "project": {
     "name": "AI Narrative RPG Engine",
     "principles": ["provider-neutral", "deterministic-core", "simulation-owned-truth"]
   },
   "sprint": {
-    "id": "10.64",
-    "title": "One Derived Player-Safe Elapsed-Time Transition Observation",
+    "id": "10.65",
+    "title": "One Player-Safe Local Route Guidance Projection",
     "type": "capability-package",
     "mode": "capability-package",
-    "status": "complete",
-    "review_state": "merged",
-    "goal": "For the accepted one-hour wait transition, derive one deterministic, nonpersistent, player-safe observation from command-start and completed player-visible state that says an hour passed and, when applicable, one authored actor is no longer present.",
-    "predecessor": {"id": "10.63", "status": "complete", "review_state": "merged"},
+    "status": "active",
+    "review_state": "staged",
+    "goal": "Derive one deterministic, player-safe presentation of the current scene's immediate traversable connections as natural local route cues, without turning navigation into a compass grid or destination-routing system.",
+    "predecessor": {"id": "10.64", "status": "complete", "review_state": "merged"},
     "platform": {"official_interpreter": ".\\.venv\\Scripts\\python.exe", "save_version": 1, "provider_requests": "forbidden"},
     "expected_files": {
-      "likely_modified": ["engine/game_engine.py", "test_time_actor_relocation.py", "test_save_load.py", "docs/current_capability_package.md", "docs/current_sprint.md", "docs/current_sprint.json"],
-      "likely_created": ["engine/elapsed_time_transition_observation.py", "test_elapsed_time_transition_observation.py", "handoffs/derived-player-safe-elapsed-time-transition-observation-10.64-<short-head>.zip"]
+      "likely_modified": ["engine/navigation_projection.py", "engine/game_engine.py", "test_navigation_projection.py", "docs/current_capability_package.md", "docs/current_sprint.md", "docs/current_sprint.json"],
+      "likely_created": []
     },
     "acceptance_criteria": [
-      "A successful accepted one-hour wait returns `An hour passes.`; a qualifying actor absence appends `{actor display name} is no longer at the {location name}.` Exact wording is deterministic and bounded to this transition.",
-      "When a material authored actor visible at wait start is no longer present at the same player location after the transition, the output names only that actor and their current-location absence in fixed deterministic selection order.",
-      "The observation derives only from command-start and completed player-visible scene state and adds no World State, history, save data, narration context, or simulation authority.",
-      "No hidden cause, trigger, history identifier, pressure, evidence, internal consequence identifier, or other simulation-only state is disclosed.",
-      "No qualifying visible change adds no actor-change clause; travel and non-wait transitions remain outside scope, save version remains 1, and next_sprint remains null."
+      "Route cues describe only immediate, traversable connections from the current player scene; they do not describe the relative position of non-adjacent or merely known destinations.",
+      "Cues are deterministic, player-safe, and phrased as natural local routes, for example `Main Street continues south into town.`",
+      "Local orientation may be included only where it meaningfully describes an immediate route; the result is not a raw compass grid.",
+      "Structural connectivity remains authoritative and separate from the derived presentation projection; movement behavior is unchanged.",
+      "The projection adds no World State, history, save data, narration context, provider authority, migration, or save-version change."
     ],
     "verification": {
       "staging_commands": ["Official-interpreter preflight through the established workspace procedure", "Canonical record validation", "git diff --check"],
-      "focused_commands": ["Focused elapsed-time transition observation tests", "Affected wait/time relocation, interaction history, save/load, perception, and narration-preview regressions", "Provider-safe regressions only; provider requests are forbidden"],
+      "focused_commands": ["Focused local-route projection tests", "Affected navigation, movement, scene, save/load, narration-context, and provider-safe regressions", "Provider requests are forbidden"],
       "closeout_commands": ["Official-interpreter preflight", "Canonical record validation", "git diff --check", "Clean committed review-candidate Git evidence", "Required review-packet assembly and validation"]
     },
     "execution_phases": [
       {"id": "package-and-sprint-staging", "status": "complete"},
-      {"id": "derived-wait-transition-observation", "status": "complete"},
-      {"id": "focused-verification", "status": "complete"},
-      {"id": "review-candidate", "status": "complete"}
+      {"id": "local-route-guidance-projection", "status": "planned"},
+      {"id": "focused-verification", "status": "planned"},
+      {"id": "review-candidate", "status": "planned"}
     ],
     "governance": [
-      "No sprint or capability package is currently active or staged.",
-      "Simulation owns the accepted wait transition and all persistent truth; the observation is deterministic, player-safe, derived presentation only.",
-      "Use only command-start and completed player-visible scene state; do not introduce generic scene-diff or World State comparison infrastructure.",
-      "Do not add persistence, history, parser, command, provider, narration architecture, migration, or save-version changes. Save version remains 1.",
+      "This owner-authorized capability package is active; no following sprint is authorized or staged.",
+      "Simulation retains authority over structural connectivity and movement; route cues are deterministic, player-safe, derived presentation only.",
+      "Project only immediate traversable connections relevant to the current scene; never infer or expose nonlocal destination relationships.",
+      "Do not add persistence, history, parser, command, provider, navigation-framework, migration, or save-version changes. Save version remains 1.",
       "Provider requests are forbidden for automated verification, and next_sprint remains null."
     ],
     "closeout": {
       "allowed_terminal_statuses": ["complete", "blocked"],
-      "verification_result": "Official-interpreter preflight and syntax checks passed. Focused elapsed-time transition-observation coverage and affected time actor-relocation, pressure, evidence-trace, interaction-history, save/load, narration-context, narration-pipeline, and fake-transport provider regressions passed. No live provider request occurred. The accepted candidate was strict-fast-forward merged into main. No sprint or capability package remains active; save version remains 1 and next_sprint remains null.",
+      "verification_result": "Staging pending implementation and closeout verification.",
       "next_sprint": null
     }
   }

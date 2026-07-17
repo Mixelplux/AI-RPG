@@ -1,62 +1,45 @@
-# Current Capability Package
+# Sprint 10.65 - One Player-Safe Local Route Guidance Projection
 
-No capability package is currently active or authorized. The most recent
-terminal package record is retained below for identity and closeout context.
+Status: Active.
 
-## Most Recent Terminal Package
-
-# Sprint 10.64 - One Derived Player-Safe Elapsed-Time Transition Observation
-
-Status: Complete.
-
-Review state: Merged.
-
-No following capability package is authorized, staged, branched, or started.
-`next_sprint` remains `null`.
+Review state: Staged.
 
 ## Goal
 
-For the existing accepted one-hour `wait` transition, derive one deterministic,
-nonpersistent, player-safe observation that says an hour passed and, when
-applicable, names one material change in the presence of an authored actor
-visible at the command start.
+Establish one bounded, deterministic, nonpersistent projection of immediate,
+perceivable traversal options from the current player scene as natural local
+route cues. Compass direction describes an immediate local route, never the
+relative position of every known destination.
 
 ## Authorized Scope
 
-- Operate only on the accepted one-hour `wait` transition and preserve its
-  existing simulation-owned candidate-state transition.
-- Compare only command-start and completed player-visible scene state to derive
-  one presentation result after the transition has been accepted.
-- Emit deterministic, bounded wording: `An hour passes.` followed, when
-  applicable, by `{actor display name} is no longer at the {location name}.`
-  for one visible actor's material absence from the current location.
-- Keep the observation derived, non-mutating, nonpersistent, and reconstructible
-  from the transition inputs; it must not become World State, history, save
-  data, or narration context.
-- Preserve existing actor-location authority, player-safe projection boundaries,
-  save/load compatibility, and save version `1`.
+- Preserve existing world topology and deterministic movement authority.
+- Distinguish structural connectivity from player-facing route presentation.
+- Project only immediate traversable connections relevant to the current scene.
+- Permit one optional local orientation only when it helps express a local
+  connection; do not present navigation as a raw compass grid.
+- Use natural deterministic route cues, such as `Main Street continues south
+  into town.`
+- Keep the projection derived and nonpersistent.
 
 ## Boundaries
 
-- Do not add a generic scene-diff, World State comparison, transition, or
-  elapsed-time narration framework.
-- Do not add persistent World State fields, history event types, observation
-  history, parser or command changes, migrations, or save-version changes.
-- Do not reveal cause, trigger, history identifier, pressure, evidence,
-  internal consequence identifier, or other simulation-only information.
-- Do not cover travel transitions, automatic investigation or discovery, later
-  discovery/use presentation, AI/provider-generated prose, provider changes,
-  or unrelated Sprint 10.60 findings.
-- `next_sprint` remains `null`; no following package is authorized.
+- Do not provide non-adjacent destination guidance.
+- Do not add `go to the inn`, `find the blacksmith`, familiarity,
+  destination-knowledge, pathfinding, multi-step routing, LLM intent parsing,
+  global-coordinate, or complete-spatial-geometry behavior.
+- Do not change structural topology except as minimally required to demonstrate
+  this local-route seam.
+- Do not alter movement authority, persistence, save compatibility, save
+  version, provider behavior, or unrelated player-facing behavior.
+- `next_sprint` remains `null`; this staging does not authorize another
+  capability package.
 
 ## Completion
 
-Implementation derives the observation only after successful one-hour wait
-completion. It reports the first command-start visible static actor absent from
-the completed same-location scene, in existing scene order, and otherwise
-returns only `An hour passes.` Focused observation coverage and affected
-time-effect, interaction-history, save/load, narration-context, narration
-pipeline, and fake-transport provider regressions passed. No live provider
-request occurred. The accepted candidate was strict-fast-forward merged into
-`main`; no following capability package is active or authorized, save version
-remains `1`, and `next_sprint` remains `null`.
+The implementation derives deterministic, player-safe natural-language route
+cues solely from immediate traversable connections of the current scene. It
+keeps connectivity authoritative in the simulation, introduces no persistent
+route state, exposes no nonlocal destination relationship, and passes focused
+projection and affected movement, scene, save/load, and provider-safe
+regressions. No live provider request occurs.
