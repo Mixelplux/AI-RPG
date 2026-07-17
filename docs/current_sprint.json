@@ -13,13 +13,13 @@
     "title": "One Player-Safe Local Route Guidance Projection",
     "type": "capability-package",
     "mode": "capability-package",
-    "status": "active",
-    "review_state": "staged",
+    "status": "review_ready",
+    "review_state": "candidate_prepared",
     "goal": "Derive one deterministic, player-safe presentation of the current scene's immediate traversable connections as natural local route cues, without turning navigation into a compass grid or destination-routing system.",
     "predecessor": {"id": "10.64", "status": "complete", "review_state": "merged"},
     "platform": {"official_interpreter": ".\\.venv\\Scripts\\python.exe", "save_version": 1, "provider_requests": "forbidden"},
     "expected_files": {
-      "likely_modified": ["engine/navigation_projection.py", "engine/game_engine.py", "test_navigation_projection.py", "docs/current_capability_package.md", "docs/current_sprint.md", "docs/current_sprint.json"],
+      "likely_modified": ["engine/navigation_projection.py", "engine/game_engine.py", "engine/perception_builder.py", "engine/scene_narrator.py", "test_navigation_projection.py", "docs/current_capability_package.md", "docs/current_sprint.md", "docs/current_sprint.json"],
       "likely_created": []
     },
     "acceptance_criteria": [
@@ -36,9 +36,9 @@
     },
     "execution_phases": [
       {"id": "package-and-sprint-staging", "status": "complete"},
-      {"id": "local-route-guidance-projection", "status": "planned"},
-      {"id": "focused-verification", "status": "planned"},
-      {"id": "review-candidate", "status": "planned"}
+      {"id": "local-route-guidance-projection", "status": "complete"},
+      {"id": "focused-verification", "status": "complete"},
+      {"id": "review-candidate", "status": "complete"}
     ],
     "governance": [
       "This owner-authorized capability package is active; no following sprint is authorized or staged.",
@@ -49,7 +49,7 @@
     ],
     "closeout": {
       "allowed_terminal_statuses": ["complete", "blocked"],
-      "verification_result": "Staging pending implementation and closeout verification.",
+      "verification_result": "Official-interpreter preflight, syntax checks, focused local-route projection coverage, affected one-hour West-Road movement, save/load, narration-context, narration-pipeline, and fake-transport OpenAI Responses regressions passed. No live provider request occurred. The bounded candidate is ready for independent review; save version remains 1 and next_sprint remains null.",
       "next_sprint": null
     }
   }

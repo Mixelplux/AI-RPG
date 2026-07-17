@@ -51,21 +51,21 @@ def format_spawned_entity_label(template: str, count: int) -> str:
     return f"{count} {readable}s"
 
 
-def format_navigation(routes: List[Dict[str, str]]) -> str | None:
-    """Render immediate, player-safe routes in natural spatial language."""
+def format_navigation(route_cues: List[Dict[str, str]]) -> str | None:
+    """Render already-derived immediate route cues without map-like prose."""
 
-    if not routes:
+    if not route_cues:
         return None
 
-    phrases = [
-        f"{route['destination_name']} lies {route['direction']}."
-        for route in routes
-        if route.get("direction") and route.get("destination_name")
+    cues = [
+        cue["text"]
+        for cue in route_cues
+        if isinstance(cue.get("text"), str) and cue["text"]
     ]
-    if not phrases:
+    if not cues:
         return None
 
-    return "From here, " + " ".join(phrases)
+    return " ".join(cues)
 
 
 def format_contextual_actions(opportunities: List[str]) -> str | None:
@@ -142,7 +142,7 @@ def narrate_scene(perception_snapshot: Dict[str, Any]) -> Dict[str, Any]:
     if resolved_thread_observation:
         description_parts.append(resolved_thread_observation["text"])
 
-    navigation_text = format_navigation(navigation.get("routes", []))
+    navigation_text = format_navigation(navigation.get("route_cues", []))
     if navigation_text:
         description_parts.append(navigation_text)
 
@@ -156,7 +156,7 @@ def narrate_scene(perception_snapshot: Dict[str, Any]) -> Dict[str, Any]:
         "title": f"{location_name}, Bryn Shander",
         "description": "\n\n".join(description_parts),
         "visible_entities": visible_entity_names,
-        "navigation": deepcopy(navigation.get("routes", [])),
+        "navigation": deepcopy(navigation.get("route_cues", [])),
         "contextual_actions": deepcopy(contextual_actions.get("opportunities", [])),
         "player_prompt": "What do you do?"
     }

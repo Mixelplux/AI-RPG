@@ -63,7 +63,7 @@ def build_perception(
 
         "conversation_affordance": deepcopy(conversation_affordance or {}),
 
-        "navigation": deepcopy(navigation_projection or {"routes": []}),
+        "navigation": deepcopy(navigation_projection or {"route_cues": []}),
 
         "contextual_actions": deepcopy(
             contextual_action_projection or {"opportunities": []}

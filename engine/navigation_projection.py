@@ -4,7 +4,7 @@ from copy import deepcopy
 from typing import Any, Dict
 
 
-_PLAYER_FACING_DIRECTIONS = {
+_LOCAL_ORIENTATIONS = {
     "north": "north",
     "south": "south",
     "east": "east",
@@ -20,11 +20,13 @@ def derive_navigation_projection(
     scene_snapshot: Dict[str, Any],
     locations: list[Dict[str, Any]],
 ) -> Dict[str, list[Dict[str, str]]]:
-    """Return only safely presentable, directly perceivable current-scene exits.
+    """Return player-safe local cues for directly perceivable scene exits.
 
-    Scene exits are the existing boundary for local perception.  Destination
-    identifiers are used only to join authored display names and never leave
-    this derived projection.
+    Scene exits are the existing boundary for local perception and remain the
+    only navigation authority consulted here. Destination identifiers join
+    authored display names but never leave the derived projection. Each cue
+    describes one immediate way from the current scene, not a destination's
+    position in a wider map.
     """
 
     current_location_id = scene_snapshot.get("location", {}).get("location_id")
@@ -38,7 +40,7 @@ def derive_navigation_projection(
         and location["name"].strip()
     }
 
-    routes: list[Dict[str, str]] = []
+    route_cues: list[Dict[str, str]] = []
     seen_destinations: set[str] = set()
     for exit_data in scene_snapshot.get("exits", []):
         if not isinstance(exit_data, dict):
@@ -47,21 +49,20 @@ def derive_navigation_projection(
         destination_id = exit_data.get("location_id")
         direction = exit_data.get("direction")
         destination_name = names_by_id.get(destination_id)
-        player_facing_direction = _PLAYER_FACING_DIRECTIONS.get(direction)
+        orientation = _LOCAL_ORIENTATIONS.get(direction)
 
         if (
             not isinstance(destination_id, str)
             or destination_id == current_location_id
             or destination_id in seen_destinations
             or destination_name is None
-            or player_facing_direction is None
+            or orientation is None
         ):
             continue
 
-        routes.append({
-            "direction": player_facing_direction,
-            "destination_name": destination_name.strip(),
+        route_cues.append({
+            "text": f"The way {orientation} leads to {destination_name.strip()}.",
         })
         seen_destinations.add(destination_id)
 
-    return {"routes": deepcopy(routes)}
+    return {"route_cues": deepcopy(route_cues)}

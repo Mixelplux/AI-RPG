@@ -1,8 +1,8 @@
 # Sprint 10.65 - One Player-Safe Local Route Guidance Projection
 
-Status: Active.
+Status: Ready for Independent Review.
 
-Review state: Staged.
+Review state: Candidate prepared.
 
 ## Goal
 
@@ -42,4 +42,5 @@ cues solely from immediate traversable connections of the current scene. It
 keeps connectivity authoritative in the simulation, introduces no persistent
 route state, exposes no nonlocal destination relationship, and passes focused
 projection and affected movement, scene, save/load, and provider-safe
-regressions. No live provider request occurs.
+regressions. No live provider request occurred. The candidate is ready for
+independent review; `next_sprint` remains `null` and save version remains `1`.

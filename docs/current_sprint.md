@@ -1,8 +1,8 @@
 # Sprint 10.65 - One Player-Safe Local Route Guidance Projection
 
-Status: Active.
+Status: Ready for Independent Review.
 
-Review state: Staged.
+Review state: Candidate prepared.
 
 `next_sprint` is `null`. This is the active, owner-authorized capability
 package; no following sprint is authorized or staged.
@@ -17,6 +17,8 @@ navigation into a compass grid or destination-routing system.
 
 - `engine/navigation_projection.py`
 - `engine/game_engine.py`
+- `engine/perception_builder.py`
+- `engine/scene_narrator.py`
 - `test_navigation_projection.py`
 - `docs/current_capability_package.md`
 - `docs/current_sprint.md`
@@ -39,10 +41,12 @@ navigation into a compass grid or destination-routing system.
 
 ## Verification
 
-- Official-interpreter preflight, canonical-record validation, and `git diff
-  --check` pass for staging.
+- Official-interpreter preflight, syntax checks, canonical-record validation,
+  and `git diff --check` pass.
 - Focused local-route projection coverage proves immediate-only selection,
   deterministic cue wording and order, optional-orientation boundaries,
   non-persistence, and non-disclosure of nonlocal destination relationships.
 - Affected navigation, movement, scene, save/load, narration-context, and
-  provider-safe regressions pass. No live provider request occurs.
+  provider-safe regressions pass. No live provider request occurred.
+- The bounded candidate is committed and ready for independent review; save
+  version remains `1` and `next_sprint` remains `null`.

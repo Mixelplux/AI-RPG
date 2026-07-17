@@ -19,20 +19,22 @@ def test_direct_routes_are_player_facing_and_deterministic():
     first = engine.get_player_perception()
     second = engine.get_player_perception()
 
-    expected_routes = [
-        {"direction": "north", "destination_name": "Northern Tundra Route"},
-        {"direction": "south", "destination_name": "Main Street"},
+    expected_route_cues = [
+        {"text": "The way north leads to Northern Tundra Route."},
+        {"text": "The way south leads to Main Street."},
     ]
-    assert first["navigation"] == {"routes": expected_routes}
+    assert first["navigation"] == {"route_cues": expected_route_cues}
     assert second == first
     assert engine.get_world_state() == before_state
     assert engine.get_history() == before_history
     assert engine.get_scene_snapshot() == before_scene
 
     narration = engine.get_narration()
-    assert narration["navigation"] == expected_routes
-    assert "Northern Tundra Route lies north." in narration["description"]
-    assert "Main Street lies south." in narration["description"]
+    assert narration["navigation"] == expected_route_cues
+    assert "The way north leads to Northern Tundra Route." in narration["description"]
+    assert "The way south leads to Main Street." in narration["description"]
+    assert "lies north" not in narration["description"]
+    assert "lies south" not in narration["description"]
     assert "outside_tundra_route_north" not in narration["description"]
     assert "bryn_shander_main_street" not in narration["description"]
 
@@ -58,9 +60,7 @@ def test_non_adjacent_or_ineligible_geography_is_not_projected():
 
     projection = derive_navigation_projection(scene, locations)
 
-    assert projection == {
-        "routes": [{"direction": "north", "destination_name": "Main Street"}]
-    }
+    assert projection == {"route_cues": [{"text": "The way north leads to Main Street."}]}
     assert scene == before_scene
     assert locations == before_locations
     assert "Hidden Vault" not in str(projection)
@@ -76,10 +76,10 @@ def test_movement_and_save_load_remain_compatible():
         "bryn_shander_main_street"
     )
     assert engine.get_history()[-1]["event_type"] == "player_movement"
-    assert engine.get_player_perception()["navigation"]["routes"] == [
-        {"direction": "north", "destination_name": "North Gate"},
-        {"direction": "east", "destination_name": "Traders' Hall"},
-        {"direction": "west", "destination_name": "The Inn of the Four Candles"},
+    assert engine.get_player_perception()["navigation"]["route_cues"] == [
+        {"text": "The way north leads to North Gate."},
+        {"text": "The way east leads to Traders' Hall."},
+        {"text": "The way west leads to The Inn of the Four Candles."},
     ]
 
     with TemporaryDirectory() as directory:
