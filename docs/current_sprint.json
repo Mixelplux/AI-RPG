@@ -2,52 +2,51 @@
   "schema_version": "1.0.0",
   "document_type": "current_sprint",
   "sprint_count": 1,
-  "active_sprint": null,
-  "active_capability_package": null,
+  "active_sprint": "10.63",
+  "active_capability_package": "10.63",
   "project": {
     "name": "AI Narrative RPG Engine",
     "principles": ["provider-neutral", "deterministic-core", "simulation-owned-truth"]
   },
   "sprint": {
-    "id": "10.62",
-    "title": "Derived Player-Safe Contextual Action Projection",
-    "type": "capability-package",
-    "mode": "capability-package",
-    "status": "complete",
-    "review_state": "merged",
-    "goal": "Project fixed, legitimate contextual action opportunities into player-safe scene presentation without changing the established command and resolver paths.",
-    "predecessor": {"id": "10.61", "status": "complete", "review_state": "merged"},
+    "id": "10.63",
+    "title": "One-Time Consequence-Bearing Conversation Response",
+    "type": "correctness-correction",
+    "mode": "maintenance",
+    "status": "review_ready",
+    "review_state": "candidate_prepared",
+    "goal": "Make the discovery-gated Elin patrol-dispatch response and its declared canonical consequence occur exactly once.",
+    "predecessor": {"id": "10.62", "status": "complete", "review_state": "merged"},
     "platform": {"official_interpreter": ".\\.venv\\Scripts\\python.exe", "save_version": 1, "provider_requests": "forbidden"},
     "expected_files": {
-      "likely_modified": ["engine/game_engine.py", "engine/perception_builder.py", "engine/scene_narrator.py", "docs/current_capability_package.md", "docs/current_sprint.md", "docs/current_sprint.json"],
-      "likely_created": ["engine/action_eligibility.py", "engine/contextual_action_projection.py", "test_contextual_action_projection.py", "handoffs/derived-player-safe-contextual-action-projection-10.62-<short-head>.zip"]
+      "likely_modified": ["data/regions/bryn_shander.json", "engine/player_discovery_response.py", "engine/conversation_affordance.py", "engine/game_engine.py", "engine/region_validator.py", "test_discovery_gated_relocated_actor_response.py", "test_discovery_gated_conversation_affordance.py", "docs/current_capability_package.md", "docs/current_sprint.md", "docs/current_sprint.json"],
+      "likely_created": ["handoffs/one-time-consequence-bearing-conversation-response-10.63-<short-head>.zip"]
     },
     "acceptance_criteria": [
-      "Only the four authorized opportunity categories are projected as deterministic, player-safe natural-language text.",
-      "Existing investigation and clue-presentation eligibility rules are reused without creating a second resolver or generic action framework.",
-      "Projection derivation is non-mutating and nonpersistent, reconstructs after save/load, and save version remains 1.",
-      "Stale displayed opportunities remain independently validated by existing deterministic resolvers and next_sprint remains null."
+      "Before the qualifying discovery, the Elin patrol-dispatch response remains unavailable.",
+      "The first eligible Elin conversation returns the authored response and applies one canonical patrol-dispatch consequence.",
+      "Subsequent Elin conversations do not repeat the response or consequence, including after save/load.",
+      "Existing unrelated conversations and nonpersistent player-safe projection behavior remain intact; save version remains 1 and next_sprint remains null."
     ],
     "verification": {
       "staging_commands": ["Official-interpreter preflight through the established workspace procedure", "Canonical record validation", "git diff --check"],
-      "focused_commands": ["Focused contextual action projection tests", "Affected movement, conversation, investigation, discovery, clue presentation, narration, and save/load regressions", "Provider-safe regressions only"],
+      "focused_commands": ["Focused conversation response and affordance tests", "Affected discovery, evidence, thread-resolution, relocation, travel, contextual-action, narration-preview, and save/load regressions", "Provider-safe regressions only"],
       "closeout_commands": ["Official-interpreter preflight", "Canonical record validation", "git diff --check", "Clean committed review-candidate Git evidence", "Required review-packet assembly and validation"]
     },
     "execution_phases": [
       {"id": "package-and-sprint-staging", "status": "complete"},
-      {"id": "derived-projection-and-presentation", "status": "complete"},
+      {"id": "one-time-consequence-correction", "status": "complete"},
       {"id": "focused-verification", "status": "complete"},
       {"id": "review-candidate", "status": "complete"}
     ],
     "governance": [
-      "No sprint or capability package is currently active or staged.",
-      "The projection is derived presentation only and is not persistent World State.",
-      "No parser, declaration, schema, provider, save-version, generic-action, or generic-affordance expansion is authorized.",
-      "Save version remains 1 and next_sprint remains null."
+      "Use canonical World State history for the declared one-time patrol-dispatch consequence; do not add a generic dialogue-consumption flag or system.",
+      "Keep save version 1 and preserve save/load compatibility.",
+      "Do not change player-facing contextual-cue wording, parsing, providers, or next_sprint."
     ],
     "closeout": {
       "allowed_terminal_statuses": ["complete", "blocked"],
-      "verification_result": "Focused contextual-action coverage, affected regressions, and the complete local deterministic suite passed. No live provider request occurred. The candidate preserves save version 1 and next_sprint null. The accepted candidate was strict-fast-forward merged into main.",
+      "verification_result": "Focused response and affordance coverage, affected regressions, and all 38 local deterministic tests passed. No live provider request occurred. Save version remains 1 and next_sprint remains null.",
       "next_sprint": null
     }
   }

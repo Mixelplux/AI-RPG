@@ -573,7 +573,10 @@ def validate_conversation_player_discovery_response(region: dict) -> None:
     if field not in region:
         return
     declaration = region[field]
-    required = {"target_entity_id", "required_discovery_id", "response_text"}
+    required = {
+        "response_id", "target_entity_id", "required_discovery_id",
+        "consequence_event_type", "consequence_summary", "response_text",
+    }
     if not isinstance(declaration, dict) or set(declaration) != required:
         raise ValueError(f"{field} fields are invalid.")
     if any(not isinstance(declaration[name], str) or not declaration[name] for name in required):

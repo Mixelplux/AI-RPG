@@ -426,8 +426,11 @@
     "response_text": "Captain Grey gives a firm nod. \"The report is settled. The west-road patrol has its orders.\""
   },
   "conversation_player_discovery_response": {
+    "response_id": "west_gate_elin_patrol_dispatch",
     "target_entity_id": "guard_elin_voss",
     "required_discovery_id": "west_gate_elin_report_trace",
+    "consequence_event_type": "west_gate_patrol_dispatched",
+    "consequence_summary": "West Gate patrol dispatched.",
     "response_text": "Elin Voss studies the folded order, then nods. \"You found it. The West Gate patrol is moving before the road closes.\""
   },
   "conversation_affordance": {

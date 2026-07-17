@@ -110,13 +110,19 @@ def test_projection_and_existing_talk_authority():
     assert result["player_discovery_response"] == {
         "text": engine.region["conversation_player_discovery_response"]["response_text"]
     }
+    assert result["player_discovery_response_consequence"]["event_type"] == "west_gate_patrol_dispatched"
+    assert engine.get_player_perception()["conversation_affordance"] == {}
+    repeated = engine.process_command("talk to elin")
+    assert repeated["success"]
+    assert repeated["player_discovery_response"] is None
+    assert repeated["player_discovery_response_consequence"] is None
 
     world_before = engine.get_world_state()
     scene_before = engine.scene_snapshot
 
     perception["conversation_affordance"]["display_text"] = "changed"
-    assert engine.get_player_perception()["conversation_affordance"] == AFFORDANCE
-    assert engine.get_player_perception()["conversation_affordance"] == AFFORDANCE
+    assert engine.get_player_perception()["conversation_affordance"] == {}
+    assert engine.get_player_perception()["conversation_affordance"] == {}
     assert engine.get_world_state() == world_before
     assert engine.scene_snapshot is scene_before
 
@@ -127,10 +133,9 @@ def test_projection_and_existing_talk_authority():
         "bryn_shander_gate_west",
         scene_without_elin,
         tuple(engine.get_world_state()["player_discoveries"]),
+        tuple(engine.get_world_state()["history"]),
     ) is None
 
-    stale = deepcopy(engine.get_player_perception()["conversation_affordance"])
-    assert stale == AFFORDANCE
     assert engine.process_command("go east")["success"]
     assert engine.get_player_perception()["conversation_affordance"] == {}
     stale_result = engine.process_command("talk to elin")
@@ -149,6 +154,15 @@ def test_save_load_and_reentry_reconstruct_the_projection():
         loaded = load_game(save_path)
         assert loaded.get_player_perception()["conversation_affordance"] == AFFORDANCE
         assert "conversation_affordance" not in loaded.get_world_state()
+
+        first = loaded.process_command("talk to elin")
+        assert first["player_discovery_response"] is not None
+        loaded.save(save_path)
+        reloaded = load_game(save_path)
+        assert reloaded.get_player_perception()["conversation_affordance"] == {}
+        repeated = reloaded.process_command("talk to elin")
+        assert repeated["player_discovery_response"] is None
+        assert repeated["player_discovery_response_consequence"] is None
 
     assert engine.process_command("go east")["success"]
     assert engine.get_player_perception()["conversation_affordance"] == {}

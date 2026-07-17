@@ -844,6 +844,7 @@ class GameEngine:
             get_player_location_id(self.world_state),
             self.scene_snapshot,
             tuple(self.world_state["player_discoveries"]),
+            tuple(self.world_state["history"]),
         )
         return build_perception(
             self.scene_snapshot,
@@ -1063,8 +1064,10 @@ class GameEngine:
         )
         interaction_result["actor_knowledge_response"] = None
         interaction_result["player_discovery_response"] = None
+        interaction_result["player_discovery_response_consequence"] = None
         command_start_actor_knowledge = deepcopy(self.world_state["actor_knowledge"])
         command_start_player_discoveries = tuple(self.world_state["player_discoveries"])
+        command_start_history = tuple(deepcopy(self.world_state["history"]))
 
         if (
             interaction_result["intent"] == "skill_check"
@@ -1169,6 +1172,29 @@ class GameEngine:
                 interaction_result,
                 target_entity_id,
             )
+            player_discovery_response = derive_conversation_player_discovery_response(
+                self.region,
+                target_entity_id,
+                command_start_player_discoveries,
+                command_start_history,
+            )
+            if player_discovery_response is not None:
+                declaration = self.region["conversation_player_discovery_response"]
+                candidate_world_state = add_history_entry(
+                    candidate_world_state,
+                    declaration["consequence_event_type"],
+                    declaration["consequence_summary"],
+                    get_player_location_id(candidate_world_state),
+                    deepcopy(candidate_world_state["time"]),
+                    {"response_id": declaration["response_id"]},
+                )
+                interaction_result["player_discovery_response"] = (
+                    player_discovery_response
+                )
+                interaction_result["player_discovery_response_consequence"] = {
+                    "event_type": declaration["consequence_event_type"],
+                    "history_id": candidate_world_state["history"][-1]["history_id"],
+                }
 
         validate_world_state(candidate_world_state, self.region)
         candidate_scene_snapshot = build_scene(
@@ -1190,11 +1216,6 @@ class GameEngine:
                     self.region,
                     target_entity_id,
                     tuple(command_start_actor_knowledge.get(target_entity_id, [])),
-                )
-            )
-            interaction_result["player_discovery_response"] = (
-                derive_conversation_player_discovery_response(
-                    self.region, target_entity_id, command_start_player_discoveries
                 )
             )
 

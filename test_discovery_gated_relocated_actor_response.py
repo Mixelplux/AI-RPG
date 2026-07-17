@@ -34,7 +34,10 @@ def resolve_and_arrive(engine, discover=False):
 def test_validation():
     region = data(); validate_region(region)
     absent = deepcopy(region); del absent["conversation_player_discovery_response"]; del absent["conversation_affordance"]; validate_region(absent)
-    for field in ("target_entity_id", "required_discovery_id", "response_text"):
+    for field in (
+        "response_id", "target_entity_id", "required_discovery_id",
+        "consequence_event_type", "consequence_summary", "response_text",
+    ):
         bad=deepcopy(region); del bad["conversation_player_discovery_response"][field]; invalid(bad,"fields are invalid")
         bad=deepcopy(region); bad["conversation_player_discovery_response"][field]=""; invalid(bad,"non-empty strings")
     bad=deepcopy(region); bad["conversation_player_discovery_response"]["extra"]=True; invalid(bad,"fields are invalid")
@@ -52,8 +55,17 @@ def test_projection_command_start_and_non_mutation():
     state, scene=engine.get_world_state(), engine.scene_snapshot
     result=engine.process_command("talk to elin")
     assert result["player_discovery_response"]=={"text":TEXT} and result["actor_knowledge_response"] is None
+    consequence = result["player_discovery_response_consequence"]
+    assert consequence["event_type"] == "west_gate_patrol_dispatched"
+    assert consequence["history_id"]
     assert len(engine.query_history(event_type="player_conversation"))==before+2
     assert engine.get_world_state()["player_discoveries"]==state["player_discoveries"] and engine.scene_snapshot is not scene
+    assert len(engine.query_history(event_type="west_gate_patrol_dispatched")) == 1
+    repeated = engine.process_command("talk to elin")
+    assert repeated["success"] and repeated["player_discovery_response"] is None
+    assert repeated["player_discovery_response_consequence"] is None
+    assert len(engine.query_history(event_type="west_gate_patrol_dispatched")) == 1
+    assert engine.get_player_perception()["conversation_affordance"] == {}
     for packet in (engine.get_scene_snapshot(),engine.get_player_perception(),engine.get_narration_context("look"),engine.get_narration_preview("look"),engine.process_command("talk to elin")):
         assert DISCOVERY not in repr(packet)
     engine.process_command("go east"); engine.process_command("go north")
@@ -77,7 +89,9 @@ def test_command_start_failure_and_save_load():
     assert engine.get_world_state()==state and engine.scene_snapshot is scene
     with TemporaryDirectory() as directory:
         path=Path(directory)/"save.json"; path.write_text(json.dumps(build_save_data(engine)),encoding="utf-8")
-        assert load_game(str(path)).process_command("talk to elin")["player_discovery_response"]=={"text":TEXT}
+        loaded = load_game(str(path))
+        assert loaded.process_command("talk to elin")["player_discovery_response"] is None
+        assert len(loaded.query_history(event_type="west_gate_patrol_dispatched")) == 1
 
 def main():
     test_validation(); test_projection_command_start_and_non_mutation(); test_command_start_failure_and_save_load()

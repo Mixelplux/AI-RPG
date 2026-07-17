@@ -1,50 +1,36 @@
-# Current Capability Package
+# Sprint 10.63 - One-Time Consequence-Bearing Conversation Response
 
-No capability package is currently active or authorized. The most recent
-terminal package record is retained below for identity and closeout context.
+Status: Ready for independent review.
 
-## Most Recent Terminal Package
+Review state: Candidate prepared.
 
-# Sprint 10.62 - Derived Player-Safe Contextual Action Projection
+## Goal
 
-Status: Complete.
+Correct the repeated Elin consequence-bearing response found in playtesting.
+The response may occur once after its qualifying discovery and must record the
+declared patrol-dispatch consequence as canonical history so it cannot recur.
 
-Review state: Merged.
+## Authorized Scope
 
-No following capability package is authorized, staged, branched, or started.
-`next_sprint` remains `null`.
-
-## Value and Scope
-
-Derive a fixed, nonpersistent, player-safe set of contextual action opportunities
-from existing authoritative state and authored declarations. The projection is
-presentation only and has no simulation authority.
-
-## Authorized Categories
-
-- Speak with a visible, uniquely targetable, named static actor.
-- Investigate the current location when an undiscovered declared discovery is
-  currently eligible through the existing investigation path.
-- Present an already discovered clue to a visible authored target only when the
-  existing deterministic clue-presentation path currently accepts it.
-- Surface the existing discovery-gated conversation affordance through its
-  existing player-safe projection.
+- Reuse canonical World State history to establish whether the declared West
+  Gate patrol-dispatch consequence has already occurred.
+- Apply that declared consequence atomically with the first eligible Elin
+  conversation, and suppress the special response and its affordance after it.
+- Preserve ordinary conversations, deterministic behavior, save version `1`,
+  save/load behavior, and the player-safe derived projection boundary.
+- Add focused coverage for first use, repeat prevention, no duplicate
+  consequence, and save/load persistence.
 
 ## Boundaries
 
-- Reuse or narrowly extract existing investigation and clue-presentation
-  eligibility rules; do not duplicate resolver authority.
-- Produce deterministic natural-language opportunity text only; never expose
-  identifiers, hidden state, command syntax, or eligibility reasons.
-- Do not change parsing, action resolution, declarations, Region Packs, save
-  data, or save version. Save version remains `1`.
-- The projection is derived afresh, non-mutating, and absent from saves.
-- No generic action or affordance framework, persistent menu state, provider
-  work, or following package is authorized. `next_sprint` remains `null`.
+- Do not add a generic dialogue-consumption flag or system.
+- Do not change parsing, region-pack scope beyond the one declaration, save
+  schema/version, providers, or contextual-cue wording.
+- Do not start another package; `next_sprint` remains `null`.
 
 ## Completion
 
-Implementation and focused category, negative, non-mutation, stale-action,
-save/load, affected-regression, and full deterministic suite coverage passed.
-The accepted candidate was strict-fast-forward merged into `main`; no following
-capability package is active or authorized, and `next_sprint` remains `null`.
+Focused conversation, discovery, evidence, thread-resolution, relocation,
+travel, contextual-action projection, narration-preview, and save/load
+regressions pass. A committed review candidate and required review packet are
+prepared on a feature branch; merge remains owner-authorized.

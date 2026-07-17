@@ -1,53 +1,45 @@
-# Current Sprint Record
+# Sprint 10.63 - One-Time Consequence-Bearing Conversation Response
 
-No sprint is currently active. The most recent terminal sprint record is
-retained below for identity and closeout context.
+Status: Ready for independent review.
 
-## Most Recent Terminal Sprint
+Review state: Candidate prepared.
 
-# Sprint 10.62 - Derived Player-Safe Contextual Action Projection
-
-Status: Complete.
-
-Review state: Merged.
-
-`next_sprint` is `null`. No following sprint is authorized, staged, or
-started.
+`next_sprint` is `null`.
 
 ## Goal
 
-Project the fixed set of currently legitimate player actions into natural,
-player-safe scene presentation without adding simulation authority or changing
-the established command and resolver paths.
+Make the discovery-gated Elin patrol-dispatch response and its declared world
+consequence occur exactly once, using canonical persistent state.
 
 ## Expected Files
 
-- `engine/action_eligibility.py`
-- `engine/contextual_action_projection.py`
+- `data/regions/bryn_shander.json`
+- `engine/player_discovery_response.py`
+- `engine/conversation_affordance.py`
 - `engine/game_engine.py`
-- `engine/perception_builder.py`
-- `engine/scene_narrator.py`
-- `test_contextual_action_projection.py`
+- `engine/region_validator.py`
+- `test_discovery_gated_relocated_actor_response.py`
+- `test_discovery_gated_conversation_affordance.py`
 - `docs/current_capability_package.md`
 - `docs/current_sprint.md`
 - `docs/current_sprint.json`
 
 ## Acceptance Criteria
 
-- Only the four authorized opportunity categories are projected, as safe
-  natural-language text, in deterministic authored order.
-- Existing investigation and clue-presentation eligibility predicates remain
-  authoritative and are reused by the projection.
-- The projection is non-mutating, nonpersistent, and reconstructed after
-  save/load; save version remains `1`.
-- Existing resolver validation still governs stale or invalid attempted actions.
+- The special response remains unavailable before the qualifying discovery.
+- The first eligible Elin conversation returns the authored response and
+  applies one durable patrol-dispatch consequence.
+- Later Elin conversations neither return the special response nor reapply
+  the consequence, including after save/load.
+- Other Elin and actor conversations retain their existing behavior; derived
+  player-safe projection remains non-mutating and cue wording is unchanged.
 
 ## Verification
 
-- Official-interpreter preflight and canonical-record validation passed.
-- Focused contextual projection and affected movement, conversation,
-  investigation, discovery, clue presentation, narration, and save/load tests
-  passed.
-- The full deterministic repository suite passed in bounded batches. The
-  accepted candidate was strict-fast-forward merged into `main`; no following
-  sprint is active or authorized, and `next_sprint` remains `null`.
+- Official-interpreter preflight through the established workspace procedure
+  and canonical-record validation pass.
+- Focused affected conversation, discovery, evidence, thread-resolution,
+  relocation, travel, contextual-action, narration-preview, and save/load
+  tests pass.
+- `git diff --check`, a clean committed review candidate, and the required
+  review-packet assembly and validation pass.
