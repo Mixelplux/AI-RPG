@@ -1,8 +1,18 @@
+# Current Capability Package
+
+No capability package is currently active or authorized. The most recent
+terminal package record is retained below for identity and closeout context.
+
+## Most Recent Terminal Package
+
 # Sprint 10.62 - Derived Player-Safe Contextual Action Projection
 
-Status: Ready for independent review.
+Status: Complete.
 
-Review state: Independent review pending.
+Review state: Merged.
+
+No following capability package is authorized, staged, branched, or started.
+`next_sprint` remains `null`.
 
 ## Value and Scope
 
@@ -36,5 +46,5 @@ presentation only and has no simulation authority.
 
 Implementation and focused category, negative, non-mutation, stale-action,
 save/load, affected-regression, and full deterministic suite coverage passed.
-The result is ready for independent review once committed with its validated
-package-review archive. `next_sprint` remains `null`.
+The accepted candidate was strict-fast-forward merged into `main`; no following
+capability package is active or authorized, and `next_sprint` remains `null`.

@@ -2,8 +2,8 @@
   "schema_version": "1.0.0",
   "document_type": "current_sprint",
   "sprint_count": 1,
-  "active_sprint": "10.62",
-  "active_capability_package": "10.62",
+  "active_sprint": null,
+  "active_capability_package": null,
   "project": {
     "name": "AI Narrative RPG Engine",
     "principles": ["provider-neutral", "deterministic-core", "simulation-owned-truth"]
@@ -13,8 +13,8 @@
     "title": "Derived Player-Safe Contextual Action Projection",
     "type": "capability-package",
     "mode": "capability-package",
-    "status": "review_ready",
-    "review_state": "independent_review_pending",
+    "status": "complete",
+    "review_state": "merged",
     "goal": "Project fixed, legitimate contextual action opportunities into player-safe scene presentation without changing the established command and resolver paths.",
     "predecessor": {"id": "10.61", "status": "complete", "review_state": "merged"},
     "platform": {"official_interpreter": ".\\.venv\\Scripts\\python.exe", "save_version": 1, "provider_requests": "forbidden"},
@@ -40,13 +40,14 @@
       {"id": "review-candidate", "status": "complete"}
     ],
     "governance": [
+      "No sprint or capability package is currently active or staged.",
       "The projection is derived presentation only and is not persistent World State.",
       "No parser, declaration, schema, provider, save-version, generic-action, or generic-affordance expansion is authorized.",
       "Save version remains 1 and next_sprint remains null."
     ],
     "closeout": {
       "allowed_terminal_statuses": ["complete", "blocked"],
-      "verification_result": "Focused contextual-action coverage, affected regressions, and the complete local deterministic suite passed. No live provider request occurred. The candidate preserves save version 1 and next_sprint null.",
+      "verification_result": "Focused contextual-action coverage, affected regressions, and the complete local deterministic suite passed. No live provider request occurred. The candidate preserves save version 1 and next_sprint null. The accepted candidate was strict-fast-forward merged into main.",
       "next_sprint": null
     }
   }

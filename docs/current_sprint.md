@@ -1,10 +1,18 @@
+# Current Sprint Record
+
+No sprint is currently active. The most recent terminal sprint record is
+retained below for identity and closeout context.
+
+## Most Recent Terminal Sprint
+
 # Sprint 10.62 - Derived Player-Safe Contextual Action Projection
 
-Status: Ready for independent review.
+Status: Complete.
 
-Review state: Independent review pending.
+Review state: Merged.
 
-`next_sprint` remains `null`.
+`next_sprint` is `null`. No following sprint is authorized, staged, or
+started.
 
 ## Goal
 
@@ -40,5 +48,6 @@ the established command and resolver paths.
 - Focused contextual projection and affected movement, conversation,
   investigation, discovery, clue presentation, narration, and save/load tests
   passed.
-- The full deterministic repository suite passed in bounded batches; commit,
-  evidence, and package-review archive validation remain the review preparation.
+- The full deterministic repository suite passed in bounded batches. The
+  accepted candidate was strict-fast-forward merged into `main`; no following
+  sprint is active or authorized, and `next_sprint` remains `null`.
