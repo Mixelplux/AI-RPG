@@ -212,33 +212,27 @@ def test_failed_resolved_transition_preserves_live_identity() -> None:
     assert engine.scene_snapshot is live_scene
 
 
-def test_resolved_observation_is_derived_locally_and_persists_through_save_load() -> None:
+def test_resolved_observation_is_scoped_to_resolution_transition() -> None:
     engine = GameEngine("data/regions/bryn_shander.json")
     observation = engine.region["conversation_discovery_resolution"]["resolved_observation"]
     assert engine.get_player_perception()["resolved_thread_observation"] == {}
     engine.process_command("talk to captain")
     engine.process_command("investigate")
-    engine.process_command("present The Captain's Deliberate Trail to captain")
-    assert engine.get_player_perception()["resolved_thread_observation"] == {"text": observation}
-    engine.process_command("go south")
-    assert engine.get_player_perception()["resolved_thread_observation"] == {}
-    engine.process_command("go north")
-    assert engine.get_player_perception()["resolved_thread_observation"] == {"text": observation}
+    resolution = engine.process_command("present The Captain's Deliberate Trail to captain")
+    assert resolution["presentation"]["resolved_observation"] == observation
+    assert THREAD_ID in engine.get_world_state()["resolved_threads"]
+    for command in ("wait", "talk to guard", "investigate", "go south"):
+        result = engine.process_command(command)
+        assert observation not in repr(result)
+        assert engine.get_player_perception()["resolved_thread_observation"] == {}
+        assert observation not in engine.get_narration()["description"]
     with TemporaryDirectory() as directory:
         path = Path(directory) / "resolved-observation.json"
         engine.save(str(path))
         loaded = load_game(str(path))
-        assert loaded.get_player_perception()["resolved_thread_observation"] == {"text": observation}
-
-
-def test_resolved_observation_is_rendered_once_on_each_eligible_visit() -> None:
-    engine = build_resolved_engine()
-    observation = engine.region["conversation_discovery_resolution"]["resolved_observation"]
-    assert engine.get_narration()["description"].count(observation) == 1
-    engine.process_command("go south")
-    assert observation not in engine.get_narration()["description"]
-    engine.process_command("go north")
-    assert engine.get_narration()["description"].count(observation) == 1
+        assert THREAD_ID in loaded.get_world_state()["resolved_threads"]
+        assert loaded.get_player_perception()["resolved_thread_observation"] == {}
+        assert observation not in loaded.get_narration()["description"]
 
 
 def test_cli_clue_presentation_output_preserves_authored_unicode() -> None:
@@ -275,7 +269,6 @@ if __name__ == "__main__":
     test_malformed_presentation_and_resolved_save_compatibility()
     test_resolved_thread_integrity_rejects_malformed_history_and_preserves_live_state()
     test_failed_resolved_transition_preserves_live_identity()
-    test_resolved_observation_is_derived_locally_and_persists_through_save_load()
-    test_resolved_observation_is_rendered_once_on_each_eligible_visit()
+    test_resolved_observation_is_scoped_to_resolution_transition()
     test_cli_clue_presentation_output_preserves_authored_unicode()
     print("Discovery declaration tests passed.")

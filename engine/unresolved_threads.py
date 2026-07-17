@@ -211,26 +211,3 @@ def derive_unresolved_thread_evidence(
     if thread is None or thread["status"] != "open":
         return []
     return [{"text": declaration["evidence_text"]}]
-
-
-def derive_resolved_thread_observation(
-    resolved_threads: dict[str, dict[str, str]],
-    thread_declaration: dict[str, Any] | None,
-    resolution_declaration: dict[str, Any] | None,
-    location_id: str,
-) -> dict[str, str]:
-    """Project one exact authored observation from already-validated state."""
-
-    if (
-        thread_declaration is None
-        or resolution_declaration is None
-        or location_id not in thread_declaration["perception_location_ids"]
-    ):
-        return {}
-    thread_id = resolution_declaration["required_thread_id"]
-    if (
-        thread_declaration["thread_id"] != thread_id
-        or thread_id not in resolved_threads
-    ):
-        return {}
-    return {"text": resolution_declaration["resolved_observation"]}
