@@ -13,8 +13,8 @@
     "title": "One Derived Player-Safe Elapsed-Time Transition Observation",
     "type": "capability-package",
     "mode": "capability-package",
-    "status": "planned",
-    "review_state": "staged_for_bounded_implementation",
+    "status": "review_ready",
+    "review_state": "independent_review_pending",
     "goal": "For the accepted one-hour wait transition, derive one deterministic, nonpersistent, player-safe observation from command-start and completed player-visible state that says an hour passed and, when applicable, one authored actor is no longer present.",
     "predecessor": {"id": "10.63", "status": "complete", "review_state": "merged"},
     "platform": {"official_interpreter": ".\\.venv\\Scripts\\python.exe", "save_version": 1, "provider_requests": "forbidden"},
@@ -36,9 +36,9 @@
     },
     "execution_phases": [
       {"id": "package-and-sprint-staging", "status": "complete"},
-      {"id": "derived-wait-transition-observation", "status": "planned"},
-      {"id": "focused-verification", "status": "planned"},
-      {"id": "review-candidate", "status": "planned"}
+      {"id": "derived-wait-transition-observation", "status": "complete"},
+      {"id": "focused-verification", "status": "complete"},
+      {"id": "review-candidate", "status": "complete"}
     ],
     "governance": [
       "Simulation owns the accepted wait transition and all persistent truth; the observation is deterministic, player-safe, derived presentation only.",
@@ -48,7 +48,7 @@
     ],
     "closeout": {
       "allowed_terminal_statuses": ["complete", "blocked"],
-      "verification_result": "Staged only: canonical records and diff hygiene must validate before the staging commit. Implementation verification remains pending; provider requests are forbidden and save version remains 1.",
+      "verification_result": "Official-interpreter preflight and syntax checks passed. Focused elapsed-time transition-observation coverage and affected time actor-relocation, pressure, evidence-trace, interaction-history, save/load, narration-context, narration-pipeline, and fake-transport provider regressions passed. No live provider request occurred. Save version remains 1 and next_sprint remains null.",
       "next_sprint": null
     }
   }

@@ -61,6 +61,9 @@ from engine.action_eligibility import (
     is_clue_presentation_acceptable,
 )
 from engine.contextual_action_projection import derive_contextual_action_projection
+from engine.elapsed_time_transition_observation import (
+    derive_elapsed_time_transition_observation,
+)
 from engine.evidence_traces import (
     get_evidence_trace as get_world_evidence_trace,
     get_evidence_traces as get_world_evidence_traces,
@@ -1105,11 +1108,17 @@ class GameEngine:
             interaction_result["intent"] == "wait"
             and interaction_result["success"]
         ):
+            command_start_scene = deepcopy(self.scene_snapshot)
             duration_hours = interaction_result["action"]["parameters"][
                 "duration_hours"
             ]
             interaction_result["time_advancement"] = self.advance_time(
                 duration_hours
+            )
+            interaction_result["message"] = derive_elapsed_time_transition_observation(
+                command_start_scene,
+                self.scene_snapshot,
+                self.region.get("entities", []),
             )
             return deepcopy(interaction_result)
         if interaction_result["intent"] == "investigation" and interaction_result["success"]:

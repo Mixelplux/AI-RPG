@@ -1,8 +1,8 @@
 # Sprint 10.64 - One Derived Player-Safe Elapsed-Time Transition Observation
 
-Status: Planned.
+Status: Ready for independent review.
 
-Review state: Staged for bounded implementation.
+Review state: Independent review pending.
 
 `next_sprint` remains `null`.
 
@@ -44,11 +44,11 @@ change such as a previously visible actor no longer being present.
 
 ## Verification
 
-- Official-interpreter preflight and canonical-record validation passed at
-  staging; `git diff --check` passed.
-- Focused transition-observation tests must cover baseline elapsed wording,
-  qualifying visible actor absence, no qualifying change, deterministic choice,
+- Official-interpreter preflight, syntax checks, canonical-record validation,
+  and `git diff --check` passed.
+- Focused transition-observation coverage passed for baseline wording,
+  qualifying actor absence, no qualifying change, deterministic selection,
   non-mutation, hidden-state non-disclosure, and save/load non-persistence.
-- Affected wait/time relocation, interaction history, save/load, perception,
-  narration-preview, and existing provider-safe regressions must pass. Automated
-  verification must not send provider requests.
+- Time actor-relocation, time-pressure, time-evidence-trace, interaction-history,
+  save/load, narration-context, narration-pipeline, and fake-transport OpenAI
+  Responses regressions passed. No live provider request occurred.

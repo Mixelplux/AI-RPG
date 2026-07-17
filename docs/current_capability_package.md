@@ -1,8 +1,8 @@
 # Sprint 10.64 - One Derived Player-Safe Elapsed-Time Transition Observation
 
-Status: Planned.
+Status: Ready for independent review.
 
-Review state: Staged for bounded implementation.
+Review state: Independent review pending.
 
 ## Goal
 
@@ -41,9 +41,11 @@ visible at the command start.
 
 ## Completion
 
-The bounded implementation must prove deterministic one-hour wording, one
-eligible visible-actor absence observation, no observation when no qualifying
-visible change occurs, non-mutation and non-persistence, and affected wait,
-actor-relocation, save/load, interaction, narration-preview, and provider-safe
-regressions. A separately authorized review candidate is required after
-implementation; staging alone does not authorize implementation or review.
+Implementation derives the observation only after successful one-hour wait
+completion. It reports the first command-start visible static actor absent from
+the completed same-location scene, in existing scene order, and otherwise
+returns only `An hour passes.` Focused observation coverage and affected
+time-effect, interaction-history, save/load, narration-context, narration
+pipeline, and fake-transport provider regressions passed. No live provider
+request occurred. The committed candidate awaits independent review; save
+version remains `1` and `next_sprint` remains `null`.
