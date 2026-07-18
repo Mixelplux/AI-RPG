@@ -792,26 +792,29 @@ class GameEngine:
         return result
 
     def _is_declared_one_hour_west_road_traversal(
-        self, interaction_result: Dict[str, Any]
+        self,
+        interaction_result: Dict[str, Any],
+        world_state: Dict[str, Any] | None = None,
     ) -> bool:
         declaration = self.region.get("one_hour_west_road_exit_traversal")
         return (
             interaction_result.get("intent") == "movement"
             and interaction_result.get("success")
             and isinstance(declaration, dict)
-            and get_player_location_id(self.world_state)
+            and get_player_location_id(world_state or self.world_state)
             == declaration.get("source_location_id")
             and interaction_result.get("destination_location_id")
             == declaration.get("destination_location_id")
         )
 
-    def _complete_declared_one_hour_west_road_traversal(
-        self, interaction_result: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """Commit the one supported timed traversal as one outer transition."""
+    def _prepare_declared_one_hour_west_road_traversal(
+        self,
+        candidate_world_state: Dict[str, Any],
+        interaction_result: Dict[str, Any],
+    ) -> tuple[Dict[str, Any], Dict[str, Any]]:
         declaration = self.region["one_hour_west_road_exit_traversal"]
         candidate_world_state, time_result = self._prepare_time_advance_candidate(
-            copy_world_state(self.world_state), declaration["duration_hours"]
+            candidate_world_state, declaration["duration_hours"]
         )
         candidate_world_state = apply_interaction(
             candidate_world_state, interaction_result
@@ -826,6 +829,17 @@ class GameEngine:
                 arrival_trace["destination_location_id"],
                 movement_history_id,
             )
+        return candidate_world_state, time_result
+
+    def _complete_declared_one_hour_west_road_traversal(
+        self, interaction_result: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Commit the one supported timed traversal as one outer transition."""
+        candidate_world_state, time_result = (
+            self._prepare_declared_one_hour_west_road_traversal(
+                copy_world_state(self.world_state), interaction_result
+            )
+        )
         validate_world_state(candidate_world_state, self.region)
         candidate_scene_snapshot = build_scene(self.region, candidate_world_state)
         self.world_state = candidate_world_state
@@ -1156,10 +1170,33 @@ class GameEngine:
             )
             return deepcopy(interaction_result)
 
-        candidate_world_state = apply_interaction(
-            self.world_state,
-            interaction_result
-        )
+        movement_hops = interaction_result.get("movement_hops")
+        if interaction_result["success"] and isinstance(movement_hops, list):
+            candidate_world_state = copy_world_state(self.world_state)
+            time_advancements = []
+            for hop_result in movement_hops:
+                if not isinstance(hop_result, dict):
+                    raise ValueError("Validated movement hops must be dictionaries.")
+                if self._is_declared_one_hour_west_road_traversal(
+                    hop_result, candidate_world_state
+                ):
+                    candidate_world_state, time_result = (
+                        self._prepare_declared_one_hour_west_road_traversal(
+                            candidate_world_state, hop_result
+                        )
+                    )
+                    time_advancements.append(time_result)
+                else:
+                    candidate_world_state = apply_interaction(
+                        candidate_world_state, hop_result
+                    )
+            if time_advancements:
+                interaction_result["time_advancements"] = time_advancements
+        else:
+            candidate_world_state = apply_interaction(
+                self.world_state,
+                interaction_result
+            )
 
         if (
             interaction_result["intent"] == "conversation"

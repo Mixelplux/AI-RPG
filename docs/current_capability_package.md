@@ -1,47 +1,50 @@
-# Sprint 10.67 - Immediate Local Travel Phrase Alignment
+# Sprint 10.68 - One Unambiguous Two-Hop Local Destination Traversal
 
 Status: Ready for Independent Review.
 
-Review state: Candidate prepared.
+Capability: Deterministic Abstract Local Destination Traversal.
+
+Sprint 10.68 is implemented and ready for independent review. `next_sprint`
+is `null`; no following sprint or capability is authorized or staged.
 
 ## Goal
 
-Remove the remaining local command inconsistency by allowing `go to <location>`
-and `head to <location>` to use the existing local movement only when a named
-location is uniquely and immediately traversable from the current scene.
+From a current location A, resolve `go to C` or `move to C` through exactly
+one uniquely eligible authored local route A -> B -> C, reusing the existing
+per-hop movement semantics and ending at canonical location C.
 
 ## Authorized Scope
 
-- For one uniquely matched immediate current-scene connection, resolve `go to`
-  and `head to` through the same authoritative local movement used by a
-  directional command and `move to <location>`.
-- Keep existing structural topology, directional movement authority, local
-  route projection, save compatibility, and save version `1` unchanged.
-- Keep command handling deterministic, current-scene bounded, derived, and
-  nonpersistent.
-- Boundary: the interaction kernel owns classification and immediate-scene
-  candidate resolution; the destination resolver remains the nonmoving
-  loaded-region identification fallback when no immediate unique route matches.
+- Resolve only a route with exactly one intermediate location and exactly one
+  eligible two-hop route to the named destination.
+- Validate the complete two-hop route before the first movement mutation.
+- Execute each hop through the existing immediate local movement semantics.
+- Preserve direct and immediate movement behavior.
+- Keep route resolution transient and derived from existing authored local
+  connections.
+- Preserve save version `1` and the existing persistence architecture;
+  save/load must preserve the resulting canonical location.
+- Handle cycles and unrelated connections deterministically and within the
+  bounded two-hop search.
 
 ## Boundaries
 
-- A non-adjacent `go to` or `head to` retains the existing nonmoving
-  destination-identification behavior; it must not become travel.
-- Ambiguous or invalid targets fail closed without movement.
-- Do not add nonlocal travel, pathfinding, multi-step routing, familiarity or
-  destination knowledge, global coordinates, LLM intent parsing, persistence,
-  migration, or a parser/navigation framework.
-- `next_sprint` remains `null`; this staging does not authorize another
-  capability package.
+- No arbitrary-length or general pathfinding, route ranking, or tie-breaking.
+- No new movement command forms, LLM intent interpretation, narrative
+  generation, interruptions, encounters, generated routes, spatial detail,
+  destination knowledge/discoverability, or category-based destination
+  seeking.
+- A missing or ambiguous eligible two-hop route fails deterministically with
+  no movement mutation.
+- No persistence, migration, parser expansion, or save-version change. Save
+  version remains `1` and `next_sprint` remains `null`.
 
 ## Completion
 
-The implementation moves the player only for an unambiguous immediate local
-route named by `go to` or `head to`, with the same authoritative movement
-result as its directional and `move to` forms. Non-adjacent phrases retain
-nonmoving destination identification, while ambiguous and invalid phrases do
-not move state. Leading-article destination phrases preserve their established
-normalization for both immediate and nonmoving cases. Focused phrase-alignment and affected movement, route,
-save/load, narration-context, and provider-safe regressions pass. No live
-provider request occurred. The candidate is ready for independent review;
-`next_sprint` remains `null` and save version remains `1`.
+The implementation moves A -> B -> C only when `go to C` or `move to C`
+identifies one eligible two-hop local route and the entire route validates
+before movement begins. Direct and immediate behavior is unchanged; failure
+and ambiguity leave movement state unchanged. Focused traversal and affected
+movement, route, save/load, narration-context, and provider-safe regressions
+pass. No live provider request occurs. The committed candidate is ready for
+independent review, with save version `1` and `next_sprint` still `null`.

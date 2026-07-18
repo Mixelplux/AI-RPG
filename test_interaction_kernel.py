@@ -1,7 +1,11 @@
 from copy import deepcopy
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
 from engine.game_engine import GameEngine
 from engine.interaction_kernel import process_player_input
+from engine.save_system import SAVE_VERSION, load_game, save_game
+from engine.scene_loader import build_scene
 
 
 REGION_PATH = "data/regions/bryn_shander.json"
@@ -95,35 +99,152 @@ def test_article_bearing_immediate_destination_phrase_matches_local_movement():
     )
 
 
-def test_non_adjacent_go_to_and_head_to_stay_nonmoving_destination_lookup():
+def test_two_hop_go_to_and_move_to_compose_existing_movement_hops():
+    go_to_engine = GameEngine(REGION_PATH)
+    move_to_engine = GameEngine(REGION_PATH)
+
+    go_to = go_to_engine.process_command("go to Traders' Hall")
+    move_to = move_to_engine.process_command("move to the Inn of the Four Candles")
+
+    for result, engine, destination in (
+        (go_to, go_to_engine, "traders_hall"),
+        (move_to, move_to_engine, "inn_four_candles"),
+    ):
+        assert result["success"]
+        assert result["intent"] == "movement"
+        assert result["destination_location_id"] == destination
+        assert result["message"] in {
+            "You move south. You move east.",
+            "You move south. You move west.",
+        }
+        assert engine.get_world_state()["player"]["current_location_id"] == destination
+        history = engine.get_history()
+        assert [entry["event_type"] for entry in history[-2:]] == [
+            "player_movement",
+            "player_movement",
+        ]
+
+
+def test_missing_two_hop_routes_fail_without_movement():
     engine = GameEngine(REGION_PATH)
     before_state = engine.get_world_state()
     before_history = engine.get_history()
 
-    for command in ("go to Western Trade Road", "head to Western Trade Road"):
+    for command in ("go to Western Trade Road", "move to Western Trade Road"):
         result = engine.process_command(command)
 
-        assert result["intent"] == "destination"
-        assert result["success"]
-        assert result["destination_resolution"]["location_id"] == (
-            "outside_trade_road_west"
-        )
+        assert result["intent"] == "movement"
+        assert not result["success"]
     assert engine.get_world_state() == before_state
     assert engine.get_history() == before_history
 
 
-def test_article_bearing_non_adjacent_phrase_stays_nonmoving_destination_lookup():
+def test_head_to_preserves_nonmoving_destination_lookup():
     engine = GameEngine(REGION_PATH)
     before_state = engine.get_world_state()
     before_history = engine.get_history()
 
-    result = engine.process_command("go to the Western Trade Road")
+    result = engine.process_command("head to the Western Trade Road")
 
     assert result["intent"] == "destination"
     assert result["success"]
     assert result["destination_resolution"]["location_id"] == "outside_trade_road_west"
     assert engine.get_world_state() == before_state
     assert engine.get_history() == before_history
+
+
+def test_ambiguous_two_hop_routes_fail_without_movement():
+    engine = GameEngine(REGION_PATH)
+    north_gate = next(
+        location
+        for location in engine.region["locations"]
+        if location["location_id"] == "bryn_shander_gate_north"
+    )
+    west_gate = next(
+        location
+        for location in engine.region["locations"]
+        if location["location_id"] == "bryn_shander_gate_west"
+    )
+    north_gate["connected_locations"].append(
+        {"direction": "west", "location_id": "bryn_shander_gate_west"}
+    )
+    west_gate["connected_locations"].append(
+        {"direction": "north", "location_id": "traders_hall"}
+    )
+    engine.scene_snapshot = build_scene(engine.region, engine.world_state)
+    before_state = engine.get_world_state()
+    before_history = engine.get_history()
+
+    result = engine.process_command("go to Traders' Hall")
+
+    assert result["intent"] == "movement"
+    assert not result["success"]
+    assert "ambiguous" in result["message"]
+    assert engine.get_world_state() == before_state
+    assert engine.get_history() == before_history
+
+
+def test_two_hop_resolution_is_bounded_and_prevalidates_both_hops():
+    scene = {
+        "location": {
+            "connected_locations": [{"direction": "east", "location_id": "b"}]
+        }
+    }
+    locations = [
+        {"location_id": "a", "name": "A", "connected_locations": []},
+        {
+            "location_id": "b",
+            "name": "B",
+            "connected_locations": [
+                {"direction": "north", "location_id": "c"},
+                {"direction": "west", "location_id": "a"},
+            ],
+        },
+        {"location_id": "c", "name": "C", "connected_locations": []},
+        {
+            "location_id": "unrelated",
+            "name": "Unrelated",
+            "connected_locations": [{"direction": "north", "location_id": "c"}],
+        },
+    ]
+    before_scene, before_locations = deepcopy(scene), deepcopy(locations)
+
+    result = process_player_input("move to C", scene, locations)
+
+    assert result["success"]
+    assert result["destination_location_id"] == "c"
+    assert len(result["movement_hops"]) == 2
+    assert scene == before_scene
+    assert locations == before_locations
+
+    locations[1]["connected_locations"][0] = {"location_id": "c"}
+    invalid_result = process_player_input("go to C", scene, locations)
+
+    assert not invalid_result["success"]
+    assert "movement_hops" not in invalid_result
+
+
+def test_two_hop_save_load_and_existing_timed_hop_semantics():
+    engine = GameEngine(REGION_PATH, entry_location_id="traders_hall")
+
+    result = engine.process_command("move to Western Trade Road")
+
+    assert result["success"]
+    assert result["destination_location_id"] == "outside_trade_road_west"
+    assert len(result["movement_hops"]) == 2
+    assert len(result["time_advancements"]) == 1
+    assert engine.get_world_state()["time"]["elapsed_hours"] == 1
+    assert engine.get_world_state()["player"]["current_location_id"] == (
+        "outside_trade_road_west"
+    )
+
+    with TemporaryDirectory() as directory:
+        save_path = Path(directory) / "two-hop-save.json"
+        save_game(engine, str(save_path))
+        loaded = load_game(str(save_path))
+
+    assert SAVE_VERSION == 1
+    assert loaded.get_world_state() == engine.get_world_state()
 
 
 def test_ambiguous_and_invalid_destination_phrases_fail_closed():
@@ -160,8 +281,12 @@ def main():
     test_ambiguous_immediate_names_do_not_resolve_or_mutate_scene()
     test_immediate_go_to_and_head_to_match_directional_movement()
     test_article_bearing_immediate_destination_phrase_matches_local_movement()
-    test_non_adjacent_go_to_and_head_to_stay_nonmoving_destination_lookup()
-    test_article_bearing_non_adjacent_phrase_stays_nonmoving_destination_lookup()
+    test_two_hop_go_to_and_move_to_compose_existing_movement_hops()
+    test_missing_two_hop_routes_fail_without_movement()
+    test_head_to_preserves_nonmoving_destination_lookup()
+    test_ambiguous_two_hop_routes_fail_without_movement()
+    test_two_hop_resolution_is_bounded_and_prevalidates_both_hops()
+    test_two_hop_save_load_and_existing_timed_hop_semantics()
     test_ambiguous_and_invalid_destination_phrases_fail_closed()
     print("Interaction-kernel local route command tests passed.")
 
