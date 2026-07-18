@@ -70,6 +70,16 @@ Do not automatically run the full project suite unless the package requires it o
 - Prefer existing architecture and established patterns.
 - Do not introduce a generic framework, new ownership model, persistence change, or unrelated refactor unless explicitly authorized.
 
+### Approved External Region Pack Artifact Imports
+
+An owner-approved external Region Pack artifact must have a recorded SHA-256 before repository import. Repository integration must verify the external source against that approved SHA-256, import the artifact by byte-preserving file copy without text decoding or re-encoding, and verify the repository destination against the same SHA-256 before any subsequent repository-side content edits or test updates.
+
+Use the repository import utility for this transfer. It verifies the source before
+copying, writes only a same-directory temporary byte copy, verifies that copy, and
+atomically replaces the destination only after both hashes match. Do not pass the
+artifact through a text editor, parser, serializer, or newline-normalizing tool as
+part of the import.
+
 ## 2.2 Immediate Checks
 
 After a meaningful code edit:
