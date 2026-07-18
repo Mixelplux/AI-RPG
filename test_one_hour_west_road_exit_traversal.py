@@ -74,8 +74,13 @@ def test_declaration_validation():
     invalid["one_hour_west_road_exit_traversal"]["extra"] = "no"
     expect_invalid(invalid, "fields are invalid")
     disconnected = deepcopy(region)
-    disconnected["locations"][2]["connected_locations"] = [
-        {"direction": "east", "location_id": "bryn_shander_main_street"}
+    west_gate = next(
+        location for location in disconnected["locations"]
+        if location["location_id"] == "bryn_shander_gate_west"
+    )
+    west_gate["connected_locations"] = [
+        connection for connection in west_gate["connected_locations"]
+        if connection["location_id"] != "outside_trade_road_west"
     ]
     expect_invalid(disconnected, "directly connected")
 

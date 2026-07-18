@@ -81,21 +81,21 @@ def test_immediate_go_to_and_head_to_match_directional_movement():
         )
 
 
-def test_article_bearing_immediate_destination_phrase_matches_local_movement():
-    directional_engine = GameEngine(REGION_PATH)
+def test_article_bearing_immediate_destination_phrase_matches_named_movement():
+    named_engine = GameEngine(REGION_PATH)
     article_engine = GameEngine(REGION_PATH)
-    directional_engine.process_command("go south")
+    named_engine.process_command("go south")
     article_engine.process_command("go south")
 
-    directional = directional_engine.process_command("go west")
-    article = article_engine.process_command("head to the Inn of the Four Candles")
+    named = named_engine.process_command("move to Northlook")
+    article = article_engine.process_command("head to the Northlook")
 
     assert article["success"]
     assert article["intent"] == "movement"
-    assert article["destination_location_id"] == directional["destination_location_id"]
-    assert article["message"] == directional["message"]
+    assert article["destination_location_id"] == named["destination_location_id"]
+    assert article["message"] == named["message"]
     assert article_engine.get_world_state()["player"]["current_location_id"] == (
-        directional_engine.get_world_state()["player"]["current_location_id"]
+        named_engine.get_world_state()["player"]["current_location_id"]
     )
 
 
@@ -103,26 +103,22 @@ def test_two_hop_go_to_and_move_to_compose_existing_movement_hops():
     go_to_engine = GameEngine(REGION_PATH)
     move_to_engine = GameEngine(REGION_PATH)
 
-    go_to = go_to_engine.process_command("go to Traders' Hall")
-    move_to = move_to_engine.process_command("move to the Inn of the Four Candles")
+    go_to = go_to_engine.process_command("go to Rendaril's Emporium")
+    move_to = move_to_engine.process_command("move to the Northlook")
 
-    for result, engine, destination in (
-        (go_to, go_to_engine, "traders_hall"),
-        (move_to, move_to_engine, "inn_four_candles"),
+    for result, engine, destination, expected_message, hop_count in (
+        (go_to, go_to_engine, "traders_hall", "You move south. You move southwest. You move south. You move east.", 4),
+        (move_to, move_to_engine, "inn_four_candles", "You move south. You move southwest.", 2),
     ):
         assert result["success"]
         assert result["intent"] == "movement"
         assert result["destination_location_id"] == destination
-        assert result["message"] in {
-            "You move south. You move east.",
-            "You move south. You move west.",
-        }
+        assert result["message"] == expected_message
         assert engine.get_world_state()["player"]["current_location_id"] == destination
         history = engine.get_history()
-        assert [entry["event_type"] for entry in history[-2:]] == [
-            "player_movement",
-            "player_movement",
-        ]
+        assert [entry["event_type"] for entry in history[-hop_count:]] == [
+            "player_movement"
+        ] * hop_count
 
 
 def test_missing_two_hop_routes_fail_without_movement():
@@ -144,7 +140,7 @@ def test_head_to_preserves_nonmoving_destination_lookup():
     before_state = engine.get_world_state()
     before_history = engine.get_history()
 
-    result = engine.process_command("head to the Western Trade Road")
+    result = engine.process_command("head to the Southwest Trade Road")
 
     assert result["intent"] == "destination"
     assert result["success"]
@@ -155,32 +151,16 @@ def test_head_to_preserves_nonmoving_destination_lookup():
 
 def test_equal_hop_routes_use_authored_connection_order_without_player_choice():
     engine = GameEngine(REGION_PATH)
-    north_gate = next(
-        location
-        for location in engine.region["locations"]
-        if location["location_id"] == "bryn_shander_gate_north"
-    )
-    west_gate = next(
-        location
-        for location in engine.region["locations"]
-        if location["location_id"] == "bryn_shander_gate_west"
-    )
-    north_gate["connected_locations"].append(
-        {"direction": "west", "location_id": "bryn_shander_gate_west"}
-    )
-    west_gate["connected_locations"].append(
-        {"direction": "north", "location_id": "traders_hall"}
-    )
-    engine.scene_snapshot = build_scene(engine.region, engine.world_state)
-    result = engine.process_command("go to Traders' Hall")
+    result = engine.process_command("go to Market Square")
 
     assert result["intent"] == "movement"
     assert result["success"]
     assert [hop["destination_location_id"] for hop in result["movement_hops"]] == [
         "bryn_shander_main_street",
-        "traders_hall",
+        "inn_four_candles",
+        "market_square",
     ]
-    assert engine.get_world_state()["player"]["current_location_id"] == "traders_hall"
+    assert engine.get_world_state()["player"]["current_location_id"] == "market_square"
 
 
 def test_local_destination_prefers_fewer_authored_connections_over_route_order():
@@ -303,11 +283,11 @@ def test_two_hop_resolution_is_bounded_and_prevalidates_both_hops():
 def test_two_hop_save_load_and_existing_timed_hop_semantics():
     engine = GameEngine(REGION_PATH, entry_location_id="traders_hall")
 
-    result = engine.process_command("move to Western Trade Road")
+    result = engine.process_command("move to Southwest Trade Road")
 
     assert result["success"]
     assert result["destination_location_id"] == "outside_trade_road_west"
-    assert len(result["movement_hops"]) == 2
+    assert len(result["movement_hops"]) == 4
     assert len(result["time_advancements"]) == 1
     assert engine.get_world_state()["time"]["elapsed_hours"] == 1
     assert engine.get_world_state()["player"]["current_location_id"] == (
@@ -327,7 +307,7 @@ def test_three_hop_go_to_and_move_to_validate_then_compose_hops():
     go_engine = GameEngine(REGION_PATH, entry_location_id="inn_four_candles")
     move_engine = GameEngine(REGION_PATH, entry_location_id="inn_four_candles")
 
-    for command, engine in (("go to West Gate", go_engine), ("move to West Gate", move_engine)):
+    for command, engine in (("go to Southwest Gate", go_engine), ("move to Southwest Gate", move_engine)):
         before_history = engine.get_history()
         result = engine.process_command(command)
         assert result["success"]
@@ -448,7 +428,7 @@ def test_long_route_publishes_each_hop_and_preserves_timed_intermediate_arrival(
     result = engine.process_command("go to Sequential Route Destination")
 
     assert result["success"]
-    assert len(result["movement_hops"]) == 5
+    assert len(result["movement_hops"]) == 7
     assert result["destination_location_id"] == "sequential_route_destination"
     assert engine.get_world_state()["player"]["current_location_id"] == (
         "sequential_route_destination"
@@ -459,7 +439,9 @@ def test_long_route_publishes_each_hop_and_preserves_timed_intermediate_arrival(
     ]
     assert [entry["location"] for entry in movement_history] == [
         "bryn_shander_main_street",
-        "traders_hall",
+        "inn_four_candles",
+        "market_square",
+        "council_hall",
         "bryn_shander_gate_west",
         "outside_trade_road_west",
         "sequential_route_destination",
@@ -490,7 +472,7 @@ def test_later_route_hop_failure_preserves_earlier_authoritative_hop():
     engine._complete_movement_hop = fail_before_second_hop
 
     try:
-        engine.process_command("go to Western Trade Road")
+        engine.process_command("go to Southwest Trade Road")
         assert False, "Expected the injected later-hop failure."
     except RuntimeError as error:
         assert str(error) == "test-only later-hop failure"
@@ -540,7 +522,7 @@ def main():
     test_named_routes_are_current_scene_only_and_fail_closed()
     test_ambiguous_immediate_names_do_not_resolve_or_mutate_scene()
     test_immediate_go_to_and_head_to_match_directional_movement()
-    test_article_bearing_immediate_destination_phrase_matches_local_movement()
+    test_article_bearing_immediate_destination_phrase_matches_named_movement()
     test_two_hop_go_to_and_move_to_compose_existing_movement_hops()
     test_missing_two_hop_routes_fail_without_movement()
     test_head_to_preserves_nonmoving_destination_lookup()

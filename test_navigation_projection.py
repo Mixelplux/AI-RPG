@@ -20,7 +20,7 @@ def test_direct_routes_are_player_facing_and_deterministic():
     second = engine.get_player_perception()
 
     expected_route_cues = [
-        {"text": "The way north leads to Northern Tundra Route."},
+        {"text": "The way north leads to Northern Gate Approach."},
         {"text": "The way south leads to Main Street."},
     ]
     assert first["navigation"] == {"route_cues": expected_route_cues}
@@ -31,7 +31,7 @@ def test_direct_routes_are_player_facing_and_deterministic():
 
     narration = engine.get_narration()
     assert narration["navigation"] == expected_route_cues
-    assert "The way north leads to Northern Tundra Route." in narration["description"]
+    assert "The way north leads to Northern Gate Approach." in narration["description"]
     assert "The way south leads to Main Street." in narration["description"]
     assert "lies north" not in narration["description"]
     assert "lies south" not in narration["description"]
@@ -78,8 +78,6 @@ def test_movement_and_save_load_remain_compatible():
     assert engine.get_history()[-1]["event_type"] == "player_movement"
     assert engine.get_player_perception()["navigation"]["route_cues"] == [
         {"text": "The way north leads to North Gate."},
-        {"text": "The way east leads to Traders' Hall."},
-        {"text": "The way west leads to The Inn of the Four Candles."},
     ]
 
     with TemporaryDirectory() as directory:

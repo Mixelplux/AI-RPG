@@ -14,7 +14,7 @@ ACTOR = "guard_elin_voss"
 DISCOVERY = "west_gate_elin_report_trace"
 AFFORDANCE = {
     "affordance_id": "west_gate_elin_orders_conversation",
-    "display_text": "Elin Voss is at the West Gate with the patrol orders. You can speak with her about them.",
+    "display_text": "Elin Voss is at the Southwest Gate with the patrol orders. You can speak with her about them.",
     "command_text": "talk to Elin Voss",
     "target_display_name": "Elin Voss",
 }
@@ -37,9 +37,7 @@ def resolve_and_arrive(engine, discover=False):
     engine.process_command("talk to captain")
     engine.process_command("investigate")
     assert engine.present_clue("The Captain's Deliberate Trail", "captain")["changed"]
-    assert engine.process_command("go south")["success"]
-    assert engine.process_command("go east")["success"]
-    assert engine.process_command("go north")["success"]
+    assert engine.process_command("go to Southwest Gate")["success"]
     if discover:
         assert engine.process_command("investigate")["investigation"]["discovery_id"] == DISCOVERY
 
@@ -136,7 +134,7 @@ def test_projection_and_existing_talk_authority():
         tuple(engine.get_world_state()["history"]),
     ) is None
 
-    assert engine.process_command("go east")["success"]
+    assert engine.process_command("go to Rendaril's Emporium")["success"]
     assert engine.get_player_perception()["conversation_affordance"] == {}
     stale_result = engine.process_command("talk to elin")
     assert not stale_result["success"]
@@ -164,10 +162,9 @@ def test_save_load_and_reentry_reconstruct_the_projection():
         assert repeated["player_discovery_response"] is None
         assert repeated["player_discovery_response_consequence"] is None
 
-    assert engine.process_command("go east")["success"]
+    assert engine.process_command("go to Rendaril's Emporium")["success"]
     assert engine.get_player_perception()["conversation_affordance"] == {}
-    assert engine.process_command("go east")["success"]
-    assert engine.process_command("go north")["success"]
+    assert engine.process_command("go to Southwest Gate")["success"]
     assert engine.get_player_perception()["conversation_affordance"] == AFFORDANCE
 
 

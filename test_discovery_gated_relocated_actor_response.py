@@ -12,7 +12,7 @@ from engine.save_system import build_save_data, load_game
 
 REGION = "data/regions/bryn_shander.json"
 DISCOVERY = "west_gate_elin_report_trace"
-TEXT = 'Elin Voss studies the folded order, then nods. "You found it. The West Gate patrol is moving before the road closes."'
+TEXT = 'Elin Voss studies the folded order, then nods. "You found it. The Southwest Gate patrol is moving before the road closes."'
 
 
 def data(): return json.loads(Path(REGION).read_text(encoding="utf-8"))
@@ -26,9 +26,7 @@ def invalid(region, text):
 def resolve_and_arrive(engine, discover=False):
     engine.process_command("talk to captain"); engine.process_command("investigate")
     assert engine.present_clue("The Captain's Deliberate Trail", "captain")["changed"]
-    assert engine.process_command("go south")["success"]
-    assert engine.process_command("go east")["success"]
-    assert engine.process_command("go north")["success"]
+    assert engine.process_command("go to Southwest Gate")["success"]
     if discover: assert engine.process_command("investigate")["investigation"]["discovery_id"] == DISCOVERY
 
 def test_validation():
@@ -68,7 +66,7 @@ def test_projection_command_start_and_non_mutation():
     assert engine.get_player_perception()["conversation_affordance"] == {}
     for packet in (engine.get_scene_snapshot(),engine.get_player_perception(),engine.get_narration_context("look"),engine.get_narration_preview("look"),engine.process_command("talk to elin")):
         assert DISCOVERY not in repr(packet)
-    engine.process_command("go east"); engine.process_command("go north")
+    assert engine.process_command("go to North Gate")["success"]
     assert engine.process_command("talk to captain")["actor_knowledge_response"] is not None
 
 def test_command_start_failure_and_save_load():

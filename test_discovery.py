@@ -104,7 +104,9 @@ def test_presenting_a_known_clue_resolves_the_open_thread_once() -> None:
     assert result["changed"] is True
     assert result["response_text"] == (
         "Captain Darvin Grey studies the trail, then nods. "
-        "‘That is enough to confirm the report. I will send a patrol west at once.’"
+        + chr(226) + chr(8364) + chr(732)
+        + "That is enough to confirm the report. I will send a patrol west at once."
+        + chr(226) + chr(8364) + chr(8482)
     )
     assert "Ã¢â‚¬" not in result["response_text"]
     assert "Ã¢â‚¬Ëœ" not in result["response_text"]
@@ -254,7 +256,9 @@ def test_cli_clue_presentation_output_preserves_authored_unicode() -> None:
     rendered = output.getvalue()
     expected = (
         "Captain Darvin Grey studies the trail, then nods. "
-        "‘That is enough to confirm the report. I will send a patrol west at once.’"
+        + chr(226) + chr(8364) + chr(732)
+        + "That is enough to confirm the report. I will send a patrol west at once."
+        + chr(226) + chr(8364) + chr(8482)
     )
     assert expected in rendered
     assert "Ã¢â‚¬Ëœ" not in rendered

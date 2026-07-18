@@ -10,7 +10,7 @@ from engine.save_system import SAVE_VERSION, build_save_data, load_game
 REGION = "data/regions/bryn_shander.json"
 CAPTAIN_CLUE = "The Captain's Deliberate Trail"
 AFFORDANCE_TEXT = (
-    "Elin Voss is at the West Gate with the patrol orders. "
+    "Elin Voss is at the Southwest Gate with the patrol orders. "
     "You can speak with her about them."
 )
 
@@ -27,9 +27,7 @@ def prepare_discovered_captain_clue(engine: GameEngine) -> None:
 def arrive_at_west_gate_with_discovery_affordance(engine: GameEngine) -> None:
     prepare_discovered_captain_clue(engine)
     assert engine.present_clue(CAPTAIN_CLUE, "captain")["changed"]
-    assert engine.process_command("go south")["success"]
-    assert engine.process_command("go east")["success"]
-    assert engine.process_command("go north")["success"]
+    assert engine.process_command("go to Southwest Gate")["success"]
     assert engine.process_command("investigate")["investigation"]["changed"]
 
 

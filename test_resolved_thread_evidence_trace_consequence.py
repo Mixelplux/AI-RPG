@@ -118,9 +118,7 @@ def test_atomic_composition_and_hidden_investigation():
     ):
         assert TRACE_ID not in repr(packet)
         assert EVIDENCE_ID not in repr(packet)
-    assert engine.process_command("go south")["success"]
-    assert engine.process_command("go east")["success"]
-    assert engine.process_command("go north")["success"]
+    assert engine.process_command("go to Southwest Gate")["success"]
     investigation = engine.process_command("investigate")["investigation"]
     assert investigation["changed"] and investigation["discovery_id"] == DISCOVERY_ID
     assert investigation["text"] == engine.region["discovery_declarations"][2]["text"]

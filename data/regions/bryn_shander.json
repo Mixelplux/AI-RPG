@@ -3,7 +3,7 @@
   "region_name": "Bryn Shander",
   "setting": "Icewind Dale",
   "canon_source": "Dungeons & Dragons Forgotten Realms",
-  "version": "0.4",
+  "version": "0.5",
   "initial_pressures": [
     {
       "pressure_id": "bryn_shander_winter",
@@ -85,11 +85,11 @@
     },
     {
       "discovery_id": "west_gate_elin_report_trace",
-      "title": "Elin's West-Road Orders",
+      "title": "Elin's Southwest-Gate Orders",
       "trace_id": "west_gate_elin_report_trace",
       "evidence_id": "elin_west_road_patrol_orders",
       "location_id": "bryn_shander_gate_west",
-      "text": "A folded patrol order beneath the West Gate brazier records Elin Voss's urgent west-road assignment."
+      "text": "A folded patrol order beneath the Southwest Gate brazier records Elin Voss's urgent west-road assignment."
     },
     {
       "discovery_id": "western_trade_road_patrol_marker",
@@ -113,7 +113,7 @@
     "target_entity_id": "captain_darvin_grey",
     "required_discovery_id": "north_gate_captain_trace",
     "required_thread_id": "bryn_shander_west_road_bandit_report",
-    "response_text": "Captain Darvin Grey studies the trail, then nods. ‘That is enough to confirm the report. I will send a patrol west at once.’",
+    "response_text": "Captain Darvin Grey studies the trail, then nods. â€˜That is enough to confirm the report. I will send a patrol west at once.â€™",
     "resolved_observation": "The watch's low-voiced concern has given way to purposeful orders."
   },
   "conversation_discovery_actor_relocation": {
@@ -204,7 +204,7 @@
       "location_id": "bryn_shander_gate_north",
       "name": "North Gate",
       "type": "city_gate",
-      "description_seed": "Main northern entry point into Bryn Shander, exposed to harsh winds and constant cold.",
+      "description_seed": "The northern gate opens onto the wind-lashed approach and the town's central thoroughfare.",
       "state": {
         "open": true,
         "traffic_level": 0.2,
@@ -229,10 +229,28 @@
       ]
     },
     {
+      "location_id": "outside_tundra_route_north",
+      "name": "Northern Gate Approach",
+      "type": "wilderness_route",
+      "description_seed": "Project-authored approach road immediately north of the gate, left deliberately small rather than modeled as regional routing.",
+      "state": {
+        "visibility_level": 0.25,
+        "travel_difficulty": 0.8,
+        "activity_level": 0.05
+      },
+      "spawn_rules": {},
+      "connected_locations": [
+        {
+          "direction": "south",
+          "location_id": "bryn_shander_gate_north"
+        }
+      ]
+    },
+    {
       "location_id": "bryn_shander_main_street",
       "name": "Main Street",
       "type": "urban_road",
-      "description_seed": "Central artery lined with trade halls and reinforced wooden structures.",
+      "description_seed": "Project-authored connective thoroughfare joining the North Gate to Bryn Shander's market and commercial lanes.",
       "state": {
         "crowd_density": 0.25,
         "activity_level": 0.4
@@ -261,20 +279,128 @@
           "location_id": "bryn_shander_gate_north"
         },
         {
-          "direction": "east",
-          "location_id": "traders_hall"
+          "direction": "southwest",
+          "location_id": "inn_four_candles"
         },
         {
-          "direction": "west",
-          "location_id": "inn_four_candles"
+          "direction": "southeast",
+          "location_id": "blackiron_blades"
         }
       ]
     },
     {
-      "location_id": "bryn_shander_gate_west",
-      "name": "West Gate",
+      "location_id": "inn_four_candles",
+      "name": "Northlook",
+      "type": "inn",
+      "description_seed": "The Northlook inn is a warm, busy gathering place for travelers and mercenaries near the northern side of town.",
+      "state": {
+        "crowd_density": 0.3,
+        "activity_level": 0.45
+      },
+      "spawn_rules": {},
+      "connected_locations": [
+        {
+          "direction": "northeast",
+          "location_id": "bryn_shander_main_street"
+        },
+        {
+          "direction": "east",
+          "location_id": "blackiron_blades"
+        },
+        {
+          "direction": "south",
+          "location_id": "market_square"
+        }
+      ]
+    },
+    {
+      "location_id": "blackiron_blades",
+      "name": "Blackiron Blades",
+      "type": "smithy",
+      "description_seed": "Blackiron Blades is the town's practical smithy and outfitter north of the civic quarter.",
+      "state": {
+        "crowd_density": 0.2,
+        "activity_level": 0.4
+      },
+      "spawn_rules": {},
+      "connected_locations": [
+        {
+          "direction": "northwest",
+          "location_id": "bryn_shander_main_street"
+        },
+        {
+          "direction": "west",
+          "location_id": "inn_four_candles"
+        },
+        {
+          "direction": "south",
+          "location_id": "market_square"
+        }
+      ]
+    },
+    {
+      "location_id": "market_square",
+      "name": "Market Square",
+      "type": "market_square",
+      "description_seed": "The central Market Square is Bryn Shander's public trading and gathering ground.",
+      "state": {
+        "crowd_density": 0.45,
+        "activity_level": 0.6
+      },
+      "spawn_rules": {},
+      "connected_locations": [
+        {
+          "direction": "northwest",
+          "location_id": "inn_four_candles"
+        },
+        {
+          "direction": "north",
+          "location_id": "blackiron_blades"
+        },
+        {
+          "direction": "east",
+          "location_id": "traders_hall"
+        },
+        {
+          "direction": "southeast",
+          "location_id": "town_hall"
+        },
+        {
+          "direction": "south",
+          "location_id": "council_hall"
+        },
+        {
+          "direction": "southwest",
+          "location_id": "house_of_the_triad"
+        }
+      ]
+    },
+    {
+      "location_id": "traders_hall",
+      "name": "Rendaril's Emporium",
+      "type": "trade_hall",
+      "description_seed": "Rendaril's well-stocked emporium anchors the eastern commercial lane between Main Street, Market Square, and the gates.",
+      "state": {
+        "crowd_density": 0.35,
+        "activity_level": 0.55
+      },
+      "spawn_rules": {},
+      "connected_locations": [
+        {
+          "direction": "west",
+          "location_id": "market_square"
+        },
+        {
+          "direction": "east",
+          "location_id": "bryn_shander_gate_east"
+        }
+      ]
+    },
+    {
+      "location_id": "bryn_shander_gate_east",
+      "name": "East Gate",
       "type": "city_gate",
-      "description_seed": "Secondary gate used for caravans and supply routes.",
+      "description_seed": "The East Gate gives a guarded eastern exit from the commercial side of Bryn Shander.",
       "state": {
         "open": true,
         "traffic_level": 0.1,
@@ -290,75 +416,165 @@
       "connected_locations": [
         {
           "direction": "west",
-          "location_id": "outside_trade_road_west"
+          "location_id": "traders_hall"
+        },
+        {
+          "direction": "southwest",
+          "location_id": "town_hall"
         },
         {
           "direction": "east",
-          "location_id": "bryn_shander_main_street"
+          "location_id": "outside_eastway_east"
         }
       ]
     },
     {
-      "location_id": "outside_tundra_route_north",
-      "name": "Northern Tundra Route",
-      "type": "wilderness_route",
-      "description_seed": "A snow-choked trail leading away from Bryn Shander into the open tundra.",
+      "location_id": "outside_eastway_east",
+      "name": "Eastway Gate Approach",
+      "type": "trade_route",
+      "description_seed": "Project-authored immediate road approach beyond the East Gate, kept deliberately local and not modeled as regional routing.",
       "state": {
-        "visibility_level": 0.25,
-        "travel_difficulty": 0.8,
-        "activity_level": 0.05
+        "visibility_level": 0.3,
+        "travel_difficulty": 0.7,
+        "activity_level": 0.1
       },
       "spawn_rules": {},
       "connected_locations": [
         {
-          "direction": "south",
-          "location_id": "bryn_shander_gate_north"
+          "direction": "west",
+          "location_id": "bryn_shander_gate_east"
         }
       ]
     },
     {
-      "location_id": "traders_hall",
-      "name": "Traders' Hall",
-      "type": "trade_hall",
-      "description_seed": "A busy hall where merchants, caravan guards, and townsfolk conduct business out of the cold.",
+      "location_id": "town_hall",
+      "name": "Town Hall",
+      "type": "civic_hall",
+      "description_seed": "Town Hall faces the southern side of Market Square and hosts Bryn Shander's public business.",
       "state": {
-        "crowd_density": 0.35,
-        "activity_level": 0.55
+        "crowd_density": 0.2,
+        "activity_level": 0.35
       },
       "spawn_rules": {},
       "connected_locations": [
         {
-          "direction": "out",
-          "location_id": "bryn_shander_main_street"
+          "direction": "northwest",
+          "location_id": "market_square"
         },
         {
+          "direction": "northeast",
+          "location_id": "bryn_shander_gate_east"
+        },
+        {
+          "direction": "south",
+          "location_id": "speakers_palace"
+        }
+      ]
+    },
+    {
+      "location_id": "speakers_palace",
+      "name": "Speaker's Palace",
+      "type": "civic_residence",
+      "description_seed": "The Speaker's Palace stands beside the council offices and the eastern side of town.",
+      "state": {
+        "crowd_density": 0.05,
+        "activity_level": 0.15
+      },
+      "spawn_rules": {},
+      "connected_locations": [
+        {
           "direction": "north",
+          "location_id": "town_hall"
+        }
+      ]
+    },
+    {
+      "location_id": "house_of_the_triad",
+      "name": "House of the Triad",
+      "type": "temple",
+      "description_seed": "The House of the Triad is a modest place of worship and counsel on the edge of the civic streets.",
+      "state": {
+        "crowd_density": 0.1,
+        "activity_level": 0.25
+      },
+      "spawn_rules": {},
+      "connected_locations": [
+        {
+          "direction": "northeast",
+          "location_id": "market_square"
+        },
+        {
+          "direction": "east",
+          "location_id": "council_hall"
+        },
+        {
+          "direction": "southwest",
           "location_id": "bryn_shander_gate_west"
         }
       ]
     },
     {
-      "location_id": "inn_four_candles",
-      "name": "The Inn of the Four Candles",
-      "type": "inn",
-      "description_seed": "A warm inn lit by flickering candles, filled with the smell of stew, smoke, and wet wool.",
+      "location_id": "council_hall",
+      "name": "Council Hall",
+      "type": "civic_hall",
+      "description_seed": "Council Hall joins Bryn Shander's civic offices and public deliberations.",
       "state": {
-        "crowd_density": 0.3,
-        "activity_level": 0.45
+        "crowd_density": 0.15,
+        "activity_level": 0.3
       },
       "spawn_rules": {},
       "connected_locations": [
         {
-          "direction": "out",
-          "location_id": "bryn_shander_main_street"
+          "direction": "north",
+          "location_id": "market_square"
+        },
+        {
+          "direction": "west",
+          "location_id": "house_of_the_triad"
+        },
+        {
+          "direction": "southwest",
+          "location_id": "bryn_shander_gate_west"
+        }
+      ]
+    },
+    {
+      "location_id": "bryn_shander_gate_west",
+      "name": "Southwest Gate",
+      "type": "city_gate",
+      "description_seed": "The southwest gate serves caravans and the road approach beyond Bryn Shander's walls.",
+      "state": {
+        "open": true,
+        "traffic_level": 0.1,
+        "activity_level": 0.2
+      },
+      "spawn_rules": {
+        "guards": {
+          "count": 1,
+          "template": "city_guard",
+          "persistence": "dynamic"
+        }
+      },
+      "connected_locations": [
+        {
+          "direction": "northeast",
+          "location_id": "council_hall"
+        },
+        {
+          "direction": "east",
+          "location_id": "house_of_the_triad"
+        },
+        {
+          "direction": "west",
+          "location_id": "outside_trade_road_west"
         }
       ]
     },
     {
       "location_id": "outside_trade_road_west",
-      "name": "Western Trade Road",
+      "name": "Southwest Trade Road",
       "type": "trade_route",
-      "description_seed": "A hard-packed road leading west from Bryn Shander, half-buried under windblown snow.",
+      "description_seed": "Project-authored immediate road approach beyond the Southwest Gate; it does not establish a regional routing policy.",
       "state": {
         "visibility_level": 0.3,
         "travel_difficulty": 0.7,
@@ -431,14 +647,14 @@
     "required_discovery_id": "west_gate_elin_report_trace",
     "consequence_event_type": "west_gate_patrol_dispatched",
     "consequence_summary": "West Gate patrol dispatched.",
-    "response_text": "Elin Voss studies the folded order, then nods. \"You found it. The West Gate patrol is moving before the road closes.\""
+    "response_text": "Elin Voss studies the folded order, then nods. \"You found it. The Southwest Gate patrol is moving before the road closes.\""
   },
   "conversation_affordance": {
     "affordance_id": "west_gate_elin_orders_conversation",
     "location_id": "bryn_shander_gate_west",
     "target_entity_id": "guard_elin_voss",
     "required_discovery_id": "west_gate_elin_report_trace",
-    "display_text": "Elin Voss is at the West Gate with the patrol orders. You can speak with her about them."
+    "display_text": "Elin Voss is at the Southwest Gate with the patrol orders. You can speak with her about them."
   },
   "factions": [
     {

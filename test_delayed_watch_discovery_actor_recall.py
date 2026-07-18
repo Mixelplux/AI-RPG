@@ -40,9 +40,7 @@ def reach_captain_with_mark(engine):
     assert engine.process_command("wait")["success"]
     assert engine.get_evidence_trace("north_gate_second_hour_trace") is not None
     assert engine.process_command("investigate")["investigation"]["discovery_id"] == DISCOVERY
-    assert engine.process_command("go south")["success"]
-    assert engine.process_command("go east")["success"]
-    assert engine.process_command("go north")["success"]
+    assert engine.process_command("go to Southwest Gate")["success"]
     assert engine.resolve_target("captain")["identifier"] == CAPTAIN
 
 
@@ -107,8 +105,7 @@ def test_end_to_end_atomic_recall_and_path_separation():
     assert moved["event_type"] == "actor_moved"
     assert moved["source_history_id"] == source["history_id"]
     assert engine.resolve_target("captain")["status"] != "resolved"
-    assert engine.process_command("go east")["success"]
-    assert engine.process_command("go north")["success"]
+    assert engine.process_command("go to North Gate")["success"]
     assert engine.resolve_target("captain")["identifier"] == CAPTAIN
     for packet in (
         engine.get_scene_snapshot(), engine.get_player_perception(),
@@ -145,8 +142,7 @@ def test_ineligible_noop_rollback_and_save_load():
         assert engine.get_world_state() == before_state and engine.world_state is live_state
         assert engine.scene_snapshot is before_scene
     assert engine.present_clue(TITLE, "captain")["actor_location_consequence"] == {"status": "applied"}
-    assert engine.process_command("go east")["success"]
-    assert engine.process_command("go north")["success"]
+    assert engine.process_command("go to North Gate")["success"]
     moved_count = len(engine.query_history(event_type="actor_moved"))
     assert engine.present_clue(TITLE, "captain")["actor_location_consequence"] == {"status": "no_op"}
     assert len(engine.query_history(event_type="actor_moved")) == moved_count
@@ -202,8 +198,7 @@ def test_exact_noop_counts_and_pre_presentation_save_load_path():
     engine = GameEngine(REGION)
     reach_captain_with_mark(engine)
     assert engine.present_clue(TITLE, "captain")["actor_location_consequence"] == {"status": "applied"}
-    assert engine.process_command("go east")["success"]
-    assert engine.process_command("go north")["success"]
+    assert engine.process_command("go to North Gate")["success"]
     source_count = len(engine.query_history(event_type="clue_presented"))
     moved_count = len(engine.query_history(event_type="actor_moved"))
     original_validate, original_build = game_engine_module.validate_world_state, game_engine_module.build_scene
@@ -228,9 +223,7 @@ def test_exact_noop_counts_and_pre_presentation_save_load_path():
         loaded = load_game(str(path))
         assert DISCOVERY in loaded.get_player_discoveries()
         assert loaded.resolve_target("captain")["status"] != "resolved"
-        assert loaded.process_command("go south")["success"]
-        assert loaded.process_command("go east")["success"]
-        assert loaded.process_command("go north")["success"]
+        assert loaded.process_command("go to Southwest Gate")["success"]
         result = loaded.present_clue(TITLE, "captain")
         assert result["response_text"] == RESPONSE
         source, moved = loaded.get_history()[-2:]
@@ -239,8 +232,7 @@ def test_exact_noop_counts_and_pre_presentation_save_load_path():
         assert moved["source_history_id"] == source["history_id"]
         loaded.save(str(path))
         reloaded = load_game(str(path))
-        assert reloaded.process_command("go east")["success"]
-        assert reloaded.process_command("go north")["success"]
+        assert reloaded.process_command("go to North Gate")["success"]
         moved_count = len(reloaded.query_history(event_type="actor_moved"))
         assert reloaded.present_clue(TITLE, "captain")["actor_location_consequence"] == {"status": "no_op"}
         assert len(reloaded.query_history(event_type="actor_moved")) == moved_count

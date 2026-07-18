@@ -71,6 +71,11 @@ def validate_region(region: dict) -> None:
                     f"{location['location_id']} references missing location '{destination}'"
                 )
 
+    try:
+        validate_local_topology_integrity(locations, location_set, entry_location)
+    except ValueError as error:
+        errors.append(str(error))
+
     # --------------------------------------------------
     # Supported named static actors
     # --------------------------------------------------
@@ -209,6 +214,69 @@ def validate_region(region: dict) -> None:
             "Region validation failed:\n\n" +
             "\n".join(f"- {error}" for error in errors)
         )
+
+
+def validate_local_topology_integrity(
+    locations: list[dict], location_set: set[str], entry_location: str | None
+) -> None:
+    """Validate explicit, reciprocal local topology without adding reverse edges."""
+    errors = []
+    connections_by_location = {}
+
+    for location in locations:
+        location_id = location["location_id"]
+        connections = location.get("connected_locations", [])
+        if not isinstance(connections, list):
+            errors.append(f"{location_id}.connected_locations must be a list")
+            continue
+
+        destinations = []
+        for index, connection in enumerate(connections):
+            if not isinstance(connection, dict):
+                errors.append(f"{location_id} connection at index {index} must be a dictionary")
+                continue
+            destination_id = connection.get("location_id")
+            if not isinstance(destination_id, str) or not destination_id:
+                errors.append(f"{location_id} connection at index {index} requires a location_id")
+                continue
+            if destination_id == location_id:
+                errors.append(f"{location_id} has an unintended self-link")
+            destinations.append(destination_id)
+
+        duplicates = sorted(
+            destination_id for destination_id, count in Counter(destinations).items()
+            if count > 1
+        )
+        if duplicates:
+            errors.append(f"{location_id} has duplicate connection target(s): {duplicates}")
+        connections_by_location[location_id] = set(destinations)
+
+    for source_id, destinations in connections_by_location.items():
+        for destination_id in destinations:
+            if destination_id not in location_set:
+                continue
+            if source_id not in connections_by_location.get(destination_id, set()):
+                errors.append(
+                    f"{source_id} -> {destination_id} lacks an explicitly authored reciprocal connection"
+                )
+
+    if entry_location in location_set:
+        reachable = {entry_location}
+        pending = [entry_location]
+        while pending:
+            source_id = pending.pop(0)
+            for destination_id in connections_by_location.get(source_id, set()):
+                if destination_id in location_set and destination_id not in reachable:
+                    reachable.add(destination_id)
+                    pending.append(destination_id)
+        unreachable = sorted(location_set - reachable)
+        if unreachable:
+            errors.append(
+                f"Locations unreachable from entry_location '{entry_location}': {unreachable}"
+            )
+
+    if errors:
+        raise ValueError("; ".join(errors))
 
 
 def validate_discovery_declarations(region: dict) -> None:
