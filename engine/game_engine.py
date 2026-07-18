@@ -1174,7 +1174,7 @@ class GameEngine:
         if (
             interaction_result["success"]
             and isinstance(movement_hops, list)
-            and len(movement_hops) in {2, 3}
+            and movement_hops
         ):
             candidate_world_state = copy_world_state(self.world_state)
             time_advancements = []
@@ -1202,7 +1202,7 @@ class GameEngine:
                 interaction_result
             )
         else:
-            raise ValueError("Validated abstract traversal must contain two or three hops.")
+            raise ValueError("Validated abstract traversal must contain one or more hops.")
 
         if (
             interaction_result["intent"] == "conversation"

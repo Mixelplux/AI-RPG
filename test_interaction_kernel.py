@@ -33,7 +33,7 @@ def test_named_routes_are_current_scene_only_and_fail_closed():
     before_state = engine.get_world_state()
     before_history = engine.get_history()
 
-    result = engine.process_command("move to Western Trade Road")
+    result = engine.process_command("move to Nowhere")
 
     assert not result["success"]
     assert engine.get_world_state() == before_state
@@ -130,7 +130,7 @@ def test_missing_two_hop_routes_fail_without_movement():
     before_state = engine.get_world_state()
     before_history = engine.get_history()
 
-    for command in ("go to Western Trade Road", "move to Western Trade Road"):
+    for command in ("go to Nowhere", "move to Nowhere"):
         result = engine.process_command(command)
 
         assert result["intent"] == "movement"
@@ -295,6 +295,24 @@ def test_three_hop_ambiguity_and_invalid_final_hop_fail_without_mutation():
     assert "movement_hops" not in invalid
 
 
+def test_hop_agnostic_resolver_handles_long_routes_and_cycles():
+    for hop_count in (5, 10):
+        locations = []
+        for index in range(hop_count + 1):
+            location_id = f"node_{index}"
+            connections = [] if index == hop_count else [{"direction": f"d{index}", "location_id": f"node_{index + 1}"}]
+            if index > 0:
+                connections.append({"direction": f"back{index}", "location_id": f"node_{index - 1}"})
+            locations.append({"location_id": location_id, "name": "Destination" if index == hop_count else f"Node {index}", "connected_locations": connections})
+        scene = {"location": locations[0]}
+        before_scene, before_locations = deepcopy(scene), deepcopy(locations)
+        result = process_player_input("go to Destination", scene, locations)
+        assert result["success"]
+        assert len(result["movement_hops"]) == hop_count
+        assert result["destination_location_id"] == f"node_{hop_count}"
+        assert scene == before_scene and locations == before_locations
+
+
 def test_ambiguous_and_invalid_destination_phrases_fail_closed():
     scene = {
         "location": {
@@ -337,6 +355,7 @@ def main():
     test_two_hop_save_load_and_existing_timed_hop_semantics()
     test_three_hop_go_to_and_move_to_validate_then_compose_hops()
     test_three_hop_ambiguity_and_invalid_final_hop_fail_without_mutation()
+    test_hop_agnostic_resolver_handles_long_routes_and_cycles()
     test_ambiguous_and_invalid_destination_phrases_fail_closed()
     print("Interaction-kernel local route command tests passed.")
 

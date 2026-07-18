@@ -67,16 +67,7 @@ def process_player_input(
             return immediate_route_result
 
         if _is_go_to_destination_command(cleaned_input):
-            two_hop_result = resolve_two_hop_destination_route(
-                action,
-                scene_snapshot,
-                locations or [],
-            )
-            if two_hop_result["success"] or _is_ambiguous_local_route(two_hop_result):
-                return two_hop_result
-            return resolve_three_hop_destination_route(
-                action, scene_snapshot, locations or []
-            )
+            return resolve_local_destination_route(action, scene_snapshot, locations or [])
 
         return build_interaction_result(
             success=True,
@@ -123,16 +114,7 @@ def process_player_input(
         ):
             return immediate_movement_result
 
-        two_hop_result = resolve_two_hop_destination_route(
-            action,
-            scene_snapshot,
-            locations or [],
-        )
-        if two_hop_result["success"] or _is_ambiguous_local_route(two_hop_result):
-            return two_hop_result
-        return resolve_three_hop_destination_route(
-            action, scene_snapshot, locations or []
-        )
+        return resolve_local_destination_route(action, scene_snapshot, locations or [])
 
     if intent == "observation":
         return build_interaction_result(
@@ -359,6 +341,63 @@ def resolve_immediate_destination_route(
             action=action,
         )
     return None
+
+
+def resolve_local_destination_route(
+    action: Dict[str, Any], scene_snapshot: Dict[str, Any], locations: list[Dict[str, Any]]
+) -> Dict[str, Any]:
+    """Derive one unique simple authored route, without persistent mutation.
+
+    A route never revisits a location. This makes cyclic authored graphs finite
+    without ranking, choosing a shortest path, or imposing a hop limit.
+    """
+    target = action.get("target")
+    if not isinstance(target, str) or not target:
+        return build_interaction_result(False, "movement", "Where do you want to go?", action)
+
+    root_location = scene_snapshot.get("location", {})
+    root_id = root_location.get("location_id", "__current_location__")
+    routes: list[list[Dict[str, Any]]] = []
+
+    def search(location: Dict[str, Any], visited: set[Any], hops: list[Dict[str, Any]]) -> None:
+        connections = location.get("connected_locations", [])
+        if not isinstance(connections, list) or len(routes) > 1:
+            return
+        current_scene = scene_snapshot if not hops else {"location": location}
+        for connection in connections:
+            if not isinstance(connection, dict):
+                continue
+            destination_id = connection.get("location_id")
+            if destination_id in visited:
+                continue
+            hop = _resolve_connection_movement(connection, current_scene, locations)
+            if hop is None:
+                continue
+            next_hops = [*hops, hop]
+            if _normalized_location_name(destination_id, locations) == _normalize_destination_name(target):
+                routes.append(next_hops)
+                if len(routes) > 1:
+                    return
+                continue
+            destination = _location_by_id(destination_id, locations)
+            if destination is not None:
+                search(destination, visited | {destination_id}, next_hops)
+                if len(routes) > 1:
+                    return
+
+    search(root_location, {root_id}, [])
+    if len(routes) != 1:
+        return build_interaction_result(
+            False, "movement",
+            "That local destination is ambiguous." if len(routes) > 1 else "You cannot reach that destination locally.",
+            action,
+        )
+    hops = routes[0]
+    return build_interaction_result(
+        True, "movement", " ".join(hop["message"] for hop in hops),
+        {**action, "type": "move"},
+        {"destination_location_id": hops[-1]["destination_location_id"], "movement_hops": hops},
+    )
 
 
 def resolve_two_hop_destination_route(
