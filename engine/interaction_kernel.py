@@ -1,4 +1,5 @@
 import re
+from collections import deque
 from typing import Any, Dict
 
 
@@ -346,10 +347,11 @@ def resolve_immediate_destination_route(
 def resolve_local_destination_route(
     action: Dict[str, Any], scene_snapshot: Dict[str, Any], locations: list[Dict[str, Any]]
 ) -> Dict[str, Any]:
-    """Derive one unique simple authored route, without persistent mutation.
+    """Derive the shortest local route from static authored topology.
 
-    A route never revisits a location. This makes cyclic authored graphs finite
-    without ranking, choosing a shortest path, or imposing a hop limit.
+    Breadth-first traversal preserves authored connection-list order for equal
+    hop-count routes. The resulting route is transient and remains provisional
+    until the sequential movement executor completes each hop.
     """
     target = action.get("target")
     if not isinstance(target, str) or not target:
@@ -357,46 +359,54 @@ def resolve_local_destination_route(
 
     root_location = scene_snapshot.get("location", {})
     root_id = root_location.get("location_id", "__current_location__")
-    routes: list[list[Dict[str, Any]]] = []
+    target_name = _normalize_destination_name(target)
+    visited_location_ids = {root_id}
+    pending_routes = deque([(root_location, [])])
 
-    def search(location: Dict[str, Any], visited: set[Any], hops: list[Dict[str, Any]]) -> None:
+    while pending_routes:
+        location, hops = pending_routes.popleft()
         connections = location.get("connected_locations", [])
-        if not isinstance(connections, list) or len(routes) > 1:
-            return
-        current_scene = scene_snapshot if not hops else {"location": location}
+        if not isinstance(connections, list):
+            continue
+
         for connection in connections:
             if not isinstance(connection, dict):
                 continue
             destination_id = connection.get("location_id")
-            if destination_id in visited:
+            if destination_id in visited_location_ids:
                 continue
-            hop = _resolve_connection_movement(connection, current_scene, locations)
+
+            hop = _resolve_connection_movement(
+                connection,
+                {"location": location},
+                locations,
+            )
             if hop is None:
                 continue
+
             next_hops = [*hops, hop]
-            if _normalized_location_name(destination_id, locations) == _normalize_destination_name(target):
-                routes.append(next_hops)
-                if len(routes) > 1:
-                    return
-                continue
+            if _normalized_location_name(destination_id, locations) == target_name:
+                return build_interaction_result(
+                    True,
+                    "movement",
+                    " ".join(route_hop["message"] for route_hop in next_hops),
+                    {**action, "type": "move"},
+                    {
+                        "destination_location_id": hop["destination_location_id"],
+                        "movement_hops": next_hops,
+                    },
+                )
+
             destination = _location_by_id(destination_id, locations)
             if destination is not None:
-                search(destination, visited | {destination_id}, next_hops)
-                if len(routes) > 1:
-                    return
+                visited_location_ids.add(destination_id)
+                pending_routes.append((destination, next_hops))
 
-    search(root_location, {root_id}, [])
-    if len(routes) != 1:
-        return build_interaction_result(
-            False, "movement",
-            "That local destination is ambiguous." if len(routes) > 1 else "You cannot reach that destination locally.",
-            action,
-        )
-    hops = routes[0]
     return build_interaction_result(
-        True, "movement", " ".join(hop["message"] for hop in hops),
-        {**action, "type": "move"},
-        {"destination_location_id": hops[-1]["destination_location_id"], "movement_hops": hops},
+        False,
+        "movement",
+        "You cannot reach that destination locally.",
+        action,
     )
 
 

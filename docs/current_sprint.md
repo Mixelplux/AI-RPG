@@ -1,15 +1,15 @@
-# Sprint 10.71 - One Hop-Count-Agnostic Sequential Local Destination Traversal
+# Sprint 10.72 - One Deterministic Mundane Multi-Route Local Destination Resolver
 
 Status: Ready for Independent Review.
 
 ## Goal
 
-Execute each resolved local `movement_hops` entry through authoritative
-movement completion before the next entry begins.
+Resolve one local mundane route from static authored topology by fewest hops,
+then stable authored connection ordering.
 
 ## Expected Files
 
-- `engine/game_engine.py`
+- `engine/interaction_kernel.py`
 - `test_interaction_kernel.py`
 - `docs/current_capability_package.md`
 - `docs/current_sprint.md`
@@ -17,16 +17,17 @@ movement completion before the next entry begins.
 
 ## Acceptance Criteria
 
-- Every successful hop is validated, has its scene rebuilt, and is published
-  before the next hop.
-- A later hop failure does not roll back already completed hops.
-- Existing timed West Road traversal and its consequences apply at its hop.
-- One-, two-, and three-hop routes remain compatible; save version remains
-  `1` and route hops are not persisted.
+- Multiple valid simple local routes select the fewest authored connections.
+- Equal-hop routes select the stable first route induced by authored connection
+  ordering; no player route choice is required.
+- Directionality remains intact and route selection reads no hidden dynamic
+  world-state condition.
+- The selected ordered `movement_hops` remains transient and provisional until
+  sequential authoritative traversal completes it; save version remains `1`.
 
 ## Verification
 
-Focused four-hop, timed-hop, later-failure, resolver, movement, navigation,
-save/load, narration-context, and provider-safe regressions; official
-preflight; canonical record validation; `git diff --check`; and a validated
-package-review packet.
+Focused shortest-route, stable tie-break, directionality, unreachable-route,
+sequential traversal, save/load, narration-context, and provider-safe
+regressions; official preflight; canonical record validation; `git diff
+--check`; and a validated package-review packet.

@@ -1,27 +1,29 @@
-# Sprint 10.71 - One Hop-Count-Agnostic Sequential Local Destination Traversal
+# Sprint 10.72 - One Deterministic Mundane Multi-Route Local Destination Resolver
 
 Status: Ready for Independent Review.
 
-Sprint 10.71 executes the ordered transient `movement_hops` supplied by the
-existing Sprint 10.70 resolver as sequential authoritative movement
-transitions. `next_sprint` is `null`.
+Sprint 10.72 selects one provisional local mundane route when static authored
+topology contains multiple valid simple routes to a resolved destination.
+`next_sprint` remains `null`.
 
 ## Goal
 
-For a resolved finite local route, validate, build the scene for, and publish
-each completed hop before beginning the next hop.
+Prefer the route with the fewest authored connections. For equal hop counts,
+use the stable order of the existing authored `connected_locations` lists.
 
 ## Boundaries
 
-Route plans remain provisional and transient. Completed hops remain
-authoritative if a later hop fails. The existing resolver, route model,
-directionality, parser, save version, and persistence model are unchanged.
-No interruption, dynamic-route, narration, or provider behavior is added.
+The resolver reads only static authored topology, preserves authored direction,
+and produces the existing transient ordered `movement_hops` for sequential
+authoritative traversal. Hop count is not physical distance or travel time.
+No edge costs, hidden-state routing, rerouting, route-choice interaction,
+regional or wilderness policy, encounter generation, parser expansion,
+persistence change, migration, narration, or provider behavior is added.
 
 ## Completion
 
-Routes of four or more hops execute in order; timed intermediate movement
-retains its existing duration and consequences; one-, two-, and three-hop
-behavior remains compatible. Save version remains `1`, `movement_hops` remains
-transient, and a clean committed review candidate is prepared without staging
-a following package. Verification passed; no live provider request occurred.
+Focused shortest-route, stable tie-break, directionality, failure, traversal,
+save/load, narration-context, and provider-safe regressions passed. Save version
+remains `1`, route plans remain provisional, `movement_hops` remains transient,
+and a clean committed independent-review candidate is prepared without staging
+a following package. No live provider request occurred.

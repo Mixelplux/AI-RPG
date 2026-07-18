@@ -153,7 +153,7 @@ def test_head_to_preserves_nonmoving_destination_lookup():
     assert engine.get_history() == before_history
 
 
-def test_ambiguous_two_hop_routes_fail_without_movement():
+def test_equal_hop_routes_use_authored_connection_order_without_player_choice():
     engine = GameEngine(REGION_PATH)
     north_gate = next(
         location
@@ -172,16 +172,92 @@ def test_ambiguous_two_hop_routes_fail_without_movement():
         {"direction": "north", "location_id": "traders_hall"}
     )
     engine.scene_snapshot = build_scene(engine.region, engine.world_state)
-    before_state = engine.get_world_state()
-    before_history = engine.get_history()
-
     result = engine.process_command("go to Traders' Hall")
 
     assert result["intent"] == "movement"
-    assert not result["success"]
-    assert "ambiguous" in result["message"]
-    assert engine.get_world_state() == before_state
-    assert engine.get_history() == before_history
+    assert result["success"]
+    assert [hop["destination_location_id"] for hop in result["movement_hops"]] == [
+        "bryn_shander_main_street",
+        "traders_hall",
+    ]
+    assert engine.get_world_state()["player"]["current_location_id"] == "traders_hall"
+
+
+def test_local_destination_prefers_fewer_authored_connections_over_route_order():
+    locations = [
+        {
+            "location_id": "a",
+            "name": "A",
+            "connected_locations": [
+                {"direction": "east", "location_id": "b"},
+                {"direction": "north", "location_id": "c"},
+            ],
+        },
+        {
+            "location_id": "b",
+            "name": "B",
+            "connected_locations": [{"direction": "north", "location_id": "d"}],
+        },
+        {
+            "location_id": "c",
+            "name": "C",
+            "connected_locations": [{"direction": "east", "location_id": "destination"}],
+        },
+        {
+            "location_id": "d",
+            "name": "D",
+            "connected_locations": [{"direction": "east", "location_id": "destination"}],
+        },
+        {"location_id": "destination", "name": "Destination", "connected_locations": []},
+    ]
+
+    result = process_player_input("go to Destination", {"location": locations[0]}, locations)
+
+    assert result["success"]
+    assert [hop["destination_location_id"] for hop in result["movement_hops"]] == [
+        "c",
+        "destination",
+    ]
+
+
+def test_equal_hop_tie_break_is_stable_and_ignores_dynamic_scene_state():
+    locations = [
+        {
+            "location_id": "a",
+            "name": "A",
+            "connected_locations": [
+                {"direction": "west", "location_id": "b"},
+                {"direction": "east", "location_id": "c"},
+            ],
+        },
+        {
+            "location_id": "b",
+            "name": "B",
+            "connected_locations": [{"direction": "north", "location_id": "destination"}],
+        },
+        {
+            "location_id": "c",
+            "name": "C",
+            "connected_locations": [{"direction": "south", "location_id": "destination"}],
+        },
+        {"location_id": "destination", "name": "Destination", "connected_locations": []},
+    ]
+
+    calm_result = process_player_input(
+        "move to Destination",
+        {"location": locations[0], "local_state": {"weather": "calm"}},
+        locations,
+    )
+    storm_result = process_player_input(
+        "move to Destination",
+        {"location": locations[0], "local_state": {"weather": "storm"}},
+        locations,
+    )
+
+    expected_route = ["b", "destination"]
+    assert calm_result["success"] and storm_result["success"]
+    assert [hop["destination_location_id"] for hop in calm_result["movement_hops"]] == expected_route
+    assert [hop["destination_location_id"] for hop in storm_result["movement_hops"]] == expected_route
 
 
 def test_two_hop_resolution_is_bounded_and_prevalidates_both_hops():
@@ -269,7 +345,7 @@ def test_three_hop_go_to_and_move_to_validate_then_compose_hops():
     assert "movement_hops" not in loaded.get_world_state()
 
 
-def test_three_hop_ambiguity_and_invalid_final_hop_fail_without_mutation():
+def test_three_hop_tie_break_and_invalid_final_hop_fail_without_mutation():
     scene = {"location": {"connected_locations": [
         {"direction": "east", "location_id": "b1"},
         {"direction": "west", "location_id": "b2"},
@@ -283,9 +359,13 @@ def test_three_hop_ambiguity_and_invalid_final_hop_fail_without_mutation():
         {"location_id": "unrelated", "name": "Unrelated", "connected_locations": [{"direction": "north", "location_id": "d"}]},
     ]
     before_scene, before_locations = deepcopy(scene), deepcopy(locations)
-    ambiguous = process_player_input("go to D", scene, locations)
-    assert not ambiguous["success"]
-    assert "ambiguous" in ambiguous["message"]
+    resolved = process_player_input("go to D", scene, locations)
+    assert resolved["success"]
+    assert [hop["destination_location_id"] for hop in resolved["movement_hops"]] == [
+        "b1",
+        "c1",
+        "d",
+    ]
     assert scene == before_scene and locations == before_locations
 
     locations[2]["connected_locations"][0] = {"location_id": "d"}
@@ -464,11 +544,13 @@ def main():
     test_two_hop_go_to_and_move_to_compose_existing_movement_hops()
     test_missing_two_hop_routes_fail_without_movement()
     test_head_to_preserves_nonmoving_destination_lookup()
-    test_ambiguous_two_hop_routes_fail_without_movement()
+    test_equal_hop_routes_use_authored_connection_order_without_player_choice()
+    test_local_destination_prefers_fewer_authored_connections_over_route_order()
+    test_equal_hop_tie_break_is_stable_and_ignores_dynamic_scene_state()
     test_two_hop_resolution_is_bounded_and_prevalidates_both_hops()
     test_two_hop_save_load_and_existing_timed_hop_semantics()
     test_three_hop_go_to_and_move_to_validate_then_compose_hops()
-    test_three_hop_ambiguity_and_invalid_final_hop_fail_without_mutation()
+    test_three_hop_tie_break_and_invalid_final_hop_fail_without_mutation()
     test_hop_agnostic_resolver_handles_long_routes_and_cycles()
     test_hop_agnostic_resolver_respects_authored_directionality()
     test_long_route_publishes_each_hop_and_preserves_timed_intermediate_arrival()
