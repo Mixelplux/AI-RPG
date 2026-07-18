@@ -13,13 +13,13 @@
     "title": "Immediate Local Travel Phrase Alignment",
     "type": "capability-package",
     "mode": "capability-package",
-    "status": "active",
-    "review_state": "staged",
+    "status": "review_ready",
+    "review_state": "candidate_prepared",
     "goal": "Align go to <location> and head to <location> with existing immediate local movement, without converting nonlocal destination identification into travel.",
     "predecessor": {"id": "10.66", "status": "complete", "review_state": "merged"},
     "platform": {"official_interpreter": ".\\.venv\\Scripts\\python.exe", "save_version": 1, "provider_requests": "forbidden"},
     "expected_files": {
-      "likely_modified": ["engine/interaction_kernel.py", "engine/game_engine.py", "test_interaction_kernel.py", "docs/current_capability_package.md", "docs/current_sprint.md", "docs/current_sprint.json"],
+      "likely_modified": ["engine/interaction_kernel.py", "test_interaction_kernel.py", "docs/current_capability_package.md", "docs/current_sprint.md", "docs/current_sprint.json"],
       "likely_created": []
     },
     "acceptance_criteria": [
@@ -36,9 +36,9 @@
     },
     "execution_phases": [
       {"id": "package-and-sprint-staging", "status": "complete"},
-      {"id": "immediate-local-travel-phrase-alignment", "status": "planned"},
-      {"id": "focused-verification", "status": "planned"},
-      {"id": "review-candidate", "status": "planned"}
+      {"id": "immediate-local-travel-phrase-alignment", "status": "complete"},
+      {"id": "focused-verification", "status": "complete"},
+      {"id": "review-candidate", "status": "complete"}
     ],
     "governance": [
       "This owner-authorized capability package is active; no following sprint is authorized or staged.",
@@ -49,7 +49,7 @@
     ],
     "closeout": {
       "allowed_terminal_statuses": ["complete", "blocked"],
-      "verification_result": "Staging pending implementation and closeout verification.",
+      "verification_result": "Official-interpreter preflight, syntax checks, focused immediate local travel phrase-alignment coverage, affected navigation, one-hour West-Road movement, save/load, narration-context, narration-pipeline, and fake-transport OpenAI Responses regressions passed. No live provider request occurred. The bounded candidate is ready for independent review; save version remains 1 and next_sprint remains null.",
       "next_sprint": null
     }
   }

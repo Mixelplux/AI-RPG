@@ -1,8 +1,8 @@
 # Sprint 10.67 - Immediate Local Travel Phrase Alignment
 
-Status: Active.
+Status: Ready for Independent Review.
 
-Review state: Staged.
+Review state: Candidate prepared.
 
 ## Goal
 
@@ -42,4 +42,5 @@ result as its directional and `move to` forms. Non-adjacent phrases retain
 nonmoving destination identification, while ambiguous and invalid phrases do
 not move state. Focused phrase-alignment and affected movement, route,
 save/load, narration-context, and provider-safe regressions pass. No live
-provider request occurs.
+provider request occurred. The candidate is ready for independent review;
+`next_sprint` remains `null` and save version remains `1`.

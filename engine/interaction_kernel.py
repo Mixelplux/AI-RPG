@@ -58,6 +58,14 @@ def process_player_input(
                 action=action
             )
 
+        immediate_route_result = resolve_immediate_destination_route(
+            action,
+            scene_snapshot,
+            locations or [],
+        )
+        if immediate_route_result is not None:
+            return immediate_route_result
+
         return build_interaction_result(
             success=True,
             intent=intent,
@@ -261,12 +269,11 @@ def resolve_movement(
         if connection.get("direction") == target:
             return _resolved_movement(action, connection)
 
-    named_connections = [
-        connection
-        for connection in connected_locations
-        if _normalized_location_name(connection.get("location_id"), locations)
-        == _normalize_name(target)
-    ]
+    named_connections = _matching_named_connections(
+        connected_locations,
+        target,
+        locations,
+    )
     if len(named_connections) == 1:
         return _resolved_movement(action, named_connections[0])
 
@@ -276,6 +283,45 @@ def resolve_movement(
         message="You cannot go that way.",
         action=action
     )
+
+
+def resolve_immediate_destination_route(
+    action: Dict[str, Any],
+    scene_snapshot: Dict[str, Any],
+    locations: list[Dict[str, Any]],
+) -> Dict[str, Any] | None:
+    """Resolve a destination phrase only when it names one immediate route.
+
+    Returning ``None`` preserves the destination resolver's existing
+    nonmoving loaded-region identification behavior.
+    """
+
+    target = action.get("target")
+    if not isinstance(target, str) or not target:
+        return None
+
+    connected_locations = scene_snapshot.get("location", {}).get(
+        "connected_locations", []
+    )
+    named_connections = _matching_named_connections(
+        connected_locations,
+        target,
+        locations,
+    )
+    if len(named_connections) == 1:
+        movement_action = {
+            **action,
+            "type": "move",
+        }
+        return _resolved_movement(movement_action, named_connections[0])
+    if len(named_connections) > 1:
+        return build_interaction_result(
+            success=False,
+            intent="destination",
+            message="That immediate route is ambiguous.",
+            action=action,
+        )
+    return None
 
 
 def _resolved_movement(
@@ -289,6 +335,23 @@ def _resolved_movement(
         action=action,
         extra={"destination_location_id": connection.get("location_id")},
     )
+
+
+def _matching_named_connections(
+    connected_locations: Any,
+    target: str,
+    locations: list[Dict[str, Any]],
+) -> list[Dict[str, Any]]:
+    if not isinstance(connected_locations, list):
+        return []
+    normalized_target = _normalize_name(target)
+    return [
+        connection
+        for connection in connected_locations
+        if isinstance(connection, dict)
+        and _normalized_location_name(connection.get("location_id"), locations)
+        == normalized_target
+    ]
 
 
 def extract_movement_target(player_input: str) -> str | None:
@@ -358,8 +421,6 @@ def extract_destination_target(player_input: str) -> str | None:
     for prefix in ["head to", "go to"]:
         if lowered == prefix or lowered.startswith(f"{prefix} "):
             target = player_input[len(prefix):].strip()
-            if target.lower().startswith("the "):
-                target = target[4:].strip()
             return target or None
     return None
 

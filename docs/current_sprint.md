@@ -1,8 +1,8 @@
 # Sprint 10.67 - Immediate Local Travel Phrase Alignment
 
-Status: Active.
+Status: Ready for Independent Review.
 
-Review state: Staged.
+Review state: Candidate prepared.
 
 `next_sprint` is `null`. This is the active, owner-authorized capability
 package; no following sprint is authorized or staged.
@@ -16,7 +16,6 @@ into travel.
 ## Expected Files
 
 - `engine/interaction_kernel.py`
-- `engine/game_engine.py`
 - `test_interaction_kernel.py`
 - `docs/current_capability_package.md`
 - `docs/current_sprint.md`
@@ -41,11 +40,13 @@ into travel.
 
 ## Verification
 
-- Official-interpreter preflight, canonical-record validation, and `git diff
-  --check` pass for staging.
+- Official-interpreter preflight, syntax checks, canonical-record validation,
+  and `git diff --check` pass.
 - Focused phrase-alignment coverage proves local `go to` and `head to`
   equivalence, non-adjacent nonmoving fallback, ambiguity refusal, invalid
   refusal, and no state change on failed movement.
 - Affected interaction-kernel, movement, navigation-projection, save/load,
   narration-context, and provider-safe regressions pass. No live provider
-  request occurs.
+  request occurred.
+- The bounded candidate is committed and ready for independent review; save
+  version remains `1` and `next_sprint` remains `null`.
