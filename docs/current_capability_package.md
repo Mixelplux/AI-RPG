@@ -1,8 +1,18 @@
+# Current Capability Package
+
+No capability package is currently active or authorized. The most recent
+terminal package record is retained below for identity and closeout context.
+
+## Most Recent Terminal Package
+
 # Sprint 10.65 - One Player-Safe Local Route Guidance Projection
 
-Status: Ready for Independent Review.
+Status: Complete.
 
-Review state: Candidate prepared.
+Review state: Merged.
+
+No following capability package is authorized, staged, branched, or started.
+`next_sprint` remains `null`.
 
 ## Goal
 
@@ -42,5 +52,7 @@ cues solely from immediate traversable connections of the current scene. It
 keeps connectivity authoritative in the simulation, introduces no persistent
 route state, exposes no nonlocal destination relationship, and passes focused
 projection and affected movement, scene, save/load, and provider-safe
-regressions. No live provider request occurred. The candidate is ready for
-independent review; `next_sprint` remains `null` and save version remains `1`.
+regressions. No live provider request occurred. The accepted candidate was
+strict-fast-forward merged into `main`; no following capability package is
+active or authorized, save version remains `1`, and `next_sprint` remains
+`null`.
