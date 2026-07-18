@@ -1057,7 +1057,8 @@ class GameEngine:
     def process_command(self, player_input: str) -> Dict[str, Any]:
         interaction_result = process_player_input(
             player_input,
-            self.scene_snapshot
+            self.scene_snapshot,
+            self.region.get("locations", []),
         )
         interaction_result["actor_knowledge_response"] = None
         interaction_result["player_discovery_response"] = None

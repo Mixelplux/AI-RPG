@@ -1,8 +1,8 @@
 # Sprint 10.66 - Immediate Local Route Command Alignment
 
-Status: Active.
+Status: Ready for Independent Review.
 
-Review state: Staged.
+Review state: Candidate prepared.
 
 ## Goal
 
@@ -42,4 +42,6 @@ the bounded `move to <adjacent location>` form, executes the same authoritative
 movement as the matching directional command, and rejects nonlocal or
 unavailable names without state change. Focused command-alignment and affected
 movement, route-projection, save/load, narration-context, and provider-safe
-regressions pass. No live provider request occurs.
+regressions passed. No live provider request occurred. The candidate is ready
+for independent review; `next_sprint` remains `null` and save version remains
+`1`.

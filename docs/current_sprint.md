@@ -1,8 +1,8 @@
 # Sprint 10.66 - Immediate Local Route Command Alignment
 
-Status: Active.
+Status: Ready for Independent Review.
 
-Review state: Staged.
+Review state: Candidate prepared.
 
 `next_sprint` is `null`. This is the active, owner-authorized capability
 package; no following sprint is authorized or staged.
@@ -15,8 +15,8 @@ location>` resolve to the already authoritative directional movement result.
 ## Expected Files
 
 - `engine/interaction_kernel.py`
+- `engine/game_engine.py`
 - `test_interaction_kernel.py`
-- `test_navigation_projection.py`
 - `docs/current_capability_package.md`
 - `docs/current_sprint.md`
 - `docs/current_sprint.json`
@@ -39,11 +39,13 @@ location>` resolve to the already authoritative directional movement result.
 
 ## Verification
 
-- Official-interpreter preflight, canonical-record validation, and `git diff
-  --check` pass for staging.
+- Official-interpreter preflight, syntax checks, canonical-record validation,
+  and `git diff --check` pass.
 - Focused command-alignment coverage proves immediate named-route success,
   directional equivalence, deterministic ambiguity handling, nonlocal refusal,
   no-state-change failure, and no broad `go to` travel behavior.
 - Affected interaction-kernel, navigation-projection, movement, save/load,
   narration-context, and provider-safe regressions pass. No live provider
-  request occurs.
+  request occurred.
+- The bounded candidate is committed and ready for independent review; save
+  version remains `1` and `next_sprint` remains `null`.

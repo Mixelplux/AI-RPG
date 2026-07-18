@@ -4,7 +4,8 @@ from typing import Any, Dict
 
 def process_player_input(
     player_input: str,
-    scene_snapshot: Dict[str, Any]
+    scene_snapshot: Dict[str, Any],
+    locations: list[Dict[str, Any]] | None = None,
 ) -> Dict[str, Any]:
     """
     Process raw player input and return a structured Interaction Result.
@@ -86,7 +87,7 @@ def process_player_input(
         return build_interaction_result(success=True, intent=intent, message="You present a clue.", action=action)
 
     if intent == "movement":
-        return resolve_movement(action, scene_snapshot)
+        return resolve_movement(action, scene_snapshot, locations or [])
 
     if intent == "observation":
         return build_interaction_result(
@@ -240,7 +241,8 @@ def build_action(player_input: str, intent: str) -> Dict[str, Any]:
 
 def resolve_movement(
     action: Dict[str, Any],
-    scene_snapshot: Dict[str, Any]
+    scene_snapshot: Dict[str, Any],
+    locations: list[Dict[str, Any]],
 ) -> Dict[str, Any]:
     target = action.get("target")
 
@@ -257,17 +259,16 @@ def resolve_movement(
 
     for connection in connected_locations:
         if connection.get("direction") == target:
-            destination_id = connection.get("location_id")
+            return _resolved_movement(action, connection)
 
-            return build_interaction_result(
-                success=True,
-                intent="movement",
-                message=f"You move {target}.",
-                action=action,
-                extra={
-                    "destination_location_id": destination_id
-                }
-            )
+    named_connections = [
+        connection
+        for connection in connected_locations
+        if _normalized_location_name(connection.get("location_id"), locations)
+        == _normalize_name(target)
+    ]
+    if len(named_connections) == 1:
+        return _resolved_movement(action, named_connections[0])
 
     return build_interaction_result(
         success=False,
@@ -277,8 +278,24 @@ def resolve_movement(
     )
 
 
+def _resolved_movement(
+    action: Dict[str, Any], connection: Dict[str, Any]
+) -> Dict[str, Any]:
+    direction = connection.get("direction")
+    return build_interaction_result(
+        success=True,
+        intent="movement",
+        message=f"You move {direction}.",
+        action=action,
+        extra={"destination_location_id": connection.get("location_id")},
+    )
+
+
 def extract_movement_target(player_input: str) -> str | None:
     lowered = player_input.lower()
+
+    if lowered.startswith("move to "):
+        return player_input[len("move to "):].strip() or None
 
     direction_aliases = {
         "north": "north",
@@ -298,6 +315,23 @@ def extract_movement_target(player_input: str) -> str | None:
             return canonical_direction
 
     return None
+
+
+def _normalized_location_name(
+    location_id: Any,
+    locations: list[Dict[str, Any]],
+) -> str | None:
+    for location in locations:
+        if location.get("location_id") != location_id:
+            continue
+        name = location.get("name")
+        if isinstance(name, str) and name.strip():
+            return _normalize_name(name)
+    return None
+
+
+def _normalize_name(value: str) -> str:
+    return " ".join(value.casefold().split())
 
 
 def extract_conversation_target(player_input: str) -> str | None:
