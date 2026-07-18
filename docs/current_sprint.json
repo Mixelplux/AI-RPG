@@ -2,55 +2,30 @@
   "schema_version": "1.0.0",
   "document_type": "current_sprint",
   "sprint_count": 1,
-  "active_sprint": "10.68",
-  "active_capability_package": "Deterministic Abstract Local Destination Traversal",
-  "project": {
-    "name": "AI Narrative RPG Engine",
-    "principles": ["provider-neutral", "deterministic-core", "simulation-owned-truth"]
-  },
+  "active_sprint": "10.69",
+  "active_capability_package": "10.69",
+  "project": {"name": "AI Narrative RPG Engine", "principles": ["provider-neutral", "deterministic-core", "simulation-owned-truth"]},
   "sprint": {
-    "id": "10.68",
-    "title": "One Unambiguous Two-Hop Local Destination Traversal",
+    "id": "10.69",
+    "title": "One Unambiguous Three-Hop Local Destination Traversal",
     "type": "capability-package",
     "mode": "capability-package",
     "status": "review_ready",
     "review_state": "candidate_prepared",
-    "goal": "Resolve only a uniquely eligible two-hop authored local route for go to <location> and move to <location>, validating both hops before movement and reusing existing immediate movement semantics.",
-    "predecessor": {"id": "10.67", "status": "complete", "review_state": "merged"},
+    "goal": "Resolve only one uniquely eligible three-hop authored local route for go to <location> and move to <location>, validating every hop before movement and reusing immediate movement semantics.",
+    "predecessor": {"id": "10.68", "status": "complete", "review_state": "merged"},
     "platform": {"official_interpreter": ".\\.venv\\Scripts\\python.exe", "save_version": 1, "provider_requests": "forbidden"},
-    "expected_files": {
-      "likely_modified": ["engine/interaction_kernel.py", "engine/game_engine.py", "test_interaction_kernel.py", "docs/current_capability_package.md", "docs/current_sprint.md", "docs/current_sprint.json"],
-      "likely_created": []
-    },
+    "expected_files": {"likely_modified": ["engine/interaction_kernel.py", "engine/game_engine.py", "test_interaction_kernel.py", "docs/current_capability_package.md", "docs/current_sprint.md", "docs/current_sprint.json"], "likely_created": []},
     "acceptance_criteria": [
-      "go to <location> and move to <location> may traverse exactly one uniquely eligible two-hop local route, ending at the canonical destination.",
-      "The complete route is validated before any movement mutation; missing or ambiguous routes fail deterministically without movement.",
-      "Each accepted hop uses existing immediate local movement semantics, while direct and immediate behavior remains unchanged.",
-      "Route resolution is derived, transient, bounded to two hops, and deterministic for cycles and unrelated connections.",
-      "Save version remains 1; no persistence architecture, migration, parser expansion, general pathfinding, route ranking, or provider behavior is introduced."
+      "go to <location> and move to <location> may traverse exactly one eligible three-hop local route and end at the canonical destination.",
+      "The complete route validates before any movement mutation; zero or multiple eligible routes fail deterministically without state change.",
+      "Each hop uses existing immediate local movement semantics; immediate and two-hop traversal behavior remains unchanged.",
+      "Resolution is derived, transient, and bounded to three hops, including cycle and unrelated-connection handling.",
+      "Save version remains 1; no persistent route state, migration, generic pathfinding, ranking, or provider behavior is introduced."
     ],
-    "verification": {
-      "staging_commands": ["Official-interpreter preflight through the established workspace procedure", "Canonical record validation", "git diff --check"],
-      "focused_commands": ["Focused two-hop local destination traversal tests", "Affected interaction-kernel, movement, navigation-projection, save/load, narration-context, and provider-safe regressions", "Provider requests are forbidden"],
-      "closeout_commands": ["Official-interpreter preflight", "Canonical record validation", "git diff --check", "Clean committed review-candidate Git evidence", "Required review-packet assembly and validation"]
-    },
-    "execution_phases": [
-      {"id": "package-and-sprint-staging", "status": "complete"},
-      {"id": "bounded-two-hop-local-destination-traversal", "status": "complete"},
-      {"id": "focused-verification", "status": "complete"},
-      {"id": "review-candidate", "status": "complete"}
-    ],
-    "governance": [
-      "This owner-authorized capability package is active; no following sprint is authorized or staged.",
-      "Simulation retains authority over structural connectivity and movement; two-hop route resolution is derived and transient.",
-      "The interaction kernel may resolve only one unambiguous route with exactly one intermediate location and must validate the entire route before movement.",
-      "Do not infer or execute general pathfinding, route ranking, destination knowledge, persistence changes, or excluded systems. Save version remains 1.",
-      "Provider requests are forbidden for automated verification, and next_sprint remains null."
-    ],
-    "closeout": {
-      "allowed_terminal_statuses": ["complete", "blocked"],
-      "verification_result": "Official-interpreter preflight, syntax checks, focused two-hop local destination traversal coverage, affected navigation-projection, save/load, one-hour West-Road traversal, narration-context, narration-pipeline, and fake-transport OpenAI Responses regressions passed. No live provider request occurred. The bounded candidate is ready for independent review; save version remains 1 and next_sprint remains null.",
-      "next_sprint": null
-    }
+    "verification": {"staging_commands": ["Official-interpreter preflight", "Canonical record validation", "git diff --check"], "focused_commands": ["Focused three-hop traversal tests", "Affected movement, navigation, save/load, narration-context, and provider-safe regressions", "Provider requests are forbidden"], "closeout_commands": ["Official-interpreter preflight", "Canonical record validation", "git diff --check", "Clean committed review-candidate Git evidence", "Required review-packet assembly and validation"]},
+    "execution_phases": [{"id": "package-and-sprint-staging", "status": "complete"}, {"id": "bounded-three-hop-local-destination-traversal", "status": "complete"}, {"id": "focused-verification", "status": "complete"}, {"id": "review-candidate", "status": "complete"}],
+    "governance": ["This owner-authorized capability package is active; no following sprint is authorized or staged.", "Simulation retains authority over connections and movement; three-hop resolution is derived and transient.", "The interaction kernel may resolve only one route with exactly two intermediates and must validate all hops before movement.", "Do not add general pathfinding, configurable depth, ranking, persistent state, parser expansion, or excluded systems. Save version remains 1.", "Provider requests are forbidden and next_sprint remains null."],
+    "closeout": {"allowed_terminal_statuses": ["complete", "blocked"], "verification_result": "Official-interpreter preflight, syntax checks, focused three-hop traversal coverage, affected navigation, save/load, one-hour West-Road traversal, narration-context, and fake-transport OpenAI Responses regressions passed. No live provider request occurred. The bounded candidate is ready for independent review; save version remains 1 and next_sprint remains null.", "next_sprint": null}
   }
 }

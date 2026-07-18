@@ -1171,7 +1171,11 @@ class GameEngine:
             return deepcopy(interaction_result)
 
         movement_hops = interaction_result.get("movement_hops")
-        if interaction_result["success"] and isinstance(movement_hops, list):
+        if (
+            interaction_result["success"]
+            and isinstance(movement_hops, list)
+            and len(movement_hops) in {2, 3}
+        ):
             candidate_world_state = copy_world_state(self.world_state)
             time_advancements = []
             for hop_result in movement_hops:
@@ -1192,11 +1196,13 @@ class GameEngine:
                     )
             if time_advancements:
                 interaction_result["time_advancements"] = time_advancements
-        else:
+        elif not isinstance(movement_hops, list):
             candidate_world_state = apply_interaction(
                 self.world_state,
                 interaction_result
             )
+        else:
+            raise ValueError("Validated abstract traversal must contain two or three hops.")
 
         if (
             interaction_result["intent"] == "conversation"

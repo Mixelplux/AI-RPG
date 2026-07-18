@@ -67,10 +67,15 @@ def process_player_input(
             return immediate_route_result
 
         if _is_go_to_destination_command(cleaned_input):
-            return resolve_two_hop_destination_route(
+            two_hop_result = resolve_two_hop_destination_route(
                 action,
                 scene_snapshot,
                 locations or [],
+            )
+            if two_hop_result["success"] or _is_ambiguous_local_route(two_hop_result):
+                return two_hop_result
+            return resolve_three_hop_destination_route(
+                action, scene_snapshot, locations or []
             )
 
         return build_interaction_result(
@@ -118,10 +123,15 @@ def process_player_input(
         ):
             return immediate_movement_result
 
-        return resolve_two_hop_destination_route(
+        two_hop_result = resolve_two_hop_destination_route(
             action,
             scene_snapshot,
             locations or [],
+        )
+        if two_hop_result["success"] or _is_ambiguous_local_route(two_hop_result):
+            return two_hop_result
+        return resolve_three_hop_destination_route(
+            action, scene_snapshot, locations or []
         )
 
     if intent == "observation":
@@ -429,6 +439,68 @@ def resolve_two_hop_destination_route(
     )
 
 
+def resolve_three_hop_destination_route(
+    action: Dict[str, Any],
+    scene_snapshot: Dict[str, Any],
+    locations: list[Dict[str, Any]],
+) -> Dict[str, Any]:
+    """Resolve one uniquely eligible A -> B -> C -> D local route."""
+
+    target = action.get("target")
+    if not isinstance(target, str) or not target:
+        return build_interaction_result(False, "movement", "Where do you want to go?", action)
+
+    source_connections = scene_snapshot.get("location", {}).get("connected_locations", [])
+    eligible_routes: list[tuple[Dict[str, Any], Dict[str, Any], Dict[str, Any]]] = []
+    for first_connection in source_connections if isinstance(source_connections, list) else []:
+        if not isinstance(first_connection, dict):
+            continue
+        first_location = _location_by_id(first_connection.get("location_id"), locations)
+        if first_location is None:
+            continue
+        first_scene = {"location": first_location}
+        first_hop = _resolve_connection_movement(first_connection, scene_snapshot, locations)
+        if first_hop is None:
+            continue
+        second_connections = first_location.get("connected_locations", [])
+        for second_connection in second_connections if isinstance(second_connections, list) else []:
+            if not isinstance(second_connection, dict):
+                continue
+            second_location = _location_by_id(second_connection.get("location_id"), locations)
+            if second_location is None:
+                continue
+            second_scene = {"location": second_location}
+            second_hop = _resolve_connection_movement(second_connection, first_scene, locations)
+            if second_hop is None:
+                continue
+            for third_connection in _matching_named_connections(
+                second_location.get("connected_locations", []), target, locations
+            ):
+                third_hop = _resolve_connection_movement(third_connection, second_scene, locations)
+                if third_hop is not None:
+                    eligible_routes.append((first_hop, second_hop, third_hop))
+
+    if len(eligible_routes) != 1:
+        return build_interaction_result(
+            False,
+            "movement",
+            "That local destination is ambiguous." if len(eligible_routes) > 1 else "You cannot reach that destination locally.",
+            action,
+        )
+
+    first_hop, second_hop, third_hop = eligible_routes[0]
+    return build_interaction_result(
+        True,
+        "movement",
+        f"{first_hop['message']} {second_hop['message']} {third_hop['message']}",
+        {**action, "type": "move"},
+        {
+            "destination_location_id": third_hop["destination_location_id"],
+            "movement_hops": [first_hop, second_hop, third_hop],
+        },
+    )
+
+
 def _resolved_movement(
     action: Dict[str, Any], connection: Dict[str, Any]
 ) -> Dict[str, Any]:
@@ -502,6 +574,10 @@ def _is_go_to_destination_command(player_input: str) -> bool:
 def _is_move_to_destination_command(player_input: str) -> bool:
     lowered = player_input.casefold()
     return lowered == "move to" or lowered.startswith("move to ")
+
+
+def _is_ambiguous_local_route(result: Dict[str, Any]) -> bool:
+    return result.get("message") == "That local destination is ambiguous."
 
 
 def extract_movement_target(player_input: str) -> str | None:

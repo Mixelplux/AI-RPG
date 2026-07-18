@@ -247,6 +247,54 @@ def test_two_hop_save_load_and_existing_timed_hop_semantics():
     assert loaded.get_world_state() == engine.get_world_state()
 
 
+def test_three_hop_go_to_and_move_to_validate_then_compose_hops():
+    go_engine = GameEngine(REGION_PATH, entry_location_id="inn_four_candles")
+    move_engine = GameEngine(REGION_PATH, entry_location_id="inn_four_candles")
+
+    for command, engine in (("go to West Gate", go_engine), ("move to West Gate", move_engine)):
+        before_history = engine.get_history()
+        result = engine.process_command(command)
+        assert result["success"]
+        assert result["destination_location_id"] == "bryn_shander_gate_west"
+        assert len(result["movement_hops"]) == 3
+        assert engine.get_world_state()["player"]["current_location_id"] == "bryn_shander_gate_west"
+        assert len(engine.get_history()) == len(before_history) + 3
+
+    with TemporaryDirectory() as directory:
+        save_path = Path(directory) / "three-hop-save.json"
+        save_game(go_engine, str(save_path))
+        loaded = load_game(str(save_path))
+    assert SAVE_VERSION == 1
+    assert loaded.get_world_state() == go_engine.get_world_state()
+    assert "movement_hops" not in loaded.get_world_state()
+
+
+def test_three_hop_ambiguity_and_invalid_final_hop_fail_without_mutation():
+    scene = {"location": {"connected_locations": [
+        {"direction": "east", "location_id": "b1"},
+        {"direction": "west", "location_id": "b2"},
+    ]}}
+    locations = [
+        {"location_id": "b1", "name": "B1", "connected_locations": [{"direction": "north", "location_id": "c1"}]},
+        {"location_id": "b2", "name": "B2", "connected_locations": [{"direction": "south", "location_id": "c2"}]},
+        {"location_id": "c1", "name": "C1", "connected_locations": [{"direction": "east", "location_id": "d"}, {"direction": "west", "location_id": "b1"}]},
+        {"location_id": "c2", "name": "C2", "connected_locations": [{"direction": "east", "location_id": "d"}]},
+        {"location_id": "d", "name": "D", "connected_locations": []},
+        {"location_id": "unrelated", "name": "Unrelated", "connected_locations": [{"direction": "north", "location_id": "d"}]},
+    ]
+    before_scene, before_locations = deepcopy(scene), deepcopy(locations)
+    ambiguous = process_player_input("go to D", scene, locations)
+    assert not ambiguous["success"]
+    assert "ambiguous" in ambiguous["message"]
+    assert scene == before_scene and locations == before_locations
+
+    locations[2]["connected_locations"][0] = {"location_id": "d"}
+    locations[1]["connected_locations"] = []
+    invalid = process_player_input("move to D", scene, locations)
+    assert not invalid["success"]
+    assert "movement_hops" not in invalid
+
+
 def test_ambiguous_and_invalid_destination_phrases_fail_closed():
     scene = {
         "location": {
@@ -287,6 +335,8 @@ def main():
     test_ambiguous_two_hop_routes_fail_without_movement()
     test_two_hop_resolution_is_bounded_and_prevalidates_both_hops()
     test_two_hop_save_load_and_existing_timed_hop_semantics()
+    test_three_hop_go_to_and_move_to_validate_then_compose_hops()
+    test_three_hop_ambiguity_and_invalid_final_hop_fail_without_mutation()
     test_ambiguous_and_invalid_destination_phrases_fail_closed()
     print("Interaction-kernel local route command tests passed.")
 
