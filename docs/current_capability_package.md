@@ -1,25 +1,27 @@
-# Sprint 10.70 - One Hop-Count-Agnostic Unambiguous Local Destination Route Resolver
+# Sprint 10.71 - One Hop-Count-Agnostic Sequential Local Destination Traversal
 
 Status: Ready for Independent Review.
 
-Sprint 10.70 is implemented and ready for independent review; `next_sprint`
-is `null`.
+Sprint 10.71 executes the ordered transient `movement_hops` supplied by the
+existing Sprint 10.70 resolver as sequential authoritative movement
+transitions. `next_sprint` is `null`.
 
 ## Goal
 
-Derive and prevalidate exactly one authored simple local route of any hop
-length for `go to <location>` and `move to <location>`, then compose existing
-immediate movement transitions.
+For a resolved finite local route, validate, build the scene for, and publish
+each completed hop before beginning the next hop.
 
 ## Boundaries
 
-Routes are transient and unranked. Repeated locations are excluded from a
-candidate route, making cycles finite without a hop limit. No route ranking,
-persistence, save migration, parser expansion, generated content, encounters,
-or significance system is introduced.
+Route plans remain provisional and transient. Completed hops remain
+authoritative if a later hop fails. The existing resolver, route model,
+directionality, parser, save version, and persistence model are unchanged.
+No interruption, dynamic-route, narration, or provider behavior is added.
 
 ## Completion
 
-Unique routes of any authored length succeed; zero or multiple routes fail
-without mutation. Existing immediate, two-hop, and three-hop behavior and save
-version `1` remain compatible. The candidate is unmerged pending review.
+Routes of four or more hops execute in order; timed intermediate movement
+retains its existing duration and consequences; one-, two-, and three-hop
+behavior remains compatible. Save version remains `1`, `movement_hops` remains
+transient, and a clean committed review candidate is prepared without staging
+a following package. Verification passed; no live provider request occurred.

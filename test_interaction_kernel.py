@@ -310,7 +310,121 @@ def test_hop_agnostic_resolver_handles_long_routes_and_cycles():
         assert result["success"]
         assert len(result["movement_hops"]) == hop_count
         assert result["destination_location_id"] == f"node_{hop_count}"
+        visited_location_ids = ["node_0"] + [
+            hop["destination_location_id"] for hop in result["movement_hops"]
+        ]
+        assert len(visited_location_ids) == len(set(visited_location_ids))
         assert scene == before_scene and locations == before_locations
+
+
+def test_hop_agnostic_resolver_respects_authored_directionality():
+    locations = [
+        {"location_id": "a", "name": "A", "connected_locations": [
+            {"direction": "east", "location_id": "b"},
+        ]},
+        {"location_id": "b", "name": "B", "connected_locations": [
+            {"direction": "east", "location_id": "c"},
+        ]},
+        {"location_id": "c", "name": "C", "connected_locations": []},
+    ]
+
+    forward = process_player_input(
+        "go to C", {"location": locations[0]}, locations
+    )
+    reverse = process_player_input(
+        "go to A", {"location": locations[2]}, locations
+    )
+
+    assert forward["success"]
+    assert [hop["destination_location_id"] for hop in forward["movement_hops"]] == [
+        "b", "c",
+    ]
+    assert not reverse["success"]
+    assert "movement_hops" not in reverse
+
+
+def test_long_route_publishes_each_hop_and_preserves_timed_intermediate_arrival():
+    engine = GameEngine(REGION_PATH)
+    road = next(
+        location
+        for location in engine.region["locations"]
+        if location["location_id"] == "outside_trade_road_west"
+    )
+    road["connected_locations"].append({
+        "direction": "west",
+        "location_id": "sequential_route_destination",
+    })
+    engine.region["locations"].append({
+        "location_id": "sequential_route_destination",
+        "name": "Sequential Route Destination",
+        "type": "test_route",
+        "description_seed": "A test-only authored continuation beyond the Western Trade Road.",
+        "state": {},
+        "spawn_rules": {},
+        "connected_locations": [],
+    })
+    engine.scene_snapshot = build_scene(engine.region, engine.world_state)
+
+    result = engine.process_command("go to Sequential Route Destination")
+
+    assert result["success"]
+    assert len(result["movement_hops"]) == 5
+    assert result["destination_location_id"] == "sequential_route_destination"
+    assert engine.get_world_state()["player"]["current_location_id"] == (
+        "sequential_route_destination"
+    )
+    movement_history = [
+        entry for entry in engine.get_history()
+        if entry["event_type"] == "player_movement"
+    ]
+    assert [entry["location"] for entry in movement_history] == [
+        "bryn_shander_main_street",
+        "traders_hall",
+        "bryn_shander_gate_west",
+        "outside_trade_road_west",
+        "sequential_route_destination",
+    ]
+    assert len(result["time_advancements"]) == 1
+    assert engine.get_world_state()["time"]["elapsed_hours"] == 1
+    assert engine.get_world_state()["evidence_traces"] == [{
+        "trace_id": "western_trade_road_arrival_trace",
+        "evidence_id": "western_trade_road_patrol_marker",
+        "location_id": "outside_trade_road_west",
+    }]
+
+    assert "movement_hops" not in engine.get_world_state()
+
+
+def test_later_route_hop_failure_preserves_earlier_authoritative_hop():
+    engine = GameEngine(REGION_PATH)
+    original_complete_hop = engine._complete_movement_hop
+    completed_hop_count = 0
+
+    def fail_before_second_hop(hop):
+        nonlocal completed_hop_count
+        completed_hop_count += 1
+        if completed_hop_count == 2:
+            raise RuntimeError("test-only later-hop failure")
+        return original_complete_hop(hop)
+
+    engine._complete_movement_hop = fail_before_second_hop
+
+    try:
+        engine.process_command("go to Western Trade Road")
+        assert False, "Expected the injected later-hop failure."
+    except RuntimeError as error:
+        assert str(error) == "test-only later-hop failure"
+
+    assert engine.get_world_state()["player"]["current_location_id"] == (
+        "bryn_shander_main_street"
+    )
+    movement_history = [
+        entry for entry in engine.get_history()
+        if entry["event_type"] == "player_movement"
+    ]
+    assert [entry["location"] for entry in movement_history] == [
+        "bryn_shander_main_street"
+    ]
 
 
 def test_ambiguous_and_invalid_destination_phrases_fail_closed():
@@ -356,6 +470,9 @@ def main():
     test_three_hop_go_to_and_move_to_validate_then_compose_hops()
     test_three_hop_ambiguity_and_invalid_final_hop_fail_without_mutation()
     test_hop_agnostic_resolver_handles_long_routes_and_cycles()
+    test_hop_agnostic_resolver_respects_authored_directionality()
+    test_long_route_publishes_each_hop_and_preserves_timed_intermediate_arrival()
+    test_later_route_hop_failure_preserves_earlier_authoritative_hop()
     test_ambiguous_and_invalid_destination_phrases_fail_closed()
     print("Interaction-kernel local route command tests passed.")
 

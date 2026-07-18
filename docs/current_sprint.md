@@ -1,18 +1,14 @@
-# Sprint 10.70 - One Hop-Count-Agnostic Unambiguous Local Destination Route Resolver
+# Sprint 10.71 - One Hop-Count-Agnostic Sequential Local Destination Traversal
 
 Status: Ready for Independent Review.
 
-Sprint 10.70 is implemented and ready for independent review; `next_sprint`
-is `null`.
-
 ## Goal
 
-Replace fixed-depth abstract route resolution with one deterministic,
-hop-count-agnostic, transient authored-route resolver.
+Execute each resolved local `movement_hops` entry through authoritative
+movement completion before the next entry begins.
 
 ## Expected Files
 
-- `engine/interaction_kernel.py`
 - `engine/game_engine.py`
 - `test_interaction_kernel.py`
 - `docs/current_capability_package.md`
@@ -21,15 +17,16 @@ hop-count-agnostic, transient authored-route resolver.
 
 ## Acceptance Criteria
 
-- Exactly one eligible simple authored route, including routes longer than
-  three hops, is prevalidated and then composed through existing hop semantics.
-- Zero or multiple routes fail without state mutation; cycles terminate.
-- Immediate, two-hop, and three-hop observable behavior remains compatible.
-- Save version remains `1`; route data is not persistent.
+- Every successful hop is validated, has its scene rebuilt, and is published
+  before the next hop.
+- A later hop failure does not roll back already completed hops.
+- Existing timed West Road traversal and its consequences apply at its hop.
+- One-, two-, and three-hop routes remain compatible; save version remains
+  `1` and route hops are not persisted.
 
 ## Verification
 
-Focused long-route, ambiguity, cycle, preservation, save/load, and no-state
-tests plus affected movement, navigation, persistence, narration-context, and
-provider-safe regressions pass. Preflight, canonical validation, diff checks,
-and review-packet validation pass.
+Focused four-hop, timed-hop, later-failure, resolver, movement, navigation,
+save/load, narration-context, and provider-safe regressions; official
+preflight; canonical record validation; `git diff --check`; and a validated
+package-review packet.

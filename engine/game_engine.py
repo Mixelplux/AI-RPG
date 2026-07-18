@@ -835,11 +835,29 @@ class GameEngine:
         self, interaction_result: Dict[str, Any]
     ) -> Dict[str, Any]:
         """Commit the one supported timed traversal as one outer transition."""
-        candidate_world_state, time_result = (
-            self._prepare_declared_one_hour_west_road_traversal(
-                copy_world_state(self.world_state), interaction_result
+        time_result = self._complete_movement_hop(interaction_result)
+        if time_result is None:
+            raise ValueError("Declared timed traversal did not advance time.")
+        return time_result
+
+    def _complete_movement_hop(
+        self, interaction_result: Dict[str, Any]
+    ) -> Dict[str, Any] | None:
+        """Commit one validated movement hop and rebuild its authoritative scene."""
+        candidate_world_state = copy_world_state(self.world_state)
+        time_result = None
+        if self._is_declared_one_hour_west_road_traversal(
+            interaction_result, candidate_world_state
+        ):
+            candidate_world_state, time_result = (
+                self._prepare_declared_one_hour_west_road_traversal(
+                    candidate_world_state, interaction_result
+                )
             )
-        )
+        else:
+            candidate_world_state = apply_interaction(
+                candidate_world_state, interaction_result
+            )
         validate_world_state(candidate_world_state, self.region)
         candidate_scene_snapshot = build_scene(self.region, candidate_world_state)
         self.world_state = candidate_world_state
@@ -1176,26 +1194,16 @@ class GameEngine:
             and isinstance(movement_hops, list)
             and movement_hops
         ):
-            candidate_world_state = copy_world_state(self.world_state)
             time_advancements = []
             for hop_result in movement_hops:
                 if not isinstance(hop_result, dict):
                     raise ValueError("Validated movement hops must be dictionaries.")
-                if self._is_declared_one_hour_west_road_traversal(
-                    hop_result, candidate_world_state
-                ):
-                    candidate_world_state, time_result = (
-                        self._prepare_declared_one_hour_west_road_traversal(
-                            candidate_world_state, hop_result
-                        )
-                    )
+                time_result = self._complete_movement_hop(hop_result)
+                if time_result is not None:
                     time_advancements.append(time_result)
-                else:
-                    candidate_world_state = apply_interaction(
-                        candidate_world_state, hop_result
-                    )
             if time_advancements:
                 interaction_result["time_advancements"] = time_advancements
+            return deepcopy(interaction_result)
         elif not isinstance(movement_hops, list):
             candidate_world_state = apply_interaction(
                 self.world_state,
