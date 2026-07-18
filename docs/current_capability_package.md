@@ -1,58 +1,45 @@
-# Current Capability Package
+# Sprint 10.66 - Immediate Local Route Command Alignment
 
-No capability package is currently active or authorized. The most recent
-terminal package record is retained below for identity and closeout context.
+Status: Active.
 
-## Most Recent Terminal Package
-
-# Sprint 10.65 - One Player-Safe Local Route Guidance Projection
-
-Status: Complete.
-
-Review state: Merged.
-
-No following capability package is authorized, staged, branched, or started.
-`next_sprint` remains `null`.
+Review state: Staged.
 
 ## Goal
 
-Establish one bounded, deterministic, nonpersistent projection of immediate,
-perceivable traversal options from the current player scene as natural local
-route cues. Compass direction describes an immediate local route, never the
-relative position of every known destination.
+Align deterministic local movement commands with the immediate named route
+options already projected from the current scene. A command such as `move to
+Main Street` resolves only to that existing immediate connection and executes
+the same movement as its corresponding directional command.
 
 ## Authorized Scope
 
-- Preserve existing world topology and deterministic movement authority.
-- Distinguish structural connectivity from player-facing route presentation.
-- Project only immediate traversable connections relevant to the current scene.
-- Permit one optional local orientation only when it helps express a local
-  connection; do not present navigation as a raw compass grid.
-- Use natural deterministic route cues, such as `Main Street continues south
-  into town.`
-- Keep the projection derived and nonpersistent.
+- Resolve a named adjacent location only when it is an immediately traversable
+  connection in the current player scene.
+- Route successful local name resolution through the existing authoritative
+  movement path, producing the same destination and movement behavior as the
+  corresponding directional command.
+- Preserve structural topology, deterministic movement authority, player-safe
+  route projection, save compatibility, and save version `1`.
+- Keep command interpretation deterministic, bounded, derived from current
+  scene connectivity, and nonpersistent.
 
 ## Boundaries
 
-- Do not provide non-adjacent destination guidance.
-- Do not add `go to the inn`, `find the blacksmith`, familiarity,
-  destination-knowledge, pathfinding, multi-step routing, LLM intent parsing,
-  global-coordinate, or complete-spatial-geometry behavior.
-- Do not change structural topology except as minimally required to demonstrate
-  this local-route seam.
-- Do not alter movement authority, persistence, save compatibility, save
-  version, provider behavior, or unrelated player-facing behavior.
+- Do not provide non-adjacent destination guidance, familiarity or knowledge,
+  pathfinding, multi-step routing, global coordinates, or LLM intent parsing.
+- Do not generalize `go to <destination>` into travel; it remains deferred
+  unless a separately staged architecture review proves unification necessary
+  and bounded.
+- Do not add a navigation framework, alter topology, add persistence or
+  migration, change save version, or change unrelated command behavior.
 - `next_sprint` remains `null`; this staging does not authorize another
   capability package.
 
 ## Completion
 
-The implementation derives deterministic, player-safe natural-language route
-cues solely from immediate traversable connections of the current scene. It
-keeps connectivity authoritative in the simulation, introduces no persistent
-route state, exposes no nonlocal destination relationship, and passes focused
-projection and affected movement, scene, save/load, and provider-safe
-regressions. No live provider request occurred. The accepted candidate was
-strict-fast-forward merged into `main`; no following capability package is
-active or authorized, save version remains `1`, and `next_sprint` remains
-`null`.
+The implementation accepts an unambiguous named immediate local route through
+the bounded `move to <adjacent location>` form, executes the same authoritative
+movement as the matching directional command, and rejects nonlocal or
+unavailable names without state change. Focused command-alignment and affected
+movement, route-projection, save/load, narration-context, and provider-safe
+regressions pass. No live provider request occurs.

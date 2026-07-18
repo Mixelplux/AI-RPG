@@ -2,54 +2,54 @@
   "schema_version": "1.0.0",
   "document_type": "current_sprint",
   "sprint_count": 1,
-  "active_sprint": null,
-  "active_capability_package": null,
+  "active_sprint": "10.66",
+  "active_capability_package": "10.66",
   "project": {
     "name": "AI Narrative RPG Engine",
     "principles": ["provider-neutral", "deterministic-core", "simulation-owned-truth"]
   },
   "sprint": {
-    "id": "10.65",
-    "title": "One Player-Safe Local Route Guidance Projection",
+    "id": "10.66",
+    "title": "Immediate Local Route Command Alignment",
     "type": "capability-package",
     "mode": "capability-package",
-    "status": "complete",
-    "review_state": "merged",
-    "goal": "Derive one deterministic, player-safe presentation of the current scene's immediate traversable connections as natural local route cues, without turning navigation into a compass grid or destination-routing system.",
-    "predecessor": {"id": "10.64", "status": "complete", "review_state": "merged"},
+    "status": "active",
+    "review_state": "staged",
+    "goal": "For one immediate, named current-scene route, make move to <adjacent location> resolve to the already authoritative directional movement result.",
+    "predecessor": {"id": "10.65", "status": "complete", "review_state": "merged"},
     "platform": {"official_interpreter": ".\\.venv\\Scripts\\python.exe", "save_version": 1, "provider_requests": "forbidden"},
     "expected_files": {
-      "likely_modified": ["engine/navigation_projection.py", "engine/game_engine.py", "engine/perception_builder.py", "engine/scene_narrator.py", "test_navigation_projection.py", "docs/current_capability_package.md", "docs/current_sprint.md", "docs/current_sprint.json"],
+      "likely_modified": ["engine/interaction_kernel.py", "test_interaction_kernel.py", "test_navigation_projection.py", "docs/current_capability_package.md", "docs/current_sprint.md", "docs/current_sprint.json"],
       "likely_created": []
     },
     "acceptance_criteria": [
-      "Route cues describe only immediate, traversable connections from the current player scene; they do not describe the relative position of non-adjacent or merely known destinations.",
-      "Cues are deterministic, player-safe, and phrased as natural local routes, for example `Main Street continues south into town.`",
-      "Local orientation may be included only where it meaningfully describes an immediate route; the result is not a raw compass grid.",
-      "Structural connectivity remains authoritative and separate from the derived presentation projection; movement behavior is unchanged.",
-      "The projection adds no World State, history, save data, narration context, provider authority, migration, or save-version change."
+      "At the current scene, move to <adjacent location> succeeds only when that name identifies one immediately traversable connection and yields the same destination and movement behavior as the matching directional command.",
+      "Resolution is deterministic and restricted to current-scene immediate exits; non-adjacent, unavailable, ambiguous, or unrecognized names do not move the player or expose a route beyond the scene.",
+      "Existing structural connectivity and movement authority remain unchanged; the local name form reuses rather than duplicates movement resolution.",
+      "go to <destination> and head to <destination> do not become travel commands in this sprint.",
+      "No persistence, history, parser framework, provider behavior, migration, or save-version change is introduced."
     ],
     "verification": {
       "staging_commands": ["Official-interpreter preflight through the established workspace procedure", "Canonical record validation", "git diff --check"],
-      "focused_commands": ["Focused local-route projection tests", "Affected navigation, movement, scene, save/load, narration-context, and provider-safe regressions", "Provider requests are forbidden"],
+      "focused_commands": ["Focused immediate local route command-alignment tests", "Affected interaction-kernel, navigation-projection, movement, save/load, narration-context, and provider-safe regressions", "Provider requests are forbidden"],
       "closeout_commands": ["Official-interpreter preflight", "Canonical record validation", "git diff --check", "Clean committed review-candidate Git evidence", "Required review-packet assembly and validation"]
     },
     "execution_phases": [
       {"id": "package-and-sprint-staging", "status": "complete"},
-      {"id": "local-route-guidance-projection", "status": "complete"},
-      {"id": "focused-verification", "status": "complete"},
-      {"id": "review-candidate", "status": "complete"}
+      {"id": "immediate-local-route-command-alignment", "status": "planned"},
+      {"id": "focused-verification", "status": "planned"},
+      {"id": "review-candidate", "status": "planned"}
     ],
     "governance": [
-      "No sprint or capability package is currently active or staged.",
-      "Simulation retains authority over structural connectivity and movement; route cues are deterministic, player-safe, derived presentation only.",
-      "Project only immediate traversable connections relevant to the current scene; never infer or expose nonlocal destination relationships.",
-      "Do not add persistence, history, parser, command, provider, navigation-framework, migration, or save-version changes. Save version remains 1.",
+      "This owner-authorized capability package is active; no following sprint is authorized or staged.",
+      "Simulation retains authority over structural connectivity and movement; local route command resolution may use only immediate current-scene traversable connections.",
+      "Do not infer or expose nonlocal destination relationships, destination knowledge, or multi-step travel.",
+      "Do not generalize go to or head to commands into travel without separately staged bounded architecture authority. Save version remains 1.",
       "Provider requests are forbidden for automated verification, and next_sprint remains null."
     ],
     "closeout": {
       "allowed_terminal_statuses": ["complete", "blocked"],
-      "verification_result": "Official-interpreter preflight, syntax checks, focused local-route projection coverage, affected one-hour West-Road movement, save/load, narration-context, narration-pipeline, and fake-transport OpenAI Responses regressions passed. No live provider request occurred. The accepted candidate was strict-fast-forward merged into main. No sprint or capability package remains active; save version remains 1 and next_sprint remains null.",
+      "verification_result": "Staging pending implementation and closeout verification.",
       "next_sprint": null
     }
   }
