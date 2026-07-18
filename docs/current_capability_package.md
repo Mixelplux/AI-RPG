@@ -1,58 +1,45 @@
-# Current Capability Package
+# Sprint 10.67 - Immediate Local Travel Phrase Alignment
 
-No capability package is currently active or authorized. The most recent
-terminal package record is retained below for identity and closeout context.
+Status: Active.
 
-## Most Recent Terminal Package
-
-# Sprint 10.66 - Immediate Local Route Command Alignment
-
-Status: Complete.
-
-Review state: Merged.
-
-No following capability package is authorized, staged, branched, or started.
-`next_sprint` remains `null`.
+Review state: Staged.
 
 ## Goal
 
-Align deterministic local movement commands with the immediate named route
-options already projected from the current scene. A command such as `move to
-Main Street` resolves only to that existing immediate connection and executes
-the same movement as its corresponding directional command.
+Remove the remaining local command inconsistency by allowing `go to <location>`
+and `head to <location>` to use the existing local movement only when a named
+location is uniquely and immediately traversable from the current scene.
 
 ## Authorized Scope
 
-- Resolve a named adjacent location only when it is an immediately traversable
-  connection in the current player scene.
-- Route successful local name resolution through the existing authoritative
-  movement path, producing the same destination and movement behavior as the
-  corresponding directional command.
-- Preserve structural topology, deterministic movement authority, player-safe
-  route projection, save compatibility, and save version `1`.
-- Keep command interpretation deterministic, bounded, derived from current
-  scene connectivity, and nonpersistent.
+- For one uniquely matched immediate current-scene connection, resolve `go to`
+  and `head to` through the same authoritative local movement used by a
+  directional command and `move to <location>`.
+- Keep existing structural topology, directional movement authority, local
+  route projection, save compatibility, and save version `1` unchanged.
+- Keep command handling deterministic, current-scene bounded, derived, and
+  nonpersistent.
+- Boundary: the interaction kernel owns classification and immediate-scene
+  candidate resolution; the destination resolver remains the nonmoving
+  loaded-region identification fallback when no immediate unique route matches.
 
 ## Boundaries
 
-- Do not provide non-adjacent destination guidance, familiarity or knowledge,
-  pathfinding, multi-step routing, global coordinates, or LLM intent parsing.
-- Do not generalize `go to <destination>` into travel; it remains deferred
-  unless a separately staged architecture review proves unification necessary
-  and bounded.
-- Do not add a navigation framework, alter topology, add persistence or
-  migration, change save version, or change unrelated command behavior.
+- A non-adjacent `go to` or `head to` retains the existing nonmoving
+  destination-identification behavior; it must not become travel.
+- Ambiguous or invalid targets fail closed without movement.
+- Do not add nonlocal travel, pathfinding, multi-step routing, familiarity or
+  destination knowledge, global coordinates, LLM intent parsing, persistence,
+  migration, or a parser/navigation framework.
 - `next_sprint` remains `null`; this staging does not authorize another
   capability package.
 
 ## Completion
 
-The implementation accepts an unambiguous named immediate local route through
-the bounded `move to <adjacent location>` form, executes the same authoritative
-movement as the matching directional command, and rejects nonlocal or
-unavailable names without state change. Focused command-alignment and affected
-movement, route-projection, save/load, narration-context, and provider-safe
-regressions passed. No live provider request occurred. The accepted candidate
-was strict-fast-forward merged into `main`; no following capability package is
-active or authorized, save version remains `1`, and `next_sprint` remains
-`null`.
+The implementation moves the player only for an unambiguous immediate local
+route named by `go to` or `head to`, with the same authoritative movement
+result as its directional and `move to` forms. Non-adjacent phrases retain
+nonmoving destination identification, while ambiguous and invalid phrases do
+not move state. Focused phrase-alignment and affected movement, route,
+save/load, narration-context, and provider-safe regressions pass. No live
+provider request occurs.

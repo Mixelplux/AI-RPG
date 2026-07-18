@@ -1,23 +1,17 @@
-# Current Sprint Record
+# Sprint 10.67 - Immediate Local Travel Phrase Alignment
 
-No sprint is currently active. The most recent terminal sprint record is
-retained below for identity and closeout context.
+Status: Active.
 
-## Most Recent Terminal Sprint
+Review state: Staged.
 
-# Sprint 10.66 - Immediate Local Route Command Alignment
-
-Status: Complete.
-
-Review state: Merged.
-
-`next_sprint` is `null`. No following sprint is authorized, staged, or
-started.
+`next_sprint` is `null`. This is the active, owner-authorized capability
+package; no following sprint is authorized or staged.
 
 ## Goal
 
-For one immediate, named current-scene route, make `move to <adjacent
-location>` resolve to the already authoritative directional movement result.
+Align `go to <location>` and `head to <location>` with the existing immediate
+local movement result, without converting nonlocal destination identification
+into travel.
 
 ## Expected Files
 
@@ -30,30 +24,28 @@ location>` resolve to the already authoritative directional movement result.
 
 ## Acceptance Criteria
 
-- At the current scene, `move to Main Street` succeeds only when Main Street
-  names one immediately traversable connection and yields the same destination
-  and movement behavior as the matching directional command.
-- Resolution is deterministic and restricted to current-scene immediate exits;
-  non-adjacent, unavailable, ambiguous, or unrecognized names do not move the
-  player or expose a route beyond the scene.
-- Existing structural connectivity and movement authority remain unchanged;
-  the local name form reuses rather than duplicates movement resolution.
-- `go to <destination>` and `head to <destination>` do not become travel
-  commands in this sprint.
-- No persistence, history, parser framework, provider behavior, migration, or
-  save-version change is introduced. Save version remains `1` and
-  `next_sprint` remains `null`.
+- `go to Main Street` and `head to Main Street` from North Gate move only
+  because Main Street is a uniquely named immediately traversable connection;
+  their destination and movement behavior match `go south` and `move to Main
+  Street`.
+- Non-adjacent names retain existing nonmoving destination-identification
+  behavior; they do not invoke travel, pathfinding, or multi-step routing.
+- Ambiguous or invalid immediate names fail closed without player movement,
+  history, or other state change.
+- The interaction kernel resolves only immediate scene candidates; the
+  destination resolver remains the fallback for nonmoving loaded-region
+  identification when no immediate unique match exists.
+- No persistence, history model, parser framework, provider behavior,
+  migration, or save-version change is introduced. Save version remains `1`
+  and `next_sprint` remains `null`.
 
 ## Verification
 
-- Official-interpreter preflight, syntax checks, canonical-record validation,
-  and `git diff --check` pass.
-- Focused command-alignment coverage proves immediate named-route success,
-  directional equivalence, deterministic ambiguity handling, nonlocal refusal,
-  no-state-change failure, and no broad `go to` travel behavior.
-- Affected interaction-kernel, navigation-projection, movement, save/load,
+- Official-interpreter preflight, canonical-record validation, and `git diff
+  --check` pass for staging.
+- Focused phrase-alignment coverage proves local `go to` and `head to`
+  equivalence, non-adjacent nonmoving fallback, ambiguity refusal, invalid
+  refusal, and no state change on failed movement.
+- Affected interaction-kernel, movement, navigation-projection, save/load,
   narration-context, and provider-safe regressions pass. No live provider
-  request occurred.
-- The accepted candidate was strict-fast-forward merged into `main`; no
-  following sprint is active or authorized, save version remains `1`, and
-  `next_sprint` remains `null`.
+  request occurs.

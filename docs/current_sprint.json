@@ -2,54 +2,54 @@
   "schema_version": "1.0.0",
   "document_type": "current_sprint",
   "sprint_count": 1,
-  "active_sprint": null,
-  "active_capability_package": null,
+  "active_sprint": "10.67",
+  "active_capability_package": "10.67",
   "project": {
     "name": "AI Narrative RPG Engine",
     "principles": ["provider-neutral", "deterministic-core", "simulation-owned-truth"]
   },
   "sprint": {
-    "id": "10.66",
-    "title": "Immediate Local Route Command Alignment",
+    "id": "10.67",
+    "title": "Immediate Local Travel Phrase Alignment",
     "type": "capability-package",
     "mode": "capability-package",
-    "status": "complete",
-    "review_state": "merged",
-    "goal": "For one immediate, named current-scene route, make move to <adjacent location> resolve to the already authoritative directional movement result.",
-    "predecessor": {"id": "10.65", "status": "complete", "review_state": "merged"},
+    "status": "active",
+    "review_state": "staged",
+    "goal": "Align go to <location> and head to <location> with existing immediate local movement, without converting nonlocal destination identification into travel.",
+    "predecessor": {"id": "10.66", "status": "complete", "review_state": "merged"},
     "platform": {"official_interpreter": ".\\.venv\\Scripts\\python.exe", "save_version": 1, "provider_requests": "forbidden"},
     "expected_files": {
       "likely_modified": ["engine/interaction_kernel.py", "engine/game_engine.py", "test_interaction_kernel.py", "docs/current_capability_package.md", "docs/current_sprint.md", "docs/current_sprint.json"],
       "likely_created": []
     },
     "acceptance_criteria": [
-      "At the current scene, move to <adjacent location> succeeds only when that name identifies one immediately traversable connection and yields the same destination and movement behavior as the matching directional command.",
-      "Resolution is deterministic and restricted to current-scene immediate exits; non-adjacent, unavailable, ambiguous, or unrecognized names do not move the player or expose a route beyond the scene.",
-      "Existing structural connectivity and movement authority remain unchanged; the local name form reuses rather than duplicates movement resolution.",
-      "go to <destination> and head to <destination> do not become travel commands in this sprint.",
-      "No persistence, history, parser framework, provider behavior, migration, or save-version change is introduced."
+      "go to <location> and head to <location> move only for a uniquely named immediately traversable current-scene connection, with the same destination and movement behavior as the corresponding directional and move to forms.",
+      "Non-adjacent names retain existing nonmoving destination-identification behavior and do not invoke travel, pathfinding, or multi-step routing.",
+      "Ambiguous or invalid immediate names fail closed without player movement, history, or other state change.",
+      "The interaction kernel resolves only immediate scene candidates; the destination resolver remains the fallback for nonmoving loaded-region identification when no immediate unique match exists.",
+      "No persistence, history model, parser framework, provider behavior, migration, or save-version change is introduced."
     ],
     "verification": {
       "staging_commands": ["Official-interpreter preflight through the established workspace procedure", "Canonical record validation", "git diff --check"],
-      "focused_commands": ["Focused immediate local route command-alignment tests", "Affected interaction-kernel, navigation-projection, movement, save/load, narration-context, and provider-safe regressions", "Provider requests are forbidden"],
+      "focused_commands": ["Focused immediate local travel phrase-alignment tests", "Affected interaction-kernel, movement, navigation-projection, save/load, narration-context, and provider-safe regressions", "Provider requests are forbidden"],
       "closeout_commands": ["Official-interpreter preflight", "Canonical record validation", "git diff --check", "Clean committed review-candidate Git evidence", "Required review-packet assembly and validation"]
     },
     "execution_phases": [
       {"id": "package-and-sprint-staging", "status": "complete"},
-      {"id": "immediate-local-route-command-alignment", "status": "complete"},
-      {"id": "focused-verification", "status": "complete"},
-      {"id": "review-candidate", "status": "complete"}
+      {"id": "immediate-local-travel-phrase-alignment", "status": "planned"},
+      {"id": "focused-verification", "status": "planned"},
+      {"id": "review-candidate", "status": "planned"}
     ],
     "governance": [
-      "No sprint or capability package is currently active or staged.",
-      "Simulation retains authority over structural connectivity and movement; local route command resolution may use only immediate current-scene traversable connections.",
-      "Do not infer or expose nonlocal destination relationships, destination knowledge, or multi-step travel.",
-      "Do not generalize go to or head to commands into travel without separately staged bounded architecture authority. Save version remains 1.",
+      "This owner-authorized capability package is active; no following sprint is authorized or staged.",
+      "Simulation retains authority over structural connectivity and movement; immediate travel phrases may resolve only against current-scene traversable connections.",
+      "The interaction kernel owns immediate candidate resolution; the destination resolver remains the nonmoving loaded-region identification fallback.",
+      "Do not infer or execute nonlocal destination relationships, travel, destination knowledge, or multi-step routing. Save version remains 1.",
       "Provider requests are forbidden for automated verification, and next_sprint remains null."
     ],
     "closeout": {
       "allowed_terminal_statuses": ["complete", "blocked"],
-      "verification_result": "Official-interpreter preflight, syntax checks, focused immediate local route command-alignment coverage, affected navigation, one-hour West-Road movement, save/load, narration-context, and fake-transport OpenAI Responses regressions passed. No live provider request occurred. The accepted candidate was strict-fast-forward merged into main. No sprint or capability package remains active; save version remains 1 and next_sprint remains null.",
+      "verification_result": "Staging pending implementation and closeout verification.",
       "next_sprint": null
     }
   }
