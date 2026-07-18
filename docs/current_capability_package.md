@@ -1,8 +1,18 @@
+# Current Capability Package
+
+No capability package is currently active or authorized. The most recent
+terminal package record is retained below for identity and closeout context.
+
+## Most Recent Terminal Package
+
 # Sprint 10.66 - Immediate Local Route Command Alignment
 
-Status: Ready for Independent Review.
+Status: Complete.
 
-Review state: Candidate prepared.
+Review state: Merged.
+
+No following capability package is authorized, staged, branched, or started.
+`next_sprint` remains `null`.
 
 ## Goal
 
@@ -42,6 +52,7 @@ the bounded `move to <adjacent location>` form, executes the same authoritative
 movement as the matching directional command, and rejects nonlocal or
 unavailable names without state change. Focused command-alignment and affected
 movement, route-projection, save/load, narration-context, and provider-safe
-regressions passed. No live provider request occurred. The candidate is ready
-for independent review; `next_sprint` remains `null` and save version remains
-`1`.
+regressions passed. No live provider request occurred. The accepted candidate
+was strict-fast-forward merged into `main`; no following capability package is
+active or authorized, save version remains `1`, and `next_sprint` remains
+`null`.

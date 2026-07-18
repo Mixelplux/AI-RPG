@@ -1,11 +1,18 @@
+# Current Sprint Record
+
+No sprint is currently active. The most recent terminal sprint record is
+retained below for identity and closeout context.
+
+## Most Recent Terminal Sprint
+
 # Sprint 10.66 - Immediate Local Route Command Alignment
 
-Status: Ready for Independent Review.
+Status: Complete.
 
-Review state: Candidate prepared.
+Review state: Merged.
 
-`next_sprint` is `null`. This is the active, owner-authorized capability
-package; no following sprint is authorized or staged.
+`next_sprint` is `null`. No following sprint is authorized, staged, or
+started.
 
 ## Goal
 
@@ -47,5 +54,6 @@ location>` resolve to the already authoritative directional movement result.
 - Affected interaction-kernel, navigation-projection, movement, save/load,
   narration-context, and provider-safe regressions pass. No live provider
   request occurred.
-- The bounded candidate is committed and ready for independent review; save
-  version remains `1` and `next_sprint` remains `null`.
+- The accepted candidate was strict-fast-forward merged into `main`; no
+  following sprint is active or authorized, save version remains `1`, and
+  `next_sprint` remains `null`.

@@ -2,8 +2,8 @@
   "schema_version": "1.0.0",
   "document_type": "current_sprint",
   "sprint_count": 1,
-  "active_sprint": "10.66",
-  "active_capability_package": "10.66",
+  "active_sprint": null,
+  "active_capability_package": null,
   "project": {
     "name": "AI Narrative RPG Engine",
     "principles": ["provider-neutral", "deterministic-core", "simulation-owned-truth"]
@@ -13,8 +13,8 @@
     "title": "Immediate Local Route Command Alignment",
     "type": "capability-package",
     "mode": "capability-package",
-    "status": "review_ready",
-    "review_state": "candidate_prepared",
+    "status": "complete",
+    "review_state": "merged",
     "goal": "For one immediate, named current-scene route, make move to <adjacent location> resolve to the already authoritative directional movement result.",
     "predecessor": {"id": "10.65", "status": "complete", "review_state": "merged"},
     "platform": {"official_interpreter": ".\\.venv\\Scripts\\python.exe", "save_version": 1, "provider_requests": "forbidden"},
@@ -41,7 +41,7 @@
       {"id": "review-candidate", "status": "complete"}
     ],
     "governance": [
-      "This owner-authorized capability package is active; no following sprint is authorized or staged.",
+      "No sprint or capability package is currently active or staged.",
       "Simulation retains authority over structural connectivity and movement; local route command resolution may use only immediate current-scene traversable connections.",
       "Do not infer or expose nonlocal destination relationships, destination knowledge, or multi-step travel.",
       "Do not generalize go to or head to commands into travel without separately staged bounded architecture authority. Save version remains 1.",
@@ -49,7 +49,7 @@
     ],
     "closeout": {
       "allowed_terminal_statuses": ["complete", "blocked"],
-      "verification_result": "Official-interpreter preflight, syntax checks, focused immediate local route command-alignment coverage, affected navigation, one-hour West-Road movement, save/load, narration-context, and fake-transport OpenAI Responses regressions passed. No live provider request occurred. The bounded candidate is ready for independent review; save version remains 1 and next_sprint remains null.",
+      "verification_result": "Official-interpreter preflight, syntax checks, focused immediate local route command-alignment coverage, affected navigation, one-hour West-Road movement, save/load, narration-context, and fake-transport OpenAI Responses regressions passed. No live provider request occurred. The accepted candidate was strict-fast-forward merged into main. No sprint or capability package remains active; save version remains 1 and next_sprint remains null.",
       "next_sprint": null
     }
   }
