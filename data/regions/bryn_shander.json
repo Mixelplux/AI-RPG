@@ -113,7 +113,7 @@
     "target_entity_id": "captain_darvin_grey",
     "required_discovery_id": "north_gate_captain_trace",
     "required_thread_id": "bryn_shander_west_road_bandit_report",
-    "response_text": "Captain Darvin Grey studies the trail, then nods. â€˜That is enough to confirm the report. I will send a patrol west at once.â€™",
+    "response_text": "Captain Darvin Grey studies the trail, then nods. ‘That is enough to confirm the report. I will send a patrol west at once.’",
     "resolved_observation": "The watch's low-voiced concern has given way to purposeful orders."
   },
   "conversation_discovery_actor_relocation": {
