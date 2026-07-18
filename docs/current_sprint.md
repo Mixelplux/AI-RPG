@@ -43,8 +43,9 @@ into travel.
 - Official-interpreter preflight, syntax checks, canonical-record validation,
   and `git diff --check` pass.
 - Focused phrase-alignment coverage proves local `go to` and `head to`
-  equivalence, non-adjacent nonmoving fallback, ambiguity refusal, invalid
-  refusal, and no state change on failed movement.
+  equivalence, leading-article immediate and non-adjacent behavior,
+  non-adjacent nonmoving fallback, ambiguity refusal, invalid refusal, and no
+  state change on failed movement.
 - Affected interaction-kernel, movement, navigation-projection, save/load,
   narration-context, and provider-safe regressions pass. No live provider
   request occurred.

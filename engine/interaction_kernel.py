@@ -344,7 +344,7 @@ def _matching_named_connections(
 ) -> list[Dict[str, Any]]:
     if not isinstance(connected_locations, list):
         return []
-    normalized_target = _normalize_name(target)
+    normalized_target = _normalize_destination_name(target)
     return [
         connection
         for connection in connected_locations
@@ -389,12 +389,17 @@ def _normalized_location_name(
             continue
         name = location.get("name")
         if isinstance(name, str) and name.strip():
-            return _normalize_name(name)
+            return _normalize_destination_name(name)
     return None
 
 
 def _normalize_name(value: str) -> str:
     return " ".join(value.casefold().split())
+
+
+def _normalize_destination_name(value: str) -> str:
+    normalized = _normalize_name(value)
+    return normalized[4:] if normalized.startswith("the ") else normalized
 
 
 def extract_conversation_target(player_input: str) -> str | None:
@@ -421,6 +426,8 @@ def extract_destination_target(player_input: str) -> str | None:
     for prefix in ["head to", "go to"]:
         if lowered == prefix or lowered.startswith(f"{prefix} "):
             target = player_input[len(prefix):].strip()
+            if target.lower().startswith("the "):
+                target = target[4:].strip()
             return target or None
     return None
 

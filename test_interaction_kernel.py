@@ -77,6 +77,24 @@ def test_immediate_go_to_and_head_to_match_directional_movement():
         )
 
 
+def test_article_bearing_immediate_destination_phrase_matches_local_movement():
+    directional_engine = GameEngine(REGION_PATH)
+    article_engine = GameEngine(REGION_PATH)
+    directional_engine.process_command("go south")
+    article_engine.process_command("go south")
+
+    directional = directional_engine.process_command("go west")
+    article = article_engine.process_command("head to the Inn of the Four Candles")
+
+    assert article["success"]
+    assert article["intent"] == "movement"
+    assert article["destination_location_id"] == directional["destination_location_id"]
+    assert article["message"] == directional["message"]
+    assert article_engine.get_world_state()["player"]["current_location_id"] == (
+        directional_engine.get_world_state()["player"]["current_location_id"]
+    )
+
+
 def test_non_adjacent_go_to_and_head_to_stay_nonmoving_destination_lookup():
     engine = GameEngine(REGION_PATH)
     before_state = engine.get_world_state()
@@ -90,6 +108,20 @@ def test_non_adjacent_go_to_and_head_to_stay_nonmoving_destination_lookup():
         assert result["destination_resolution"]["location_id"] == (
             "outside_trade_road_west"
         )
+    assert engine.get_world_state() == before_state
+    assert engine.get_history() == before_history
+
+
+def test_article_bearing_non_adjacent_phrase_stays_nonmoving_destination_lookup():
+    engine = GameEngine(REGION_PATH)
+    before_state = engine.get_world_state()
+    before_history = engine.get_history()
+
+    result = engine.process_command("go to the Western Trade Road")
+
+    assert result["intent"] == "destination"
+    assert result["success"]
+    assert result["destination_resolution"]["location_id"] == "outside_trade_road_west"
     assert engine.get_world_state() == before_state
     assert engine.get_history() == before_history
 
@@ -127,7 +159,9 @@ def main():
     test_named_routes_are_current_scene_only_and_fail_closed()
     test_ambiguous_immediate_names_do_not_resolve_or_mutate_scene()
     test_immediate_go_to_and_head_to_match_directional_movement()
+    test_article_bearing_immediate_destination_phrase_matches_local_movement()
     test_non_adjacent_go_to_and_head_to_stay_nonmoving_destination_lookup()
+    test_article_bearing_non_adjacent_phrase_stays_nonmoving_destination_lookup()
     test_ambiguous_and_invalid_destination_phrases_fail_closed()
     print("Interaction-kernel local route command tests passed.")
 

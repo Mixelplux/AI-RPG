@@ -49,7 +49,7 @@
     ],
     "closeout": {
       "allowed_terminal_statuses": ["complete", "blocked"],
-      "verification_result": "Official-interpreter preflight, syntax checks, focused immediate local travel phrase-alignment coverage, affected navigation, one-hour West-Road movement, save/load, narration-context, narration-pipeline, and fake-transport OpenAI Responses regressions passed. No live provider request occurred. The bounded candidate is ready for independent review; save version remains 1 and next_sprint remains null.",
+      "verification_result": "Official-interpreter preflight, syntax checks, focused immediate local travel phrase-alignment coverage including leading-article immediate and non-adjacent phrases, affected navigation, one-hour West-Road movement, save/load, narration-context, narration-pipeline, and fake-transport OpenAI Responses regressions passed. No live provider request occurred. The bounded candidate is ready for independent review; save version remains 1 and next_sprint remains null.",
       "next_sprint": null
     }
   }
