@@ -1,1 +1,98 @@
-{"schema_version":"1.0.0","document_type":"current_sprint","sprint_count":1,"active_sprint":"10.73","active_capability_package":"10.73","project":{"name":"AI Narrative RPG Engine","principles":["provider-neutral","deterministic-core","simulation-owned-truth"]},"sprint":{"id":"10.73","title":"Representative Bryn Shander Traversal Region and Topology Integrity","type":"capability-package","mode":"capability-package","status":"review_ready","review_state":"candidate_prepared","goal":"Create a representative canon-informed Bryn Shander macro traversal graph that can be deterministically traversed and inspected for local topology integrity.","predecessor":{"id":"10.72","status":"review_ready","review_state":"candidate_prepared"},"platform":{"official_interpreter":".\\.venv\\Scripts\\python.exe","save_version":1,"provider_requests":"forbidden"},"expected_files":{"likely_modified":["data/regions/bryn_shander.json","engine/region_validator.py","test_interaction_kernel.py","docs/current_capability_package.md","docs/current_sprint.md","docs/current_sprint.json"],"likely_created":["test_region_topology.py","docs/bryn_shander_topology.md"]},"acceptance_criteria":["The approved representative anchors and minimal connective geography form one reachable local graph.","All ordinary local connections are explicitly reciprocal; validation rejects missing targets, self-links, duplicate targets, missing reverse edges, and unreachable locations.","Loops and equal-hop alternate routes follow the Sprint 10.72 fewest-hop then authored-connection-order routing semantics.","Route selection remains static-topology-only, movement_hops remains transient, save version remains 1, and provider requests remain forbidden."],"verification":{"staging_commands":["Official-interpreter preflight","Canonical record validation","git diff --check"],"focused_commands":["Topology-integrity and deterministic-routing tests","Full script-based regression suite including movement, save/load, narration-context, and provider-safe coverage"],"closeout_commands":["Official-interpreter preflight","Canonical record validation","git diff --check","Clean committed review-candidate Git evidence","Required review-packet assembly and validation"]},"execution_phases":[{"id":"package-and-sprint-staging","status":"complete"},{"id":"representative-topology-and-validation","status":"complete"},{"id":"focused-verification","status":"complete"},{"id":"review-candidate","status":"complete"}],"governance":["This owner-authorized capability package is active; no following sprint is authorized or staged.","No intentionally asymmetric local path or asymmetric-route schema is permitted.","No regional routing, costs, dynamic-state-aware routing, rerouting, route-choice interaction, encounters, parser expansion, persistence change, migration, scene projection, narration, or provider behavior is permitted.","Provider requests are forbidden and next_sprint remains null."],"closeout":{"allowed_terminal_statuses":["complete","blocked"],"verification_result":"Topology validation, deterministic routing, and the full script-based regression suite passed. No live provider request occurred. Save version remains 1 and next_sprint remains null.","next_sprint":null}}}
+{
+  "schema_version": "1.0.0",
+  "document_type": "current_sprint",
+  "sprint_count": 1,
+  "active_sprint": null,
+  "active_capability_package": null,
+  "project": {
+    "name": "AI Narrative RPG Engine",
+    "principles": ["provider-neutral", "deterministic-core", "simulation-owned-truth"]
+  },
+  "sprint": {
+    "id": "10.73",
+    "title": "Representative Bryn Shander Traversal Region and Topology Integrity",
+    "type": "capability-package",
+    "mode": "capability-package",
+    "status": "complete",
+    "review_state": "merged",
+    "goal": "Create a representative canon-informed Bryn Shander macro traversal graph that can be deterministically traversed and inspected for local topology integrity.",
+    "predecessor": {
+      "id": "10.72",
+      "status": "complete",
+      "review_state": "merged"
+    },
+    "platform": {
+      "official_interpreter": ".\\.venv\\Scripts\\python.exe",
+      "save_version": 1,
+      "provider_requests": "forbidden"
+    },
+    "expected_files": {
+      "likely_modified": [
+        "data/regions/bryn_shander.json",
+        "engine/region_validator.py",
+        "test_interaction_kernel.py",
+        "docs/current_capability_package.md",
+        "docs/current_sprint.md",
+        "docs/current_sprint.json"
+      ],
+      "likely_created": [
+        "test_region_topology.py",
+        "docs/bryn_shander_topology.md"
+      ]
+    },
+    "acceptance_criteria": [
+      "The approved representative anchors and minimal connective geography form one reachable local graph.",
+      "All ordinary local connections are explicitly reciprocal; validation rejects missing targets, self-links, duplicate targets, missing reverse edges, and unreachable locations.",
+      "Loops and equal-hop alternate routes follow the Sprint 10.72 fewest-hop then authored-connection-order routing semantics.",
+      "Route selection remains static-topology-only, movement_hops remains transient, save version remains 1, and provider requests remain forbidden."
+    ],
+    "verification": {
+      "staging_commands": [
+        "Official-interpreter preflight",
+        "Canonical record validation",
+        "git diff --check"
+      ],
+      "focused_commands": [
+        "Topology-integrity and deterministic-routing tests",
+        "Full script-based regression suite including movement, save/load, narration-context, and provider-safe coverage"
+      ],
+      "closeout_commands": [
+        "Official-interpreter preflight",
+        "Canonical record validation",
+        "git diff --check",
+        "Clean committed review-candidate Git evidence",
+        "Required review-packet assembly and validation"
+      ]
+    },
+    "execution_phases": [
+      {
+        "id": "package-and-sprint-staging",
+        "status": "complete"
+      },
+      {
+        "id": "representative-topology-and-validation",
+        "status": "complete"
+      },
+      {
+        "id": "focused-verification",
+        "status": "complete"
+      },
+      {
+        "id": "review-candidate",
+        "status": "complete"
+      }
+    ],
+    "governance": [
+      "No sprint or capability package is currently active or staged.",
+      "No following sprint is authorized or started.",
+      "No intentionally asymmetric local path or asymmetric-route schema is permitted.",
+      "No regional routing, costs, dynamic-state-aware routing, rerouting, route-choice interaction, encounters, parser expansion, persistence change, migration, scene projection, narration, or provider behavior is permitted.",
+      "Provider requests are forbidden and next_sprint remains null."
+    ],
+    "closeout": {
+      "allowed_terminal_statuses": ["complete", "blocked"],
+      "verification_result": "Topology validation, deterministic routing, and the full script-based regression suite passed. No live provider request occurred. The accepted Sprint 10.73 implementation was strict-fast-forward merged into main at 174c8b8e2371731a96eeb9115717cfa7c2c2daab. The later Region Pack Artifact Import Integrity correction was integrated at 5257fcd106cabaf36f4753f24973a6911f74faba. No sprint or capability package remains active; no following sprint is authorized or started; save version remains 1 and next_sprint remains null.",
+      "next_sprint": null
+    }
+  }
+}

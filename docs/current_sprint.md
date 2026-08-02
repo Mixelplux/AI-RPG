@@ -1,46 +1,45 @@
+# Current Sprint Record
+
+No sprint is currently active. The most recent terminal sprint record is
+retained below for identity and closeout context.
+
+## Most Recent Terminal Sprint
+
 # Sprint 10.73 - Representative Bryn Shander Traversal Region and Topology Integrity
 
-Status: Ready for Independent Review.
+Status: Complete.
+
+Review state: Merged.
+
+`next_sprint` is `null`. No following sprint is authorized, staged, or
+started.
 
 ## Goal
 
-Create a representative canon-informed Bryn Shander macro traversal graph that
-can be deterministically traversed and inspected for local topology integrity.
+Provide deterministic local wandering across a canon-informed, deliberately
+limited Bryn Shander topology before narration influences the experience.
 
-## Expected Files
+## Boundaries
 
-- `data/regions/bryn_shander.json`
-- `engine/region_validator.py`
-- `test_interaction_kernel.py`
-- `test_region_topology.py`
-- `test_navigation_projection.py`
-- `test_contextual_action_projection.py`
-- `test_discovery_gated_conversation_affordance.py`
-- `test_discovery_gated_relocated_actor_response.py`
-- `test_one_hour_west_road_exit_traversal.py`
-- `test_delayed_watch_discovery_actor_recall.py`
-- `test_discovery.py`
-- `test_resolved_thread_evidence_trace_consequence.py`
-- `docs/bryn_shander_topology.md`
-- `docs/current_capability_package.md`
-- `docs/current_sprint.md`
-- `docs/current_sprint.json`
+The Region Pack retains stable location IDs where practical, including
+`bryn_shander_gate_west`, whose displayed identity is Southwest Gate. Every
+ordinary local connection is explicitly authored in both directions. Routing
+continues to use static authored topology only: fewest hops first, then
+connection-list order for equal-hop routes.
 
-## Acceptance Criteria
+No complete Region Pack, asymmetric paths or schema, regional routing, travel
+weights, scene projection, narration/provider behavior, encounters, command
+language expansion, persistence change, or migration is added.
 
-- The approved representative anchors, gates, civic area, commercial area, and
-  minimal connective geography form one reachable local graph.
-- Every ordinary connection is explicitly reciprocal; the validator rejects
-  missing targets, self-links, duplicate targets, missing reverse edges, and
-  unreachable locations.
-- The graph contains loops and equal-hop alternate routes whose deterministic
-  selection follows the Sprint 10.72 authored connection ordering.
-- Route selection remains static-topology-only, `movement_hops` remains
-  transient, save version remains `1`, and no provider request occurs.
+## Verification and Closeout
 
-## Verification
+Topology-integrity and route-determinism coverage and the full script-based
+regression suite passed without live provider requests. The accepted Sprint
+10.73 implementation was strict-fast-forward merged into `main` at
+`174c8b8e2371731a96eeb9115717cfa7c2c2daab`. The later Region Pack Artifact
+Import Integrity correction was integrated at
+`5257fcd106cabaf36f4753f24973a6911f74faba`.
 
-Topology validation and deterministic routing tests; the full script-based
-regression suite including movement, save/load, narration-context, and
-provider-safe regressions; official interpreter preflight; canonical record
-validation; `git diff --check`; and a validated package-review packet.
+No sprint or capability package remains active. No following sprint is
+authorized or started. Save version remains `1` and `next_sprint` remains
+`null`.
