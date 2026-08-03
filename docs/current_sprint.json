@@ -1,23 +1,35 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "document_type": "current_sprint",
   "sprint_count": 1,
-  "active_sprint": null,
-  "active_capability_package": null,
+  "lifecycle_authority": {
+    "machine_readable": "docs/current_sprint.json",
+    "markdown_role": "scope_rationale_acceptance_and_readable_status",
+    "yaml_required": false
+  },
+  "active_sprint": "10.74",
+  "active_capability_package": "10.74",
+  "latest_completed_sprint": {
+    "id": "10.73",
+    "status": "complete",
+    "review_state": "merged"
+  },
   "project": {
     "name": "AI Narrative RPG Engine",
     "principles": ["provider-neutral", "deterministic-core", "simulation-owned-truth"]
   },
   "sprint": {
-    "id": "10.73",
-    "title": "Representative Bryn Shander Traversal Region and Topology Integrity",
-    "type": "capability-package",
-    "mode": "capability-package",
-    "status": "complete",
-    "review_state": "merged",
-    "goal": "Create a representative canon-informed Bryn Shander macro traversal graph that can be deterministically traversed and inspected for local topology integrity.",
+    "id": "10.74",
+    "title": "Canonical Lifecycle Authority and Behavioral Verification Gate",
+    "type": "maintenance-package",
+    "mode": "maintenance-package",
+    "status": "review_ready",
+    "review_state": "candidate_prepared",
+    "candidate_state": "created",
+    "merge_state": "not_merged",
+    "goal": "Establish explicit lifecycle authority, validate every material duplicated lifecycle field, remove obsolete YAML authority, and add one mandatory complete offline behavioral verification command.",
     "predecessor": {
-      "id": "10.72",
+      "id": "10.73",
       "status": "complete",
       "review_state": "merged"
     },
@@ -28,40 +40,44 @@
     },
     "expected_files": {
       "likely_modified": [
-        "data/regions/bryn_shander.json",
-        "engine/region_validator.py",
-        "test_interaction_kernel.py",
+        "AGENTS.md",
+        "WORKFLOW.md",
         "docs/current_capability_package.md",
         "docs/current_sprint.md",
-        "docs/current_sprint.json"
+        "docs/current_sprint.json",
+        "tools/validate_project_records.ps1"
       ],
       "likely_created": [
-        "test_region_topology.py",
-        "docs/bryn_shander_topology.md"
+        "tools/test_project_records.ps1",
+        "tools/run_offline_behavioral_verification.ps1"
       ]
     },
     "acceptance_criteria": [
-      "The approved representative anchors and minimal connective geography form one reachable local graph.",
-      "All ordinary local connections are explicitly reciprocal; validation rejects missing targets, self-links, duplicate targets, missing reverse edges, and unreachable locations.",
-      "Loops and equal-hop alternate routes follow the Sprint 10.72 fewest-hop then authored-connection-order routing semantics.",
-      "Route selection remains static-topology-only, movement_hops remains transient, save version remains 1, and provider requests remain forbidden."
+      "docs/current_sprint.json is the sole machine-readable lifecycle authority; readable Markdown scope and status never override contradictory JSON active state.",
+      "The validator normalizes and compares every retained material lifecycle duplicate and reports the exact field and source files on disagreement.",
+      "Positive idle and active fixtures pass, while all required lifecycle disagreements and stale YAML authority references fail closed.",
+      "One fail-fast repository command runs project-record validation and the complete stable offline root test_*.py suite through only the official interpreter.",
+      "Live provider smoke, engine behavior, save behavior, dependencies, external tools, and Codex configuration remain unchanged."
     ],
     "verification": {
+      "required_command": "& .\\tools\\run_offline_behavioral_verification.ps1",
+      "contract": "complete_offline_behavioral",
       "staging_commands": [
-        "Official-interpreter preflight",
-        "Canonical record validation",
+        "Safe read-only official-interpreter and repository preflight",
+        "Canonical project-record validation",
         "git diff --check"
       ],
       "focused_commands": [
-        "Topology-integrity and deterministic-routing tests",
-        "Full script-based regression suite including movement, save/load, narration-context, and provider-safe coverage"
+        "& .\\tools\\run_offline_behavioral_verification.ps1 -SelfTest",
+        "& .\\tools\\test_project_records.ps1",
+        "PowerShell syntax parsing for changed scripts"
       ],
       "closeout_commands": [
-        "Official-interpreter preflight",
-        "Canonical record validation",
+        "& .\\tools\\run_offline_behavioral_verification.ps1",
+        "Official-interpreter JSON parsing",
+        "Safe read-only repository preflight",
         "git diff --check",
-        "Clean committed review-candidate Git evidence",
-        "Required review-packet assembly and validation"
+        "Read-only Git status and diff inspection"
       ]
     },
     "execution_phases": [
@@ -70,28 +86,28 @@
         "status": "complete"
       },
       {
-        "id": "representative-topology-and-validation",
+        "id": "lifecycle-authority-and-validation",
         "status": "complete"
       },
       {
-        "id": "focused-verification",
+        "id": "official-offline-verification-gate",
         "status": "complete"
       },
       {
-        "id": "review-candidate",
+        "id": "focused-and-complete-verification",
         "status": "complete"
       }
     ],
     "governance": [
-      "No sprint or capability package is currently active or staged.",
-      "No following sprint is authorized or started.",
-      "No intentionally asymmetric local path or asymmetric-route schema is permitted.",
-      "No regional routing, costs, dynamic-state-aware routing, rerouting, route-choice interaction, encounters, parser expansion, persistence change, migration, scene projection, narration, or provider behavior is permitted.",
-      "Provider requests are forbidden and next_sprint remains null."
+      "This owner-authorized maintenance package is active; no following sprint is authorized or staged.",
+      "JSON owns machine-readable lifecycle truth; Markdown owns readable scope, rationale, acceptance criteria, and status subject to validated agreement.",
+      "Historical sprint logs and handoffs are evidence and context, not current authorization; no YAML lifecycle representation is required.",
+      "No engine, gameplay, region, authored-content, save, provider, dependency, external-tool, or Codex-configuration change is permitted.",
+      "Provider requests are forbidden, save version remains 1, and next_sprint remains null."
     ],
     "closeout": {
       "allowed_terminal_statuses": ["complete", "blocked"],
-      "verification_result": "Topology validation, deterministic routing, and the full script-based regression suite passed. No live provider request occurred. The accepted Sprint 10.73 implementation was strict-fast-forward merged into main at 174c8b8e2371731a96eeb9115717cfa7c2c2daab. The later Region Pack Artifact Import Integrity correction was integrated at 5257fcd106cabaf36f4753f24973a6911f74faba. No sprint or capability package remains active; no following sprint is authorized or started; save version remains 1 and next_sprint remains null.",
+      "verification_result": "The 17-case runner self-test, 23-case project-record fixture suite, current project-record validation, and complete 43-command offline behavioral verification including all 41 stable root behavioral test scripts passed. No live provider smoke ran and no API-key state was inspected. Candidate preparation is authorized; merge remains unauthorized.",
       "next_sprint": null
     }
   }

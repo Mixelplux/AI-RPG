@@ -30,7 +30,7 @@ During continued work on the same task, do not reread them unless scope, task st
 
 Read `docs/architecture.md`, ADRs, and conditional procedures only when the current task identifies them or a material question requires them.
 
-Do not routinely read the full ADR ledger, roadmap, architecture history, or duplicate JSON/YAML sprint manifests. Validate canonical manifest agreement with the established validator.
+Do not routinely read the full ADR ledger, roadmap, architecture history, or duplicate lifecycle fields in readable records. Validate JSON/Markdown lifecycle agreement with the established validator; `docs/current_sprint.json` is the sole machine-readable lifecycle authority.
 
 ## System Constraints
 

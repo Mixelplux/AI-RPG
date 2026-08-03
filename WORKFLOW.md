@@ -42,8 +42,18 @@ Do not invent missing scope.
 
 When sprint/package records are used:
 
-- validate canonical Markdown/JSON/YAML agreement with the established validator;
-- inspect duplicate structured manifests directly only when validation fails or the task concerns them.
+- treat `docs/current_sprint.json` as the sole machine-readable authority for
+  active sprint and capability-package lifecycle state;
+- use `docs/current_sprint.md` and `docs/current_capability_package.md` for
+  scope, rationale, acceptance criteria, and readable status;
+- validate every intentionally duplicated lifecycle field between JSON and
+  Markdown with the established validator;
+- when a Markdown lifecycle field contradicts JSON, fail closed; Markdown
+  does not override the machine-readable active state;
+- treat historical sprint logs and handoffs as evidence and context, not
+  current authorization;
+- do not require or create a YAML lifecycle representation unless a future,
+  separately authorized package deliberately introduces one.
 
 Update only the authorized package or sprint state.
 
@@ -87,6 +97,9 @@ After a meaningful code edit:
 1. run the smallest appropriate syntax/static check;
 2. run the focused test for the changed behavior when practical.
 
+During implementation, prefer these smallest relevant checks over repeatedly
+running the complete behavioral suite.
+
 Repair directly caused, in-scope defects without owner interruption.
 
 Follow `AGENTS.md` failure limits. Do not loop on repeated failures.
@@ -105,15 +118,20 @@ Do not request routine continuation approval between milestones.
 
 **Goal:** Prove the completed change satisfies the package without known regressions.
 
-Run, as applicable:
+Before candidate freeze:
 
-1. syntax/static checks;
-2. focused tests;
-3. directly affected regressions;
-4. package-specific acceptance checks;
-5. required broader regression or official suite;
-6. canonical manifest agreement where records changed;
-7. `git diff --check`.
+1. run `& .\tools\run_offline_behavioral_verification.ps1`, the mandatory
+   repository-owned complete offline behavioral verification command;
+2. run any additional package-specific acceptance checks;
+3. require every applicable command to pass with no skipped required check;
+4. validate canonical lifecycle-record agreement where records changed;
+5. run `git diff --check`.
+
+The official command uses only `.\.venv\Scripts\python.exe` for Python,
+runs the complete deterministic `test_*.py` suite plus project-record
+validation, and excludes live provider smoke. Live provider smoke is a
+separate, explicitly owner-authorized activity; it is never routine
+implementation, automated test, or candidate-verification work.
 
 Specialized checks are required only when relevant to the package.
 
@@ -164,7 +182,9 @@ When strict fast-forward merge is authorized:
 4. perform strict fast-forward only;
 5. do not alter the accepted candidate;
 6. run safe post-merge verification;
-7. confirm final `main` HEAD and clean repository state.
+7. reconcile the current package/sprint lifecycle records as defined by the
+   authorized closeout and validate them;
+8. confirm final `main` HEAD and clean repository state.
 
 ---
 
