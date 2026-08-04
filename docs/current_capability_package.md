@@ -1,8 +1,8 @@
 # Sprint 10.74 - Canonical Lifecycle Authority and Behavioral Verification Gate
 
-Status: Ready for Independent Review.
+Status: Complete.
 
-Review state: Candidate Prepared.
+Review state: Merged.
 
 ## Lifecycle Summary
 
@@ -12,13 +12,13 @@ and status. Its duplicated lifecycle values must agree with JSON.
 
 | Lifecycle field | Value |
 |---|---|
-| `active_sprint` | `10.74` |
-| `active_capability_package` | `10.74` |
-| `latest_completed_sprint` | `10.73` |
+| `active_sprint` | `null` |
+| `active_capability_package` | `null` |
+| `latest_completed_sprint` | `10.74` |
 | `latest_completed_status` | `complete` |
 | `next_sprint` | `null` |
-| `candidate_state` | `created` |
-| `merge_state` | `not_merged` |
+| `candidate_state` | `accepted` |
+| `merge_state` | `merged` |
 | `save_version` | `1` |
 | `provider_requests` | `forbidden` |
 | `official_interpreter` | `.\.venv\Scripts\python.exe` |
@@ -79,6 +79,7 @@ external tools.
 
 ## Completion Boundary
 
-The focused and complete offline verification passed. A single immutable
-candidate commit and review-evidence export are authorized; merge remains
-unauthorized. No following package is authorized.
+The focused and complete offline verification passed. The accepted Sprint 10.74
+candidate was strict-fast-forward merged at
+`d88fccf2a1509a3be64cd18e1cf59fff8b4f29ea`. No following package is
+authorized.

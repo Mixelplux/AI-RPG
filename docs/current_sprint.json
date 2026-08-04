@@ -7,10 +7,10 @@
     "markdown_role": "scope_rationale_acceptance_and_readable_status",
     "yaml_required": false
   },
-  "active_sprint": "10.74",
-  "active_capability_package": "10.74",
+  "active_sprint": null,
+  "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "10.73",
+    "id": "10.74",
     "status": "complete",
     "review_state": "merged"
   },
@@ -23,10 +23,10 @@
     "title": "Canonical Lifecycle Authority and Behavioral Verification Gate",
     "type": "maintenance-package",
     "mode": "maintenance-package",
-    "status": "review_ready",
-    "review_state": "candidate_prepared",
-    "candidate_state": "created",
-    "merge_state": "not_merged",
+    "status": "complete",
+    "review_state": "merged",
+    "candidate_state": "accepted",
+    "merge_state": "merged",
     "goal": "Establish explicit lifecycle authority, validate every material duplicated lifecycle field, remove obsolete YAML authority, and add one mandatory complete offline behavioral verification command.",
     "predecessor": {
       "id": "10.73",
@@ -99,7 +99,7 @@
       }
     ],
     "governance": [
-      "This owner-authorized maintenance package is active; no following sprint is authorized or staged.",
+      "Sprint 10.74 is complete and merged; no active or following sprint is authorized or staged.",
       "JSON owns machine-readable lifecycle truth; Markdown owns readable scope, rationale, acceptance criteria, and status subject to validated agreement.",
       "Historical sprint logs and handoffs are evidence and context, not current authorization; no YAML lifecycle representation is required.",
       "No engine, gameplay, region, authored-content, save, provider, dependency, external-tool, or Codex-configuration change is permitted.",
@@ -107,7 +107,8 @@
     ],
     "closeout": {
       "allowed_terminal_statuses": ["complete", "blocked"],
-      "verification_result": "The 17-case runner self-test, 23-case project-record fixture suite, current project-record validation, and complete 43-command offline behavioral verification including all 41 stable root behavioral test scripts passed. No live provider smoke ran and no API-key state was inspected. Candidate preparation is authorized; merge remains unauthorized.",
+      "verification_result": "The 17-case runner self-test, 23-case project-record fixture suite, current project-record validation, and complete 43-command offline behavioral verification including all 41 stable root behavioral test scripts passed. No live provider smoke ran and no API-key state was inspected. The accepted candidate was strict-fast-forward merged.",
+      "merged_commit": "d88fccf2a1509a3be64cd18e1cf59fff8b4f29ea",
       "next_sprint": null
     }
   }

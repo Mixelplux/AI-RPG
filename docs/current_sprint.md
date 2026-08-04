@@ -1,8 +1,8 @@
 # Sprint 10.74 - Canonical Lifecycle Authority and Behavioral Verification Gate
 
-Status: Ready for Independent Review.
+Status: Complete.
 
-Review state: Candidate Prepared.
+Review state: Merged.
 
 ## Lifecycle Summary
 
@@ -13,13 +13,13 @@ agree with JSON.
 
 | Lifecycle field | Value |
 |---|---|
-| `active_sprint` | `10.74` |
-| `active_capability_package` | `10.74` |
-| `latest_completed_sprint` | `10.73` |
+| `active_sprint` | `null` |
+| `active_capability_package` | `null` |
+| `latest_completed_sprint` | `10.74` |
 | `latest_completed_status` | `complete` |
 | `next_sprint` | `null` |
-| `candidate_state` | `created` |
-| `merge_state` | `not_merged` |
+| `candidate_state` | `accepted` |
+| `merge_state` | `merged` |
 | `save_version` | `1` |
 | `provider_requests` | `forbidden` |
 | `official_interpreter` | `.\.venv\Scripts\python.exe` |
@@ -73,3 +73,9 @@ and `next_sprint` remains `null`.
   through the official interpreter, safe read-only preflight checks, and `git
   diff --check`.
 - Do not run live provider smoke.
+
+## Closeout
+
+The accepted Sprint 10.74 candidate was strict-fast-forward merged at
+`d88fccf2a1509a3be64cd18e1cf59fff8b4f29ea`. No sprint or capability package
+is active, and no next sprint is authorized.
