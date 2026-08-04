@@ -59,9 +59,11 @@ mandatory complete offline behavioral verification command.
 ## Exclusions and Stop Conditions
 
 The exclusions and stop conditions in `docs/current_capability_package.md`
-apply unchanged. Candidate preparation is authorized, but merge remains
-unauthorized. Save version remains `1`, provider requests remain forbidden,
-and `next_sprint` remains `null`.
+apply unchanged. At candidate preparation, merge remained unauthorized. The
+candidate was subsequently independently accepted, owner-authorized, and
+strict-fast-forward merged as commit
+`d88fccf2a1509a3be64cd18e1cf59fff8b4f29ea`. Save version remains `1`,
+provider requests remain forbidden, and `next_sprint` remains `null`.
 
 ## Verification
 
