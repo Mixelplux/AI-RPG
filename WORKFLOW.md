@@ -73,6 +73,21 @@ Do not introduce a migration, persistence or ownership model, broad refactor,
 or player-visible behavior beyond the accepted scope. Preserve unrelated user
 changes. Provider output remains untrusted and has no simulation authority.
 
+### Approved External Region Pack Artifact Imports
+
+An owner-approved external Region Pack artifact must have a recorded SHA-256
+before repository import. Repository integration must verify the external
+source against that approved SHA-256, import the artifact by byte-preserving
+file copy without text decoding or re-encoding, and verify the repository
+destination against the same SHA-256 before any repository-side content edits
+or test updates.
+
+Use the repository import utility for this transfer. It verifies the source
+before copying, writes only a same-directory temporary byte copy, verifies that
+copy, and atomically replaces the destination only after both hashes match. Do
+not pass the artifact through a text editor, parser, serializer, or
+newline-normalizing tool as part of the import.
+
 ---
 
 ## Phase 3: Validate
