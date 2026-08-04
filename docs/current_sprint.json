@@ -1,115 +1,42 @@
 {
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "document_type": "current_sprint",
   "sprint_count": 1,
   "lifecycle_authority": {
     "machine_readable": "docs/current_sprint.json",
-    "markdown_role": "scope_rationale_acceptance_and_readable_status",
+    "markdown_role": "explanatory_records",
     "yaml_required": false
   },
   "active_sprint": null,
   "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "10.74",
-    "status": "complete",
-    "review_state": "merged"
+    "id": "10.75"
   },
-  "project": {
-    "name": "AI Narrative RPG Engine",
-    "principles": ["provider-neutral", "deterministic-core", "simulation-owned-truth"]
-  },
+  "next_sprint": null,
   "sprint": {
-    "id": "10.74",
-    "title": "Canonical Lifecycle Authority and Behavioral Verification Gate",
+    "id": "10.75",
+    "title": "Risk-Proportional Workflow Simplification",
     "type": "maintenance-package",
-    "mode": "maintenance-package",
     "status": "complete",
-    "review_state": "merged",
-    "candidate_state": "accepted",
-    "merge_state": "merged",
-    "goal": "Establish explicit lifecycle authority, validate every material duplicated lifecycle field, remove obsolete YAML authority, and add one mandatory complete offline behavioral verification command.",
+    "risk_level": "routine",
+    "goal": "Replace redundant lifecycle gates with a two-level Critical and Routine workflow while preserving JSON as the only machine-enforced lifecycle authority.",
     "predecessor": {
-      "id": "10.73",
-      "status": "complete",
-      "review_state": "merged"
+      "id": "10.74"
     },
     "platform": {
       "official_interpreter": ".\\.venv\\Scripts\\python.exe",
       "save_version": 1,
       "provider_requests": "forbidden"
     },
-    "expected_files": {
-      "likely_modified": [
-        "AGENTS.md",
-        "WORKFLOW.md",
-        "docs/current_capability_package.md",
-        "docs/current_sprint.md",
-        "docs/current_sprint.json",
-        "tools/validate_project_records.ps1"
-      ],
-      "likely_created": [
-        "tools/test_project_records.ps1",
-        "tools/run_offline_behavioral_verification.ps1"
-      ]
-    },
-    "acceptance_criteria": [
-      "docs/current_sprint.json is the sole machine-readable lifecycle authority; readable Markdown scope and status never override contradictory JSON active state.",
-      "The validator normalizes and compares every retained material lifecycle duplicate and reports the exact field and source files on disagreement.",
-      "Positive idle and active fixtures pass, while all required lifecycle disagreements and stale YAML authority references fail closed.",
-      "One fail-fast repository command runs project-record validation and the complete stable offline root test_*.py suite through only the official interpreter.",
-      "Live provider smoke, engine behavior, save behavior, dependencies, external tools, and Codex configuration remain unchanged."
+    "scope": [
+      "Governance guidance, lifecycle records, project-record validation, and directly relevant fixtures only."
     ],
-    "verification": {
-      "required_command": "& .\\tools\\run_offline_behavioral_verification.ps1",
-      "contract": "complete_offline_behavioral",
-      "staging_commands": [
-        "Safe read-only official-interpreter and repository preflight",
-        "Canonical project-record validation",
-        "git diff --check"
-      ],
-      "focused_commands": [
-        "& .\\tools\\run_offline_behavioral_verification.ps1 -SelfTest",
-        "& .\\tools\\test_project_records.ps1",
-        "PowerShell syntax parsing for changed scripts"
-      ],
-      "closeout_commands": [
-        "& .\\tools\\run_offline_behavioral_verification.ps1",
-        "Official-interpreter JSON parsing",
-        "Safe read-only repository preflight",
-        "git diff --check",
-        "Read-only Git status and diff inspection"
-      ]
-    },
-    "execution_phases": [
-      {
-        "id": "package-and-sprint-staging",
-        "status": "complete"
-      },
-      {
-        "id": "lifecycle-authority-and-validation",
-        "status": "complete"
-      },
-      {
-        "id": "official-offline-verification-gate",
-        "status": "complete"
-      },
-      {
-        "id": "focused-and-complete-verification",
-        "status": "complete"
-      }
-    ],
-    "governance": [
-      "Sprint 10.74 is complete and merged; no active or following sprint is authorized or staged.",
-      "JSON owns machine-readable lifecycle truth; Markdown owns readable scope, rationale, acceptance criteria, and status subject to validated agreement.",
-      "Historical sprint logs and handoffs are evidence and context, not current authorization; no YAML lifecycle representation is required.",
-      "No engine, gameplay, region, authored-content, save, provider, dependency, external-tool, or Codex-configuration change is permitted.",
-      "Provider requests are forbidden, save version remains 1, and next_sprint remains null."
-    ],
-    "closeout": {
-      "allowed_terminal_statuses": ["complete", "blocked"],
-      "verification_result": "The 17-case runner self-test, 23-case project-record fixture suite, current project-record validation, and complete 43-command offline behavioral verification including all 41 stable root behavioral test scripts passed. No live provider smoke ran and no API-key state was inspected. The accepted candidate was strict-fast-forward merged.",
-      "merged_commit": "d88fccf2a1509a3be64cd18e1cf59fff8b4f29ea",
-      "next_sprint": null
-    }
+    "verification": [
+      "Lifecycle validator tests",
+      "Project-record fixtures",
+      "Official-interpreter JSON parsing and save-version assertion",
+      "git diff --check",
+      "Changed-scope inspection and final repository cleanliness"
+    ]
   }
 }

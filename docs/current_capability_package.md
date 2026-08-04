@@ -1,85 +1,52 @@
-# Sprint 10.74 - Canonical Lifecycle Authority and Behavioral Verification Gate
+# Sprint 10.75 - Risk-Proportional Workflow Simplification
 
-Status: Complete.
+This is an explanatory package record. `docs/current_sprint.json` is the only
+machine-enforced lifecycle authority.
 
-Review state: Merged.
+## Status
 
-## Lifecycle Summary
-
-`docs/current_sprint.json` is the sole machine-readable lifecycle authority.
-This readable package record supplies scope, rationale, acceptance criteria,
-and status. Its duplicated lifecycle values must agree with JSON.
-
-| Lifecycle field | Value |
-|---|---|
-| `active_sprint` | `null` |
-| `active_capability_package` | `null` |
-| `latest_completed_sprint` | `10.74` |
-| `latest_completed_status` | `complete` |
-| `next_sprint` | `null` |
-| `candidate_state` | `accepted` |
-| `merge_state` | `merged` |
-| `save_version` | `1` |
-| `provider_requests` | `forbidden` |
-| `official_interpreter` | `.\.venv\Scripts\python.exe` |
-| `required_verification_command` | `& .\tools\run_offline_behavioral_verification.ps1` |
+Implementation is complete and the immutable Routine candidate awaits owner
+review. Candidate acceptance and merge authorization are owner decisions, not
+lifecycle fields.
 
 ## Goal
 
-- Establish explicit lifecycle authority.
-- Validate all material duplicated lifecycle state.
-- Remove obsolete YAML authority requirements.
-- Add one mandatory complete offline behavioral verification command.
+Simplify the maintained workflow to Critical and Routine levels; remove
+redundant lifecycle gates and Markdown duplicate authority.
 
 ## Authorized Scope
 
-- Update only active operational lifecycle guidance and the current package
-  and sprint records.
-- Expand the repository-owned project-record validator and add focused idle,
-  active, and disagreement fixtures.
-- Add one repository-owned command that runs project-record validation and the
-  complete stable offline `test_*.py` behavioral suite through the official
-  interpreter.
-- Keep save version `1`, provider requests forbidden, and `next_sprint` null.
+- Governance guidance and lifecycle records.
+- Project-record validator behavior and directly relevant fixtures.
 
 ## Exclusions
 
-- No engine or gameplay behavior changes.
-- No region or authored-content changes.
-- No save-format or save-write changes.
-- No provider changes or live API use.
-- No dependency additions or replacements.
-- No external GitWorkflowTools changes.
-- No Codex configuration, sandbox, ACL, ownership, or Git-configuration
-  changes.
+- Engine or gameplay behavior, movement, saves or save schema, Region Packs,
+  provider code, dependencies, external GitWorkflowTools, `AINarrativeRPG.psd1`,
+  and the offline behavioral test selection.
 
 ## Acceptance Criteria
 
-- JSON is explicitly the sole machine-readable lifecycle authority, while
-  Markdown remains the readable scope and status record and cannot override
-  contradictory JSON active-state fields.
-- Every intentionally duplicated material lifecycle field is normalized and
-  compared with exact conflicting fields and source files reported.
-- Active operational guidance and validation contain no obsolete YAML
-  lifecycle-authority requirement.
-- One fail-fast command runs current-record validation, its complete fixture
-  suite, and every stable root `test_*.py` script without a live provider
-  request or alternate Python interpreter.
-- Workflow guidance distinguishes focused implementation checks, mandatory
-  pre-candidate offline verification, separately authorized live smoke, and
-  post-merge lifecycle reconciliation.
+- Critical work is limited to saves, migrations, Region Pack integrity,
+  destructive mutation, movement semantics, security/provider boundaries, and
+  repository/data-loss risk; it requires frozen scope, a feature branch,
+  relevant integration verification, independent review, and owner-authorized
+  strict-fast-forward merge.
+- Routine work requires concise scope, a feature branch, targeted verification,
+  and owner review and merge authorization. Independent review and evidence
+  packets are optional unless requested.
+- JSON is the only machine-enforced lifecycle authority; Markdown is
+  explanatory and does not duplicate JSON lifecycle checks.
+- Candidate and merge lifecycle states are removed. Normal merge needs no
+  separate lifecycle-closeout package.
+- Clerical corrections receive correction-only verification; non-contract
+  hardening and style concerns are backlog items; one bounded correction cycle
+  precedes an owner classification request.
 
-## Stop Conditions
+## Required Verification
 
-Stop if current records cannot be reconciled without changing historical
-meaning; the existing suite has no stable definition; a required behavioral
-test fails for an unrelated pre-existing reason; a dependency change is
-required; or scope would extend into save behavior, provider behavior, or
-external tools.
+- Lifecycle validator tests and project-record fixtures.
+- JSON parsing and save-version assertion through `\.venv\Scripts\python.exe`.
+- `git diff --check`, changed-scope inspection, and final clean-state check.
 
-## Completion Boundary
-
-The focused and complete offline verification passed. The accepted Sprint 10.74
-candidate was strict-fast-forward merged at
-`d88fccf2a1509a3be64cd18e1cf59fff8b4f29ea`. No following package is
-authorized.
+No merge or push is authorized by this record.

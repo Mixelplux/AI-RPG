@@ -1,261 +1,169 @@
-# Workflow: Task Execution
+# Workflow: Risk-Proportional Task Execution
 
 ## Governing Rule
 
-The normal unit of work is one owner-authorized capability package or maintenance task.
+The normal unit of work is one owner-authorized capability package or
+maintenance task. Codex proceeds without routine interruption inside that
+boundary, and stops for owner review and merge authorization.
 
-Codex proceeds through the phases below without routine owner interruption.
+Every package is classified once at staging. If its classification is unclear,
+use **Critical** until the owner decides otherwise.
 
-Advance only when the current phase passes. Stop when `AGENTS.md` requires it, the package defines a stop condition, required verification cannot be completed safely, scope would expand, or owner review/merge authorization is required.
+## Risk Levels
 
----
+### Critical
 
-# Phase 1: Verify
+Classify as Critical when the change affects saves, migrations, Region Pack
+integrity, destructive mutation, movement semantics, security or provider
+boundaries, or repository/data-loss risk.
 
-**Goal:** Confirm authority, repository state, scope, and a usable baseline before editing.
+Critical packages require:
 
-## 1.1 Repository State
+- frozen scope;
+- a feature branch;
+- relevant integration verification;
+- independent review; and
+- owner-authorized strict-fast-forward merge.
 
-From the repository root:
+### Routine
 
-- confirm Git root;
-- confirm branch and full HEAD;
-- confirm working-tree and index status;
-- run the approved environment/interpreter preflight.
+Routine covers ordinary runtime capabilities, read-only behavior,
+documentation, tests, lifecycle records, and workflow metadata.
 
-Stop for unexpected user changes, repository mismatch, or unresolved preflight failure.
+Routine packages require:
 
-## 1.2 Task Authority
+- concise scope;
+- a feature branch;
+- targeted verification; and
+- owner review and merge authorization.
 
-Read the task-start files defined in `AGENTS.md`.
-
-Confirm:
-
-- the package or maintenance task is owner-authorized;
-- any active sprint belongs to the authorized package; zero active sprints is valid while idle;
-- once a first sprint or milestone is staged, it defines its goal, expected files, acceptance criteria, and verification;
-- scope, exclusions, and completion conditions are defined.
-
-Do not invent missing scope.
-
-## 1.3 Canonical Records
-
-When sprint/package records are used:
-
-- treat `docs/current_sprint.json` as the sole machine-readable authority for
-  active sprint and capability-package lifecycle state;
-- use `docs/current_sprint.md` and `docs/current_capability_package.md` for
-  scope, rationale, acceptance criteria, and readable status;
-- validate every intentionally duplicated lifecycle field between JSON and
-  Markdown with the established validator;
-- when a Markdown lifecycle field contradicts JSON, fail closed; Markdown
-  does not override the machine-readable active state;
-- treat historical sprint logs and handoffs as evidence and context, not
-  current authorization;
-- do not require or create a YAML lifecycle representation unless a future,
-  separately authorized package deliberately introduces one.
-
-Update only the authorized package or sprint state.
-
-## 1.4 Targeted Inspection and Baseline
-
-Before modifying code:
-
-- locate relevant files;
-- inspect only the smallest relevant implementation area;
-- read additional ADRs, architecture sections, or conditional procedures only when required;
-- run proportionate baseline checks for the affected behavior.
-
-Do not automatically run the full project suite unless the package requires it or the baseline is uncertain.
+Independent review and evidence packets are optional for Routine work unless
+the owner explicitly requests them.
 
 ---
 
-# Phase 2: Modify
+## Phase 1: Verify and Stage
 
-**Goal:** Implement the smallest change that satisfies the authorized task.
+Before editing:
 
-## 2.1 Targeted Changes
+- confirm Git root, branch, full HEAD, and clean working tree and index;
+- read the task-start files defined by `AGENTS.md`;
+- confirm owner authorization, scope, exclusions, and completion condition;
+- record the risk level in `docs/current_sprint.json`; and
+- inspect only the implementation and tests relevant to the change.
 
-- Change only files needed for the authorized scope.
-- Prefer existing architecture and established patterns.
-- Do not introduce a generic framework, new ownership model, persistence change, or unrelated refactor unless explicitly authorized.
+`docs/current_sprint.json` is the only machine-enforced lifecycle authority.
+`docs/current_sprint.md` and `docs/current_capability_package.md` are
+explanatory records for scope, rationale, and readable status. They are not
+parsed as duplicate lifecycle state and cannot override JSON.
 
-### Approved External Region Pack Artifact Imports
-
-An owner-approved external Region Pack artifact must have a recorded SHA-256 before repository import. Repository integration must verify the external source against that approved SHA-256, import the artifact by byte-preserving file copy without text decoding or re-encoding, and verify the repository destination against the same SHA-256 before any subsequent repository-side content edits or test updates.
-
-Use the repository import utility for this transfer. It verifies the source before
-copying, writes only a same-directory temporary byte copy, verifies that copy, and
-atomically replaces the destination only after both hashes match. Do not pass the
-artifact through a text editor, parser, serializer, or newline-normalizing tool as
-part of the import.
-
-## 2.2 Immediate Checks
-
-After a meaningful code edit:
-
-1. run the smallest appropriate syntax/static check;
-2. run the focused test for the changed behavior when practical.
-
-During implementation, prefer these smallest relevant checks over repeatedly
-running the complete behavioral suite.
-
-Repair directly caused, in-scope defects without owner interruption.
-
-Follow `AGENTS.md` failure limits. Do not loop on repeated failures.
-
-## 2.3 Internal Milestones
-
-A capability package may contain multiple accepted internal milestones.
-
-Codex may progress through them sequentially when each remains in scope, required focused verification passes, and no meaningful stop condition occurs.
-
-Do not request routine continuation approval between milestones.
+Do not create a YAML lifecycle representation. Historical handoffs and logs
+are context, not current authorization. `next_sprint` remains `null` until the
+owner separately authorizes package selection.
 
 ---
 
-# Phase 3: Validate
+## Phase 2: Modify
 
-**Goal:** Prove the completed change satisfies the package without known regressions.
+Change only the authorized scope. Make routine in-scope choices, repair
+directly caused defects, and run the smallest useful syntax or static check
+after meaningful edits.
 
-Before candidate freeze:
-
-1. run `& .\tools\run_offline_behavioral_verification.ps1`, the mandatory
-   repository-owned complete offline behavioral verification command;
-2. run any additional package-specific acceptance checks;
-3. require every applicable command to pass with no skipped required check;
-4. validate canonical lifecycle-record agreement where records changed;
-5. run `git diff --check`.
-
-The official command uses only `.\.venv\Scripts\python.exe` for Python,
-runs the complete deterministic `test_*.py` suite plus project-record
-validation, and excludes live provider smoke. Live provider smoke is a
-separate, explicitly owner-authorized activity; it is never routine
-implementation, automated test, or candidate-verification work.
-
-Specialized checks are required only when relevant to the package.
-
-For documentation-only changes, run documentation/governance validation and directly affected checks unless behavior could be affected.
-
-Never report failed, skipped, or blocked verification as passed.
-
-If validation finds a directly caused, bounded defect requiring no new architecture or scope, correct it once within the package and rerun the affected verification. Otherwise stop.
-
-For player-visible packages, provide a short owner playtest procedure. Do not require manual owner validation of invisible internals already covered by automated verification.
+Do not introduce a migration, persistence or ownership model, broad refactor,
+or player-visible behavior beyond the accepted scope. Preserve unrelated user
+changes. Provider output remains untrusted and has no simulation authority.
 
 ---
 
-# Phase 4: Prepare Review Candidate
+## Phase 3: Validate
 
-**Goal:** Produce one auditable candidate for final review.
+Run the verification required by the risk level and package record:
 
-When formal review is required:
+- Critical: relevant integration verification plus focused checks.
+- Routine: targeted checks for changed behavior and records.
 
-- use the authorized feature-branch workflow;
-- commit only authorized package changes;
-- record exact branch and full HEAD;
-- confirm working tree and index are clean;
-- confirm canonical package/sprint status truthfully reflects completed work;
-- leave `next_sprint` unchanged unless explicitly authorized.
+Always validate changed lifecycle JSON, run `git diff --check`, and inspect
+the changed scope. Do not run a broader suite unless the package requires it.
+Live-provider execution remains separately owner-authorized.
 
-A final review candidate must be a committed repository state. An archive of uncommitted changes is not sufficient.
+For a clerical correction that cannot affect behavior, run correction-only
+verification: JSON parsing, the lifecycle validator or affected record test,
+and `git diff --check`. Do not repeat unrelated verification solely because a
+record or wording was corrected.
 
-Create a review packet only at a required review boundary. Use the established profile, assembler, and validator. The packet must bind to the exact candidate branch and HEAD and pass validation before being reported as valid.
-
-Detailed packet mechanics belong to review-packet tooling and conditional procedure documentation.
-
----
-
-# Phase 5: Owner Review and Merge
-
-**Goal:** Preserve owner authority at meaningful boundaries.
-
-Final package review may result in acceptance, revision, rejection, or deferral.
-
-Acceptance does not authorize merge unless merge authority is explicitly granted.
-
-When strict fast-forward merge is authorized:
-
-1. verify `main` is at the expected parent;
-2. verify the accepted candidate HEAD exactly;
-3. verify fast-forward eligibility;
-4. perform strict fast-forward only;
-5. do not alter the accepted candidate;
-6. run safe post-merge verification;
-7. reconcile the current package/sprint lifecycle records as defined by the
-   authorized closeout and validate them;
-8. confirm final `main` HEAD and clean repository state.
+Non-contract hardening, defensive improvements, and stylistic concerns belong
+in the backlog and do not block a candidate unless they violate an accepted
+requirement or a core invariant.
 
 ---
 
-# Phase 6: Await Next Direction
+## Phase 4: Prepare Candidate
 
-After merge or completion:
+Prepare one immutable candidate on the feature branch:
 
-- report the authoritative repository state;
-- preserve `next_sprint` as `null` unless separately authorized;
-- do not stage, branch, define, or implement another capability automatically.
+- commit only authorized changes;
+- record the exact branch, candidate HEAD, and parent;
+- confirm a clean working tree and index; and
+- leave `next_sprint` unchanged unless separately authorized.
 
-After the owner explicitly authorizes selection of a new capability package,
-Codex may make that package `current_capability_package` and stage its first
-sprint or milestone. Validate its records, scope, exclusions, and completion
-conditions; only then may bounded implementation begin. Codex must not make
-this transition independently. Package selection authorization, candidate
-acceptance, and merge authorization are separate owner decisions; none implies
-another.
-
-Architecture or sequencing analysis may recommend a next candidate. Implementation requires separate owner authorization.
+Lifecycle records describe implementation state only. Do not require or add
+candidate-prepared, not-merged, merge-unauthorized, candidate-state, or
+merge-state lifecycle fields. A normal merge does not require a separate
+lifecycle-closeout package or a post-review lifecycle-only commit.
 
 ---
 
-# Handoff Rules
+## Phase 5: Review, Correction, and Merge
 
-## Classification and Authority
+For a Critical candidate, obtain independent review before owner acceptance.
+For a Routine candidate, owner review is sufficient. Evidence packets are
+created only when the owner explicitly requests one.
 
-Classify every handoff by its purpose:
+One bounded correction cycle is allowed for review findings that remain within
+scope. Re-run only the verification affected by that correction and prepare a
+replacement immutable candidate. If a further correction, scope change, or
+risk reclassification is needed, stop and request owner classification.
+
+Acceptance and merge authority are separate owner decisions. When the owner
+authorizes merge, verify the expected `main` parent and candidate HEAD,
+confirm fast-forward eligibility, and perform a strict fast-forward only.
+Do not push or merge without that authorization.
+
+After a normal merge, report the final `main` HEAD and clean state. Do not
+start, stage, or select another package automatically.
+
+---
+
+## Handoff Rules
+
+### Classification and Authority
+
+Classify handoffs by purpose:
 
 - **Execution handoff (Chat → Codex):** perform one already-authorized bounded objective.
-- **Review handoff (Codex → Chat):** independently assess a completed candidate.
-- **Escalation (Codex → Chat/owner):** report material ambiguity, missing authority, or a decision that Codex cannot make.
-- **Owner action:** a separately identified request for the owner to approve, revise, reject, or authorize something.
+- **Review handoff (Codex → Chat):** assess a completed candidate.
+- **Escalation (Codex → Chat/owner):** report material ambiguity, missing authority, or a decision Codex cannot make.
+- **Owner action:** a separately identified request to approve, revise, reject, or authorize something.
 
-The transport destination does not confer decision authority. For example, “copy to new chat” and “copy to Codex” identify where context is sent, not who has owner authority.
+The transport destination does not confer decision authority. A context
+transfer contains operational context only; keep owner-action requests
+separately labeled.
 
-A context-transfer block intended for a new chat or Codex contains operational context and instructions only. Do not end it with an approval, rejection, revision, or authorization request unless that recipient is explicitly the decision owner. Put owner-action requests outside the context-transfer block or in a separately labeled **Owner action** section.
+### Content Discipline
 
-For Codex prompts, place the recommended reasoning level immediately below `Project: AI Narrative RPG Engine`.
+Use pointer-first, necessity-tested handoffs. Prefer canonical pointers—commit
+SHAs and branches, record paths, package identifiers, and focused verification
+results—over copied history or logs.
 
-## Content Discipline
+### Receiving-Side Validation
 
-Use a pointer-first, necessity-tested handoff. Include information only when the receiver would realistically be unable to execute, review, or safely stop without it.
+Before acting, confirm the handoff contains one bounded objective, sufficient
+execution or review information, granted authority, material constraints, and
+a testable completion condition. Stop for a material omission; do not escalate
+for harmless omissions.
 
-Prefer reliable canonical pointers over reproduced history, rationale, or logs: commit SHAs and branches; canonical document paths; ADR, capability-package, or sprint identifiers; file paths; evidence or review-packet references; and line ranges when useful. Do not use a line range as the sole durable identity for important material.
+## Conditional Procedures
 
-This is a default discipline, not an absolute prohibition: include the context necessary for safe execution or review, but do not duplicate canonical state, long logs, or historical explanation when a reliable pointer is sufficient.
-
-## Receiving-Side Validation
-
-Before acting on a handoff, determine that it provides:
-
-- one bounded objective;
-- sufficient information to execute or review that objective;
-- clear authority already granted for the requested action;
-- explicit material constraints and stop conditions; and
-- a testable or observable completion condition.
-
-If material scope, authority, or execution information is missing, stop and escalate rather than infer new scope or authority. Do not escalate for harmless omissions that do not affect safe execution or review.
-
----
-
-# Conditional Procedures
-
-Load detailed instructions only when the current task requires them:
-
-- review-packet assembly and validation;
-- environment/interpreter recovery;
-- architecture review;
-- capability sequencing or planning-horizon review;
-- live-provider execution;
-- migration or save-version change.
-
-The current package should identify any conditional procedure required for its work.
+Load detailed instructions only when the task requires them: independent
+review, environment recovery, architecture review, capability sequencing,
+live-provider execution, or migration and save-version work.

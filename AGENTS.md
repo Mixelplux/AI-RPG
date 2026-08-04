@@ -30,7 +30,7 @@ During continued work on the same task, do not reread them unless scope, task st
 
 Read `docs/architecture.md`, ADRs, and conditional procedures only when the current task identifies them or a material question requires them.
 
-Do not routinely read the full ADR ledger, roadmap, architecture history, or duplicate lifecycle fields in readable records. Validate JSON/Markdown lifecycle agreement with the established validator; `docs/current_sprint.json` is the sole machine-readable lifecycle authority.
+Do not routinely read the full ADR ledger, roadmap, architecture history, or duplicate lifecycle fields in readable records. Validate `docs/current_sprint.json` with the established validator; Markdown lifecycle documents are explanatory records, not duplicate machine authorities.
 
 ## System Constraints
 
@@ -72,7 +72,7 @@ Preserve unless explicitly superseded:
 - provider behavior fails closed;
 - persistent state changes preserve atomicity and save compatibility;
 - zero or one sprint may be active; zero is valid while idle;
-- canonical package and sprint records remain consistent;
+- `docs/current_sprint.json` remains the sole machine-enforced lifecycle authority;
 - no next package begins automatically.
 
 ## Git and Review Safety
@@ -91,7 +91,7 @@ Use proportionate verification:
 1. relevant syntax/static checks;
 2. focused tests;
 3. directly affected regressions;
-4. required package closeout verification.
+4. the verification required by the package risk level.
 
 Do not rerun the full suite after every small edit. Never report blocked, skipped, or failed checks as passed.
 
