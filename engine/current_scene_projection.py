@@ -48,8 +48,17 @@ def _visible_scene_data(
     return visible_location, visible_entities
 
 
+def _validated_region_entities(region: dict[str, Any]) -> list[dict[str, Any]]:
+    entities = region.get("entities")
+    if not isinstance(entities, list) or any(
+        not isinstance(entity, dict) for entity in entities
+    ):
+        raise ValueError("Region entities must be a list of objects.")
+    return entities
+
+
 def _visible_actors(
-    region: dict[str, Any],
+    region_entities: list[dict[str, Any]],
     scene_snapshot: dict[str, Any],
     visible_entities: dict[str, Any],
 ) -> list[dict[str, str]]:
@@ -66,7 +75,7 @@ def _visible_actors(
         if isinstance(actor_id, str) and actor_id
     }
     actors_by_id: dict[str, str] = {}
-    for actor in region.get("entities", []):
+    for actor in region_entities:
         if not isinstance(actor, dict) or actor.get("persistence") != "static":
             continue
         actor_id = actor.get("entity_id")
@@ -160,6 +169,7 @@ def build_current_scene_projection(
     }
     if not all(isinstance(value, dict) for value in (region, scene_snapshot, perception_snapshot)):
         return projection
+    region_entities = _validated_region_entities(region)
 
     visible_data = _visible_scene_data(scene_snapshot, perception_snapshot)
     if visible_data is None:
@@ -171,7 +181,7 @@ def build_current_scene_projection(
         "description": _safe_text(visible_location.get("description_seed")) or "",
     }
     projection["entities"] = {
-        "actors": _visible_actors(region, scene_snapshot, visible_entities),
+        "actors": _visible_actors(region_entities, scene_snapshot, visible_entities),
         "groups": _visible_groups(scene_snapshot, visible_entities),
     }
     projection["exits"] = derive_safe_exits(

@@ -161,6 +161,23 @@ def test_hidden_internal_state_is_redacted_and_unlabeled_spawns_fail_closed():
     }
 
 
+def test_malformed_region_entities_are_rejected_without_raw_value_fallback():
+    engine = GameEngine(REGION_PATH)
+    malformed_region = deepcopy(engine.region)
+    malformed_region["entities"] = {CAPTAIN: "Captain Darvin Grey"}
+
+    try:
+        build_current_scene_projection(
+            malformed_region,
+            engine.get_scene_snapshot(),
+            engine.get_player_perception(),
+        )
+    except ValueError as error:
+        assert "Region entities" in str(error)
+    else:
+        raise AssertionError("Expected malformed region entities to be rejected.")
+
+
 def test_explicitly_labeled_visible_spawned_groups_are_aggregated_in_order():
     region = {
         "locations": [{"location_id": "gate", "name": "North Gate"}],
@@ -234,6 +251,7 @@ def main():
     test_actor_relocation_and_player_movement_rebuild_projection()
     test_exit_filtering_order_and_navigation_remain_unchanged()
     test_hidden_internal_state_is_redacted_and_unlabeled_spawns_fail_closed()
+    test_malformed_region_entities_are_rejected_without_raw_value_fallback()
     test_explicitly_labeled_visible_spawned_groups_are_aggregated_in_order()
     test_save_load_reproduces_projection_without_persisting_it()
     test_query_does_not_invoke_provider_narration_parser_or_movement()
