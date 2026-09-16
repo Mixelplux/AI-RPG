@@ -11,6 +11,7 @@ from engine.unresolved_threads import (
 )
 from engine.scene_narrator import narrate_scene
 from engine.navigation_projection import derive_navigation_projection
+from engine.current_scene_projection import build_current_scene_projection
 from engine.interaction_kernel import process_player_input
 from engine.world_update import apply_interaction
 from engine.region_validator import validate_region
@@ -900,6 +901,13 @@ class GameEngine:
                 self.scene_snapshot,
                 conversation_affordance,
             ),
+        )
+
+    def get_current_scene_projection(self) -> Dict[str, Any]:
+        return build_current_scene_projection(
+            self.region,
+            self.scene_snapshot,
+            self.get_player_perception(),
         )
 
     def get_narration(self) -> Dict[str, Any]:

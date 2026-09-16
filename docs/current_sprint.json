@@ -10,18 +10,18 @@
   "active_sprint": null,
   "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "10.75"
+    "id": "10.76"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "10.75",
-    "title": "Risk-Proportional Workflow Simplification",
-    "type": "maintenance-package",
+    "id": "10.76",
+    "title": "Deterministic Current-Scene Projection",
+    "type": "capability-package",
     "status": "complete",
     "risk_level": "routine",
-    "goal": "Replace redundant lifecycle gates with a two-level Critical and Routine workflow while preserving JSON as the only machine-enforced lifecycle authority.",
+    "goal": "Derive a deterministic, player-safe, read-only structured projection of the current scene without changing simulation, persistence, narration, or command behavior.",
     "predecessor": {
-      "id": "10.74"
+      "id": "10.75"
     },
     "platform": {
       "official_interpreter": ".\\.venv\\Scripts\\python.exe",
@@ -29,12 +29,13 @@
       "provider_requests": "forbidden"
     },
     "scope": [
-      "Governance guidance, lifecycle records, project-record validation, and directly relevant fixtures only."
+      "engine/current_scene_projection.py and test_current_scene_projection.py.",
+      "Shared safe-exit derivation in engine/navigation_projection.py while preserving its existing navigation output.",
+      "GameEngine.get_current_scene_projection() and required lifecycle records."
     ],
     "verification": [
-      "Lifecycle validator tests",
-      "Project-record fixtures",
-      "Official-interpreter JSON parsing and save-version assertion",
+      "Current-scene projection, navigation, actor-location, movement, and save/load regressions",
+      "Lifecycle record validation and official-interpreter JSON parsing with save-version assertion",
       "git diff --check",
       "Changed-scope inspection and final repository cleanliness"
     ]
