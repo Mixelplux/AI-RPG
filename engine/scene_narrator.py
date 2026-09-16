@@ -100,7 +100,6 @@ def narrate_scene(perception_snapshot: Dict[str, Any]) -> Dict[str, Any]:
 
     weather = environment.get("weather", {})
     weather_type = weather.get("type")
-    weather_severity = weather.get("severity")
 
     static_entities = entities.get("static", [])
     spawned_entities = entities.get("spawned", [])
@@ -123,14 +122,7 @@ def narrate_scene(perception_snapshot: Dict[str, Any]) -> Dict[str, Any]:
         description_parts.append(description_seed)
 
     if weather_type is not None:
-        if weather_severity is not None:
-            description_parts.append(
-                f"The weather is {weather_type} with severity {weather_severity}."
-            )
-        else:
-            description_parts.append(
-                f"The weather is {weather_type}."
-            )
+        description_parts.append(f"The weather is {weather_type}.")
 
     entity_descriptions = visible_entity_names + spawned_labels
 

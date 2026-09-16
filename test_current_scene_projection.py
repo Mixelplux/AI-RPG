@@ -81,6 +81,22 @@ def test_actor_relocation_and_player_movement_rebuild_projection():
     ]
 
 
+def test_player_facing_weather_keeps_type_and_redacts_internal_severity():
+    engine = GameEngine(REGION_PATH)
+
+    narration = engine.get_narration()
+    description = narration["description"]
+    assert "The weather is blizzard." in description
+    assert "severity" not in description
+    assert "0.65" not in description
+
+    projection = engine.get_current_scene_projection()
+    assert "severity" not in json.dumps(projection, sort_keys=True)
+    assert engine.get_world_state()["weather"]["severity"] == 0.65
+    assert engine.get_scene_snapshot()["local_state"]["weather"]["severity"] == 0.65
+    assert engine.get_player_perception()["environment"]["weather"]["severity"] == 0.65
+
+
 def test_exit_filtering_order_and_navigation_remain_unchanged():
     region = {
         "locations": [
@@ -249,6 +265,7 @@ def test_query_does_not_invoke_provider_narration_parser_or_movement():
 def main():
     test_exact_initial_projection_is_deterministic_and_copy_safe()
     test_actor_relocation_and_player_movement_rebuild_projection()
+    test_player_facing_weather_keeps_type_and_redacts_internal_severity()
     test_exit_filtering_order_and_navigation_remain_unchanged()
     test_hidden_internal_state_is_redacted_and_unlabeled_spawns_fail_closed()
     test_malformed_region_entities_are_rejected_without_raw_value_fallback()
