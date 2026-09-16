@@ -253,7 +253,7 @@ if ($null -ne $jsonRecord) {
             if ($officialInterpreter -ne $null -and $officialInterpreter.Replace('/', '\').ToLowerInvariant() -cne '.\.venv\scripts\python.exe') {
                 Add-Failure "sprint.platform.official_interpreter must be '.\.venv\Scripts\python.exe'; found '$officialInterpreter'."
             }
-            if ($saveVersion -isnot [int] -or $saveVersion -ne 1) {
+            if (($saveVersion -isnot [System.Int32] -and $saveVersion -isnot [System.Int64]) -or $saveVersion -ne 1) {
                 Add-Failure "sprint.platform.save_version must be exactly integer 1; found '$saveVersion'."
             }
             if ($providerRequests -ne $null -and (ConvertTo-RecordToken -Value $providerRequests) -cne 'forbidden') {

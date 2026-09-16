@@ -148,20 +148,33 @@ try {
     Assert-Accepted -Name 'complete record with explanatory Markdown' -FixtureRoot (New-Fixture -Name 'complete' -Mode complete)
     Assert-Accepted -Name 'active record with explanatory Markdown' -FixtureRoot (New-Fixture -Name 'active' -Mode active)
 
+    $fixture = New-Fixture -Name 'integer-save-version' -Mode complete
+    Assert-Accepted -Name 'integer save version' -FixtureRoot $fixture
+
     $fixture = New-Fixture -Name 'active-sprint-mismatch' -Mode active
-    Replace-FixtureText $fixture 'docs/current_sprint.json' '"active_sprint":  "10.75"' '"active_sprint":  "10.76"'
+    Replace-FixtureText $fixture 'docs/current_sprint.json' '"active_sprint": "10.75"' '"active_sprint":  "10.76"'
     Assert-Rejected 'active sprint mismatch' $fixture "active_sprint mismatch: active_sprint is '10.76'; sprint.id is '10.75'."
 
     $fixture = New-Fixture -Name 'unexpected-next-sprint' -Mode complete
-    Replace-FixtureText $fixture 'docs/current_sprint.json' '"next_sprint":  null' '"next_sprint":  "10.75"'
+    Replace-FixtureText $fixture 'docs/current_sprint.json' '"next_sprint": null' '"next_sprint":  "10.75"'
     Assert-Rejected 'unexpected next sprint' $fixture "next_sprint must remain null until separately authorized; found '10.75'."
 
     $fixture = New-Fixture -Name 'unsafe-save-version' -Mode complete
-    Replace-FixtureText $fixture 'docs/current_sprint.json' '"save_version":  1' '"save_version":  2'
+    Replace-FixtureText $fixture 'docs/current_sprint.json' '"save_version": 1' '"save_version":  2'
     Assert-Rejected 'unsafe save version' $fixture "sprint.platform.save_version must be exactly integer 1; found '2'."
 
+    foreach ($invalidSaveVersion in @(
+        @{ Name = 'string save version'; Value = '"1"' },
+        @{ Name = 'fractional save version'; Value = '1.5' },
+        @{ Name = 'null save version'; Value = 'null' },
+        @{ Name = 'boolean save version'; Value = 'true' }
+    )) {
+        $fixture = New-Fixture -Name ($invalidSaveVersion.Name -replace ' ', '-') -Mode complete
+        Replace-FixtureText $fixture 'docs/current_sprint.json' '"save_version": 1' ('"save_version":  ' + $invalidSaveVersion.Value)
+        Assert-Rejected $invalidSaveVersion.Name $fixture 'sprint.platform.save_version must be exactly integer 1;'
+    }
     $fixture = New-Fixture -Name 'unsupported-risk-level' -Mode complete
-    Replace-FixtureText $fixture 'docs/current_sprint.json' '"risk_level":  "routine"' '"risk_level":  "unclassified"'
+    Replace-FixtureText $fixture 'docs/current_sprint.json' '"risk_level": "routine"' '"risk_level":  "unclassified"'
     Assert-Rejected 'unsupported risk level' $fixture "sprint.risk_level must be 'critical' or 'routine'; found 'unclassified'."
 
     $fixture = New-Fixture -Name 'ephemeral-candidate-field' -Mode complete
