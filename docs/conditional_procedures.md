@@ -83,6 +83,28 @@ the environment, change permissions, run as Administrator, or substitute a
 different Python executable. Stop when the required preflight remains
 unresolved.
 
+### Windows Codex Sandbox and Temporary Test Files
+
+**Trigger:** A Windows Codex run reports `helper_sandbox_lock_failed`,
+`SetNamedSecurityInfoW sandbox dir failed: 5`, or a save/load test fails while
+cleaning up a Python `TemporaryDirectory`.
+
+**Rules:** Treat the elevated Windows sandbox setup failure as an external
+Codex-environment defect. After one confirmation attempt, use the verified
+safe fallback instead of retrying the same blocked setup: the affected local
+Codex configuration uses `[windows] sandbox = "unelevated"`. Do not change
+`.sandbox-bin`, project ACLs, or Windows ACLs as a workaround.
+
+The save/load regression must use direct deterministic files in the tracked
+`.artifacts/` root, not `tempfile.TemporaryDirectory`. Redirecting `TEMP` and
+`TMP` only changes the parent directory; it does not prevent a sandbox-created
+child directory from receiving a protected ACL that blocks cleanup. Generated
+save/load outputs remain ignored under `.artifacts/`.
+
+The repository uses standalone `test_*.py` scripts with the official
+interpreter; `pytest` is not an intended development dependency and is not
+declared in `requirements.txt`. Do not install it solely to run these tests.
+
 ## Live-Provider Execution
 
 **Trigger:** The owner explicitly authorizes an opt-in live provider smoke or

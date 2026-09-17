@@ -1,13 +1,21 @@
 import json
 from copy import deepcopy
 from pathlib import Path
-from tempfile import TemporaryDirectory
 
 from engine.game_engine import GameEngine
 from engine.save_system import SAVE_VERSION, build_save_data, save_game, load_game
 
 
 REGION_PATH = "data/regions/bryn_shander.json"
+TEST_OUTPUT_ROOT = Path(__file__).resolve().parent / ".artifacts"
+
+
+def get_test_output_path(name: str) -> Path:
+    """Return a deterministic direct-file path in the tracked test output root."""
+    if not TEST_OUTPUT_ROOT.is_dir():
+        raise AssertionError(f"Missing save/load test output root: {TEST_OUTPUT_ROOT}")
+
+    return TEST_OUTPUT_ROOT / f"save_load_regression_{name}"
 
 
 def main():
@@ -59,13 +67,12 @@ def main():
     assert time_entry["new_time"] == advanced_time
     assert history_before_save[-1]["event_type"] == "player_movement"
 
-    with TemporaryDirectory() as temp_dir:
-        save_path = f"{temp_dir}/test_save.json"
-        save_payload = build_save_data(engine)
-        assert save_payload["save_version"] == SAVE_VERSION == 1
-        assert save_payload["world_state"]["pressures"] == engine.get_pressures()
-        save_game(engine, save_path)
-        loaded_engine = load_game(save_path)
+    save_path = get_test_output_path("test_save.json")
+    save_payload = build_save_data(engine)
+    assert save_payload["save_version"] == SAVE_VERSION == 1
+    assert save_payload["world_state"]["pressures"] == engine.get_pressures()
+    save_game(engine, str(save_path))
+    loaded_engine = load_game(str(save_path))
 
     loaded_world_state = loaded_engine.get_world_state()
 
@@ -98,47 +105,44 @@ def main():
     assert len(post_load_history) == len(history_before_save) + 2
     assert post_load_history[-1]["history_id"] not in loaded_history_ids
 
-    with TemporaryDirectory() as temp_dir:
-        base_payload = build_save_data(engine)
+    base_payload = build_save_data(engine)
 
-        unlinked_payload = deepcopy(base_payload)
-        del unlinked_payload["world_state"]["history"][1]["source_history_id"]
-        unlinked_path = Path(temp_dir) / "unlinked.json"
-        unlinked_path.write_text(json.dumps(unlinked_payload), encoding="utf-8")
-        load_game(str(unlinked_path))
+    unlinked_payload = deepcopy(base_payload)
+    del unlinked_payload["world_state"]["history"][1]["source_history_id"]
+    unlinked_path = get_test_output_path("unlinked.json")
+    unlinked_path.write_text(json.dumps(unlinked_payload), encoding="utf-8")
+    load_game(str(unlinked_path))
 
-        invalid_references = (
-            (None, "non-string"),
-            ("", "empty"),
-            ("history_999999", "dangling"),
-            (linked_result["history_id"], "self"),
-        )
-        for invalid_reference, label in invalid_references:
-            payload = deepcopy(base_payload)
-            payload["world_state"]["history"][1]["source_history_id"] = (
-                invalid_reference
-            )
-            path = Path(temp_dir) / f"{label}.json"
-            path.write_text(json.dumps(payload), encoding="utf-8")
-            try:
-                load_game(str(path))
-            except ValueError:
-                pass
-            else:
-                raise AssertionError(f"Loaded {label} source reference.")
-
-        forward_payload = deepcopy(base_payload)
-        forward_payload["world_state"]["history"][0]["source_history_id"] = (
-            linked_result["history_id"]
-        )
-        forward_path = Path(temp_dir) / "forward.json"
-        forward_path.write_text(json.dumps(forward_payload), encoding="utf-8")
+    invalid_references = (
+        (None, "non-string"),
+        ("", "empty"),
+        ("history_999999", "dangling"),
+        (linked_result["history_id"], "self"),
+    )
+    for invalid_reference, label in invalid_references:
+        payload = deepcopy(base_payload)
+        payload["world_state"]["history"][1]["source_history_id"] = invalid_reference
+        path = get_test_output_path(f"{label}.json")
+        path.write_text(json.dumps(payload), encoding="utf-8")
         try:
-            load_game(str(forward_path))
+            load_game(str(path))
         except ValueError:
             pass
         else:
-            raise AssertionError("Loaded forward source reference.")
+            raise AssertionError(f"Loaded {label} source reference.")
+
+    forward_payload = deepcopy(base_payload)
+    forward_payload["world_state"]["history"][0]["source_history_id"] = (
+        linked_result["history_id"]
+    )
+    forward_path = get_test_output_path("forward.json")
+    forward_path.write_text(json.dumps(forward_payload), encoding="utf-8")
+    try:
+        load_game(str(forward_path))
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("Loaded forward source reference.")
 
     print("Save/load test passed.")
 
