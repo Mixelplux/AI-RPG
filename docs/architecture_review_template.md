@@ -1,6 +1,11 @@
 # Architecture Review Template
 
-Use the lightest review type allowed by `WORKFLOW.md`. The main review is written for the project owner. Technical evidence belongs in the packet or appendix.
+Use this template when it helps an owner-requested architecture review. Routine
+reviews may use a concise diff and verification report; this template is required
+only for explicitly requested formal architecture packets, whose existing
+content contract remains in `docs/review_packet_profiles.md`. Review depth
+follows `docs/engineering_posture.md`. Technical evidence belongs in an optional
+appendix or requested packet.
 
 ## Review Type
 
@@ -55,7 +60,9 @@ End with exactly one requested decision:
 - Defer the recommendation
 - Request a deeper review of one named issue
 
-Acceptance authorizes later sprint staging around the recommendation. It does not define, stage, or start a sprint.
+Acceptance of review findings does not authorize a new capability package or
+Git operation. Package selection/opening and Git authorization remain separate
+owner decisions. A recommendation does not define, stage, or start a sprint.
 
 ## Technical Appendix
 

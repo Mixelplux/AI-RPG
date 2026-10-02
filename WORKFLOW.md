@@ -1,184 +1,121 @@
-# Workflow: Risk-Proportional Task Execution
+# Workflow: Proportional Engineering
 
 ## Governing Rule
 
-The normal unit of work is one owner-authorized capability package or
-maintenance task. Codex proceeds without routine interruption inside that
-boundary, and stops for owner review and merge authorization.
+Work on one owner-authorized, small, coherent capability package or maintenance
+task at a time. Finish authorized reversible work without repeated approval.
+Use credible consequence and recovery difficulty to choose rigor; Routine is
+the default. `docs/engineering_posture.md` defines the three risk levels and
+architectural safeguards that apply to all work.
 
-Every package is classified once at staging. If its classification is unclear,
-use **Critical** until the owner decides otherwise.
+## Verify and Define Scope
 
-## Risk Levels
+Before editing, verify repository root, branch, full HEAD, and working-tree
+and index status; identify the accepted Git baseline and preserve unrelated
+changes. Read the task-start files specified by `AGENTS.md`. Confirm the
+authorized capability, allowed architectural subsystems, exclusions, risk,
+and completion condition. Expected files are guidance, not an immutable list.
 
-### Critical
+A directly necessary additional file within an approved subsystem may change
+without another approval if it does not broaden product scope. Report it at
+completion. Crossing into another architectural subsystem requires owner
+review. Do not introduce unapproved behavior, persistence or ownership models,
+migrations, save-version changes, broad refactors, or deferred capabilities.
 
-Classify as Critical when the change affects saves, migrations, Region Pack
-integrity, destructive mutation, movement semantics, security or provider
-boundaries, or repository/data-loss risk.
+Use a feature branch for implementation and maintenance edits. Owner
+authorization is required to select/open a new capability package; stage its
+first sprint before implementation. Record its risk in lifecycle JSON.
+An explicitly authorized standalone documentation/process maintenance task
+may proceed while lifecycle is idle without replacing the completed sprint
+or staging a future package.
 
-Critical packages require:
+`docs/current_sprint.json` is the sole machine-enforced lifecycle authority.
+Markdown package and sprint records explain scope and status; stale prose
+cannot override JSON. Zero or one sprint may be active. Historical handoffs
+are context, not authorization. Do not create a YAML lifecycle representation
+or select, stage, or start the next package automatically. Keep `next_sprint`
+null until separately authorized package selection under existing lifecycle
+mechanics; validate staged records with the established validator.
 
-- frozen scope;
-- a feature branch;
-- relevant integration verification;
-- independent review; and
-- owner-authorized strict-fast-forward merge.
+## Implement and Verify
 
-### Routine
+Make routine local decisions, repair directly caused defects, and complete
+in-scope milestones and review corrections without arbitrary correction-count
+limits. Stop only for scope departure, destructive/irreversible action,
+materially different architecture or risk, missing provider/live-action
+authorization, conflicting authoritative requirements, or an unresolved blocker.
 
-Routine covers ordinary runtime capabilities, read-only behavior,
-documentation, tests, lifecycle records, and workflow metadata.
+Verification follows risk and the actual affected behavior:
 
-Routine packages require:
+- **Routine:** relevant syntax/static checks, focused behavior tests, directly
+  relevant nearby regressions, `git diff --check`, and scope/diff review.
+  Arrange owner smoke when behavior is player-visible.
+- **Elevated:** add affected-system regressions, targeted architecture review,
+  compatibility checks, and migration/recovery checks where relevant.
+- **Critical:** agree explicit approval boundaries and verification appropriate
+  to the high-consequence boundary; deep adversarial review, broad verification,
+  or evidence capture may be justified.
 
-- concise scope;
-- a feature branch;
-- targeted verification; and
-- owner review and merge authorization.
+Validate affected lifecycle/record contracts. For wording-only corrections,
+use affected record checks and diff review; do not repeat unrelated tests.
+Routine work does not default to independent audit, repository-wide suites,
+formal packets, ADRs, exact file manifests, multiple gates, or broad architecture
+revalidation. Write an ADR only when a material durable architectural decision
+needs recording. Optional hardening and style suggestions do not block
+completion unless they violate accepted behavior or a core invariant.
 
-Independent review and evidence packets are optional for Routine work unless
-the owner explicitly requests them.
+Environment/tooling failures are verification blockers, not proof of product
+failure. Report checks as passed, failed, blocked, or unrun accurately. Use the
+established Windows recovery procedure after one confirmation of its known
+sandbox/ACL failure. Never loop on blocked paths or modify ACLs without new,
+narrowly scoped evidence. Live-provider actions require explicit authorization;
+automated tests remain offline.
 
----
+## Git, Review, and Completion
 
-## Phase 1: Verify and Stage
+Continue using `D:\Codex Tools\GitWorkflowTools` with
+`Profiles\AINarrativeRPG.psd1`; do not invent a replacement Git workflow.
+Use its state tool near task start, run focused checks directly, and use its
+verification, candidate, evidence, and merge operations when applicable and
+authorized. Profile checks are mechanical invariants, not a requirement for
+repository-wide gameplay testing. Do not modify shared tools for a package.
 
-Before editing:
+An uncommitted working diff is a valid implementation handoff when commits
+are not authorized. Report baseline, changed files, verification, and blockers.
+Only prepare a final review candidate when staging/commit authority is granted:
+commit authorized changes on the feature branch, bind review to its exact HEAD
+and parent, and confirm clean working tree and index. Formal evidence packets
+are used only when explicitly requested or required for the agreed risk boundary.
 
-- confirm Git root, branch, full HEAD, and clean working tree and index;
-- read the task-start files defined by `AGENTS.md`;
-- confirm owner authorization, scope, exclusions, and completion condition;
-- record the risk level in `docs/current_sprint.json`; and
-- inspect only the implementation and tests relevant to the change.
+Owner smoke evaluates player experience; acceptance evaluates the result.
+Neither authorizes Git staging, commit, push, or merge. Obtain appropriate
+Git authorization separately. Routine owner review may use a concise diff and
+verification report; independent review is not a default requirement.
 
-`docs/current_sprint.json` is the only machine-enforced lifecycle authority.
-`docs/current_sprint.md` and `docs/current_capability_package.md` are
-explanatory records for scope, rationale, and readable status. They are not
-parsed as duplicate lifecycle state and cannot override JSON.
+When merge is explicitly authorized, use the established strict fast-forward
+tool, verify expected `main` parent and candidate HEAD, and report final `main`
+HEAD and cleanliness. Never rewrite accepted history without authorization.
+A normal merge needs no lifecycle-closeout package or extra lifecycle-only
+commit. Do not add ephemeral candidate/merge-state fields to lifecycle JSON.
 
-Do not create a YAML lifecycle representation. Historical handoffs and logs
-are context, not current authorization. `next_sprint` remains `null` until the
-owner separately authorizes package selection.
+## Approved External Region Pack Artifact Imports
 
----
+An approved external artifact needs a recorded SHA-256. Use the existing
+repository import utility to verify source bytes, create and verify a
+same-directory temporary byte copy, and atomically replace the destination.
+Verify destination against the approved hash before repository content edits
+or test updates. Do not decode, re-encode, or normalize the artifact during
+import. This integrity check is specific to external imports, not routine
+package file scope.
 
-## Phase 2: Modify
+## Handoffs and Conditional Procedures
 
-Change only the authorized scope. Make routine in-scope choices, repair
-directly caused defects, and run the smallest useful syntax or static check
-after meaningful edits.
+Handoffs identify one bounded objective, baseline/branch, granted authority,
+material constraints, completion condition, and focused verification. Prefer
+canonical pointers to copied logs. Distinguish execution context, review,
+escalation, and owner decisions; transport does not grant authority. Escalate
+material omissions, not harmless ones.
 
-Do not introduce a migration, persistence or ownership model, broad refactor,
-or player-visible behavior beyond the accepted scope. Preserve unrelated user
-changes. Provider output remains untrusted and has no simulation authority.
-
-### Approved External Region Pack Artifact Imports
-
-An owner-approved external Region Pack artifact must have a recorded SHA-256
-before repository import. Repository integration must verify the external
-source against that approved SHA-256, import the artifact by byte-preserving
-file copy without text decoding or re-encoding, and verify the repository
-destination against the same SHA-256 before any repository-side content edits
-or test updates.
-
-Use the repository import utility for this transfer. It verifies the source
-before copying, writes only a same-directory temporary byte copy, verifies that
-copy, and atomically replaces the destination only after both hashes match. Do
-not pass the artifact through a text editor, parser, serializer, or
-newline-normalizing tool as part of the import.
-
----
-
-## Phase 3: Validate
-
-Run the verification required by the risk level and package record:
-
-- Critical: relevant integration verification plus focused checks.
-- Routine: targeted checks for changed behavior and records.
-
-Always validate changed lifecycle JSON, run `git diff --check`, and inspect
-the changed scope. Do not run a broader suite unless the package requires it.
-Live-provider execution remains separately owner-authorized.
-
-For a clerical correction that cannot affect behavior, run correction-only
-verification: JSON parsing, the lifecycle validator or affected record test,
-and `git diff --check`. Do not repeat unrelated verification solely because a
-record or wording was corrected.
-
-Non-contract hardening, defensive improvements, and stylistic concerns belong
-in the backlog and do not block a candidate unless they violate an accepted
-requirement or a core invariant.
-
----
-
-## Phase 4: Prepare Candidate
-
-Prepare one immutable candidate on the feature branch:
-
-- commit only authorized changes;
-- record the exact branch, candidate HEAD, and parent;
-- confirm a clean working tree and index; and
-- leave `next_sprint` unchanged unless separately authorized.
-
-Lifecycle records describe implementation state only. Do not require or add
-candidate-prepared, not-merged, merge-unauthorized, candidate-state, or
-merge-state lifecycle fields. A normal merge does not require a separate
-lifecycle-closeout package or a post-review lifecycle-only commit.
-
----
-
-## Phase 5: Review, Correction, and Merge
-
-For a Critical candidate, obtain independent review before owner acceptance.
-For a Routine candidate, owner review is sufficient. Evidence packets are
-created only when the owner explicitly requests one.
-
-One bounded correction cycle is allowed for review findings that remain within
-scope. Re-run only the verification affected by that correction and prepare a
-replacement immutable candidate. If a further correction, scope change, or
-risk reclassification is needed, stop and request owner classification.
-
-Acceptance and merge authority are separate owner decisions. When the owner
-authorizes merge, verify the expected `main` parent and candidate HEAD,
-confirm fast-forward eligibility, and perform a strict fast-forward only.
-Do not push or merge without that authorization.
-
-After a normal merge, report the final `main` HEAD and clean state. Do not
-start, stage, or select another package automatically.
-
----
-
-## Handoff Rules
-
-### Classification and Authority
-
-Classify handoffs by purpose:
-
-- **Execution handoff (Chat → Codex):** perform one already-authorized bounded objective.
-- **Review handoff (Codex → Chat):** assess a completed candidate.
-- **Escalation (Codex → Chat/owner):** report material ambiguity, missing authority, or a decision Codex cannot make.
-- **Owner action:** a separately identified request to approve, revise, reject, or authorize something.
-
-The transport destination does not confer decision authority. A context
-transfer contains operational context only; keep owner-action requests
-separately labeled.
-
-### Content Discipline
-
-Use pointer-first, necessity-tested handoffs. Prefer canonical pointers—commit
-SHAs and branches, record paths, package identifiers, and focused verification
-results—over copied history or logs.
-
-### Receiving-Side Validation
-
-Before acting, confirm the handoff contains one bounded objective, sufficient
-execution or review information, granted authority, material constraints, and
-a testable completion condition. Stop for a material omission; do not escalate
-for harmless omissions.
-
-## Conditional Procedures
-
-Load detailed instructions only when the task requires them: independent
-review, environment recovery, architecture review, capability sequencing,
-live-provider execution, or migration and save-version work.
+Load `docs/conditional_procedures.md` only for an applicable architecture or
+planning question, requested packet, environment recovery, authorized live
+provider action, or migration/save-version work.

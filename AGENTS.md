@@ -15,6 +15,9 @@ to make that package current and stage its first sprint or milestone. Begin
 bounded implementation only after that staging. Candidate acceptance and merge
 authorization remain separate owner decisions.
 
+An explicitly authorized standalone documentation/process maintenance task
+may proceed while lifecycle is idle as described in `WORKFLOW.md`.
+
 ## Context Loading
 
 `AGENTS.md` is the standing execution contract.
@@ -51,15 +54,21 @@ Do not routinely read the full ADR ledger, roadmap, architecture history, or dup
 
 Within authorized scope, Codex may implement accepted behavior, make routine local choices, repair directly caused defects, update required documentation, run verification, and progress through authorized internal milestones.
 
+Scope is the approved capability and architectural subsystems. Expected files
+are guidance; directly necessary additional files within those subsystems may
+change without another approval if product scope stays bounded. Report them
+at completion. Crossing into another subsystem requires owner review.
+
 Stop for owner input if work requires:
 
 - scope outside the accepted package;
-- a new persistence or ownership model;
-- a save-version change or migration;
+- a persistence or ownership model not already authorized by the package;
+- a save-version change or migration not already authorized by the package;
 - unapproved player-visible behavior;
 - a generic framework or broad refactor;
 - an explicitly deferred capability;
 - destructive or irreversible action;
+- materially different architecture/risk or an unauthorized live/provider action;
 - resolution of conflicting authoritative requirements;
 - unresolved required verification failure outside safe in-scope repair.
 
@@ -81,12 +90,20 @@ Preserve unless explicitly superseded:
 - Do not merge to `main` without explicit owner authorization.
 - Do not rewrite accepted history unless explicitly authorized.
 - Do not create commits unless the task permits them.
-- Final review candidates must be committed, bound to an exact HEAD, and have a clean working tree and index.
+- Final review candidates, when commit authority is granted, must be committed,
+  bound to an exact HEAD, and have a clean working tree and index. Otherwise
+  report the uncommitted working diff as an implementation handoff.
+- Owner smoke and acceptance do not grant Git staging, commit, push, or merge authority.
 - Use review-packet tooling only when `WORKFLOW.md` requires it.
 
 ## Verification
 
 Use proportionate verification:
+
+Routine is the default. Use Elevated for meaningful persistence or cross-system
+consequence and Critical for rare high-consequence boundaries; see
+`docs/engineering_posture.md`. Formal evidence and independent review are
+conditional, not routine defaults.
 
 1. relevant syntax/static checks;
 2. focused tests;

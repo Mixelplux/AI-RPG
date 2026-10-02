@@ -148,6 +148,10 @@ try {
     Assert-Accepted -Name 'complete record with explanatory Markdown' -FixtureRoot (New-Fixture -Name 'complete' -Mode complete)
     Assert-Accepted -Name 'active record with explanatory Markdown' -FixtureRoot (New-Fixture -Name 'active' -Mode active)
 
+    $fixture = New-Fixture -Name 'elevated-risk-level' -Mode active
+    Replace-FixtureText $fixture 'docs/current_sprint.json' '"risk_level": "routine"' '"risk_level": "elevated"'
+    Assert-Accepted -Name 'elevated risk level' -FixtureRoot $fixture
+
     $fixture = New-Fixture -Name 'integer-save-version' -Mode complete
     Assert-Accepted -Name 'integer save version' -FixtureRoot $fixture
 
@@ -175,7 +179,7 @@ try {
     }
     $fixture = New-Fixture -Name 'unsupported-risk-level' -Mode complete
     Replace-FixtureText $fixture 'docs/current_sprint.json' '"risk_level": "routine"' '"risk_level":  "unclassified"'
-    Assert-Rejected 'unsupported risk level' $fixture "sprint.risk_level must be 'critical' or 'routine'; found 'unclassified'."
+    Assert-Rejected 'unsupported risk level' $fixture "sprint.risk_level must be 'routine', 'elevated', or 'critical'; found 'unclassified'."
 
     $fixture = New-Fixture -Name 'ephemeral-candidate-field' -Mode complete
     Add-FixtureSprintProperty -Root $fixture -Name 'candidate_state' -Value 'prepared'

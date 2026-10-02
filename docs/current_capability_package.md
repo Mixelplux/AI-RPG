@@ -5,8 +5,16 @@ machine-enforced lifecycle authority.
 
 ## Status
 
-Routine implementation is complete. The candidate awaits owner review and
-separate merge authorization.
+Sprint 10.76 is complete and included in the accepted `main` baseline
+`3b3606a2c31d92b6fba75a7ddf5d90d015304772`. Lifecycle JSON is idle;
+no new capability package is selected or active.
+
+Current owner-authorized work is standalone proportional-engineering
+documentation/process maintenance. Its boundary is process guidance and
+directly necessary lifecycle-validator textual consistency. Runtime/gameplay,
+architecture changes, new tools, and Sprint 10.77 are excluded. Verification
+is record validation, affected validator checks, contradiction searches, and
+diff/scope review. Staging, commits, and merges are not authorized.
 
 ## Goal
 
@@ -40,7 +48,9 @@ perception shape, provider transport, and CLI output.
 
 ## Required Verification
 
-Focused projection, navigation, actor-location, movement, and save/load
+The completed Sprint 10.76 verification scope was focused projection,
+navigation, actor-location, movement, and save/load
 regressions; lifecycle validation; official-interpreter JSON parsing with
 save-version assertion; `git diff --check`; changed-scope inspection; and
-clean candidate evidence. No merge, push, or evidence packet is authorized.
+clean candidate evidence. It is historical scope, not the verification burden
+for this maintenance task. No push or evidence packet is authorized here.

@@ -238,8 +238,8 @@ if ($null -ne $jsonRecord) {
         if ((ConvertTo-RecordToken -Value $jsonSprintStatus) -notin @('active', 'complete', 'blocked')) {
             Add-Failure "sprint.status is not a supported workflow state: '$jsonSprintStatus'."
         }
-        if ((ConvertTo-RecordToken -Value $jsonRiskLevel) -notin @('critical', 'routine')) {
-            Add-Failure "sprint.risk_level must be 'critical' or 'routine'; found '$jsonRiskLevel'."
+        if ((ConvertTo-RecordToken -Value $jsonRiskLevel) -notin @('critical', 'elevated', 'routine')) {
+            Add-Failure "sprint.risk_level must be 'routine', 'elevated', or 'critical'; found '$jsonRiskLevel'."
         }
 
         $platform = Get-PropertyValue -Object $sprint -Name 'platform' -Path 'sprint.platform'

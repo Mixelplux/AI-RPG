@@ -5,8 +5,12 @@ from `docs/current_sprint.json`.
 
 ## Status
 
-Routine implementation is complete. The candidate awaits owner review and
-separate merge authorization.
+Sprint 10.76 is complete and included in the accepted `main` baseline
+`3b3606a2c31d92b6fba75a7ddf5d90d015304772`. Lifecycle JSON is idle:
+no active sprint/package and no selected next sprint.
+
+The owner-authorized proportional-engineering documentation maintenance is
+standalone work while idle. It does not open or implement Sprint 10.77.
 
 ## Goal
 
@@ -29,7 +33,10 @@ perception shape, provider transport, and CLI output.
 
 ## Verification
 
-Run focused current-scene projection, navigation, actor-location, movement, and
+The completed package's verification scope was focused current-scene
+projection, navigation, actor-location, movement, and
 save/load regressions; validate lifecycle records; parse JSON and assert save
 version `1`; run `git diff --check`; inspect changed scope; and confirm clean
-candidate state. No merge, push, or evidence packet is authorized.
+candidate state. These historical requirements do not prescribe verification
+for the current documentation maintenance; use `WORKFLOW.md` and its
+authorized scope. No staging, commit, merge, push, or packet is authorized here.

@@ -2,9 +2,11 @@
 
 ## Role
 
-This document is the authoritative strategic roadmap for architecture review
-and review-packet context. It describes direction, priorities, and deferrals;
-the current project records own package and sprint state, and
+This document describes strategic direction, priorities, and deferrals.
+Use observed player experience to choose small coherent capabilities under
+`docs/engineering_posture.md`; routine planning needs no formal review packet
+or full architecture review. `docs/current_sprint.json` alone owns
+machine-enforced lifecycle state; Markdown package/sprint records explain it, and
 `docs/conditional_procedures.md` owns triggered process detail.
 
 ## Current Capability Position
@@ -80,3 +82,5 @@ provider failure closure, and deterministic gameplay without provider access.
   otherwise.
 - Use focused evidence from completed work to choose the next bounded
   capability; this roadmap does not authorize, stage, or start one.
+- Scale verification to Routine, Elevated, or Critical consequence and recovery
+  difficulty; preserve focused tests without routine enterprise-style ceremony.

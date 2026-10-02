@@ -2,9 +2,12 @@
 
 ## Status and Authority
 
-This document defines the review-packet contract used by the packet assembly
-and validation tools. It is workflow authority under `WORKFLOW.md`; it does
-not replace repository architecture or simulation authorities.
+This document defines the optional formal review-packet contract used by the
+existing assembly and validation tools. Load it only when a packet is explicitly
+requested or required by an agreed risk boundary under `WORKFLOW.md`.
+These manifest and evidence requirements apply to that artifact only; they do
+not impose routine package scope, file lists, audits, or planning gates. It does
+not replace repository architecture, simulation, or lifecycle authorities.
 
 Packet-local synthesis is review convenience only. Its authoritative sources
 remain `docs/architecture.md`, `docs/simulation_model.md`,
