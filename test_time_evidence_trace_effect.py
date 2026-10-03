@@ -1,6 +1,6 @@
 from copy import deepcopy
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 from unittest.mock import patch
 
 from engine.game_engine import GameEngine
@@ -10,7 +10,7 @@ from engine.scene_loader import build_scene as real_build_scene
 from engine.world_state import validate_world_state as real_validate_world_state
 
 
-REGION_PATH = "data/regions/bryn_shander.json"
+REGION_PATH = "test_fixtures/bryn_shander_legacy.json"
 TRACE_ID = "north_gate_second_hour_trace"
 
 
@@ -107,8 +107,8 @@ def main():
         else: raise AssertionError("Expected evidence-history failure.")
     assert failing.get_world_state() == state and failing.scene_snapshot is scene
 
-    with TemporaryDirectory() as directory:
-        path = str(Path(directory) / "time-trace.json")
+    with artifact_files("test_time_evidence_trace_effect") as directory:
+        path = str(Path(directory) / "test_time_evidence_trace_effect_time-trace.json")
         saved = GameEngine(REGION_PATH); saved.save(path)
         loaded = load_game(path); assert loaded.advance_time(2)["evidence_trace_consequence"]["changed"]
         loaded.save(path); reloaded = load_game(path)

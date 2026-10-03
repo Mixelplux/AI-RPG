@@ -1,7 +1,7 @@
 import json
 from copy import deepcopy
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 from unittest.mock import patch
 
 import engine.game_engine as game_engine_module
@@ -10,7 +10,7 @@ from engine.region_validator import validate_region
 from engine.save_system import build_save_data, load_game
 
 
-REGION = "data/regions/bryn_shander.json"
+REGION = "test_fixtures/bryn_shander_legacy.json"
 DISCOVERY = "west_gate_elin_report_trace"
 TEXT = 'Elin Voss studies the folded order, then nods. "You found it. The Southwest Gate patrol is moving before the road closes."'
 
@@ -85,8 +85,8 @@ def test_command_start_failure_and_save_load():
         except RuntimeError: pass
         else: raise AssertionError("Expected scene failure")
     assert engine.get_world_state()==state and engine.scene_snapshot is scene
-    with TemporaryDirectory() as directory:
-        path=Path(directory)/"save.json"; path.write_text(json.dumps(build_save_data(engine)),encoding="utf-8")
+    with artifact_files("test_discovery_gated_relocated_actor_response") as directory:
+        path=Path(directory)/"test_discovery_gated_relocated_actor_response_save.json"; path.write_text(json.dumps(build_save_data(engine)),encoding="utf-8")
         loaded = load_game(str(path))
         assert loaded.process_command("talk to elin")["player_discovery_response"] is None
         assert len(loaded.query_history(event_type="west_gate_patrol_dispatched")) == 1

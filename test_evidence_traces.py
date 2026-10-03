@@ -1,14 +1,14 @@
 from copy import deepcopy
 import json
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 
 from engine.game_engine import GameEngine
 from engine.save_system import build_save_data, load_game
 from engine.world_state import validate_world_state
 
 
-REGION_PATH = "data/regions/bryn_shander.json"
+REGION_PATH = "test_fixtures/bryn_shander_legacy.json"
 
 
 def expect_value_error(callable_):
@@ -53,18 +53,18 @@ def test_conversation_and_persistence():
         assert "captain_conversation_trace" not in rendered
     assert all(entry["event_type"] != "evidence_trace_added" for entry in context["history_context"]["history_entries"])
     assert not engine.process_command("talk to captain")["evidence_trace_consequence"]["changed"]
-    with TemporaryDirectory() as directory:
-        path = Path(directory) / "trace.json"
+    with artifact_files("test_evidence_traces") as directory:
+        path = Path(directory) / "test_evidence_traces_trace.json"
         path.write_text(json.dumps(build_save_data(engine)), encoding="utf-8")
         loaded = load_game(str(path))
         assert loaded.get_evidence_trace("captain_conversation_gate_trace")
         assert "captain_conversation_gate_trace" not in repr(loaded.get_narration_context("look", history_count=20))
         assert not loaded.process_command("talk to captain")["evidence_trace_consequence"]["changed"]
         legacy = build_save_data(engine); del legacy["world_state"]["evidence_traces"]
-        legacy_path = Path(directory) / "legacy.json"; legacy_path.write_text(json.dumps(legacy), encoding="utf-8")
+        legacy_path = Path(directory) / "test_evidence_traces_legacy.json"; legacy_path.write_text(json.dumps(legacy), encoding="utf-8")
         assert load_game(str(legacy_path)).get_evidence_traces() == []
         malformed = deepcopy(build_save_data(engine)); malformed["world_state"]["evidence_traces"][0]["location_id"] = "missing"
-        bad_path = Path(directory) / "bad.json"; bad_path.write_text(json.dumps(malformed), encoding="utf-8")
+        bad_path = Path(directory) / "test_evidence_traces_bad.json"; bad_path.write_text(json.dumps(malformed), encoding="utf-8")
         before = engine.get_world_state(); expect_value_error(lambda: engine.load(str(bad_path)))
         assert engine.get_world_state() == before
 

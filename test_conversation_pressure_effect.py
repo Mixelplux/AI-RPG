@@ -1,7 +1,7 @@
 import json
 from copy import deepcopy
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 from unittest.mock import patch
 
 from engine.game_engine import GameEngine
@@ -10,7 +10,7 @@ from engine.save_system import load_game, save_game
 from engine.world_update import apply_interaction
 
 
-REGION_PATH = "data/regions/bryn_shander.json"
+REGION_PATH = "test_fixtures/bryn_shander_legacy.json"
 PRESSURE_ID = "bryn_shander_gate_scrutiny"
 EFFECT_ID = "north_gate_captain_scrutiny"
 
@@ -265,8 +265,8 @@ def test_save_load_without_replay() -> None:
     engine.process_command("talk to captain")
     history = engine.get_history()
 
-    with TemporaryDirectory() as temp_dir:
-        path = str(Path(temp_dir) / "save.json")
+    with artifact_files("test_conversation_pressure_effect") as temp_dir:
+        path = str(Path(temp_dir) / "test_conversation_pressure_effect_save.json")
         save_game(engine, path)
         loaded = load_game(path)
 

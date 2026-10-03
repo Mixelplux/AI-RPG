@@ -1,6 +1,6 @@
 from copy import deepcopy
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 from unittest.mock import patch
 
 from engine.game_engine import GameEngine
@@ -10,7 +10,7 @@ from engine.scene_loader import build_scene as real_build_scene
 from engine.world_state import validate_world_state as real_validate_world_state
 
 
-REGION_PATH = "data/regions/bryn_shander.json"
+REGION_PATH = "test_fixtures/bryn_shander_legacy.json"
 ACTOR_ID = "captain_darvin_grey"
 BASELINE = "bryn_shander_gate_north"
 DESTINATION = "bryn_shander_gate_west"
@@ -119,8 +119,8 @@ def main():
     consequence["actor_entity_id"] = "changed"
     actor_history = engine.query_history(event_type="actor_moved")
     assert actor_history[-1]["entity_id"] == ACTOR_ID
-    with TemporaryDirectory() as temp_dir:
-        save_path = str(Path(temp_dir) / "actor-time.json")
+    with artifact_files("test_time_actor_relocation") as temp_dir:
+        save_path = str(Path(temp_dir) / "test_time_actor_relocation_actor-time.json")
         engine.save(save_path)
         loaded = load_game(save_path)
         assert loaded.get_world_state() == engine.get_world_state()

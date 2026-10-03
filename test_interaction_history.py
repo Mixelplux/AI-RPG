@@ -1,6 +1,6 @@
 from copy import deepcopy
 import os
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 from unittest.mock import patch
 
 from engine.game_engine import GameEngine
@@ -8,7 +8,7 @@ from engine.save_system import load_game, save_game
 from play_game import main as play_game_main
 
 
-REGION_PATH = "data/regions/bryn_shander.json"
+REGION_PATH = "test_fixtures/bryn_shander_legacy.json"
 
 
 def without_history(world_state):
@@ -152,8 +152,8 @@ def main():
         ]
     )
 
-    with TemporaryDirectory() as temp_dir:
-        save_path = f"{temp_dir}/conversation_history_save.json"
+    with artifact_files("test_interaction_history") as temp_dir:
+        save_path = f"{temp_dir}/test_interaction_history_conversation_history_save.json"
         save_game(engine, save_path)
         loaded_engine = load_game(save_path)
 
@@ -214,8 +214,8 @@ def main():
         starting_location
     )
 
-    with TemporaryDirectory() as temp_dir:
-        cli_save_path = f"{temp_dir}/cli_save.json"
+    with artifact_files("test_interaction_history") as temp_dir:
+        cli_save_path = f"{temp_dir}/test_interaction_history_cli_save.json"
         with patch("play_game.SAVE_PATH", cli_save_path), patch(
             "builtins.input",
             side_effect=[

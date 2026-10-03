@@ -1,7 +1,7 @@
 from copy import deepcopy
 import json
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 from unittest.mock import patch
 
 from engine.current_scene_projection import build_current_scene_projection
@@ -10,7 +10,7 @@ from engine.navigation_projection import derive_navigation_projection
 from engine.save_system import SAVE_VERSION, build_save_data, load_game
 
 
-REGION_PATH = "data/regions/bryn_shander.json"
+REGION_PATH = "test_fixtures/bryn_shander_legacy.json"
 CAPTAIN = "captain_darvin_grey"
 ELIN = "guard_elin_voss"
 MAIN_STREET = "bryn_shander_main_street"
@@ -243,8 +243,8 @@ def test_save_load_reproduces_projection_without_persisting_it():
     assert "current_scene_projection" not in save_data
     assert "current_scene_projection" not in save_data["world_state"]
 
-    with TemporaryDirectory() as directory:
-        path = Path(directory) / "current-scene.json"
+    with artifact_files("test_current_scene_projection") as directory:
+        path = Path(directory) / "test_current_scene_projection_current-scene.json"
         path.write_text(json.dumps(save_data), encoding="utf-8")
         loaded = load_game(str(path))
 

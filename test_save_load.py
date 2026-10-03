@@ -6,7 +6,7 @@ from engine.game_engine import GameEngine
 from engine.save_system import SAVE_VERSION, build_save_data, save_game, load_game
 
 
-REGION_PATH = "data/regions/bryn_shander.json"
+REGION_PATH = "test_fixtures/bryn_shander_legacy.json"
 TEST_OUTPUT_ROOT = Path(__file__).resolve().parent / ".artifacts"
 
 

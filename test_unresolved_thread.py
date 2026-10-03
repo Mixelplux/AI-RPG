@@ -1,6 +1,6 @@
 from copy import deepcopy
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 from unittest.mock import patch
 
 from engine.game_engine import GameEngine
@@ -8,7 +8,7 @@ from engine.region_validator import validate_region
 from engine.save_system import build_save_data, load_game
 
 
-REGION_PATH = "data/regions/bryn_shander.json"
+REGION_PATH = "test_fixtures/bryn_shander_legacy.json"
 THREAD_ID = "bryn_shander_west_road_bandit_report"
 EVIDENCE = {
     "text": (
@@ -97,8 +97,8 @@ def test_save_load_legacy_and_atomic_failure() -> None:
     assert engine.get_scene_snapshot() == before_scene
 
     engine.process_command("talk to captain")
-    with TemporaryDirectory() as temporary_directory:
-        path = Path(temporary_directory) / "thread.json"
+    with artifact_files("test_unresolved_thread") as temporary_directory:
+        path = Path(temporary_directory) / "test_unresolved_thread_thread.json"
         engine.save(str(path))
         loaded = load_game(str(path))
         assert loaded.get_open_threads() == engine.get_open_threads()
@@ -106,7 +106,7 @@ def test_save_load_legacy_and_atomic_failure() -> None:
 
         legacy = build_save_data(GameEngine(REGION_PATH))
         del legacy["world_state"]["open_threads"]
-        legacy_path = Path(temporary_directory) / "legacy.json"
+        legacy_path = Path(temporary_directory) / "test_unresolved_thread_legacy.json"
         import json
         legacy_path.write_text(json.dumps(legacy), encoding="utf-8")
         legacy_loaded = load_game(str(legacy_path))
@@ -114,7 +114,7 @@ def test_save_load_legacy_and_atomic_failure() -> None:
 
         malformed = build_save_data(engine)
         malformed["world_state"]["open_threads"][THREAD_ID]["status"] = "closed"
-        malformed_path = Path(temporary_directory) / "malformed.json"
+        malformed_path = Path(temporary_directory) / "test_unresolved_thread_malformed.json"
         malformed_path.write_text(__import__("json").dumps(malformed), encoding="utf-8")
         expect_value_error(lambda: load_game(str(malformed_path)))
 
@@ -124,7 +124,7 @@ def test_causal_integrity_narration_isolation_and_live_load_atomicity() -> None:
     engine.process_command("talk to captain")
     assert engine.query_history(event_type="unresolved_thread_opened")
     assert all(entry["event_type"] != "unresolved_thread_opened" for entry in engine.get_narration_context("look", history_count=10)["history_context"]["history_entries"])
-    with TemporaryDirectory() as temporary_directory:
+    with artifact_files("test_unresolved_thread") as temporary_directory:
         valid = build_save_data(engine)
         for label, mutate in (
             ("phantom", lambda p: p["world_state"]["open_threads"].__setitem__("phantom", {"thread_id":"phantom","status":"open","created_by_history_id":"history_000001"})),
@@ -138,7 +138,7 @@ def test_causal_integrity_narration_isolation_and_live_load_atomicity() -> None:
             import json; path.write_text(json.dumps(payload), encoding="utf-8")
             expect_value_error(lambda path=path: load_game(str(path)))
         bad = deepcopy(valid); bad["world_state"]["open_threads"][THREAD_ID]["created_by_history_id"] = "history_000002"
-        path = Path(temporary_directory) / "bad_live.json"; import json; path.write_text(json.dumps(bad), encoding="utf-8")
+        path = Path(temporary_directory) / "test_unresolved_thread_bad_live.json"; import json; path.write_text(json.dumps(bad), encoding="utf-8")
         before_state, before_scene = engine.get_world_state(), engine.get_scene_snapshot()
         expect_value_error(lambda: engine.load(str(path)))
         assert engine.get_world_state() == before_state and engine.get_scene_snapshot() == before_scene

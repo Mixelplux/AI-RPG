@@ -1,7 +1,7 @@
 import json
 from copy import deepcopy
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 
 from engine.conversation_affordance import derive_conversation_affordance
 from engine.game_engine import GameEngine
@@ -9,7 +9,7 @@ from engine.region_validator import validate_region
 from engine.save_system import load_game
 
 
-REGION = "data/regions/bryn_shander.json"
+REGION = "test_fixtures/bryn_shander_legacy.json"
 ACTOR = "guard_elin_voss"
 DISCOVERY = "west_gate_elin_report_trace"
 AFFORDANCE = {
@@ -146,8 +146,8 @@ def test_save_load_and_reentry_reconstruct_the_projection():
     resolve_and_arrive(engine, discover=True)
     assert engine.get_player_perception()["conversation_affordance"] == AFFORDANCE
 
-    with TemporaryDirectory() as directory:
-        save_path = str(Path(directory) / "save.json")
+    with artifact_files("test_discovery_gated_conversation_affordance") as directory:
+        save_path = str(Path(directory) / "test_discovery_gated_conversation_affordance_save.json")
         engine.save(save_path)
         loaded = load_game(save_path)
         assert loaded.get_player_perception()["conversation_affordance"] == AFFORDANCE

@@ -1,6 +1,6 @@
 from copy import deepcopy
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 
 from engine.game_engine import GameEngine
 from engine.pressure_observation import derive_pressure_observation
@@ -8,7 +8,7 @@ from engine.region_validator import validate_region
 from engine.save_system import load_game
 
 
-PATH = "data/regions/bryn_shander.json"
+PATH = "test_fixtures/bryn_shander_legacy.json"
 CUE = {"cue_id": "winter_deepens_observation", "pressure_id": "bryn_shander_winter", "text": "The cold has become noticeably more severe."}
 
 
@@ -52,8 +52,8 @@ def main():
     except ValueError: pass
     else: raise AssertionError("extra")
 
-    with TemporaryDirectory() as td:
-        save = str(Path(td) / "save.json"); engine.save(save); loaded = load_game(save)
+    with artifact_files("test_pressure_observation") as td:
+        save = str(Path(td) / "test_pressure_observation_save.json"); engine.save(save); loaded = load_game(save)
         assert loaded.get_player_perception()["pressure_cues"] == [CUE]
         assert "pressure_observation_cue" not in loaded.get_world_state()
     assert before["history"] == []

@@ -1,13 +1,13 @@
 from copy import deepcopy
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 
 from engine.contextual_action_projection import derive_contextual_action_projection
 from engine.game_engine import GameEngine
 from engine.save_system import SAVE_VERSION, build_save_data, load_game
 
 
-REGION = "data/regions/bryn_shander.json"
+REGION = "test_fixtures/bryn_shander_legacy.json"
 CAPTAIN_CLUE = "The Captain's Deliberate Trail"
 AFFORDANCE_TEXT = (
     "Elin Voss is at the Southwest Gate with the patrol orders. "
@@ -185,8 +185,8 @@ def test_projection_is_deterministic_non_mutating_and_not_persisted():
     assert "contextual_actions" not in save_data
     assert "contextual_actions" not in save_data["world_state"]
 
-    with TemporaryDirectory() as directory:
-        save_path = str(Path(directory) / "contextual-actions.json")
+    with artifact_files("test_contextual_action_projection") as directory:
+        save_path = str(Path(directory) / "test_contextual_action_projection_contextual-actions.json")
         engine.save(save_path)
         loaded = load_game(save_path)
 

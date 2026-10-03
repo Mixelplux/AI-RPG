@@ -7,7 +7,7 @@ from pathlib import Path
 from engine.region_validator import validate_region
 from engine.game_engine import GameEngine
 from engine.save_system import build_save_data, load_game
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 from unittest.mock import patch
 
 import play_game
@@ -25,7 +25,7 @@ def expect_value_error(callable_) -> None:
 
 
 def build_resolved_engine() -> GameEngine:
-    engine = GameEngine("data/regions/bryn_shander.json")
+    engine = GameEngine("test_fixtures/bryn_shander_legacy.json")
     engine.process_command("talk to captain")
     engine.process_command("investigate")
     assert engine.process_command("present The Captain's Deliberate Trail to captain")["presentation"]["changed"]
@@ -33,7 +33,7 @@ def build_resolved_engine() -> GameEngine:
 
 
 def test_discovery_declarations() -> None:
-    region = json.loads(Path("data/regions/bryn_shander.json").read_text(encoding="utf-8"))
+    region = json.loads(Path("test_fixtures/bryn_shander_legacy.json").read_text(encoding="utf-8"))
     validate_region(region)
     declaration = region["discovery_declarations"][0]
     assert declaration["text"].startswith("Fresh boot prints")
@@ -53,7 +53,7 @@ def test_discovery_declarations() -> None:
 
 
 def test_atomic_local_discovery_and_no_op() -> None:
-    engine = GameEngine("data/regions/bryn_shander.json")
+    engine = GameEngine("test_fixtures/bryn_shander_legacy.json")
     assert engine.process_command("investigate")["investigation"]["changed"] is False
     engine.process_command("talk to captain")
     result = engine.process_command("investigate")["investigation"]
@@ -70,7 +70,7 @@ def test_atomic_local_discovery_and_no_op() -> None:
 
 
 def test_wrong_location_and_unknown_save_membership_fail_closed() -> None:
-    engine = GameEngine("data/regions/bryn_shander.json")
+    engine = GameEngine("test_fixtures/bryn_shander_legacy.json")
     engine.create_evidence_trace(
         "captain_conversation_gate_trace",
         "captain_conversation_trace",
@@ -81,8 +81,8 @@ def test_wrong_location_and_unknown_save_membership_fail_closed() -> None:
     assert engine.process_command("known clues")["known_clues"] == []
     assert engine.get_world_state() == before_state
     assert engine.get_scene_snapshot() == before_scene
-    with TemporaryDirectory() as directory:
-        path = Path(directory) / "bad.json"
+    with artifact_files("test_discovery") as directory:
+        path = Path(directory) / "test_discovery_bad.json"
         payload = build_save_data(engine)
         payload["world_state"]["player_discoveries"] = ["unknown"]
         path.write_text(json.dumps(payload), encoding="utf-8")
@@ -97,7 +97,7 @@ def test_wrong_location_and_unknown_save_membership_fail_closed() -> None:
 
 
 def test_presenting_a_known_clue_resolves_the_open_thread_once() -> None:
-    engine = GameEngine("data/regions/bryn_shander.json")
+    engine = GameEngine("test_fixtures/bryn_shander_legacy.json")
     engine.process_command("talk to captain")
     engine.process_command("investigate")
     result = engine.process_command("Present The Captain's Deliberate Trail TO Captain")["presentation"]
@@ -120,20 +120,20 @@ def test_presenting_a_known_clue_resolves_the_open_thread_once() -> None:
 
 
 def test_malformed_presentation_and_resolved_save_compatibility() -> None:
-    engine = GameEngine("data/regions/bryn_shander.json")
+    engine = GameEngine("test_fixtures/bryn_shander_legacy.json")
     for command in ("present", "present clue", "present to captain", "present clue to"):
         result = engine.process_command(command)
         assert result["intent"] == "clue_presentation" and result["success"] is False
     engine.process_command("talk to captain")
     engine.process_command("investigate")
     engine.process_command("present The Captain's Deliberate Trail to captain")
-    with TemporaryDirectory() as directory:
-        path = Path(directory) / "resolved.json"
+    with artifact_files("test_discovery") as directory:
+        path = Path(directory) / "test_discovery_resolved.json"
         engine.save(str(path))
         assert load_game(str(path)).get_world_state()["resolved_threads"] == engine.get_world_state()["resolved_threads"]
-        legacy = build_save_data(GameEngine("data/regions/bryn_shander.json"))
+        legacy = build_save_data(GameEngine("test_fixtures/bryn_shander_legacy.json"))
         del legacy["world_state"]["resolved_threads"]
-        legacy_path = Path(directory) / "legacy.json"
+        legacy_path = Path(directory) / "test_discovery_legacy.json"
         legacy_path.write_text(json.dumps(legacy), encoding="utf-8")
         assert load_game(str(legacy_path)).get_world_state()["resolved_threads"] == {}
 
@@ -149,11 +149,11 @@ def test_resolved_thread_integrity_rejects_malformed_history_and_preserves_live_
     def write_payload(directory: str, label: str, mutate) -> Path:
         payload = deepcopy(valid)
         mutate(payload)
-        path = Path(directory) / f"{label}.json"
+        path = Path(directory) / f"test_discovery_{label}.json"
         path.write_text(json.dumps(payload), encoding="utf-8")
         return path
 
-    with TemporaryDirectory() as directory:
+    with artifact_files("test_discovery") as directory:
         mutations = (
             ("declaration_mismatch", lambda p: p["world_state"]["resolved_threads"].__setitem__(
                 "other_thread", {"thread_id": "other_thread", "status": "resolved", "resolved_by_history_id": presentation["history_id"]}
@@ -201,7 +201,7 @@ def test_resolved_thread_integrity_rejects_malformed_history_and_preserves_live_
 
 
 def test_failed_resolved_transition_preserves_live_identity() -> None:
-    engine = GameEngine("data/regions/bryn_shander.json")
+    engine = GameEngine("test_fixtures/bryn_shander_legacy.json")
     engine.process_command("talk to captain")
     engine.process_command("investigate")
     live_state = engine.world_state
@@ -213,7 +213,7 @@ def test_failed_resolved_transition_preserves_live_identity() -> None:
 
 
 def test_resolved_observation_is_scoped_to_resolution_transition() -> None:
-    engine = GameEngine("data/regions/bryn_shander.json")
+    engine = GameEngine("test_fixtures/bryn_shander_legacy.json")
     observation = engine.region["conversation_discovery_resolution"]["resolved_observation"]
     assert engine.get_player_perception()["resolved_thread_observation"] == {}
     engine.process_command("talk to captain")
@@ -226,8 +226,8 @@ def test_resolved_observation_is_scoped_to_resolution_transition() -> None:
         assert observation not in repr(result)
         assert engine.get_player_perception()["resolved_thread_observation"] == {}
         assert observation not in engine.get_narration()["description"]
-    with TemporaryDirectory() as directory:
-        path = Path(directory) / "resolved-observation.json"
+    with artifact_files("test_discovery") as directory:
+        path = Path(directory) / "test_discovery_resolved-observation.json"
         engine.save(str(path))
         loaded = load_game(str(path))
         assert THREAD_ID in loaded.get_world_state()["resolved_threads"]
@@ -248,6 +248,7 @@ def test_cli_clue_presentation_output_preserves_authored_unicode() -> None:
             ],
         ),
         redirect_stdout(output),
+        patch.object(play_game, "REGION_PATH", "test_fixtures/bryn_shander_legacy.json"),
     ):
         play_game.main()
 

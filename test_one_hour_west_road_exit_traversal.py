@@ -1,7 +1,7 @@
 import json
 from copy import deepcopy
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 from unittest.mock import patch
 
 import engine.game_engine as game_engine_module
@@ -11,7 +11,7 @@ from engine.region_validator import validate_region
 from engine.save_system import build_save_data, load_game
 
 
-REGION_PATH = "data/regions/bryn_shander.json"
+REGION_PATH = "test_fixtures/bryn_shander_legacy.json"
 WEST_GATE = "bryn_shander_gate_west"
 WEST_ROAD = "outside_trade_road_west"
 
@@ -132,9 +132,9 @@ def test_second_hour_trace_once_and_undeclared_routes_unchanged():
 
 
 def test_save_load_before_after_and_no_replay():
-    with TemporaryDirectory() as directory:
-        before_path = Path(directory) / "before.json"
-        after_path = Path(directory) / "after.json"
+    with artifact_files("test_one_hour_west_road_exit_traversal") as directory:
+        before_path = Path(directory) / "test_one_hour_west_road_exit_traversal_before.json"
+        after_path = Path(directory) / "test_one_hour_west_road_exit_traversal_after.json"
         engine = west_gate_engine()
         engine.save(str(before_path))
         loaded = load_game(str(before_path))

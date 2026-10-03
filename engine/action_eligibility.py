@@ -44,6 +44,11 @@ def is_clue_presentation_acceptable(
     ):
         return False
 
+    from engine import west_road_predicament as west_road
+    if west_road.enabled(region):
+        return (target.get("identifier") in (west_road.GREY, west_road.ELIN)
+                and west_road.shared_id(clue["discovery_id"]) not in world_state["actor_knowledge"].get(target["identifier"], []))
+
     declaration = region.get("conversation_discovery_resolution")
     recall = region.get("conversation_discovery_actor_relocation")
     resolution_matches = (

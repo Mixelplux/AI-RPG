@@ -1,6 +1,6 @@
 from copy import deepcopy
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 
 from engine.game_engine import GameEngine
 from engine.interaction_kernel import process_player_input
@@ -8,7 +8,7 @@ from engine.save_system import SAVE_VERSION, load_game, save_game
 from engine.scene_loader import build_scene
 
 
-REGION_PATH = "data/regions/bryn_shander.json"
+REGION_PATH = "test_fixtures/bryn_shander_legacy.json"
 
 
 def test_move_to_named_immediate_route_matches_directional_movement():
@@ -294,8 +294,8 @@ def test_two_hop_save_load_and_existing_timed_hop_semantics():
         "outside_trade_road_west"
     )
 
-    with TemporaryDirectory() as directory:
-        save_path = Path(directory) / "two-hop-save.json"
+    with artifact_files("test_interaction_kernel") as directory:
+        save_path = Path(directory) / "test_interaction_kernel_two-hop-save.json"
         save_game(engine, str(save_path))
         loaded = load_game(str(save_path))
 
@@ -316,8 +316,8 @@ def test_three_hop_go_to_and_move_to_validate_then_compose_hops():
         assert engine.get_world_state()["player"]["current_location_id"] == "bryn_shander_gate_west"
         assert len(engine.get_history()) == len(before_history) + 3
 
-    with TemporaryDirectory() as directory:
-        save_path = Path(directory) / "three-hop-save.json"
+    with artifact_files("test_interaction_kernel") as directory:
+        save_path = Path(directory) / "test_interaction_kernel_three-hop-save.json"
         save_game(go_engine, str(save_path))
         loaded = load_game(str(save_path))
     assert SAVE_VERSION == 1

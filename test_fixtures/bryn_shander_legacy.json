@@ -28,60 +28,133 @@
       }
     }
   ],
-  "discovery_declarations": [
+  "conversation_pressure_effects": [
     {
-      "discovery_id": "west_road_tracks",
-      "title": "Repeated Watch Tracks",
-      "trace_id": "west_road_tracks_trace",
-      "location_id": "outside_trade_road_west",
-      "text": "Repeated boot and animal tracks lie away from the traffic path, where several people could watch passing wagons. They suggest deliberate observation, not identity or an attack."
-    },
-    {
-      "discovery_id": "west_road_merchant_account",
-      "title": "Mara's Account",
-      "trace_id": "west_road_merchant_account_trace",
-      "location_id": "outside_trade_road_west",
-      "text": "Mara reports seeing two observers ahead and taking her caravan off the road. Her caravan survived the delay; she could not identify the observers."
-    },
-    {
-      "discovery_id": "west_road_patrol_signs",
-      "title": "Patrol Timing Marks",
-      "trace_id": "west_road_patrol_signs_trace",
-      "location_id": "outside_trade_road_west",
-      "text": "Repeated marks correspond to watch changes. Combined with the tracks, they support an inference of organized preparation; they do not identify the group."
-    },
-    {
-      "discovery_id": "west_road_driver_account",
-      "title": "Escaped Driver Report",
-      "trace_id": "west_road_driver_account_trace",
-      "location_id": "bryn_shander_gate_north",
-      "text": "An escaped driver reports that a second wagon was intercepted during your investigation. The attackers questioned its supply-stop destination; that stop may be their next target."
-    },
-    {
-      "discovery_id": "west_road_withdrawal_route",
-      "title": "Withdrawal Route",
-      "trace_id": "west_road_withdrawal_route_trace",
-      "location_id": "outside_trade_road_west",
-      "text": "Fresh signs lead to an abandoned lookout beside the local road. You have found a withdrawal route, but captured nobody."
-    },
-    {
-      "discovery_id": "west_road_staging_area",
-      "title": "Likely Staging Area",
-      "trace_id": "west_road_staging_area_trace",
-      "location_id": "outside_trade_road_west",
-      "text": "Nearby tracks converge on a sheltered hollow with fresh wagon-handling marks. It is a likely staging area, not proof of who occupies it."
+      "effect_id": "north_gate_captain_scrutiny",
+      "target_entity_id": "captain_darvin_grey",
+      "pressure_id": "bryn_shander_gate_scrutiny",
+      "new_level": 25
     }
   ],
+  "resolved_thread_actor_relocation_effect": {
+    "effect_id": "west_road_report_sends_elin_west",
+    "resolved_thread_id": "bryn_shander_west_road_bandit_report",
+    "actor_entity_id": "guard_elin_voss",
+    "destination_location_id": "bryn_shander_gate_west"
+  },
+  "resolved_thread_actor_knowledge_effect": {
+    "effect_id": "west_road_report_informs_captain",
+    "resolved_thread_id": "bryn_shander_west_road_bandit_report",
+    "actor_entity_id": "captain_darvin_grey",
+    "knowledge_id": "west_road_report_completed"
+  },
+  "resolved_thread_evidence_trace_effect": {
+    "effect_id": "west_road_report_leaves_west_gate_trace",
+    "resolved_thread_id": "bryn_shander_west_road_bandit_report",
+    "trace_id": "west_gate_elin_report_trace",
+    "evidence_id": "elin_west_road_patrol_orders",
+    "location_id": "bryn_shander_gate_west"
+  },
+  "conversation_actor_knowledge_effect": {
+    "effect_id": "captain_conversation_grants_knowledge",
+    "trigger_entity_id": "captain_darvin_grey",
+    "actor_entity_id": "captain_darvin_grey",
+    "knowledge_id": "player_spoke_with_captain"
+  },
+  "conversation_evidence_trace_effect": {
+    "effect_id": "captain_conversation_leaves_gate_trace",
+    "trigger_entity_id": "captain_darvin_grey",
+    "trace_id": "captain_conversation_gate_trace",
+    "evidence_id": "captain_conversation_trace",
+    "location_id": "bryn_shander_gate_north"
+  },
+  "discovery_declarations": [
+    {
+      "discovery_id": "north_gate_captain_trace",
+      "title": "The Captain's Deliberate Trail",
+      "trace_id": "captain_conversation_gate_trace",
+      "location_id": "bryn_shander_gate_north",
+      "text": "Fresh boot prints and a discarded watch tally suggest that Captain Darvin Grey's conversation left a deliberate trail at the gate."
+    },
+    {
+      "discovery_id": "north_gate_second_hour_trace",
+      "title": "The Delayed Watch Mark",
+      "trace_id": "north_gate_second_hour_trace",
+      "location_id": "bryn_shander_gate_north",
+      "text": "A fresh tally cut into the frozen gatepost records a delayed watch change after the second hour."
+    },
+    {
+      "discovery_id": "west_gate_elin_report_trace",
+      "title": "Elin's Southwest-Gate Orders",
+      "trace_id": "west_gate_elin_report_trace",
+      "evidence_id": "elin_west_road_patrol_orders",
+      "location_id": "bryn_shander_gate_west",
+      "text": "A folded patrol order beneath the Southwest Gate brazier records Elin Voss's urgent west-road assignment."
+    },
+    {
+      "discovery_id": "western_trade_road_patrol_marker",
+      "title": "The Exposed Patrol Marker",
+      "trace_id": "western_trade_road_arrival_trace",
+      "evidence_id": "western_trade_road_patrol_marker",
+      "location_id": "outside_trade_road_west",
+      "text": "Your arrival at the western road exposes a wind-scoured patrol marker beneath the drift, pointing back toward Bryn Shander's gate."
+    }
+  ],
+  "conversation_unresolved_thread": {
+    "thread_id": "bryn_shander_west_road_bandit_report",
+    "description": "Captain Darvin Grey's report of bandit activity on the western road remains unresolved.",
+    "trigger_entity_id": "captain_darvin_grey",
+    "perception_location_ids": [
+      "bryn_shander_gate_north"
+    ],
+    "evidence_text": "Watch patrols at the North Gate speak in low voices about the unanswered bandit report on the western road."
+  },
+  "conversation_discovery_resolution": {
+    "target_entity_id": "captain_darvin_grey",
+    "required_discovery_id": "north_gate_captain_trace",
+    "required_thread_id": "bryn_shander_west_road_bandit_report",
+    "response_text": "Captain Darvin Grey studies the trail, then nods. ‘That is enough to confirm the report. I will send a patrol west at once.’",
+    "resolved_observation": "The watch's low-voiced concern has given way to purposeful orders."
+  },
+  "conversation_discovery_actor_relocation": {
+    "effect_id": "delayed_watch_mark_recalls_captain",
+    "target_entity_id": "captain_darvin_grey",
+    "required_discovery_id": "north_gate_second_hour_trace",
+    "actor_entity_id": "captain_darvin_grey",
+    "destination_location_id": "bryn_shander_gate_north",
+    "response_text": "Captain Grey studies the delayed watch mark, then straightens. \"I am returning to the North Gate to address this lapse at once.\""
+  },
   "elapsed_time_pressure_effect": {
     "effect_id": "winter_deepens_after_first_hour",
     "trigger_elapsed_hours": 1,
     "pressure_id": "bryn_shander_winter",
     "new_level": 70
   },
+  "elapsed_time_actor_relocation_effect": {
+    "effect_id": "captain_moves_west_after_first_hour",
+    "trigger_elapsed_hours": 1,
+    "actor_entity_id": "captain_darvin_grey",
+    "destination_location_id": "bryn_shander_gate_west"
+  },
+  "elapsed_time_evidence_trace_effect": {
+    "effect_id": "second_hour_leaves_north_gate_trace",
+    "trigger_elapsed_hours": 2,
+    "trace_id": "north_gate_second_hour_trace",
+    "evidence_id": "delayed_watch_mark",
+    "location_id": "bryn_shander_gate_north"
+  },
   "one_hour_west_road_exit_traversal": {
     "source_location_id": "bryn_shander_gate_west",
     "destination_location_id": "outside_trade_road_west",
     "duration_hours": 1
+  },
+  "west_road_arrival_evidence_trace": {
+    "effect_id": "west_road_arrival_exposes_patrol_marker",
+    "source_location_id": "bryn_shander_gate_west",
+    "destination_location_id": "outside_trade_road_west",
+    "trace_id": "western_trade_road_arrival_trace",
+    "evidence_id": "western_trade_road_patrol_marker",
+    "discovery_id": "western_trade_road_patrol_marker"
   },
   "pressure_observation_cue": {
     "cue_id": "winter_deepens_observation",
@@ -141,8 +214,7 @@
         "guards": {
           "count": 2,
           "template": "city_guard",
-          "persistence": "dynamic",
-          "display_name": "watch guards"
+          "persistence": "dynamic"
         }
       },
       "connected_locations": [
@@ -160,7 +232,7 @@
       "location_id": "outside_tundra_route_north",
       "name": "Northern Gate Approach",
       "type": "wilderness_route",
-      "description_seed": "The wind sweeps the snowy approach outside the North Gate.",
+      "description_seed": "Project-authored approach road immediately north of the gate, left deliberately small rather than modeled as regional routing.",
       "state": {
         "visibility_level": 0.25,
         "travel_difficulty": 0.8,
@@ -178,7 +250,7 @@
       "location_id": "bryn_shander_main_street",
       "name": "Main Street",
       "type": "urban_road",
-      "description_seed": "Main Street runs between the North Gate and the town market, with commercial lanes branching away.",
+      "description_seed": "Project-authored connective thoroughfare joining the North Gate to Bryn Shander's market and commercial lanes.",
       "state": {
         "crowd_density": 0.25,
         "activity_level": 0.4
@@ -338,8 +410,7 @@
         "guards": {
           "count": 1,
           "template": "city_guard",
-          "persistence": "dynamic",
-          "display_name": "watch guards"
+          "persistence": "dynamic"
         }
       },
       "connected_locations": [
@@ -361,7 +432,7 @@
       "location_id": "outside_eastway_east",
       "name": "Eastway Gate Approach",
       "type": "trade_route",
-      "description_seed": "The Eastway approach lies just beyond the guarded eastern gate.",
+      "description_seed": "Project-authored immediate road approach beyond the East Gate, kept deliberately local and not modeled as regional routing.",
       "state": {
         "visibility_level": 0.3,
         "travel_difficulty": 0.7,
@@ -481,8 +552,7 @@
         "guards": {
           "count": 1,
           "template": "city_guard",
-          "persistence": "dynamic",
-          "display_name": "watch guards"
+          "persistence": "dynamic"
         }
       },
       "connected_locations": [
@@ -504,7 +574,7 @@
       "location_id": "outside_trade_road_west",
       "name": "Southwest Trade Road",
       "type": "trade_route",
-      "description_seed": "Snow drifts across the Southwest Trade Road. Beyond the gate, tracks leave the wagon path for a low rise. A caravan driver has returned from a detour.",
+      "description_seed": "Project-authored immediate road approach beyond the Southwest Gate; it does not establish a regional routing policy.",
       "state": {
         "visibility_level": 0.3,
         "travel_difficulty": 0.7,
@@ -531,7 +601,10 @@
         "trust_toward_strangers": 0.4,
         "current_activity": "gate_inspection"
       },
-      "knowledge": [],
+      "knowledge": [
+        "recent_bandit_activity_on_west_road",
+        "supply_shortage_preparing_for_winter_peak"
+      ],
       "relationships": {
         "town_watch_bryn_shander": {
           "authority": 1.0,
@@ -550,23 +623,39 @@
         "fatigue": 0.6,
         "current_activity": "watch_duty"
       },
-      "knowledge": [],
+      "knowledge": [
+        "familiar_with_local_travelers",
+        "rotating_shift_schedule"
+      ],
       "relationships": {
         "captain_darvin_grey": {
           "respect": 0.7,
           "authority": 1.0
         }
       }
-    },
-    {
-      "entity_id": "merchant_mara",
-      "name": "Mara, Caravan Driver",
-      "persistence": "static",
-      "location": "outside_trade_road_west",
-      "knowledge": [],
-      "description": "An overdue caravan driver has returned from a sheltered detour."
     }
   ],
+  "conversation_actor_knowledge_response": {
+    "response_id": "captain_acknowledges_player_conversation",
+    "target_entity_id": "captain_darvin_grey",
+    "required_knowledge_id": "west_road_report_completed",
+    "response_text": "Captain Grey gives a firm nod. \"The report is settled. The west-road patrol has its orders.\""
+  },
+  "conversation_player_discovery_response": {
+    "response_id": "west_gate_elin_patrol_dispatch",
+    "target_entity_id": "guard_elin_voss",
+    "required_discovery_id": "west_gate_elin_report_trace",
+    "consequence_event_type": "west_gate_patrol_dispatched",
+    "consequence_summary": "West Gate patrol dispatched.",
+    "response_text": "Elin Voss studies the folded order, then nods. \"You found it. The Southwest Gate patrol is moving before the road closes.\""
+  },
+  "conversation_affordance": {
+    "affordance_id": "west_gate_elin_orders_conversation",
+    "location_id": "bryn_shander_gate_west",
+    "target_entity_id": "guard_elin_voss",
+    "required_discovery_id": "west_gate_elin_report_trace",
+    "display_text": "Elin Voss is at the Southwest Gate with the patrol orders. You can speak with her about them."
+  },
   "factions": [
     {
       "faction_id": "town_watch_bryn_shander",
@@ -606,38 +695,6 @@
       "inventory": false,
       "magic": false,
       "skills": false
-    }
-  },
-  "west_road_predicament": {
-    "premise": "West-road travelers report being watched, and one caravan is overdue. Grey suspects organized raiders; Elin wants specific evidence before diverting patrols. The caravan may have been delayed rather than destroyed.",
-    "phase_text": {
-      "investigating": "Grey fears a developing threat to trade. Elin will not divert limited guards on rumor alone. Investigate the Southwest Trade Road, speak with Mara, then report both findings to Elin at the North Gate. Acting may alert the observers and divert coverage; waiting leaves traffic exposed.",
-      "observers_withdrew": "You advocated immediate patrol action. After one hour, guards disrupted the observers, who withdrew and left fresh signs. Grey considers intervention justified; Elin notes the cost to other coverage. Choose: pursue observers, or restore coverage.",
-      "wagon_intercepted": "You chose one more hour of investigation while normal coverage remained. You found patrol-timing signs, but another wagon was intercepted. Its escaped driver identified a threatened supply stop. Elin understands your restraint; Grey regrets the delay. Choose: protect supply stop, or locate raiders.",
-      "withdrawal_route_found": "You pursued local signs and found the withdrawal route. Road-focused patrol coverage remains extended; other approaches have fewer guards. Nobody was captured. The broader threat remains unresolved.",
-      "coverage_restored": "You restored ordinary local coverage. Other approaches are protected again, but the withdrawal route remains unexplored and the observers unlocated. The broader threat remains unresolved.",
-      "supply_stop_protected": "You warned the supply stop and arranged protection. Its next departure is held safely, but the raiders remain unlocated. The broader threat remains unresolved.",
-      "raider_staging_area_found": "You investigated nearby signs and found a likely staging area without confrontation. The supply stop has no dedicated protection. The broader threat remains unresolved."
-    },
-    "actor_responses": {
-      "captain_darvin_grey": {
-        "investigating": "We need credible information before a threat to trade grows. Tracks alone cannot prove a raid.",
-        "observers_withdrew": "Your patrol broke up the watchers. We should learn where they went, but Elin must weigh the cost of keeping guards away.",
-        "wagon_intercepted": "Your caution brought stronger information, but another driver paid for the delay. We must choose protection or a local search.",
-        "withdrawal_route_found": "The withdrawal route gives us useful information. We have not eliminated the threat.",
-        "coverage_restored": "Normal coverage is restored. I remain concerned about the observers we did not follow.",
-        "supply_stop_protected": "The next departure is protected. We still do not know where the raiders are.",
-        "raider_staging_area_found": "A likely staging area is useful intelligence. The supply stop still needs protection."
-      },
-      "guard_elin_voss": {
-        "investigating": "Bring me the tracks and the merchant account. Immediate patrols cost other coverage; further investigation takes an hour while traffic remains exposed.",
-        "observers_withdrew": "I committed guards because you advocated action on credible but incomplete evidence. Do we follow the signs or restore coverage?",
-        "wagon_intercepted": "Your request for better evidence was reasonable. Normal coverage stayed in place, but the interception now forces another decision.",
-        "withdrawal_route_found": "We followed the local trail without a confrontation. Road coverage remains extended.",
-        "coverage_restored": "Our guards are back on ordinary coverage. We left the withdrawal trail unexamined.",
-        "supply_stop_protected": "The supply stop has been warned and its next departure held safely.",
-        "raider_staging_area_found": "We found a likely staging area without a confrontation. No dedicated guards protect the supply stop."
-      }
     }
   }
 }

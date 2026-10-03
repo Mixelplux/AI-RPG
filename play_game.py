@@ -16,9 +16,7 @@ def configure_stdout() -> None:
 
 def print_clue_presentation(presentation: dict) -> None:
     print(
-        presentation["response_text"]
-        if presentation["changed"]
-        else "You cannot present that clue here."
+        presentation.get("response_text") or "You cannot present that clue here."
     )
 
 
@@ -30,13 +28,8 @@ def print_narration(narration: dict) -> None:
     print(narration["description"])
     print()
 
-    if narration.get("visible_entities"):
-        print("Visible:")
-        for entity in narration["visible_entities"]:
-            print(f"- {entity}")
-        print()
-
-    print(narration["player_prompt"])
+    if narration.get("player_prompt"):
+        print(narration["player_prompt"])
 
 
 def print_help() -> None:
@@ -61,6 +54,11 @@ def print_help() -> None:
     print("- wait: Let 1 hour pass.")
     print("- check <name>: Run a deterministic skill check.")
     print("- head to <place>: Identify a known destination without traveling.")
+    print("- go to <place>: Travel along a known local route.")
+    print("- investigate: Search the current area for clues.")
+    print("- advocate patrol / continue investigation: Choose at the North Gate after reporting evidence to Elin.")
+    print("- pursue observers / restore coverage: Follow up after patrol action.")
+    print("- protect supply stop / locate raiders: Follow up after further investigation.")
     print("- help: Show this help message.")
     print("- quit or exit: End the game.")
     print("- Any other input is treated as a player action.")
@@ -367,10 +365,13 @@ def main() -> None:
     print("Type 'help' for commands.")
     print("Type 'quit' or 'exit' to stop.\n")
 
+    last_presented_narration = None
     while True:
         narration = engine.get_narration()
 
-        print_narration(narration)
+        if narration != last_presented_narration:
+            print_narration(narration)
+            last_presented_narration = narration
 
         player_input = input("\n> ").strip()
         normalized_input = player_input.lower()
@@ -392,6 +393,9 @@ def main() -> None:
             try:
                 engine.load(SAVE_PATH)
                 print("\nGame loaded.")
+                for line in engine.get_resume_summary():
+                    print(line)
+                last_presented_narration = None
             except FileNotFoundError:
                 print("\nNo saved game found.")
             except ValueError as error:
@@ -401,6 +405,7 @@ def main() -> None:
         if normalized_input == "reset":
             engine.reset()
             print("\nGame reset.")
+            last_presented_narration = None
             continue
 
         if normalized_input == "pressures":
@@ -556,7 +561,12 @@ def main() -> None:
 
         if interaction_result.get("message"):
             print()
-            print(interaction_result["message"])
+            if interaction_result.get("intent") == "west_road_decision" and not interaction_result["success"]:
+                print(engine.get_narration().get("current_choice_hint", interaction_result["message"]))
+            elif interaction_result.get("intent") == "west_road_decision":
+                print("You choose to " + normalized_input + ".")
+            else:
+                print(interaction_result["message"])
 
         if interaction_result.get("skill_check"):
             check_result = interaction_result["skill_check"]
@@ -571,8 +581,7 @@ def main() -> None:
             time_advancement = interaction_result["time_advancement"]
             print(
                 "Time advanced: "
-                f"{time_advancement['previous_time']} -> "
-                f"{time_advancement['new_time']}."
+                f"{time_advancement['new_time'].get('elapsed_hours', 0) - time_advancement['previous_time'].get('elapsed_hours', 0)} hour."
             )
 
         target_resolution = interaction_result.get("target_resolution")
@@ -594,7 +603,6 @@ def main() -> None:
                 f"Destination: {destination_resolution['display_name']}."
             )
 
-        print(f"\n[Intent: {interaction_result['intent']}]")
 
 
 if __name__ == "__main__":

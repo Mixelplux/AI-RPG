@@ -14,6 +14,11 @@ def validate_region(region: dict) -> None:
         ValueError if the Region Pack is invalid.
     """
 
+    try:
+        from engine.west_road_predicament import validate_content
+    except ModuleNotFoundError:
+        from west_road_predicament import validate_content
+    validate_content(region)
     locations = region.get("locations", [])
     entities = region.get("entities", [])
     simulation_hooks = region.get("simulation_hooks", {})

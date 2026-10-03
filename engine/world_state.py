@@ -10,6 +10,7 @@ from engine.actor_knowledge import (
     validate_actor_knowledge,
 )
 from engine.evidence_traces import validate_evidence_traces
+from engine import west_road_predicament as west_road
 from engine.unresolved_threads import (
     validate_open_threads,
     validate_open_thread_integrity,
@@ -47,7 +48,7 @@ def create_initial_world_state(region: Dict[str, Any]) -> Dict[str, Any]:
     if initial_time is None:
         raise ValueError("Region Pack is missing initial time in time.")
 
-    return {
+    state = {
         "player": {
             "current_location_id": starting_location_id
         },
@@ -62,6 +63,11 @@ def create_initial_world_state(region: Dict[str, Any]) -> Dict[str, Any]:
         "evidence_traces": [],
         "player_discoveries": [],
     }
+    if west_road.enabled(region):
+        state["west_road_predicament"] = west_road.initial_record()
+        clue = next(d for d in region["discovery_declarations"] if d["discovery_id"] == "west_road_tracks")
+        state["evidence_traces"].append({"trace_id": clue["trace_id"], "evidence_id": clue["discovery_id"], "location_id": clue["location_id"]})
+    return state
 
 
 def validate_world_state(
@@ -74,6 +80,9 @@ def validate_world_state(
 
     if not isinstance(world_state, dict):
         raise ValueError("World State must be a dictionary.")
+
+    if region is not None and west_road.enabled(region) and "west_road_predicament" not in world_state:
+        raise ValueError(west_road.OLD_SAVE_MESSAGE)
 
     if "player" not in world_state:
         raise ValueError("World State is missing player.")
@@ -176,6 +185,7 @@ def validate_world_state(
     if region is not None:
         validate_open_thread_integrity(world_state, region)
         validate_resolved_thread_integrity(world_state, region)
+        west_road.validate_state(world_state, region)
 
 
 def copy_world_state(world_state: Dict[str, Any]) -> Dict[str, Any]:

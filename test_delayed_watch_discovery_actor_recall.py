@@ -1,7 +1,7 @@
 import json
 from copy import deepcopy
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 from unittest.mock import patch
 
 import engine.game_engine as game_engine_module
@@ -10,7 +10,7 @@ from engine.region_validator import validate_region
 from engine.save_system import build_save_data, load_game
 
 
-REGION = "data/regions/bryn_shander.json"
+REGION = "test_fixtures/bryn_shander_legacy.json"
 DISCOVERY = "north_gate_second_hour_trace"
 TITLE = "The Delayed Watch Mark"
 CAPTAIN = "captain_darvin_grey"
@@ -146,8 +146,8 @@ def test_ineligible_noop_rollback_and_save_load():
     moved_count = len(engine.query_history(event_type="actor_moved"))
     assert engine.present_clue(TITLE, "captain")["actor_location_consequence"] == {"status": "no_op"}
     assert len(engine.query_history(event_type="actor_moved")) == moved_count
-    with TemporaryDirectory() as directory:
-        path = Path(directory) / "save.json"
+    with artifact_files("test_delayed_watch_discovery_actor_recall") as directory:
+        path = Path(directory) / "test_delayed_watch_discovery_actor_recall_save.json"
         path.write_text(json.dumps(build_save_data(engine)), encoding="utf-8")
         loaded = load_game(str(path))
         assert loaded.resolve_target("captain")["identifier"] == CAPTAIN
@@ -213,8 +213,8 @@ def test_exact_noop_counts_and_pre_presentation_save_load_path():
     assert "fired" not in repr(engine.get_world_state())
     assert engine.resolve_target("captain")["identifier"] == CAPTAIN
 
-    with TemporaryDirectory() as directory:
-        path = Path(directory) / "before-presentation.json"
+    with artifact_files("test_delayed_watch_discovery_actor_recall") as directory:
+        path = Path(directory) / "test_delayed_watch_discovery_actor_recall_before-presentation.json"
         saved = GameEngine(REGION)
         assert saved.process_command("wait")["success"]
         assert saved.process_command("wait")["success"]

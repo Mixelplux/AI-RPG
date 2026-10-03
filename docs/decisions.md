@@ -881,3 +881,16 @@ the smallest subset justified by observed player-facing need. It guides future
 solutions to the Sprint 10.60 findings on natural spatial orientation,
 meaningful-action discoverability, observable state change, elapsed-time
 presentation, and discovery/use presentation.
+
+
+## ADR-060 - West-Road Reference Predicament Owns One Current Phase
+
+Status: Accepted; Sprint 10.77 owner smoke and acceptance passed.
+
+The revised Bryn Shander reference situation persists only `west_road_predicament.phase` and `last_outcome_history_id`. The fixed seven-phase model owns current progression. Existing discoveries retain encountered information; actor membership records only actually shared reports. History records commitments, elapsed-time sources and outcomes with backward causal links, and validates consistency without reconstructing live phase.
+
+Each accepted decision copies state, prepares all effects (including one hour for either initial approach), validates the candidate, rebuilds its scene and publishes once. Follow-ups abstract bounded local operations without additional time, combat or patrol simulation. Named actors witness/report decisions at the North Gate; responses and opportunities are derived rather than separately persisted.
+
+The existing Bryn Shander prototype declarations are superseded in ordinary play. Their mechanism coverage uses an explicitly test-only legacy fixture. No generic situation, quest, condition, dialogue, migration or event framework is introduced.
+
+Save envelope remains version 1. Revised Bryn Shander content requires the new record; missing state fails before region-aware interpretation of legacy scenario facts. Old files and the active session remain intact. No old decision is invented and no missing record is silently initialized on load.

@@ -1,4 +1,4 @@
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 
 from engine.game_engine import GameEngine
 from engine.narration_context import (
@@ -14,7 +14,7 @@ from engine.save_system import load_game, save_game
 from play_game import parse_narration_context_command
 
 
-REGION_PATH = "data/regions/bryn_shander.json"
+REGION_PATH = "test_fixtures/bryn_shander_legacy.json"
 
 
 def main():
@@ -157,8 +157,8 @@ def main():
     ) == {"player_input": "look at the gate"}
     assert "error" in parse_narration_context_command("narration context")
 
-    with TemporaryDirectory() as temp_dir:
-        save_path = f"{temp_dir}/narration_context_save.json"
+    with artifact_files("test_narration_context") as temp_dir:
+        save_path = f"{temp_dir}/test_narration_context_narration_context_save.json"
         expected_history_entries = engine.get_narration_context(
             "look at the road",
             history_count=3,

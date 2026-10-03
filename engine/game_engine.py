@@ -69,6 +69,7 @@ from engine.evidence_traces import (
     get_evidence_traces as get_world_evidence_traces,
     get_evidence_traces_at_location as get_world_evidence_traces_at_location,
 )
+from engine import west_road_predicament as west_road
 
 
 class GameEngine:
@@ -174,6 +175,8 @@ class GameEngine:
                 "text": declaration["text"], "history_id": candidate["history"][-1]["history_id"]}
 
     def present_clue(self, clue_title: str, actor_text: str) -> Dict[str, Any]:
+        if west_road.enabled(self.region):
+            return self._share_west_road_clue(clue_title, actor_text)
         result = {"changed": False, "response_text": None, "resolved_observation": None,
                   "actor_location_consequence": None, "actor_knowledge_consequence": None,
                   "evidence_trace_consequence": None}
@@ -912,7 +915,138 @@ class GameEngine:
 
     def get_narration(self) -> Dict[str, Any]:
         perception = self.get_player_perception()
+        if west_road.enabled(self.region):
+            from engine.west_road_presentation import CURRENT_CIRCUMSTANCES, CURRENT_CHOICE_HINTS, compact_secondary_actions
+            projection = self.get_current_scene_projection()
+            base = narrate_scene(perception)
+            actors = projection["entities"]["actors"]
+            groups = projection["entities"]["groups"]
+            names = [a["display_name"] for a in actors]
+            base["title"] = projection["location"]["name"] + ", Bryn Shander"
+            environment = [projection["location"]["description"]]
+            weather = self.world_state["weather"].get("type")
+            if weather:
+                environment.append("Weather: " + weather + ".")
+            environment.extend(cue["text"] for cue in perception["pressure_cues"])
+            parts = [" ".join(environment)]
+            present = names + [str(g["count"]) + " " + g["display_name"] for g in groups]
+            if present:
+                parts.append("Here: " + ", ".join(present) + ".")
+            phase = self.world_state["west_road_predicament"]["phase"]
+            parts.append(CURRENT_CIRCUMSTANCES[phase])
+            opportunities = perception["contextual_actions"]["opportunities"]
+            choices = [text.removeprefix("You can choose: ") for text in opportunities if text.startswith("You can choose:")]
+            if choices:
+                parts.append("What now?\n" + "\n".join("- " + choice for choice in choices))
+                choice_hint = CURRENT_CHOICE_HINTS[phase] if phase != "investigating" else "Choose 'advocate patrol' or 'continue investigation' now that Elin has both reports."
+            else:
+                next_action = CURRENT_CHOICE_HINTS[phase]
+                if phase == "investigating":
+                    discovered = set(self.world_state["player_discoveries"])
+                    shared = set(self.world_state["actor_knowledge"].get(west_road.ELIN, []))
+                    if set(west_road.INITIAL_EVIDENCE) <= discovered:
+                        missing_reports = [d["title"] for d in self.region["discovery_declarations"] if d["discovery_id"] in west_road.INITIAL_EVIDENCE and west_road.shared_id(d["discovery_id"]) not in shared]
+                        next_action = "Report " + " and ".join(missing_reports) + " to Elin at the North Gate before choosing a response."
+                        if not missing_reports:
+                            next_action = "Return to Grey and Elin at the North Gate to choose a response."
+                    elif self.world_state["player"]["current_location_id"] == west_road.ROAD:
+                        if "west_road_tracks" in discovered:
+                            next_action = "Speak with Mara about the overdue caravan."
+                        elif "west_road_merchant_account" in discovered:
+                            next_action = "Investigate the tracks beside the road (investigate)."
+                        else:
+                            next_action = "Investigate the tracks and speak with Mara about the overdue caravan."
+                elif phase in ("observers_withdrew", "wagon_intercepted"):
+                    next_action = "Return to Grey and Elin at the North Gate. " + next_action
+                parts.append("What now?\n" + next_action)
+                choice_hint = next_action
+            secondary = compact_secondary_actions(opportunities)
+            routes = " ".join(cue["text"] for cue in perception["navigation"]["route_cues"])
+            if secondary or routes:
+                parts.append("Other actions:\n" + "\n".join(text for text in (secondary, routes) if text))
+            base["description"] = "\n\n".join(parts)
+            base["visible_entities"] = names
+            base["player_prompt"] = ""
+            base["current_choice_hint"] = choice_hint
+            return base
         return narrate_scene(perception)
+
+    def get_resume_summary(self) -> list[str]:
+        if not west_road.enabled(self.region):
+            return []
+        return west_road.summary(self.region, self.world_state)
+
+    def _publish_west_road_candidate(self, candidate):
+        validate_world_state(candidate, self.region)
+        scene = build_scene(self.region, candidate)
+        self.world_state, self.scene_snapshot = candidate, scene
+
+    def _acquire_west_road_discovery(self, candidate, discovery_id, source_id):
+        clue = next(d for d in self.region["discovery_declarations"] if d["discovery_id"] == discovery_id)
+        candidate, _ = self._prepare_evidence_trace_candidate(candidate, clue["trace_id"], discovery_id, clue["location_id"], source_id)
+        if discovery_id not in candidate["player_discoveries"]:
+            candidate["player_discoveries"].append(discovery_id)
+            candidate = add_history_entry(candidate, "player_discovery_added", "Player learned: " + clue["title"], clue["location_id"], deepcopy(candidate["time"]), {"discovery_id": discovery_id, "source_history_id": source_id})
+        return candidate
+
+    def _share_west_road_clue(self, clue_title, actor_text):
+        result = {"changed": False, "response_text": None}
+        clue = next((d for d in self.region["discovery_declarations"] if d["title"].casefold() == clue_title.casefold()), None)
+        target = self.resolve_target(actor_text)
+        if clue is None or clue["discovery_id"] not in self.world_state["player_discoveries"] or target.get("status") != "resolved" or target.get("identifier") not in (west_road.GREY, west_road.ELIN):
+            return result
+        actor = target["identifier"]
+        knowledge = west_road.shared_id(clue["discovery_id"])
+        if knowledge in self.world_state["actor_knowledge"].get(actor, []):
+            result["response_text"] = target["display_name"] + " already received that report."
+            return result
+        candidate = copy_world_state(self.world_state)
+        candidate = add_history_entry(candidate, "west_road_evidence_shared", "Player reported " + clue["title"] + " to " + target["display_name"] + ".", get_player_location_id(candidate), deepcopy(candidate["time"]), {"actor_id": actor, "discovery_id": clue["discovery_id"]})
+        candidate, _ = self._prepare_actor_knowledge_from_event_candidate(candidate, actor, knowledge, candidate["history"][-1]["history_id"])
+        self._publish_west_road_candidate(candidate)
+        result.update(changed=True, response_text=target["display_name"] + " receives the report. It informs the decision; it does not prove the observers' identity or select a response.")
+        return result
+
+    def _process_west_road_command(self, command):
+        result = {"success": False, "intent": "west_road_decision", "message": "That decision is not available here. Return to Grey and Elin with the required evidence.", "action": {"type": "west_road_decision", "target": None, "parameters": {}, "confidence": 1.0}}
+        if command not in west_road.available_commands(self.world_state, self.scene_snapshot):
+            if self.world_state["west_road_predicament"]["phase"] != "investigating":
+                result["message"] = "That choice does not apply to the current west-road situation. Your accepted decisions remain unchanged."
+            return result
+        before, after = west_road.COMMANDS[command]
+        candidate = copy_world_state(self.world_state)
+        candidate = add_history_entry(candidate, "west_road_commitment", "Player chose to " + command + ".", west_road.GATE, deepcopy(candidate["time"]), {"command": command, "from_phase": before})
+        commitment_id = candidate["history"][-1]["history_id"]
+        time_id = None
+        if before == "investigating":
+            candidate, time_result = self._prepare_time_advance_candidate(candidate, 1)
+            time_entry = next(e for e in reversed(candidate["history"]) if e["event_type"] == "time_advanced")
+            time_entry["source_history_id"] = commitment_id
+            time_id = time_entry["history_id"]
+            result["time_advancement"] = time_result
+        for discovery in west_road.PHASE_DISCOVERIES[after]:
+            candidate = self._acquire_west_road_discovery(candidate, discovery, commitment_id)
+            for actor in (west_road.GREY, west_road.ELIN):
+                candidate = add_history_entry(candidate, "west_road_evidence_shared", "Player reported new west-road findings.", west_road.GATE, deepcopy(candidate["time"]), {"actor_id": actor, "discovery_id": discovery, "source_history_id": commitment_id})
+                candidate, _ = self._prepare_actor_knowledge_from_event_candidate(candidate, actor, west_road.shared_id(discovery), candidate["history"][-1]["history_id"])
+        candidate = add_history_entry(candidate, "west_road_outcome", self.region["west_road_predicament"]["phase_text"][after], west_road.GATE, deepcopy(candidate["time"]), {"phase": after, "source_history_id": commitment_id, "time_history_id": time_id, "witness_entity_ids": [west_road.GREY, west_road.ELIN]})
+        candidate["west_road_predicament"] = {"phase": after, "last_outcome_history_id": candidate["history"][-1]["history_id"]}
+        self._publish_west_road_candidate(candidate)
+        responses = [west_road.actor_response(self.region, candidate, actor)["text"] for actor in (west_road.GREY, west_road.ELIN)]
+        result.update(success=True, message=self.region["west_road_predicament"]["phase_text"][after] + "\nGrey: " + responses[0] + "\nElin: " + responses[1])
+        return deepcopy(result)
+
+    def _merchant_account(self):
+        discovery = "west_road_merchant_account"
+        result = {"success": True, "intent": "conversation", "message": "Mara has already told you about her detour.", "action": {"type": "talk", "target": "Mara", "parameters": {}, "confidence": 1.0}}
+        if discovery in self.world_state["player_discoveries"]:
+            return result
+        candidate = copy_world_state(self.world_state)
+        candidate = add_history_entry(candidate, "player_conversation", "Mara described seeing observers and avoiding the road.", west_road.ROAD, deepcopy(candidate["time"]), {"target_entity_id": west_road.MERCHANT, "target_display_name": "Mara, Caravan Driver"})
+        candidate = self._acquire_west_road_discovery(candidate, discovery, candidate["history"][-1]["history_id"])
+        self._publish_west_road_candidate(candidate)
+        result["message"] = next(d["text"] for d in self.region["discovery_declarations"] if d["discovery_id"] == discovery)
+        return result
 
     def perform_skill_check(self, check_name: str) -> SkillCheckResult:
         """Resolve a gameplay-facing check using deterministic placeholders."""
@@ -1095,6 +1229,8 @@ class GameEngine:
         return candidate_world_state
 
     def process_command(self, player_input: str) -> Dict[str, Any]:
+        if west_road.enabled(self.region) and player_input.strip().lower() in west_road.COMMANDS:
+            return self._process_west_road_command(player_input.strip().lower())
         interaction_result = process_player_input(
             player_input,
             self.scene_snapshot,
@@ -1106,6 +1242,11 @@ class GameEngine:
         command_start_actor_knowledge = deepcopy(self.world_state["actor_knowledge"])
         command_start_player_discoveries = tuple(self.world_state["player_discoveries"])
         command_start_history = tuple(deepcopy(self.world_state["history"]))
+
+        if west_road.enabled(self.region) and interaction_result["intent"] == "conversation":
+            target = self.resolve_target(interaction_result["action"].get("target") or "")
+            if target.get("status") == "resolved" and target.get("identifier") == west_road.MERCHANT:
+                return self._merchant_account()
 
         if (
             interaction_result["intent"] == "skill_check"
@@ -1282,4 +1423,9 @@ class GameEngine:
                 )
             )
 
+        if west_road.enabled(self.region) and interaction_result["intent"] == "conversation" and interaction_result["success"]:
+            actor = interaction_result.get("target_resolution", {}).get("identifier")
+            response = west_road.actor_response(self.region, self.world_state, actor)
+            if response:
+                interaction_result["actor_knowledge_response"] = response
         return deepcopy(interaction_result)

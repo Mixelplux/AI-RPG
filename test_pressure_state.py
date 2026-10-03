@@ -3,7 +3,7 @@ from contextlib import redirect_stdout
 from copy import deepcopy
 from io import StringIO
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 
 from engine.game_engine import GameEngine
 from engine.pressure_state import validate_pressure_state
@@ -13,7 +13,7 @@ from engine.world_state import create_initial_world_state
 from play_game import print_pressures
 
 
-REGION_PATH = "data/regions/bryn_shander.json"
+REGION_PATH = "test_fixtures/bryn_shander_legacy.json"
 PRESSURE_ID = "bryn_shander_winter"
 REGION_ID = "icewind_dale_bryn_shander"
 SECOND_PRESSURE_ID = "bryn_shander_supply_shortage"
@@ -74,8 +74,8 @@ def assert_invalid_region(region: dict, expected_text: str) -> None:
 
 
 def assert_invalid_save(save_data: dict, expected_text: str) -> None:
-    with TemporaryDirectory() as temp_dir:
-        save_path = Path(temp_dir) / "invalid_save.json"
+    with artifact_files("test_pressure_state") as temp_dir:
+        save_path = Path(temp_dir) / "test_pressure_state_invalid_save.json"
         save_path.write_text(json.dumps(save_data), encoding="utf-8")
         try:
             load_game(str(save_path))
@@ -96,8 +96,8 @@ def test_region_seed_validation() -> None:
     del without_seeds["pressure_observation_cue"]
     validate_region(without_seeds)
     assert create_initial_world_state(without_seeds)["pressures"] == {}
-    with TemporaryDirectory() as temp_dir:
-        region_path = Path(temp_dir) / "region_without_pressures.json"
+    with artifact_files("test_pressure_state") as temp_dir:
+        region_path = Path(temp_dir) / "test_pressure_state_region_without_pressures.json"
         region_path.write_text(json.dumps(without_seeds), encoding="utf-8")
         assert GameEngine(str(region_path)).get_pressures() == {}
 
@@ -548,8 +548,8 @@ def test_save_load_and_legacy_normalization() -> None:
     starting_scene_snapshot = engine.get_scene_snapshot()
     result = engine.set_pressure_level(PRESSURE_ID, 70)
 
-    with TemporaryDirectory() as temp_dir:
-        save_path = Path(temp_dir) / "pressure_save.json"
+    with artifact_files("test_pressure_state") as temp_dir:
+        save_path = Path(temp_dir) / "test_pressure_state_pressure_save.json"
         save_game(engine, str(save_path))
         saved_payload = json.loads(save_path.read_text(encoding="utf-8"))
         loaded_engine = load_game(str(save_path))
@@ -568,7 +568,7 @@ def test_save_load_and_legacy_normalization() -> None:
 
         legacy_payload = build_save_data(engine)
         del legacy_payload["world_state"]["pressures"]
-        legacy_path = Path(temp_dir) / "legacy_save.json"
+        legacy_path = Path(temp_dir) / "test_pressure_state_legacy_save.json"
         legacy_path.write_text(json.dumps(legacy_payload), encoding="utf-8")
         legacy_engine = load_game(str(legacy_path))
 

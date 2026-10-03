@@ -1,7 +1,7 @@
 import json
 from copy import deepcopy
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 from unittest.mock import patch
 
 import engine.game_engine as game_engine_module
@@ -10,7 +10,7 @@ from engine.region_validator import validate_region
 from engine.save_system import build_save_data, load_game
 
 
-REGION_PATH = "data/regions/bryn_shander.json"
+REGION_PATH = "test_fixtures/bryn_shander_legacy.json"
 TRIGGER = "captain_darvin_grey"
 KNOWLEDGE_ID = "player_spoke_with_captain"
 EFFECT_ID = "captain_conversation_grants_knowledge"
@@ -139,8 +139,8 @@ def test_atomic_failure_and_save_load():
     engine = GameEngine(REGION_PATH)
     engine.process_command("talk to captain")
     history = engine.get_history()
-    with TemporaryDirectory() as directory:
-        path = Path(directory) / "conversation-knowledge.json"
+    with artifact_files("test_conversation_actor_knowledge") as directory:
+        path = Path(directory) / "test_conversation_actor_knowledge_conversation-knowledge.json"
         path.write_text(json.dumps(build_save_data(engine)), encoding="utf-8")
         loaded = load_game(str(path))
         assert loaded.get_actor_knowledge(TRIGGER)[-1] == KNOWLEDGE_ID
@@ -150,7 +150,7 @@ def test_atomic_failure_and_save_load():
         assert not repeated["actor_knowledge_consequence"]["changed"]
         malformed = build_save_data(engine)
         malformed["world_state"]["history"][-1]["source_history_id"] = "history_999999"
-        malformed_path = Path(directory) / "malformed.json"
+        malformed_path = Path(directory) / "test_conversation_actor_knowledge_malformed.json"
         malformed_path.write_text(json.dumps(malformed), encoding="utf-8")
         before_state = engine.get_world_state()
         before_scene = engine.scene_snapshot

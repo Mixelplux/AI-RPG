@@ -1,6 +1,6 @@
 from copy import deepcopy
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 from unittest.mock import patch
 
 from engine.game_engine import GameEngine
@@ -10,7 +10,7 @@ from engine.scene_loader import build_scene as real_build_scene
 from engine.world_state import validate_world_state as real_validate_world_state
 
 
-REGION_PATH = "data/regions/bryn_shander.json"
+REGION_PATH = "test_fixtures/bryn_shander_legacy.json"
 
 
 def assert_rejected(region, fragment):
@@ -144,8 +144,8 @@ def main():
         assert failing.get_world_state() == before_state
         assert failing.scene_snapshot is before_scene
 
-    with TemporaryDirectory() as temp_dir:
-        save_path = str(Path(temp_dir) / "before.json")
+    with artifact_files("test_time_pressure_effect") as temp_dir:
+        save_path = str(Path(temp_dir) / "test_time_pressure_effect_before.json")
         saved = GameEngine(REGION_PATH)
         saved.save(save_path)
         loaded = load_game(save_path)

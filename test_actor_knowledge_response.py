@@ -3,7 +3,7 @@ from contextlib import redirect_stdout
 from copy import deepcopy
 from io import StringIO
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 from unittest.mock import patch
 
 import engine.game_engine as game_engine_module
@@ -14,7 +14,7 @@ from engine.save_system import build_save_data, load_game
 import play_game
 
 
-REGION_PATH = "data/regions/bryn_shander.json"
+REGION_PATH = "test_fixtures/bryn_shander_legacy.json"
 ACTOR_ID = "captain_darvin_grey"
 KNOWLEDGE_ID = "west_road_report_completed"
 RESPONSE_TEXT = (
@@ -120,8 +120,8 @@ def test_failure_isolation_and_save_load():
     assert engine.get_world_state() == before_state
     assert engine.scene_snapshot is before_scene
 
-    with TemporaryDirectory() as directory:
-        path = Path(directory) / "response-save.json"
+    with artifact_files("test_actor_knowledge_response") as directory:
+        path = Path(directory) / "test_actor_knowledge_response_response-save.json"
         save_data = build_save_data(engine)
         assert "actor_knowledge_response" not in json.dumps(save_data)
         path.write_text(json.dumps(save_data), encoding="utf-8")
@@ -133,7 +133,7 @@ def test_failure_isolation_and_save_load():
 
 def test_gameplay_output():
     output = StringIO()
-    with patch("builtins.input", side_effect=["talk to captain", "investigate", "present The Captain's Deliberate Trail to captain", "talk to captain", "quit"]), redirect_stdout(output):
+    with patch("builtins.input", side_effect=["talk to captain", "investigate", "present The Captain's Deliberate Trail to captain", "talk to captain", "quit"]), redirect_stdout(output), patch.object(play_game, "REGION_PATH", REGION_PATH):
         play_game.main()
     assert output.getvalue().count(RESPONSE_TEXT) == 1
 

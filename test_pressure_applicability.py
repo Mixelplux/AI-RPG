@@ -1,7 +1,7 @@
 import json
 from copy import deepcopy
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 
 from engine.game_engine import GameEngine
 from engine.pressure_state import get_applicable_pressures
@@ -249,8 +249,8 @@ def test_save_load_preserves_applicability_results() -> None:
     expected_gate = engine.get_applicable_pressures(GATE_LOCATION_ID)
     expected_main_street = engine.get_applicable_pressures(MAIN_STREET_LOCATION_ID)
 
-    with TemporaryDirectory() as temp_dir:
-        save_path = Path(temp_dir) / "applicability_save.json"
+    with artifact_files("test_pressure_applicability") as temp_dir:
+        save_path = Path(temp_dir) / "test_pressure_applicability_save.json"
         save_game(engine, str(save_path))
         loaded_engine = load_game(str(save_path))
 

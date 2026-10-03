@@ -1,6 +1,6 @@
 from copy import deepcopy
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 
 from engine.game_engine import GameEngine
 from engine.navigation_projection import derive_navigation_projection
@@ -80,8 +80,8 @@ def test_movement_and_save_load_remain_compatible():
         {"text": "The way north leads to North Gate."},
     ]
 
-    with TemporaryDirectory() as directory:
-        path = Path(directory) / "navigation-save.json"
+    with artifact_files("test_navigation_projection") as directory:
+        path = Path(directory) / "test_navigation_projection_navigation-save.json"
         save_game(engine, str(path))
         loaded = load_game(str(path))
 

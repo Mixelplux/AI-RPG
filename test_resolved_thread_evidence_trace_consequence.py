@@ -1,7 +1,7 @@
 import json
 from copy import deepcopy
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 from unittest.mock import patch
 
 import engine.game_engine as game_engine_module
@@ -10,7 +10,7 @@ from engine.region_validator import validate_region
 from engine.save_system import build_save_data, load_game
 
 
-REGION_PATH = "data/regions/bryn_shander.json"
+REGION_PATH = "test_fixtures/bryn_shander_legacy.json"
 THREAD_ID = "bryn_shander_west_road_bandit_report"
 TRACE_ID = "west_gate_elin_report_trace"
 EVIDENCE_ID = "elin_west_road_patrol_orders"
@@ -202,10 +202,10 @@ def test_rollback_and_save_load():
         else:
             raise AssertionError("Expected evidence-history failure.")
     assert engine.get_world_state() == before_state and engine.scene_snapshot is before_scene
-    with TemporaryDirectory() as directory:
+    with artifact_files("test_resolved_thread_evidence_trace_consequence") as directory:
         before = GameEngine(REGION_PATH)
         before.process_command("talk to captain")
-        path = Path(directory) / "before.json"
+        path = Path(directory) / "test_resolved_thread_evidence_trace_consequence_before.json"
         path.write_text(json.dumps(build_save_data(before)), encoding="utf-8")
         loaded = load_game(str(path))
         assert resolve(loaded)["evidence_trace_consequence"] == {"status": "applied"}
@@ -225,7 +225,7 @@ def test_rollback_and_save_load():
             entry for entry in legacy["world_state"]["history"]
             if not (entry["event_type"] == "evidence_trace_added" and entry["trace_id"] == TRACE_ID)
         ]
-        legacy_path = Path(directory) / "already-resolved.json"
+        legacy_path = Path(directory) / "test_resolved_thread_evidence_trace_consequence_already-resolved.json"
         legacy_path.write_text(json.dumps(legacy), encoding="utf-8")
         assert load_game(str(legacy_path)).get_evidence_trace(TRACE_ID) is None
 

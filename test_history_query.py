@@ -1,11 +1,11 @@
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 
 from engine.game_engine import GameEngine
 from engine.save_system import load_game, save_game
 from play_game import parse_history_query
 
 
-REGION_PATH = "data/regions/bryn_shander.json"
+REGION_PATH = "test_fixtures/bryn_shander_legacy.json"
 
 
 def main():
@@ -116,8 +116,8 @@ def main():
     else:
         raise AssertionError("Negative history query count should fail.")
 
-    with TemporaryDirectory() as temp_dir:
-        save_path = f"{temp_dir}/history_query_save.json"
+    with artifact_files("test_history_query") as temp_dir:
+        save_path = f"{temp_dir}/test_history_query_history_query_save.json"
         save_game(engine, save_path)
         loaded_engine = load_game(save_path)
 

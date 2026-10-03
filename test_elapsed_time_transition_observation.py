@@ -1,6 +1,6 @@
 from copy import deepcopy
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 
 from engine.elapsed_time_transition_observation import (
     derive_elapsed_time_transition_observation,
@@ -9,7 +9,7 @@ from engine.game_engine import GameEngine
 from engine.save_system import build_save_data, load_game
 
 
-REGION_PATH = "data/regions/bryn_shander.json"
+REGION_PATH = "test_fixtures/bryn_shander_legacy.json"
 
 
 def scene(location_id, location_name, actors):
@@ -65,8 +65,8 @@ def main():
     no_change = GameEngine(REGION_PATH, entry_location_id="bryn_shander_gate_west")
     assert no_change.process_command("wait")["message"] == "An hour passes."
 
-    with TemporaryDirectory() as temp_dir:
-        save_path = str(Path(temp_dir) / "wait-observation.json")
+    with artifact_files("test_elapsed_time_transition_observation") as temp_dir:
+        save_path = str(Path(temp_dir) / "test_elapsed_time_transition_observation_wait-observation.json")
         engine.save(save_path)
         payload = build_save_data(engine)
         assert "observation" not in payload

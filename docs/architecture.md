@@ -65,7 +65,8 @@ CLI or Narration Preview
 - pressures and thread state;
 - actor location changes;
 - actor knowledge;
-- evidence traces and player discoveries.
+- evidence traces and player discoveries;
+- the fixed west-road reference predicament phase and causal outcome reference.
 
 ### Region Packs
 
@@ -101,7 +102,7 @@ Failures must not leave partial durable mutation.
 
 Durable causal references use stable backward `history_id` references.
 
-Save version remains `1` until an explicitly authorized change defines compatibility or migration behavior.
+Save envelope version remains `1`. Revised Bryn Shander content deliberately rejects prototype saves missing `west_road_predicament`; loading does not invent a branch or alter the existing file/session. See ADR-060. Other content retains its own validated state requirements.
 
 ## Character Information and Spatial Projection
 

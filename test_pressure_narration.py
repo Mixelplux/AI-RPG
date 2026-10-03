@@ -5,7 +5,7 @@ from engine.narration_pipeline import build_narration_preview_packet
 from engine.narration_source import NARRATION_SOURCE_METADATA
 
 
-PATH = "data/regions/bryn_shander.json"
+PATH = "test_fixtures/bryn_shander_legacy.json"
 CUE = {
     "cue_id": "winter_deepens_observation",
     "pressure_id": "bryn_shander_winter",

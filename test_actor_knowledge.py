@@ -1,7 +1,7 @@
 from copy import deepcopy
 import json
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 
 from engine.game_engine import GameEngine
 import engine.game_engine as game_engine_module
@@ -10,7 +10,7 @@ from engine.save_system import SAVE_VERSION, build_save_data, load_game
 from engine.world_state import create_initial_world_state, validate_world_state
 
 
-REGION_PATH = "data/regions/bryn_shander.json"
+REGION_PATH = "test_fixtures/bryn_shander_legacy.json"
 ACTOR_ID = "captain_darvin_grey"
 OTHER_ACTOR_ID = "guard_elin_voss"
 
@@ -78,25 +78,25 @@ def test_persistence_legacy_and_atomic_live_load() -> None:
     engine = GameEngine(REGION_PATH)
     before_state = engine.get_world_state()
     before_scene = engine.scene_snapshot
-    with TemporaryDirectory() as temporary_directory:
+    with artifact_files("test_actor_knowledge") as temporary_directory:
         payload = build_save_data(engine)
         assert payload["save_version"] == SAVE_VERSION == 1
         assert payload["world_state"]["actor_knowledge"] == before_state["actor_knowledge"]
-        path = Path(temporary_directory) / "knowledge.json"
+        path = Path(temporary_directory) / "test_actor_knowledge_knowledge.json"
         path.write_text(json.dumps(payload), encoding="utf-8")
         loaded = load_game(str(path))
         assert loaded.get_actor_knowledge(ACTOR_ID) == engine.get_actor_knowledge(ACTOR_ID)
 
         legacy = deepcopy(payload)
         del legacy["world_state"]["actor_knowledge"]
-        legacy_path = Path(temporary_directory) / "legacy.json"
+        legacy_path = Path(temporary_directory) / "test_actor_knowledge_legacy.json"
         legacy_path.write_text(json.dumps(legacy), encoding="utf-8")
         legacy_loaded = load_game(str(legacy_path))
         assert legacy_loaded.get_actor_knowledge(ACTOR_ID) == ()
 
         malformed = deepcopy(payload)
         malformed["world_state"]["actor_knowledge"] = {"missing": ["known"]}
-        malformed_path = Path(temporary_directory) / "malformed.json"
+        malformed_path = Path(temporary_directory) / "test_actor_knowledge_malformed.json"
         malformed_path.write_text(json.dumps(malformed), encoding="utf-8")
         expect_value_error(lambda: load_game(str(malformed_path)))
         expect_value_error(lambda: engine.load(str(malformed_path)))
@@ -182,8 +182,8 @@ def test_addition_validation_and_candidate_failure_are_atomic() -> None:
 def test_added_membership_persists_through_save_load() -> None:
     engine = GameEngine(REGION_PATH)
     result = engine.add_actor_knowledge(ACTOR_ID, "saved_knowledge")
-    with TemporaryDirectory() as temporary_directory:
-        path = Path(temporary_directory) / "knowledge_addition.json"
+    with artifact_files("test_actor_knowledge") as temporary_directory:
+        path = Path(temporary_directory) / "test_actor_knowledge_knowledge_addition.json"
         path.write_text(json.dumps(build_save_data(engine)), encoding="utf-8")
         loaded = load_game(str(path))
     assert loaded.get_actor_knowledge(ACTOR_ID)[-1] == "saved_knowledge"
@@ -255,8 +255,8 @@ def test_causally_referenced_addition_validation_persistence_and_atomic_load() -
     result = engine.add_actor_knowledge_from_event(
         ACTOR_ID, "persisted_causal_knowledge", source_id
     )
-    with TemporaryDirectory() as temporary_directory:
-        path = Path(temporary_directory) / "causal_knowledge.json"
+    with artifact_files("test_actor_knowledge") as temporary_directory:
+        path = Path(temporary_directory) / "test_actor_knowledge_causal_knowledge.json"
         path.write_text(json.dumps(build_save_data(engine)), encoding="utf-8")
         loaded = load_game(str(path))
         assert loaded.get_history_entry_by_id(result["history_id"])["source_history_id"] == source_id
@@ -267,7 +267,7 @@ def test_causally_referenced_addition_validation_persistence_and_atomic_load() -
 
         malformed = build_save_data(engine)
         malformed["world_state"]["history"][-1]["source_history_id"] = "history_999999"
-        malformed_path = Path(temporary_directory) / "bad_causal_knowledge.json"
+        malformed_path = Path(temporary_directory) / "test_actor_knowledge_bad_causal_knowledge.json"
         malformed_path.write_text(json.dumps(malformed), encoding="utf-8")
         live_before = engine.get_world_state()
         scene_before = engine.scene_snapshot

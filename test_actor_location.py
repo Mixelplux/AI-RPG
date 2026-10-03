@@ -1,7 +1,7 @@
 from copy import deepcopy
 import json
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 from unittest.mock import patch
 
 from engine.game_engine import GameEngine
@@ -11,7 +11,7 @@ from engine.scene_loader import load_region
 from engine.world_state import create_initial_world_state, validate_world_state
 
 
-REGION_PATH = "data/regions/bryn_shander.json"
+REGION_PATH = "test_fixtures/bryn_shander_legacy.json"
 ACTOR_ID = "captain_darvin_grey"
 BASELINE = "bryn_shander_gate_north"
 DESTINATION = "bryn_shander_main_street"
@@ -114,8 +114,8 @@ def main():
     assert engine.get_world_state()["actor_location_overrides"] == {}
 
     engine.set_actor_location(ACTOR_ID, DESTINATION)
-    with TemporaryDirectory() as temp_dir:
-        save_path = Path(temp_dir) / "actor.json"
+    with artifact_files("test_actor_location") as temp_dir:
+        save_path = Path(temp_dir) / "test_actor_location_actor.json"
         save_path.write_text(json.dumps(build_save_data(engine)), encoding="utf-8")
         loaded = load_game(str(save_path))
         assert loaded.get_world_state()["actor_location_overrides"] == {
@@ -124,7 +124,7 @@ def main():
 
         legacy = build_save_data(engine)
         del legacy["world_state"]["actor_location_overrides"]
-        legacy_path = Path(temp_dir) / "legacy.json"
+        legacy_path = Path(temp_dir) / "test_actor_location_legacy.json"
         legacy_path.write_text(json.dumps(legacy), encoding="utf-8")
         legacy_engine = load_game(str(legacy_path))
         assert legacy_engine.get_world_state()["actor_location_overrides"] == {}

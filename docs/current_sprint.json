@@ -10,18 +10,18 @@
   "active_sprint": null,
   "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "10.76"
+    "id": "10.77"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "10.76",
-    "title": "Deterministic Current-Scene Projection",
+    "id": "10.77",
+    "title": "Consequential West-Road Predicament",
     "type": "capability-package",
     "status": "complete",
-    "risk_level": "routine",
-    "goal": "Derive a deterministic, player-safe, read-only structured projection of the current scene without changing simulation, persistence, narration, or command behavior.",
+    "risk_level": "elevated",
+    "goal": "One authored predicament produces persistent consequences and a second meaningful decision.",
     "predecessor": {
-      "id": "10.75"
+      "id": "10.76"
     },
     "platform": {
       "official_interpreter": ".\\.venv\\Scripts\\python.exe",
@@ -29,15 +29,10 @@
       "provider_requests": "forbidden"
     },
     "scope": [
-      "engine/current_scene_projection.py and test_current_scene_projection.py.",
-      "Shared safe-exit derivation in engine/navigation_projection.py while preserving its existing navigation output.",
-      "GameEngine.get_current_scene_projection() and required lifecycle records."
+      "Scenario-specific state, authored Bryn Shander replacement, commands, atomic consequences, player presentation and resume, explicit old-save rejection."
     ],
     "verification": [
-      "Current-scene projection, navigation, actor-location, movement, and save/load regressions",
-      "Lifecycle record validation and official-interpreter JSON parsing with save-version assertion",
-      "git diff --check",
-      "Changed-scope inspection and final repository cleanliness"
+      "Focused scenario, causal integrity, rollback, save/load, presentation, movement/time regressions and maintained tooling."
     ]
   }
 }

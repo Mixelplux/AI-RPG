@@ -20,6 +20,8 @@ def build_save_data(engine: GameEngine) -> Dict[str, Any]:
 
     world_state = engine.get_world_state()
     validate_world_state(world_state)
+    if "west_road_predicament" in engine.region:
+        validate_world_state(world_state, engine.region)
 
     return {
         "save_version": SAVE_VERSION,

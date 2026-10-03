@@ -67,4 +67,9 @@ def derive_contextual_action_projection(
         if isinstance(display_text, str) and display_text.strip():
             opportunities.append(display_text.strip())
 
+    from engine import west_road_predicament as west_road
+    if west_road.enabled(region):
+        for command in west_road.available_commands(world_state, scene_snapshot):
+            cost = " (one hour; other approaches lose coverage)" if command == "advocate patrol" else " (one hour; traffic remains exposed)" if command == "continue investigation" else ""
+            opportunities.append("You can choose: " + command + cost + ".")
     return {"opportunities": opportunities}

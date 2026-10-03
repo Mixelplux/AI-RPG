@@ -1,7 +1,7 @@
 import json
 from copy import deepcopy
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 from unittest.mock import patch
 
 import engine.game_engine as game_engine_module
@@ -10,7 +10,7 @@ from engine.region_validator import validate_region
 from engine.save_system import load_game, save_game
 
 
-REGION_PATH = "data/regions/bryn_shander.json"
+REGION_PATH = "test_fixtures/bryn_shander_legacy.json"
 THREAD = "bryn_shander_west_road_bandit_report"
 ACTOR = "guard_elin_voss"
 DESTINATION = "bryn_shander_gate_west"
@@ -98,8 +98,8 @@ def test_noop_save_load_and_failure_isolation():
     result = resolve(engine)
     assert result["changed"] and result["actor_location_consequence"] == {"status": "no_op"}
     assert len(engine.query_history(event_type="actor_moved")) == moves_before
-    with TemporaryDirectory() as directory:
-        path = str(Path(directory) / "relocation.json")
+    with artifact_files("test_conversation_actor_relocation") as directory:
+        path = str(Path(directory) / "test_conversation_actor_relocation_relocation.json")
         save_game(engine, path)
         loaded = load_game(path)
         assert loaded.get_world_state()["actor_location_overrides"] == {ACTOR: DESTINATION}
@@ -110,8 +110,8 @@ def test_noop_save_load_and_failure_isolation():
     del without_declaration["resolved_thread_evidence_trace_effect"]
     del without_declaration["conversation_player_discovery_response"]
     del without_declaration["conversation_affordance"]
-    with TemporaryDirectory() as directory:
-        path = Path(directory) / "without-relocation.json"
+    with artifact_files("test_conversation_actor_relocation") as directory:
+        path = Path(directory) / "test_conversation_actor_relocation_without-relocation.json"
         path.write_text(json.dumps(without_declaration), encoding="utf-8")
         engine = GameEngine(str(path))
         result = resolve(engine)

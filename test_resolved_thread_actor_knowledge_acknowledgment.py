@@ -1,7 +1,7 @@
 import json
 from copy import deepcopy
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from test_artifact_files import artifact_files
 from unittest.mock import patch
 
 import engine.game_engine as game_engine_module
@@ -9,7 +9,7 @@ from engine.game_engine import GameEngine
 from engine.region_validator import validate_region
 from engine.save_system import build_save_data, load_game
 
-REGION_PATH = "data/regions/bryn_shander.json"
+REGION_PATH = "test_fixtures/bryn_shander_legacy.json"
 THREAD_ID = "bryn_shander_west_road_bandit_report"
 ACTOR_ID = "captain_darvin_grey"
 KNOWLEDGE_ID = "west_road_report_completed"
@@ -86,10 +86,10 @@ def test_rollback_and_save_load():
             else: raise AssertionError("Expected injected failure")
         assert engine.get_world_state() == state and engine.scene_snapshot is scene
     engine = GameEngine(REGION_PATH); engine.process_command("talk to captain")
-    with TemporaryDirectory() as directory:
-        path = Path(directory) / "before.json"; path.write_text(json.dumps(build_save_data(engine)), encoding="utf-8")
+    with artifact_files("test_resolved_thread_actor_knowledge_acknowledgment") as directory:
+        path = Path(directory) / "test_resolved_thread_actor_knowledge_acknowledgment_before.json"; path.write_text(json.dumps(build_save_data(engine)), encoding="utf-8")
         loaded = load_game(str(path)); resolve(loaded)
-        after = Path(directory) / "after.json"; after.write_text(json.dumps(build_save_data(loaded)), encoding="utf-8")
+        after = Path(directory) / "test_resolved_thread_actor_knowledge_acknowledgment_after.json"; after.write_text(json.dumps(build_save_data(loaded)), encoding="utf-8")
         reloaded = load_game(str(after)); assert KNOWLEDGE_ID in reloaded.get_actor_knowledge(ACTOR_ID)
         assert reloaded.process_command("talk to captain")["actor_knowledge_response"] == {"text": TEXT}
 

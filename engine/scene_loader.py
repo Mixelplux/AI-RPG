@@ -54,10 +54,13 @@ def resolve_spawns(location: Dict[str, Any]):
         count = resolve_spawn_count(rule)
 
         for _ in range(count):
-            spawned.append({
+            entity = {
                 "template": rule["template"],
                 "location": location["location_id"]
-            })
+            }
+            if isinstance(rule.get("display_name"), str) and rule["display_name"].strip():
+                entity["display_name"] = rule["display_name"].strip()
+            spawned.append(entity)
 
     return spawned
 
