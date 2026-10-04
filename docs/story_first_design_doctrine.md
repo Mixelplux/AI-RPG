@@ -1,4 +1,4 @@
-# Story-First Design Doctrine v0.2
+# Story-First Design Doctrine v0.3
 
 **Status: Provisional living document**
 
@@ -79,6 +79,12 @@ are not sufficient justification.
   Importance, urgency, and immediacy are distinct; active arcs may remain offscreen.
 - "No new major situation" is a valid AI-GM outcome. Quiet play, recovery,
   ordinary conversation, and breathing room are valid. Do not flood play with content.
+- Do not maximize hooks. Maintain opportunities. Meaningful play needs enough
+  people, evidence, relationships, locations, consequences, and possible actions
+  for the player to engage with; these need not be explicit quests. Quiet play
+  remains valid, but restraint must not become narrative inertia. Opportunity
+  density should arise from the world and current circumstances, not constant
+  manufactured incidents.
 - Explicit player disinterest should usually reduce repeated attempts to
   foreground the same material unless causal circumstances make it relevant again.
 
@@ -108,6 +114,17 @@ are not sufficient justification.
   knowledge unavailable to the character, a simple DM-style ruling is enough:
   "Your character does not know that." No elaborate in-world explanation is required.
 
+### Character capability and story paths
+
+Capabilities diversify paths through the story; they should not determine
+whether a character is allowed to continue it. Characters may perceive,
+interpret, investigate, and respond differently. Capability can expose
+different information and approaches, while missing one specialist capability
+must not normally make campaign continuity impossible. Important continuity
+should have multiple plausible routes over time. Specialist discoveries can
+provide leverage, foresight, shortcuts, safer approaches, or deeper
+understanding without becoming mandatory gates.
+
 ### Truth, belief, and information
 
 Preserve distinctions between authoritative world truth, actor belief/report,
@@ -118,6 +135,23 @@ correspondence, travel, investigation, relationships, or later developments.
 A stable truth may have multiple plausible discovery routes. Do not force
 discovery merely because a fact belongs to an important arc.
 
+Evidence may support multiple observations, inferences, and investigative
+paths, with character capability affecting which become available and how
+confidently they can be understood. Direct observation, automatic competence,
+uncertain inference, active investigation, and currently unknowable information
+are distinct. A clue need not be one binary information object, and different
+questions about the same evidence may have different difficulty. Skill cannot
+reveal physical evidence that does not exist, and capability must not turn a
+preferred hypothesis into truth.
+
+Some information requires action rather than a passive or single check.
+Following tracks, questioning witnesses, comparing records, observing behavior,
+or spending time may create new causal state. Failure and partial success may
+yield partial knowledge, uncertainty, elapsed time, changed exposure, lost
+opportunity, or altered circumstances; they need not mean no information. Do
+not provide false factual information merely because a check failed. Sometimes
+the correct result is simply losing the trail and returning.
+
 ### World developments and playable situations
 
 A world development is something that becomes true. A playable situation is
@@ -127,13 +161,23 @@ with it. Many developments should never become player-facing situations.
 New unrelated situations and people may originate independently of existing
 arcs. Connections should develop only when actual causality supports them.
 Do not maximize connectivity or draw everything into the "Main-Quest Magnet."
+Player action can expose independent material through causality: action may
+cause movement, elapsed time, or changed circumstances, which create new
+exposure to possibly unrelated world material. A failed check does not
+automatically require a compensatory adventure. Independent material remains
+independent unless actual causality connects it.
 
 ### Progressive narrative commitment
 
 Generative freedom exists before commitment. Once accepted, facts constrain
-future generation. Delay unnecessary specificity when flexibility is useful;
-once accepted evidence or consequences depend on hidden structure, commit
-enough hidden truth to keep causality honest.
+future generation. Delay unnecessary specificity while committing enough
+truth to preserve established evidence and consequential on-screen or offscreen
+causality. **Undecided truth** is detail not yet required by causality and not
+yet committed. **Hidden or unknown truth** is already committed because
+existing evidence, actor behavior, authored consequences, or consequential
+offscreen events depend on it, even though the player does not know it. Player
+action may determine when undecided detail requires resolution; player
+ignorance does not mean underlying truth is undecided.
 
 Do not retroactively determine core mystery facts merely to match the player's
 theory. Do not rescue weak or contradictory AI proposals by inventing additional
