@@ -6,6 +6,10 @@ Build a single-player AI-driven narrative RPG with persistent simulation, emerge
 
 The world should remember meaningful events and respond coherently to player actions.
 
+Use the [Story-First Design Doctrine v0.2](docs/story_first_design_doctrine.md)
+as the design-evaluation lens for future decisions; its provisional mechanisms
+and hypotheses do not mandate implementation.
+
 ## Development Approach
 
 Development proceeds through small, bounded capability packages.
