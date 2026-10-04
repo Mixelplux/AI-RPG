@@ -1,8 +1,10 @@
 import json
 import math
+from copy import deepcopy
 from typing import Dict, Any
 
 from engine.world_state import get_effective_actor_location, get_weather, get_time
+from engine import west_road_market_theft
 
 
 def resolve_spawn_count(rule: Dict[str, Any]) -> int:
@@ -77,6 +79,11 @@ def build_scene(
 
     if location is None:
         raise ValueError(f"Location not found in Region Pack: {entry}")
+
+    incident_text = west_road_market_theft.visible_text(world_state, entry)
+    if incident_text:
+        location = deepcopy(location)
+        location["description_seed"] += " " + incident_text
 
     # STEP 2: static entities
     static_entities = get_static_entities(region, world_state, entry)

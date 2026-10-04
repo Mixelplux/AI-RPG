@@ -59,13 +59,13 @@ def assess(region, world, scene, command):
 
 def project(region, world, scene):
     packet = {"observations": [], "recognition": [], "findings": [], "approaches": [], "accepted_outcomes": [], "limits": [LIMIT, "Narration cannot grant competences or guard resources, invent evidence, repair failure, or convert an uncertain inference into fact."]}
-    if not west.enabled(region):
+    if not west.scene_relevant(region, world):
         return packet
     declarations = {d["discovery_id"]: d for d in region["discovery_declarations"]}
     for finding in world["player_discoveries"]:
         if finding in {"west_road_sign_direction", "west_road_observation_overlap", "west_road_withdrawal_route"}:
             packet["findings"].append({"text": declarations[finding]["text"], "status": "supported finding" if finding == "west_road_withdrawal_route" else "limited inference"})
-    if evidence_applicable(region, world) and world["player"]["current_location_id"] in (west.GATE, west.ROAD):
+    if evidence_applicable(region, world):
         physical = region["west_road_competence_evidence"]
         packet["observations"] = [{"text": physical["observation"], "status": "direct observation" if world["player"]["current_location_id"] == west.ROAD else "guard report"}]
         for tag in world["player"].get("competences", []):
@@ -82,13 +82,15 @@ def project(region, world, scene):
 def outcome_text(region, command, attempt):
     result = attempt["result"]
     if result == "failure":
-        text = "The investigation established no additional finding."
+        text = ("You search the churned snow, but cannot pick out a trail you can follow."
+                if command == "follow withdrawal signs" else
+                "You compare the roadside marks, but cannot piece together how the watch positions were linked.")
     elif result == "partial":
         finding = OPERATIONS[command][1]
         text = next(d["text"] for d in region["discovery_declarations"] if d["discovery_id"] == finding)
     else:
         text = next(d["text"] for d in region["discovery_declarations"] if d["discovery_id"] == "west_road_withdrawal_route")
-    return result.capitalize() + ": " + text + " " + LIMIT
+    return text + " The watchers' names and destination beyond this stretch of road remain unknown."
 
 
 def validate_state(world, region=None):

@@ -5,6 +5,7 @@ from typing import Any, Dict
 
 from engine.game_engine import GameEngine
 from engine.world_state import copy_world_state, validate_world_state
+from engine import west_road_market_theft
 
 
 SAVE_VERSION = 1
@@ -81,6 +82,7 @@ def load_save_data(save_path: str) -> Dict[str, Any]:
         raise ValueError("Save World State player must be a dictionary.")
     player.setdefault("competences", [])
     save_data["world_state"].setdefault("competence_attempts", {})
+    west_road_market_theft.normalize_loaded_state(save_data["world_state"])
 
     validate_world_state(save_data["world_state"])
 

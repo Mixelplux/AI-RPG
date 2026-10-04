@@ -35,6 +35,11 @@ def enabled(region):
     return "west_road_predicament" in region
 
 
+def scene_relevant(region, world):
+    """The fixed road evidence / gate report context for scene presentation."""
+    return enabled(region) and world["player"]["current_location_id"] in (GATE, ROAD)
+
+
 def shared_id(discovery_id):
     return "west_road_received:" + discovery_id
 

@@ -10,18 +10,18 @@
   "active_sprint": null,
   "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "10.78"
+    "id": "10.79"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "10.78",
-    "title": "Character Competence V1",
+    "id": "10.79",
+    "title": "West-Road Market Causality",
     "type": "capability-package",
     "status": "complete",
     "risk_level": "elevated",
-    "goal": "Bounded competence differentiates West-Road evidence, approaches, resolution and cost.",
+    "goal": "Two continuous hours of reduced guard coverage establish one independent market-approach theft before observation.",
     "predecessor": {
-      "id": "10.77"
+      "id": "10.78"
     },
     "platform": {
       "official_interpreter": ".\\.venv\\Scripts\\python.exe",
@@ -29,10 +29,10 @@
       "provider_requests": "forbidden"
     },
     "scope": [
-      "Three competence tags, bounded West-Road attempts, player-safe projection, atomic resolution and additive version-1 load normalization."
+      "Specific continuous reduced-coverage timing, one independent lamp-oil theft, local player-safe revelation, additive version-1 persistence and directly affected fiction."
     ],
     "verification": [
-      "Injected draws, affected regressions, compatibility, rollback and maintained Git verification."
+      "Exact threshold, tactical headroom, composed activities, restoration, idempotency, copied-load compatibility, rollback, affected offline regressions and maintained Git verification."
     ]
   }
 }

@@ -71,6 +71,7 @@ from engine.evidence_traces import (
 )
 from engine import west_road_predicament as west_road
 from engine import character_competence
+from engine import west_road_market_theft
 
 
 class GameEngine:
@@ -672,13 +673,16 @@ class GameEngine:
     ) -> Dict[str, Any]:
         perception = self.get_player_perception()
         pressure_cues = perception["pressure_cues"]
-        return build_narration_context_packet(
+        packet = build_narration_context_packet(
             self.world_state,
             {**self.scene_snapshot, **({"character_competence": self.get_competence_projection()} if west_road.enabled(self.region) else {})},
             player_input,
             history_count=history_count,
             pressure_cue=pressure_cues[0] if pressure_cues else None,
         )
+        if west_road_market_theft.visible_text(self.world_state, get_player_location_id(self.world_state)):
+            packet["boundary"]["drift_guardrail"] += " " + west_road_market_theft.NARRATION_LIMIT
+        return packet
 
     def get_narration_output_contract(self) -> Dict[str, Any]:
         return build_narration_output_contract()
@@ -716,6 +720,9 @@ class GameEngine:
             }
         )
         source_history_id = candidate_world_state["history"][-1]["history_id"]
+        candidate_world_state = west_road_market_theft.advance_candidate(
+            candidate_world_state, previous_time, new_time, source_history_id
+        )
         pressure_consequence = None
         effect = self.region.get("elapsed_time_pressure_effect")
         if effect is not None and (
@@ -924,7 +931,7 @@ class GameEngine:
 
     def get_narration(self) -> Dict[str, Any]:
         perception = self.get_player_perception()
-        if west_road.enabled(self.region):
+        if west_road.scene_relevant(self.region, self.world_state):
             from engine.west_road_presentation import CURRENT_CIRCUMSTANCES, CURRENT_CHOICE_HINTS, compact_secondary_actions
             projection = self.get_current_scene_projection()
             base = narrate_scene(perception)
@@ -944,11 +951,11 @@ class GameEngine:
             phase = self.world_state["west_road_predicament"]["phase"]
             parts.append(CURRENT_CIRCUMSTANCES[phase])
             competence = self.get_competence_projection()
+            outcome_texts = [item["text"] for item in competence["accepted_outcomes"]]
             for layer in ("observations", "recognition", "findings"):
-                parts.extend(item["status"] + ": " + item["text"] for item in competence[layer])
-            parts.extend(item["command"] + " — " + item["text"] for item in competence["accepted_outcomes"])
-            if competence["observations"] or competence["accepted_outcomes"]:
-                parts.extend(competence["limits"])
+                parts.extend(item["text"] for item in competence[layer]
+                             if layer != "findings" or not any(item["text"] in text for text in outcome_texts))
+            parts.extend(outcome_texts)
             opportunities = perception["contextual_actions"]["opportunities"]
             choices = [text.removeprefix("You can choose: ") for text in opportunities if text.startswith("You can choose:")]
             if choices:
@@ -1034,6 +1041,7 @@ class GameEngine:
 
     def _prepare_west_road_command(self, candidate, command, result, source_id=None):
         before, after = west_road.COMMANDS[command]
+        was_reduced = west_road_market_theft.reduced_coverage(candidate)
         candidate = add_history_entry(candidate, "west_road_commitment", "Player chose to " + command + ".", west_road.GATE, deepcopy(candidate["time"]), {"command": command, "from_phase": before, **({"source_history_id": source_id} if source_id else {})})
         commitment_id = candidate["history"][-1]["history_id"]
         time_id = None
@@ -1050,6 +1058,7 @@ class GameEngine:
                 candidate, _ = self._prepare_actor_knowledge_from_event_candidate(candidate, actor, west_road.shared_id(discovery), candidate["history"][-1]["history_id"])
         candidate = add_history_entry(candidate, "west_road_outcome", self.region["west_road_predicament"]["phase_text"][after], west_road.GATE, deepcopy(candidate["time"]), {"phase": after, "source_history_id": commitment_id, "time_history_id": time_id, "witness_entity_ids": [west_road.GREY, west_road.ELIN]})
         candidate["west_road_predicament"] = {"phase": after, "last_outcome_history_id": candidate["history"][-1]["history_id"]}
+        west_road_market_theft.allocation_changed(candidate, was_reduced)
         responses = [west_road.actor_response(self.region, candidate, actor)["text"] for actor in (west_road.GREY, west_road.ELIN)]
         result.update(success=True, message=self.region["west_road_predicament"]["phase_text"][after] + "\nGrey: " + responses[0] + "\nElin: " + responses[1])
         return candidate, deepcopy(result)
