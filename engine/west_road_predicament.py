@@ -56,13 +56,16 @@ def validate_content(region):
     for actor_text in responses.values():
         if not isinstance(actor_text, dict) or set(actor_text) != PHASES:
             raise ValueError("West-road actor phase responses are incomplete.")
+    evidence = region.get("west_road_competence_evidence")
+    if not isinstance(evidence, dict) or set(evidence) != {"observation", "tactical_assessment", "outdoor_tracking", "surveillance_analysis"} or any(not isinstance(t, str) or not t.strip() for t in evidence.values()):
+        raise ValueError("West-road competence evidence is incomplete.")
     if any(not isinstance(t, str) or not t.strip() for t in list(texts.values()) + [t for v in responses.values() for t in v.values()]):
         raise ValueError("West-road authored text must be nonempty.")
     actors = {a["entity_id"]: a for a in region["entities"] if a.get("persistence") == "static"}
     if not {GREY, ELIN, MERCHANT} <= actors.keys() or any(actors[a]["location"] != GATE for a in (GREY, ELIN)) or actors[MERCHANT]["location"] != ROAD:
         raise ValueError("West-road reference actors must be at their authored locations.")
     discoveries = {d["discovery_id"] for d in region.get("discovery_declarations", [])}
-    required = set(INITIAL_EVIDENCE) | {d for ds in PHASE_DISCOVERIES.values() for d in ds}
+    required = set(INITIAL_EVIDENCE) | {d for ds in PHASE_DISCOVERIES.values() for d in ds} | {"west_road_sign_direction", "west_road_observation_overlap"}
     if not required <= discoveries:
         raise ValueError("West-road discoveries are incomplete.")
 
@@ -135,7 +138,7 @@ def validate_state(world, region):
         for membership in world["actor_knowledge"].get(actor, []):
             if membership.startswith("west_road_received:"):
                 discovery = membership.split(":", 1)[1]
-                if discovery not in acquired or not any(e.get("event_type") == "west_road_evidence_shared" and e.get("actor_id") == actor and e.get("discovery_id") == discovery for e in events):
+                if discovery not in world["player_discoveries"] or not any(e.get("event_type") == "west_road_evidence_shared" and e.get("actor_id") == actor and e.get("discovery_id") == discovery for e in events):
                     raise ValueError("West-road actor information was not shared.")
 
 

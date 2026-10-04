@@ -11,6 +11,7 @@ from engine.actor_knowledge import (
 )
 from engine.evidence_traces import validate_evidence_traces
 from engine import west_road_predicament as west_road
+from engine import character_competence
 from engine.unresolved_threads import (
     validate_open_threads,
     validate_open_thread_integrity,
@@ -50,7 +51,8 @@ def create_initial_world_state(region: Dict[str, Any]) -> Dict[str, Any]:
 
     state = {
         "player": {
-            "current_location_id": starting_location_id
+            "current_location_id": starting_location_id,
+            "competences": [],
         },
         "weather": deepcopy(initial_weather),
         "time": deepcopy(initial_time),
@@ -62,6 +64,7 @@ def create_initial_world_state(region: Dict[str, Any]) -> Dict[str, Any]:
         "actor_knowledge": build_initial_actor_knowledge(region),
         "evidence_traces": [],
         "player_discoveries": [],
+        "competence_attempts": {},
     }
     if west_road.enabled(region):
         state["west_road_predicament"] = west_road.initial_record()
@@ -186,6 +189,7 @@ def validate_world_state(
         validate_open_thread_integrity(world_state, region)
         validate_resolved_thread_integrity(world_state, region)
         west_road.validate_state(world_state, region)
+    character_competence.validate_state(world_state, region)
 
 
 def copy_world_state(world_state: Dict[str, Any]) -> Dict[str, Any]:

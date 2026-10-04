@@ -894,3 +894,38 @@ Each accepted decision copies state, prepares all effects (including one hour fo
 The existing Bryn Shander prototype declarations are superseded in ordinary play. Their mechanism coverage uses an explicitly test-only legacy fixture. No generic situation, quest, condition, dialogue, migration or event framework is introduced.
 
 Save envelope remains version 1. Revised Bryn Shander content requires the new record; missing state fails before region-aware interpretation of legacy scenario facts. Old files and the active session remain intact. No old decision is invented and no missing record is silently initialized on load.
+
+## ADR-061 - Bounded Character Competence and Accepted West-Road Attempts
+
+Status: Accepted; Sprint 10.78 owner smoke passed and owner acceptance was recorded
+October 4, 2026.
+
+`player.competences` is a unique list limited to tactical_assessment,
+outdoor_tracking and surveillance_analysis. Classes, biography and equipment
+prose supply no authority. The fixed West-Road competence module interprets
+applicable authored evidence, deterministic recognition, available approaches,
+local d6 results and costs. Named guard coordination retains the existing
+North-Gate decision boundary; only guarded survey consumes committed guard
+assistance, recorded on its source event. Assistance is never a competence.
+
+`competence_attempts` has at most one accepted record per supported operation.
+It stores draw (null for survey), result, accepted specialist basis, cost,
+discovery identifiers and source/time/result history references. Uncertain
+operations cost one hour; survey costs two, or one with tactical competence.
+Partial findings are limited supported information in existing discoveries;
+failure adds none. Full results reuse the existing pursuit phase, route,
+reporting and causal validation. Preparation uses the existing copied candidate
+and time consequences, then validates/builds/publishes once. Replays return the
+accepted result without drawing, charging or publishing.
+
+Save version 1 is retained consistently with prior additive field normalization
+(e.g. ADR-036). Missing new fields normalize empty in a copied loaded payload;
+present malformed fields reject. Required West-Road phase/prototype rejection
+from ADR-060 remains intact. Historical completed pursuit needs no attempt.
+No general checks, skills, investigations, transactions or migrations arise.
+
+Player-safe packets separate observation/report, automatic limited recognition,
+limited inference, confirmed local findings, approaches/costs and accepted
+outcomes. Narration preserves uncertainty and explicit limits; it cannot grant
+competence/resources or repair failure. No identity, affiliation or unverified
+destination is inferred. The original ordinary continuation remains available.

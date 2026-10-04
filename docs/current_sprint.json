@@ -10,18 +10,18 @@
   "active_sprint": null,
   "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "10.77"
+    "id": "10.78"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "10.77",
-    "title": "Consequential West-Road Predicament",
+    "id": "10.78",
+    "title": "Character Competence V1",
     "type": "capability-package",
     "status": "complete",
     "risk_level": "elevated",
-    "goal": "One authored predicament produces persistent consequences and a second meaningful decision.",
+    "goal": "Bounded competence differentiates West-Road evidence, approaches, resolution and cost.",
     "predecessor": {
-      "id": "10.76"
+      "id": "10.77"
     },
     "platform": {
       "official_interpreter": ".\\.venv\\Scripts\\python.exe",
@@ -29,10 +29,10 @@
       "provider_requests": "forbidden"
     },
     "scope": [
-      "Scenario-specific state, authored Bryn Shander replacement, commands, atomic consequences, player presentation and resume, explicit old-save rejection."
+      "Three competence tags, bounded West-Road attempts, player-safe projection, atomic resolution and additive version-1 load normalization."
     ],
     "verification": [
-      "Focused scenario, causal integrity, rollback, save/load, presentation, movement/time regressions and maintained tooling."
+      "Injected draws, affected regressions, compatibility, rollback and maintained Git verification."
     ]
   }
 }

@@ -66,6 +66,7 @@ CLI or Narration Preview
 - actor location changes;
 - actor knowledge;
 - evidence traces and player discoveries;
+- player competence tags and accepted attempts for the bounded West-Road slice;
 - the fixed west-road reference predicament phase and causal outcome reference.
 
 ### Region Packs
@@ -103,6 +104,13 @@ Failures must not leave partial durable mutation.
 Durable causal references use stable backward `history_id` references.
 
 Save envelope version remains `1`. Revised Bryn Shander content deliberately rejects prototype saves missing `west_road_predicament`; loading does not invent a branch or alter the existing file/session. See ADR-060. Other content retains its own validated state requirements.
+
+Character Competence V1 uses one local authority for evidence applicability,
+recognition, eligibility, costs and d6 interpretation. Accepted West-Road attempts
+persist their draw/result and backward causal references; full results reuse the
+existing pursuit outcome in the same candidate transaction. Missing additive
+competence fields normalize empty only in a copied loaded payload. Projection
+and narration receive player-safe layers, never authority to resolve attempts.
 
 ## Character Information and Spatial Projection
 

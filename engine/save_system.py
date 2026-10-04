@@ -76,6 +76,11 @@ def load_save_data(save_path: str) -> Dict[str, Any]:
         save_data["world_state"]["evidence_traces"] = []
     if "player_discoveries" not in save_data["world_state"]:
         save_data["world_state"]["player_discoveries"] = []
+    player = save_data["world_state"].get("player")
+    if not isinstance(player, dict):
+        raise ValueError("Save World State player must be a dictionary.")
+    player.setdefault("competences", [])
+    save_data["world_state"].setdefault("competence_attempts", {})
 
     validate_world_state(save_data["world_state"])
 

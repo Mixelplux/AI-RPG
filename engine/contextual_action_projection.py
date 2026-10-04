@@ -72,4 +72,10 @@ def derive_contextual_action_projection(
         for command in west_road.available_commands(world_state, scene_snapshot):
             cost = " (one hour; other approaches lose coverage)" if command == "advocate patrol" else " (one hour; traffic remains exposed)" if command == "continue investigation" else ""
             opportunities.append("You can choose: " + command + cost + ".")
+        from engine import character_competence
+        for approach in character_competence.project(region, world_state, scene_snapshot)["approaches"]:
+            rule = "uncertain investigation" if approach["uncertain"] else "deterministic with committed guard assistance"
+            if approach["uncertain"]:
+                rule += "; specialist: partial on 1-2, full on 3-6" if approach["specialist"] else "; d6: failure on 1-2, partial on 3-4, full on 5-6"
+            opportunities.append(f"You can choose: {approach['command']} ({approach['cost_hours']} hour(s); {rule}).")
     return {"opportunities": opportunities}

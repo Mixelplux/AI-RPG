@@ -70,6 +70,7 @@ from engine.evidence_traces import (
     get_evidence_traces_at_location as get_world_evidence_traces_at_location,
 )
 from engine import west_road_predicament as west_road
+from engine import character_competence
 
 
 class GameEngine:
@@ -673,7 +674,7 @@ class GameEngine:
         pressure_cues = perception["pressure_cues"]
         return build_narration_context_packet(
             self.world_state,
-            self.scene_snapshot,
+            {**self.scene_snapshot, **({"character_competence": self.get_competence_projection()} if west_road.enabled(self.region) else {})},
             player_input,
             history_count=history_count,
             pressure_cue=pressure_cues[0] if pressure_cues else None,
@@ -884,7 +885,7 @@ class GameEngine:
             tuple(self.world_state["player_discoveries"]),
             tuple(self.world_state["history"]),
         )
-        return build_perception(
+        perception = build_perception(
             self.scene_snapshot,
             [] if cue is None else [cue],
             derive_unresolved_thread_evidence(
@@ -906,12 +907,20 @@ class GameEngine:
             ),
         )
 
+        if west_road.enabled(self.region):
+            perception["character_competence"] = self.get_competence_projection()
+        return perception
+
     def get_current_scene_projection(self) -> Dict[str, Any]:
-        return build_current_scene_projection(
+        projection = build_current_scene_projection(
             self.region,
             self.scene_snapshot,
             self.get_player_perception(),
         )
+
+        if west_road.enabled(self.region):
+            projection["character_competence"] = self.get_competence_projection()
+        return projection
 
     def get_narration(self) -> Dict[str, Any]:
         perception = self.get_player_perception()
@@ -934,6 +943,12 @@ class GameEngine:
                 parts.append("Here: " + ", ".join(present) + ".")
             phase = self.world_state["west_road_predicament"]["phase"]
             parts.append(CURRENT_CIRCUMSTANCES[phase])
+            competence = self.get_competence_projection()
+            for layer in ("observations", "recognition", "findings"):
+                parts.extend(item["status"] + ": " + item["text"] for item in competence[layer])
+            parts.extend(item["command"] + " — " + item["text"] for item in competence["accepted_outcomes"])
+            if competence["observations"] or competence["accepted_outcomes"]:
+                parts.extend(competence["limits"])
             opportunities = perception["contextual_actions"]["opportunities"]
             choices = [text.removeprefix("You can choose: ") for text in opportunities if text.startswith("You can choose:")]
             if choices:
@@ -1013,9 +1028,13 @@ class GameEngine:
             if self.world_state["west_road_predicament"]["phase"] != "investigating":
                 result["message"] = "That choice does not apply to the current west-road situation. Your accepted decisions remain unchanged."
             return result
+        candidate, result = self._prepare_west_road_command(copy_world_state(self.world_state), command, result)
+        self._publish_west_road_candidate(candidate)
+        return result
+
+    def _prepare_west_road_command(self, candidate, command, result, source_id=None):
         before, after = west_road.COMMANDS[command]
-        candidate = copy_world_state(self.world_state)
-        candidate = add_history_entry(candidate, "west_road_commitment", "Player chose to " + command + ".", west_road.GATE, deepcopy(candidate["time"]), {"command": command, "from_phase": before})
+        candidate = add_history_entry(candidate, "west_road_commitment", "Player chose to " + command + ".", west_road.GATE, deepcopy(candidate["time"]), {"command": command, "from_phase": before, **({"source_history_id": source_id} if source_id else {})})
         commitment_id = candidate["history"][-1]["history_id"]
         time_id = None
         if before == "investigating":
@@ -1031,10 +1050,49 @@ class GameEngine:
                 candidate, _ = self._prepare_actor_knowledge_from_event_candidate(candidate, actor, west_road.shared_id(discovery), candidate["history"][-1]["history_id"])
         candidate = add_history_entry(candidate, "west_road_outcome", self.region["west_road_predicament"]["phase_text"][after], west_road.GATE, deepcopy(candidate["time"]), {"phase": after, "source_history_id": commitment_id, "time_history_id": time_id, "witness_entity_ids": [west_road.GREY, west_road.ELIN]})
         candidate["west_road_predicament"] = {"phase": after, "last_outcome_history_id": candidate["history"][-1]["history_id"]}
-        self._publish_west_road_candidate(candidate)
         responses = [west_road.actor_response(self.region, candidate, actor)["text"] for actor in (west_road.GREY, west_road.ELIN)]
         result.update(success=True, message=self.region["west_road_predicament"]["phase_text"][after] + "\nGrey: " + responses[0] + "\nElin: " + responses[1])
-        return deepcopy(result)
+        return candidate, deepcopy(result)
+
+    def get_competence_projection(self):
+        return character_competence.project(self.region, self.world_state, self.scene_snapshot)
+
+    def attempt_competence(self, command):
+        """Execute a bounded operation; draw and outcome are never input parameters."""
+        command = command.strip().lower()
+        accepted = self.world_state.get("competence_attempts", {}).get(command)
+        result = {"success": False, "intent": "west_road_competence", "message": "", "action": {"type": "west_road_competence", "target": None, "parameters": {}, "confidence": 1.0}}
+        if accepted is not None:
+            result.update(success=True, changed=False, accepted_outcome=deepcopy(accepted), message=character_competence.outcome_text(self.region, command, accepted))
+            return result
+        decision = character_competence.assess(self.region, self.world_state, self.scene_snapshot, command)
+        if not decision["eligible"]:
+            result["message"] = decision["reason"]
+            return result
+        draw = character_competence.draw_d6() if decision["uncertain"] else None
+        outcome = character_competence.resolve(draw, decision["specialist"]) if decision["uncertain"] else "full"
+        candidate = copy_world_state(self.world_state)
+        candidate = add_history_entry(candidate, "west_road_competence_attempt", "Player chose to " + command + ".", west_road.GATE, deepcopy(candidate["time"]), {"command": command, "from_phase": "observers_withdrew", "specialist": decision["specialist"], "assistance_entity_ids": [] if decision["uncertain"] else [west_road.GREY, west_road.ELIN]})
+        source_id = candidate["history"][-1]["history_id"]
+        candidate, time_result = self._prepare_time_advance_candidate(candidate, decision["cost_hours"])
+        time_event = next(e for e in reversed(candidate["history"]) if e["event_type"] == "time_advanced")
+        time_event["source_history_id"] = source_id
+        time_id = time_event["history_id"]
+        findings = []
+        if outcome == "partial":
+            findings = [character_competence.OPERATIONS[command][1]]
+            candidate = self._acquire_west_road_discovery(candidate, findings[0], source_id)
+        elif outcome == "full":
+            findings = ["west_road_withdrawal_route"]
+            candidate, _ = self._prepare_west_road_command(candidate, "pursue observers", {}, source_id)
+        attempt = {"draw": draw, "result": outcome, "specialist": decision["specialist"], "cost_hours": decision["cost_hours"], "findings": findings, "source_history_id": source_id, "time_history_id": time_id, "outcome_history_id": None}
+        candidate = add_history_entry(candidate, "west_road_competence_result", "Accepted " + outcome + " competence outcome.", west_road.GATE, deepcopy(candidate["time"]), {"source_history_id": source_id})
+        attempt["outcome_history_id"] = candidate["history"][-1]["history_id"]
+        candidate["history"][-1]["attempt"] = deepcopy(attempt)
+        candidate.setdefault("competence_attempts", {})[command] = attempt
+        self._publish_west_road_candidate(candidate)
+        result.update(success=True, changed=True, accepted_outcome=deepcopy(attempt), time_advancement=time_result, message=character_competence.outcome_text(self.region, command, attempt))
+        return result
 
     def _merchant_account(self):
         discovery = "west_road_merchant_account"
@@ -1229,6 +1287,8 @@ class GameEngine:
         return candidate_world_state
 
     def process_command(self, player_input: str) -> Dict[str, Any]:
+        if player_input.strip().lower() in character_competence.OPERATIONS:
+            return self.attempt_competence(player_input)
         if west_road.enabled(self.region) and player_input.strip().lower() in west_road.COMMANDS:
             return self._process_west_road_command(player_input.strip().lower())
         interaction_result = process_player_input(

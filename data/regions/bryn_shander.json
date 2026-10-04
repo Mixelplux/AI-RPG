@@ -28,7 +28,27 @@
       }
     }
   ],
+  "west_road_competence_evidence": {
+    "observation": "Fresh withdrawal prints lead toward the low rise; two trampled patches overlook the same road stretch.",
+    "outdoor_tracking": "You recognize directional heel-to-toe impressions in the fresh prints; a direction alone does not establish the complete route.",
+    "surveillance_analysis": "You recognize overlapping sightlines from the two trampled positions; the link between them still needs investigation.",
+    "tactical_assessment": "You can divide the committed guards between the two nearby positions, reducing a guarded survey to one hour."
+  },
   "discovery_declarations": [
+    {
+      "discovery_id": "west_road_sign_direction",
+      "title": "Local Withdrawal Direction",
+      "trace_id": "west_road_sign_direction_trace",
+      "location_id": "outside_trade_road_west",
+      "text": "Fresh prints leave the wagon path toward the low rise. This supports only a local direction; the complete route remains unconfirmed."
+    },
+    {
+      "discovery_id": "west_road_observation_overlap",
+      "title": "Overlapping Watch Positions",
+      "trace_id": "west_road_observation_overlap_trace",
+      "location_id": "outside_trade_road_west",
+      "text": "Two trampled patches overlook the same road stretch. Their overlap supports a local observation circuit, but its complete route remains unconfirmed."
+    },
     {
       "discovery_id": "west_road_tracks",
       "title": "Repeated Watch Tracks",

@@ -1,24 +1,41 @@
-# Sprint 10.77 - Consequential West-Road Predicament
+# Sprint 10.78 - Character Competence V1
 
 ## Status
-Completed and owner-accepted after smoke. Elevated package implemented on `codex/west-road-predicament-10.77`; project idle.
-Baseline: `18b69f095a429cf00f83bad597fc381e1e9b03fe`.
-Lifecycle JSON is the sole machine authority. Owner authorized final reconciliation, commit, strict fast-forward merge and closeout. No next package is selected.
+Complete and owner-accepted October 4, 2026. Sprint 10.78 is frozen on
+`codex/character-competence-v1`; baseline: `d9c0cb9056007b938902dc4f1a439130763179b2`.
+No next package is selected; `next_sprint` remains null.
 
-## Goal and Scope
-Replace the existing Bryn Shander prototype with grounded evidence, explicit initial commitment, two consequences and four executable follow-up outcomes. Add only `west_road_predicament` phase and causal outcome reference; history explains rather than determines current progression. Integrate player-safe scene presentation, actor information sharing and deterministic resume.
+## Scope
+Authoritative player competences: tactical_assessment, outdoor_tracking, surveillance_analysis.
+One bounded West-Road authority projects and executes follow withdrawal signs (1 hour,
+uncertain), reconstruct local observation circuit (1 hour, uncertain), and arrange guarded
+local survey (2 hours; tactical competence reduces to 1). Existing guard assistance is a
+prerequisite, never competence. Preserve ordinary pursuit and all initial/follow-up paths.
+An engine-owned d6 yields failure/partial/full at 1-2/3-4/5-6 without competence;
+with competence, 1-2 partial and 3-6 full. Routine recognition is deterministic.
+Persist accepted attempts, draw, result, costs, findings and causal references; no reroll
+or repeat cost. Use copied candidate transactions and existing discoveries.
 
-## Compatibility
-Save envelope remains version 1. Revised Bryn Shander saves require the new scenario record; older saves fail explicitly without changing the file or active session. No migration.
+## Persistence
+Retain save version 1 using established additive copied-load normalization. Missing new
+fields normalize empty; malformed present fields reject. Preserve prototype rejection,
+source saves, active session on failure, and historical completed pursuit.
 
-## Non-goals
-Generic situations, quests, dialogue, schedules, patrol simulation, combat, inventory, provider changes, regional travel and generalized migrations.
+## Exclusions
+No classes, attributes, biography parsing, leveling, inventory, broad skills/modifiers,
+generic checks/investigations/migrations, new locations, quests, combat, provider calls,
+or automatic next package. No unsupported identity, affiliation or destination claims.
 
-## Verification
-Focused evidence/commitment/follow-up, duplicate/premature/opposite commands, time, rollback, consistency, copies, save/load at every phase, old-save preservation, presentation/resume and affected movement/navigation/time regressions. Syntax, lifecycle, JSON/save-version, maintained Git verification and diff/scope checks. Owner smoke passed. Final reconciliation and focused verification passed; maintained candidate verification runs immediately before staging.
+## Verification and completion
+Injected deterministic draws; profiles, evidence, eligibility/projection agreement,
+full/partial/failure, idempotence, alternate approaches, guard prerequisites, time,
+rollback, save/load and malformed states; affected discovery/action/scene/perception/
+narration and existing West-Road regressions. Filesystem tests use `.artifacts/`.
+Focused verification and owner smoke passed; owner accepted Character Competence V1
+on October 4, 2026. Real tokenizer-backed narration token counting remains unverified
+because the tokenizer cache was unavailable; the offline narration contract passed,
+the provider adapter is unchanged, and the limitation is non-blocking.
 
 ## Implementation handoff
-Both branches and four follow-ups implemented. Focused verification and owner smoke paths are recorded in `docs/sprint_10_77_handoff.md`. Owner accepted the implemented behavior and both narrow presentation corrections. Sprint 10.77 is complete; no active sprint/package and `next_sprint` remains null.
-
-## Deferred
-Broader player-facing presentation refinement; future observation of reusable world-development primitives; crash-safe disk-save replacement before longer-form playtesting.
+See `docs/sprint_10_78_handoff.md` for repository reconciliation, semantics,
+verification, and the accepted tokenizer limitation.
