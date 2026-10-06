@@ -4,7 +4,9 @@ Reviewed October 5, 2026 at `51f595b5c8516ef242a4fffeb246c0e143acc9b3`.
 This is the current conceptual ownership model, subject to evidence and revision.
 It is neither a call graph nor a list of runtime modules. See the separate
 [runtime architecture](../../architecture.md) and [shared doctrines](README.md).
-Only World Simulation has a manifest in this baseline.
+The World Simulation baseline is preserved. [Character System](character-system.md)
+was reviewed October 6, 2026 at documentation baseline
+`89f135834eb85cb995facb0b7126a3c5f58b7a6a`; later systems have no manifests yet.
 
 ## Responsibility hierarchy
 
@@ -37,3 +39,23 @@ hierarchy does not require splitting either into new modules.
 The World Simulation manifest describes its [inputs, outputs, and
 relationships](world-simulation.md#inputs). This map leaves future interfaces
 open rather than designing the other systems prematurely.
+
+## Dependencies and information flow around Character System
+
+The [Character System manifest](character-system.md) refines capability,
+perspective, and memory into capability/constraints, informational access, and
+selective retention/continuity. This working decomposition remains provisional.
+
+| From → To | Information / dependency | Current status |
+|---|---|---|
+| Scenario & Authored Content → Character System | Supported seeds, evidence descriptions, clue/report text and bounded interpretation declarations | Implemented bounded slices; biography/profile/familiarity interfaces provisional |
+| World Simulation → Character System | External facts, position, local evidence and conditions constrain access | Partial local perception/filtering; general sensory and familiarity access checks absent |
+| Character System → Action & Resolution | Authoritative competence, limited recognition and retained information relevant to attempts | Implemented West-Road slice; capability does not adjudicate outcomes or create evidence |
+| Action & Resolution → Character System / World Simulation | Accepted findings and attempts preserve character continuity; external consequences update world truth | Implemented fixed atomic candidate path; attempt records span responsibilities |
+| Character System ↔ Actors & Social Dynamics | Individual informational access constrains intentional decisions and reports | Provisional general interface; static-actor membership and declared sharing/responses are bounded implementations |
+| Character System → Narrative Experience / Player Presentation | Safe observations/reports, qualified recognition/findings and retained clue review | Partial: local Scene Context filters do not erase memory; narration cannot establish capability or knowledge |
+| Character System ↔ Persistence | Validated supported competence, discoveries, actor membership and attempt continuity | Implemented version-1 slices; no general character identity/replacement or belief storage model |
+
+These relationships neither relocate fields out of `world_state` nor prescribe
+new module boundaries. Player intention remains external input; session-only
+presentation continuity has no authority over persistent character state.
