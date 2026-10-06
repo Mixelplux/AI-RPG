@@ -269,10 +269,6 @@ this review. Accepted independent-agency direction does not schedule these mecha
 - **Historical terminology:** Simulation Model's World Evolution includes actor
   goals under a broad umbrella. The responsibility map separates intentional
   choice from resulting reality; this does not require editing protected manifests.
-- **Persistence limitation:** guarded candidate publication does not establish
-  atomic disk replacement; `save_game` writes directly to the destination. See
-  the [World Simulation tension](world-simulation.md#known-tensions--open-questions).
-  No save repair or new compatibility model is authorized here.
 
 No fundamental contradiction requiring changes to the three protected manifests
 was found. These are implementation gaps and unsettled future interfaces.
