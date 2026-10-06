@@ -24,6 +24,7 @@ provider behavior, should be presented as contracts.
 - [Character System](character-system.md) — Partial; reviewed October 6, 2026
 - [Action & Resolution](action-resolution.md) — Partial; review candidate October 6, 2026
 - [Actors & Social Dynamics](actors-social-dynamics.md) — Partial; review candidate October 6, 2026
+- [Narrative Experience](narrative-experience.md) — Partial; review candidate October 6, 2026
 
 Use **Implemented** for behavior evidenced in runtime and tests, **Partial** for
 a responsibility with bounded implementation and material gaps, **Accepted design**
@@ -33,8 +34,7 @@ An accepted direction can also have deferred implementation; state both when
 useful. These labels do not replace the historical status vocabulary in
 simulation principles or authorize scheduling.
 
-Remaining planned manifest order is Narrative Experience,
-Scenario & Authored Content, Persistence, then
+Remaining planned manifest order is Scenario & Authored Content, Persistence, then
 Player Presentation. These manifests are not created or authorized by this review.
 
 ## Shared doctrines

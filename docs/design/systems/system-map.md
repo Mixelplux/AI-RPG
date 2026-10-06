@@ -11,14 +11,16 @@ was reviewed October 6, 2026 at documentation baseline
 at baseline `d0dba1f5f1da391216cdb8fb8e4dabf8485705c8`;
 [Actors & Social Dynamics](actors-social-dynamics.md) has an October 6, 2026 review
 candidate at baseline `63f1a3db8b8996efe0f8245ad21d22ddb234dcbc`;
-later systems have no manifests yet.
+[Narrative Experience](narrative-experience.md) has an October 6, 2026 review
+candidate at baseline `ecd3ed246a8c989990d1411582438b58369d3c84`.
+Later systems have no manifests yet.
 
 ## Responsibility hierarchy
 
 | Group | Systems and responsibilities |
 |---|---|
 | Core Gameplay | **World Simulation:** external reality and legitimate change. **Character System:** character capability, perspective, and memory. **Action & Resolution:** adjudication of attempted action. **Actors & Social Dynamics:** meaningful intentional NPC/faction decisions. |
-| Experience | **Narrative Experience:** expression of authoritative truth and outcomes. **Player Presentation:** player input/display and interaction surface. |
+| Experience | **Narrative Experience:** selective, context-aware expression of authoritative truth and outcomes, preserving epistemic meaning and continuity. **Player Presentation:** player input/display and interaction surface. |
 | Content | **Scenario & Authored Content:** authored foundations, constraints, and bounded declarations. |
 | Cross-Cutting | **Persistence:** durable storage, restoration, and compatibility. |
 | Supporting Infrastructure | **Narrator Provider / Model Adapter:** untrusted model transport and adaptation. **Verification / Evaluation:** evidence and checks. **Runtime / Tooling:** execution and development support. |
@@ -115,3 +117,29 @@ Ordinary routines and background maintenance need no individual actor simulation
 Meaningful deliberate offscreen obstruction by an established antagonist would
 require actor authority; its external result belongs to World Simulation. This
 design distinction does not implement a scheduler or select a future package.
+
+## Dependencies and information flow around Narrative Experience
+
+The [Narrative Experience manifest](narrative-experience.md) proposes three
+responsibilities: context selection, framing and continuity, and expression.
+These refine expression of authoritative truth rather than adding fictional
+authority. Selection does not establish informational access or erase omitted
+truth. Compatible incidental texture remains non-authoritative; a model is one
+expression mechanism alongside authored and deterministic text.
+
+| From → To | Information / dependency | Current status |
+|---|---|---|
+| World Simulation → Narrative Experience | Accessible external facts, conditions and legitimate changes | Partial: bounded local scene and causal projections; provider snapshot still contains internal fields, not a universal safe view |
+| Character System → Narrative Experience | Character-specific access basis, capability, recognition and retained findings, jointly constrained by world conditions | Partial: local competence layers; no general perception/familiarity engine; expression cannot grant knowledge |
+| Action & Resolution → Narrative Experience | Accepted results, costs, findings and uncertainty limits | Implemented bounded outcomes; no general outcome stream or permission to repair failure |
+| Actors & Social Dynamics → Narrative Experience | Accepted behavior, attributed reports and established social meaning | Partial authored/scenario behavior; expressive manner cannot invent consequential intentions, promises or disclosures |
+| Scenario & Authored Content → Narrative Experience | Location grounding, dialogue, tone foundations and supported constraints | Implemented bounded content; authored wording remains constrained by live state |
+| Player Presentation ↔ Narrative Experience | Declared focus/presentation context in; selected expressive content out | Partial CLI integration; parsing, widgets and safe display mechanics remain presentation responsibilities |
+| Narrator Provider / Model Adapter → Narrative Experience | Untrusted candidate language | Implemented validated fail-closed path; structural acceptance is not proof of factual prose |
+| Persistence → Narrative Experience | Restored supported fictional state from which scenes and recap are rebuilt | Implemented bounded recap; current-scene prose cache is session-only and not saved; no new storage interface selected |
+
+Persistent truth need not be mentioned every turn. Current Scene Context and
+bounded descriptive continuity support this direction without semantic repetition
+suppression or authoritative provider memory. Technical resets can require
+reorientation without creating fictional discontinuity. General context selection,
+incidental-detail promotion and long-term narrative continuity remain unsettled.
