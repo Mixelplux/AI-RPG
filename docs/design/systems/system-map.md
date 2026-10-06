@@ -9,6 +9,8 @@ was reviewed October 6, 2026 at documentation baseline
 `89f135834eb85cb995facb0b7126a3c5f58b7a6a`.
 [Action & Resolution](action-resolution.md) has an October 6, 2026 review candidate
 at baseline `d0dba1f5f1da391216cdb8fb8e4dabf8485705c8`;
+[Actors & Social Dynamics](actors-social-dynamics.md) has an October 6, 2026 review
+candidate at baseline `63f1a3db8b8996efe0f8245ad21d22ddb234dcbc`;
 later systems have no manifests yet.
 
 ## Responsibility hierarchy
@@ -88,3 +90,28 @@ An action's time cost may cross a World Simulation threshold within the same
 candidate. Shared publication does not transfer downstream causal authority to
 Action & Resolution. The fixed theft follows guard allocation and elapsed time,
 not a competence result band or narrator choice.
+
+## Dependencies and information flow around Actors & Social Dynamics
+
+The [Actors & Social Dynamics manifest](actors-social-dynamics.md) refines
+meaningful intentional NPC/faction decisions into social continuity, decision
+basis, and intentional choice. This decomposition and broader social-state
+interfaces remain provisional. Individual informational state/access belongs to
+Character System; using it for a choice does not create a second knowledge model.
+Consequential relationships and commitments may need continuity without numeric
+meters, a general character sheet, or continuously simulated actors.
+
+| From → To | Information / dependency | Current status |
+|---|---|---|
+| Scenario & Authored Content → Actors & Social Dynamics | Identity, roles, relationship/motivation foundations and bounded behavior declarations | Partial: profiles, numeric relationship foundations and faction objectives exist as content; fixed scenario behavior does not evaluate them as general decision policy |
+| World Simulation → Actors & Social Dynamics | Circumstances, effective locations, pressures and relevant consequences | Implemented bounded premises; general intentional reaction interface provisional |
+| Character System ↔ Actors & Social Dynamics | Legitimate information/access and capability constrain choices; accepted sharing establishes acquired information | Partial: report membership gates West-Road choices and authored responses; no general belief or propagation model |
+| Actors & Social Dynamics ↔ Action & Resolution | Actor choices frame attempts; adjudicated outcomes inform further response | Provisional general interface; no general social contest or autonomous decision mechanism |
+| Actors & Social Dynamics → World Simulation | Executed intentional action yields external consequences and relevant causal provenance | Fixed authored effects and guard commitments implemented; independent intentional offscreen choice deferred |
+| Actors & Social Dynamics → Narrative Experience / Player Presentation | Safe behavior, attributed reports and eligible interactions | Partial authored replies and scenario projections; expression cannot create consequential choices, relationships or knowledge |
+| Actors & Social Dynamics ↔ Persistence | Established social meaning and causal continuity survive technical boundaries | Partial: supported identity references, reports, location overrides and scenario history persist; general goals/relationships/group-state representation remains open |
+
+Ordinary routines and background maintenance need no individual actor simulation.
+Meaningful deliberate offscreen obstruction by an established antagonist would
+require actor authority; its external result belongs to World Simulation. This
+design distinction does not implement a scheduler or select a future package.
