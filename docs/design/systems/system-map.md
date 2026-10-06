@@ -6,7 +6,10 @@ It is neither a call graph nor a list of runtime modules. See the separate
 [runtime architecture](../../architecture.md) and [shared doctrines](README.md).
 The World Simulation baseline is preserved. [Character System](character-system.md)
 was reviewed October 6, 2026 at documentation baseline
-`89f135834eb85cb995facb0b7126a3c5f58b7a6a`; later systems have no manifests yet.
+`89f135834eb85cb995facb0b7126a3c5f58b7a6a`.
+[Action & Resolution](action-resolution.md) has an October 6, 2026 review candidate
+at baseline `d0dba1f5f1da391216cdb8fb8e4dabf8485705c8`;
+later systems have no manifests yet.
 
 ## Responsibility hierarchy
 
@@ -63,3 +66,25 @@ from both rather than independently established by Character System.
 These relationships neither relocate fields out of `world_state` nor prescribe
 new module boundaries. Player intention remains external input; session-only
 presentation continuity has no authority over persistent character state.
+
+## Dependencies and information flow around Action & Resolution
+
+The [Action & Resolution manifest](action-resolution.md) uses three provisional
+responsibilities: frame an executable attempt, determine outcome/cost, and commit
+and preserve the accepted result. These describe conceptual authority, not a new
+pipeline or module split. Acceptance of a command differs from fictional success.
+
+| From → To | Information / dependency | Current status |
+|---|---|---|
+| Player Presentation → Action & Resolution | Declared intent to interpret as a supported operation | Partial: fixed parsing and scenario commands; descriptive scene intention is not consequential execution, and general action framing remains open |
+| World Simulation / Character System → Action & Resolution | External facts and resources; character capability, recognition/access basis and retained information | Implemented bounded premises; neither input owner independently adjudicates the attempt |
+| Scenario & Authored Content → Action & Resolution | Supported prerequisites, evidence, declared costs/effects and bounded resolution material | Implemented narrow declarations plus engine policy; no authority to predetermine arbitrary player outcomes |
+| Actors & Social Dynamics ↔ Action & Resolution | Intentional actor choices as inputs; adjudicated contested outcomes as results | Provisional: no general contest or autonomous decision mechanism; resolution does not choose actor intentions |
+| Action & Resolution → World Simulation / Character System | Accepted immediate effects, applicable costs and acquired findings committed with owning systems | Implemented bounded candidate paths; external truth/time and later causality remain World Simulation responsibilities, acquired information retains character continuity |
+| Action & Resolution → Narrative Experience / Player Presentation | Safe approaches, uncertainty, costs, accepted results and evidence limits | Implemented bounded projections; provider expression cannot roll, waive costs or repair failure |
+| Action & Resolution ↔ Persistence | Accepted draw/result, basis, cost, findings and causal references survive restoration | Implemented West-Road attempt replay without reroll/recharge/republish; no universal attempt ledger or anti-save-scumming guarantee |
+
+An action's time cost may cross a World Simulation threshold within the same
+candidate. Shared publication does not transfer downstream causal authority to
+Action & Resolution. The fixed theft follows guard allocation and elapsed time,
+not a competence result band or narrator choice.
