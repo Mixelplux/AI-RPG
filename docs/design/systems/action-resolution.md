@@ -34,10 +34,17 @@ different things; none permits narration to repair an unfavorable outcome.
 
 Action & Resolution owns adjudication: combining relevant premises to accept or
 reject a supported attempt, applying the appropriate deterministic or uncertain
-policy, and establishing its outcome, supported findings, and payable cost.
-Eligibility consumes facts owned elsewhere; adjudication cannot manufacture a
-target, evidence, capability, permission, or resource to make an attempt possible.
-Character recognition may expose an approach without deciding its outcome.
+policy, and establishing the accepted outcome and applicable cost. It determines
+which evidence-grounded information or result that outcome legitimately yields;
+it does not establish external facts or invent informational content. World
+Simulation owns external reality and evidence, Character System owns retained
+character information and access basis, and Scenario & Authored Content may
+provide supported evidence, declarations, and bounded result material. Resolution
+determines whether and how that material is yielded. Narrative Experience and
+Player Presentation express the accepted result. Eligibility consumes facts owned
+elsewhere; adjudication cannot manufacture a target, evidence, capability,
+permission, or resource to make an attempt possible. Character recognition may
+expose an approach without deciding its outcome.
 
 Acceptance includes a valid commitment of the required immediate effects, not
 merely a parsed command or a proposed die result. Outcomes that alter external
