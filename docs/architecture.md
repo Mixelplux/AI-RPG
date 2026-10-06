@@ -6,6 +6,11 @@ This document is a concise map of the current AI Narrative RPG Engine architectu
 
 Detailed architectural decisions belong in `docs/decisions.md`. Package-specific requirements belong in the current capability package.
 
+Living responsibility models and shared design doctrines are indexed in
+[System design manifests](design/systems/README.md). Their
+[system map](design/systems/system-map.md) separates conceptual ownership from
+the runtime flow and storage boundaries described here.
+
 Do not add sprint history, full schemas, test inventories, or implementation walkthroughs here.
 
 ## Tech Stack
