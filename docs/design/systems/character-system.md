@@ -18,10 +18,11 @@ unchanged apart from manifest navigation and relationship-map integration.
 
 ## Purpose
 
-Establish what a character can do, what information they can legitimately access,
-and what character-specific continuity matters to future play. Supply these
-constraints to action adjudication and presentation without copying external
-reality into character memory or giving narration authority over either.
+Establish what a character can do, how character-specific perspective and
+constraints bear on informational access, and what continuity matters to future
+play. Accessible views may be derived jointly from external world conditions
+and character-specific facts, without copying external reality into character
+memory or giving narration authority over either.
 
 ## Player-facing goal
 
@@ -34,12 +35,20 @@ way to continue a campaign.
 
 ## Authority
 
-The current responsibility model covers authoritative character capability,
-character-relative informational access, and selectively retained information.
-It distinguishes a character's actual capability from a narrated description,
-and the fact that they encountered or believe a report from whether the report
-is true. These are character-specific truths established by owning gameplay
-systems, within the existing contractual simulation-authority boundary.
+World Simulation supplies what exists and its externally observable properties.
+Character System supplies authoritative character capability and character-specific
+informational state, including perspective, access constraints or basis, retained
+information, and access history where established. These inputs inform the
+accessible view, which may be derived jointly with world conditions; Character
+System does not independently establish all current perception.
+World truth alone does not grant character knowledge. Narrative Experience and
+Player Presentation may express the resulting safe view but cannot establish or
+expand it. These character-specific truths are established by owning gameplay
+systems within the existing contractual simulation-authority boundary.
+
+The responsibility model distinguishes a character's actual capability from a
+narrated description, and the fact that they encountered or believe a report
+from whether the report is true.
 
 Character System supplies capability and recognition constraints; Action &
 Resolution combines them with world evidence, circumstances, resources, and
@@ -222,7 +231,7 @@ persistent informational record.
 | Player acquisition / review | **Implemented, bounded:** local investigate selects the first eligible undiscovered authored trace declaration; revised West-Road paths also retain specific reports/findings. Known-clue review joins membership to authored titles/text. No observation-by-observation memory. |
 | Actor knowledge | **Implemented membership; Partial informational model:** static-actor seeds, explicit additions, duplicates as no-ops, backward event linkage, narrow declared conversation/report effects and exact authored responses. No universal witnessing, certainty, loss, rumor propagation, or autonomous reasoning. Legacy mechanism tests do not imply prototype declarations remain active in revised play. |
 | Perspective / perception | **Partial:** base perception treats current scene entities/environment as visible. Authored pressure cues and local West-Road/market filtering add bounded access controls; no general sensory or knowledge-dependent visibility model. |
-| Character continuity | **Partial:** supported persistent fields restore and attempts replay without reroll. No multiple-protagonist identity model, general development, or informational aging. Disk-save atomic replacement is not established. |
+| Character continuity | **Partial:** supported persistent fields restore and attempts replay without reroll. No multiple-protagonist identity model, general development, or informational aging. |
 | Familiarity / durable change | **Accepted design / Provisional mechanisms:** ordinary familiarity and selective knowledge continuity are accepted; levels, representation, conditions, relationships, equipment effects, and advancement rules are unsettled and unimplemented. |
 
 ## Accepted and provisional decisions
@@ -279,10 +288,9 @@ system manifest is authorized here.
   needs a future bounded design. Injury, possession, and status can have external,
   relational, and character-capability aspects; no blanket transfer of ownership
   is justified by this review.
-- **Persistence / change gap:** accepted-attempt basis assumes unchanged tags;
-  future development must preserve historical meaning. Direct JSON disk writes
-  lack demonstrated atomic replacement, as recorded in World Simulation. These
-  are implementation limits, not authorization to repair or migrate state.
+- **Competence-change continuity:** accepted historical attempts currently
+  assume unchanged competence tags. Future competence gain or loss must
+  preserve the historical meaning and basis of prior attempts.
 
 No conflicting authoritative requirements require a decision for this
 documentation task. The access gap and unsettled interfaces remain explicit;

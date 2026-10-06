@@ -45,15 +45,19 @@ open rather than designing the other systems prematurely.
 The [Character System manifest](character-system.md) refines capability,
 perspective, and memory into capability/constraints, informational access, and
 selective retention/continuity. This working decomposition remains provisional.
+World Simulation supplies what exists and its externally observable properties;
+Character System supplies character-specific capability, perspective, and
+constraints or basis relevant to access. Accessible views may be derived jointly
+from both rather than independently established by Character System.
 
 | From → To | Information / dependency | Current status |
 |---|---|---|
 | Scenario & Authored Content → Character System | Supported seeds, evidence descriptions, clue/report text and bounded interpretation declarations | Implemented bounded slices; biography/profile/familiarity interfaces provisional |
-| World Simulation → Character System | External facts, position, local evidence and conditions constrain access | Partial local perception/filtering; general sensory and familiarity access checks absent |
+| World Simulation → Character System | What exists and its externally observable properties, including position, local evidence, and conditions | Partial: accessible views depend jointly on world conditions and character-specific constraints; ordinary lived familiarity remains design direction |
 | Character System → Action & Resolution | Authoritative competence, limited recognition and retained information relevant to attempts | Implemented West-Road slice; capability does not adjudicate outcomes or create evidence |
 | Action & Resolution → Character System / World Simulation | Accepted findings and attempts preserve character continuity; external consequences update world truth | Implemented fixed atomic candidate path; attempt records span responsibilities |
 | Character System ↔ Actors & Social Dynamics | Individual informational access constrains intentional decisions and reports | Provisional general interface; static-actor membership and declared sharing/responses are bounded implementations |
-| Character System → Narrative Experience / Player Presentation | Safe observations/reports, qualified recognition/findings and retained clue review | Partial: local Scene Context filters do not erase memory; narration cannot establish capability or knowledge |
+| Character System → Narrative Experience / Player Presentation | Character-specific capability, perspective, and access basis inform the jointly derived safe view, reports, recognition/findings, and retained clue review | Partial: current local views also depend on world conditions; narration cannot establish or expand informational access |
 | Character System ↔ Persistence | Validated supported competence, discoveries, actor membership and attempt continuity | Implemented version-1 slices; no general character identity/replacement or belief storage model |
 
 These relationships neither relocate fields out of `world_state` nor prescribe
