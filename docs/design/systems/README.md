@@ -22,8 +22,8 @@ provider behavior, should be presented as contracts.
 - [Reusable manifest template](system-manifest-template.md)
 - [World Simulation](world-simulation.md) — Partial; reviewed October 5, 2026
 - [Character System](character-system.md) — Partial; reviewed October 6, 2026
-- [Action & Resolution](action-resolution.md) — Partial; review candidate October 6, 2026
-- [Actors & Social Dynamics](actors-social-dynamics.md) — Partial; review candidate October 6, 2026
+- [Action & Resolution](action-resolution.md) — Partial; reviewed October 6, 2026
+- [Actors & Social Dynamics](actors-social-dynamics.md) — Partial; reviewed October 6, 2026
 - [Narrative Experience](narrative-experience.md) — Partial; review candidate October 6, 2026
 
 Use **Implemented** for behavior evidenced in runtime and tests, **Partial** for

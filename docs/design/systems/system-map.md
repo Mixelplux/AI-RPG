@@ -7,10 +7,10 @@ It is neither a call graph nor a list of runtime modules. See the separate
 The World Simulation baseline is preserved. [Character System](character-system.md)
 was reviewed October 6, 2026 at documentation baseline
 `89f135834eb85cb995facb0b7126a3c5f58b7a6a`.
-[Action & Resolution](action-resolution.md) has an October 6, 2026 review candidate
-at baseline `d0dba1f5f1da391216cdb8fb8e4dabf8485705c8`;
-[Actors & Social Dynamics](actors-social-dynamics.md) has an October 6, 2026 review
-candidate at baseline `63f1a3db8b8996efe0f8245ad21d22ddb234dcbc`;
+[Action & Resolution](action-resolution.md) was finalized October 6, 2026 at
+accepted milestone `63f1a3db8b8996efe0f8245ad21d22ddb234dcbc`;
+[Actors & Social Dynamics](actors-social-dynamics.md) was finalized October 6,
+2026 at accepted milestone `ecd3ed246a8c989990d1411582438b58369d3c84`;
 [Narrative Experience](narrative-experience.md) has an October 6, 2026 review
 candidate at baseline `ecd3ed246a8c989990d1411582438b58369d3c84`.
 Later systems have no manifests yet.

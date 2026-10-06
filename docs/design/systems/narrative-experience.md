@@ -14,8 +14,7 @@
 This living review candidate uses the [shared manifest structure and status
 vocabulary](README.md). It refines responsibility, not implementation authority.
 No new module, persistence model, prompt change, sprint or provider run follows
-from it. Uncommitted evaluator material is supplementary inspection evidence,
-not part of the protected implementation baseline.
+from it.
 
 ## Purpose
 
@@ -269,7 +268,6 @@ choices and one-hour costs are intentional aids, not a mandate to hide all mecha
 | Pressure composition | **Implemented, narrow:** pipeline removes exact occurrences of the selected cue from candidate text and appends that cue once. This is not semantic deduplication or cross-turn condition suppression. |
 | Recap/save-load | **Implemented, bounded:** West-Road `Previously:` derives from saved phase/discoveries/report state. Save/load rebuilds scenes; narration/cache is not saved. It is not a general campaign recap or complete attempt-history summary. |
 | Incidental expression | **Accepted design with implemented prompt permission:** compatible ordinary texture is allowed. Continuity remembers descriptive claims, not authoritative props, NPCs, inventories or discoveries. Semantic compliance remains **Partial**. |
-| Evaluation | **Implemented local tooling, outside protected baseline:** fixed contexts, blind human scoring and narrow marker checks; synthetic search/dialogue/shack cases are evaluator fixtures, not gameplay capabilities. |
 
 Sprint 10.79 corrected irrelevant West-Road material at Market Square without
 deleting discoveries, phase or outcomes. This demonstrates selection versus truth.
@@ -347,8 +345,7 @@ authority to narration.
 
 Runtime and test assertions were inspected, not executed as gameplay suites for
 this documentation review. Handoff smoke/verification findings are historical
-evidence, not new live results. Evaluation tooling was read without modification
-or execution; model scores and synthetic fixtures do not certify current runtime.
+evidence, not new live results.
 
 | Evidence | Supports |
 |---|---|
@@ -363,11 +360,6 @@ or execution; model scores and synthetic fixtures do not certify current runtime
 | [Locality tests](../../../test_west_road_scene_relevance.py), [presentation tests](../../../test_west_road_presentation.py), [save/load tests](../../../test_save_load.py) | Local omission without state loss, no-op refresh suppression, save reconstruction |
 | [Output tests](../../../test_narration_output.py), [pipeline tests](../../../test_narration_pipeline.py), [adapter tests](../../../test_openai_responses_narration.py) | Structural safety and fake-transport boundary evidence, not generated quality |
 | [10.79](../../sprint_10_79_handoff.md), [10.80](../../sprint_10_80_handoff.md) | Owner-observed locality/progression corrections and accepted remaining repetition |
-| [Local evaluator notes](../../narrator_model_evaluation_v1.md), [tool](../../../tools/narrator_eval.py), [cases](../../../tools/narrator_eval_scenarios.json), [tests](../../../test_narrator_eval.py) | Uncommitted supplementary evidence: fidelity/agency/style scoring, hidden-truth exclusion, narrow markers and fixture limitations |
-
-The evaluator links refer to preserved untracked local files and are not portable
-protected-baseline dependencies. The manifest's authority and core conclusions
-are also supported by the tracked runtime, tests and accepted handoffs above.
 
 ## Revision history
 
