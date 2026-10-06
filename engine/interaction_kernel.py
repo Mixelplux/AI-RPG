@@ -125,6 +125,11 @@ def process_player_input(
             action=action
         )
 
+    if intent == "player_intention":
+        return build_interaction_result(
+            success=True, intent=intent, message="", action=action
+        )
+
     if intent == "conversation":
         return build_interaction_result(
             success=True,
@@ -172,6 +177,11 @@ def classify_intent(player_input: str) -> str:
     if lowered.startswith("present"):
         return "clue_presentation"
 
+    # Within-scene first-person movement is narration intent, not a route.
+    # Keep explicit go/head/move-to and directional commands on their old path.
+    if re.match(r"^i\s+(?:walk|move|wander|stroll)\s+(?:through|around|about|among|along)\b", lowered):
+        return "player_intention"
+
     movement_words = ["go", "walk", "move", "travel", "enter", "leave"]
     look_words = ["look", "inspect", "examine", "search", "study"]
     talk_words = ["talk", "speak", "ask", "greet", "tell"]
@@ -193,6 +203,12 @@ def classify_intent(player_input: str) -> str:
 
 
 def build_action(player_input: str, intent: str) -> Dict[str, Any]:
+    if intent == "player_intention":
+        return {
+            "type": "narrate_intention", "target": None,
+            "parameters": {}, "confidence": 1.0,
+        }
+
     if intent == "skill_check":
         return {
             "type": "skill_check",

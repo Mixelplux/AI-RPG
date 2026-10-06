@@ -1,5 +1,6 @@
 """Deterministic, no-network checks for the isolated Responses adapter."""
 import os
+from unittest.mock import patch
 
 from engine.game_engine import GameEngine
 from engine.narration_prompt import build_narration_prompt_packet
@@ -7,6 +8,7 @@ from engine.narration_request import build_narration_request_packet
 from engine.narration_source import (
     OPENAI_MAX_INPUT_TOKENS,
     OPENAI_MODEL,
+    OPENAI_REASONING_EFFORT,
     NarrationProviderError,
     build_openai_responses_narration_source_result,
 )
@@ -28,11 +30,23 @@ def main():
     result = build_openai_responses_narration_source_result(prompt, fake)
     assert result["source"] == "openai_responses_preview"
     assert result["metadata"]["model"] == OPENAI_MODEL
+    assert OPENAI_MODEL == "gpt-6-luna" and OPENAI_REASONING_EFFORT == "low"
     assert result["candidate"]["narration_text"] == Response.output_text
     assert calls[0][0] == 20.0 and calls[0][1] == 0
-    assert "reasoning" not in calls[0][2]
+    assert calls[0][2]["model"] == "gpt-6-luna"
+    assert calls[0][2]["reasoning"] == {"effort": "low"}
+    assert set(calls[0][2]) == {"model", "reasoning", "instructions", "input", "max_output_tokens", "store"}
     assert calls[0][2]["store"] is False and calls[0][2]["max_output_tokens"] == 256
     assert engine.get_world_state() == before
+    # The local input ceiling must reject before the injected transport runs.
+    oversized_encoding = type("Encoding", (), {"encode": lambda self, text: range(OPENAI_MAX_INPUT_TOKENS + 1)})()
+    with patch("engine.narration_source.tiktoken.encoding_for_model", return_value=oversized_encoding):
+        try:
+            build_openai_responses_narration_source_result(prompt, fake)
+            raise AssertionError("oversized input invoked transport")
+        except NarrationProviderError as error:
+            assert error.stage == "provider_input_limit"
+    assert len(calls) == 1
     class RefusalResponse:
         status = "completed"
         output_text = ""

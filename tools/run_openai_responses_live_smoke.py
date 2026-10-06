@@ -2,6 +2,7 @@
 
 from engine.game_engine import GameEngine
 from engine.save_system import SAVE_VERSION
+from engine.narration_source import OPENAI_MODEL, OPENAI_REASONING_EFFORT
 
 
 def main() -> None:
@@ -25,7 +26,7 @@ def main() -> None:
         suffix = f" reason={reason}" if stage == "provider_response" and reason in allowed else ""
         print(f"LIVE_SMOKE_FAIL stage={stage}{suffix}")
         return
-    print("LIVE_SMOKE_PASS provider=openai model=gpt-4.1-mini")
+    print(f"LIVE_SMOKE_PASS provider=openai model={OPENAI_MODEL} reasoning={OPENAI_REASONING_EFFORT}")
 
 
 if __name__ == "__main__":

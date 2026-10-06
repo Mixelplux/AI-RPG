@@ -2,6 +2,7 @@ from copy import deepcopy
 from typing import Any, Dict
 
 from engine.history_context import build_history_context_packet
+from engine.scene_context import build_scene_context
 from engine.world_state import get_player_location_id, get_time
 
 
@@ -12,9 +13,9 @@ NARRATION_CONTEXT_BOUNDARY_RULE = (
     "The narrator can describe. The engine decides what is true."
 )
 NARRATION_CONTEXT_DRIFT_GUARDRAIL = (
-    "Narration context may support atmospheric prose, but future narration "
-    "must not invent unstated specifics. Sensory description must be grounded "
-    "in known scene facts and must not create durable world truth."
+    "Narration may concretize ordinary low-consequence detail under the scene "
+    "narration contract. Known facts, current conditions and expected activity "
+    "constrain that freedom; prose must not create consequential or durable world truth."
 )
 NARRATION_CONTEXT_ATMOSPHERE_EXAMPLE = (
     "If the scene contains a blizzard, narration may describe cold weather, "
@@ -53,6 +54,7 @@ def build_narration_context_packet(
             "current_location_id": get_player_location_id(world_state)
         },
         "scene_snapshot": deepcopy(scene_snapshot),
+        "scene_context": build_scene_context(scene_snapshot, player_input),
         "history_context": history_context,
         "pressure_cue": deepcopy(pressure_cue or {}),
         "boundary": {

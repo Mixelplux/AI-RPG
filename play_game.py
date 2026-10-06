@@ -1,6 +1,8 @@
 import sys
+import re
 
 from engine.game_engine import GameEngine
+from engine.scene_continuity import SceneContinuity
 
 
 REGION_PATH = "data/regions/bryn_shander.json"
@@ -30,6 +32,36 @@ def print_narration(narration: dict) -> None:
 
     if narration.get("player_prompt"):
         print(narration["player_prompt"])
+
+
+def print_scene_experience(engine: GameEngine, player_input: str,
+                           continuity=None, stage="expand") -> None:
+    """Present validated prose through the existing read-only narration boundary."""
+    presentation = (continuity.presentation(engine.get_scene_snapshot(), player_input, stage)
+                    if continuity is not None else None)
+    packet = engine.get_narration_preview(player_input, presentation=presentation)
+    if not packet["accepted"]:
+        # Provider failure must be visible, without dumping grounding or errors.
+        print("\nScene narration is unavailable. You can retry with 'look'.")
+        return
+    if continuity is not None:
+        continuity.remember(packet["display_text"],
+                            packet["narration_context"]["scene_context"]["conditions"])
+    print_narration({
+        "title": engine.get_scene_snapshot()["location"]["name"],
+        "description": packet["display_text"],
+    })
+
+
+def travel_presentation(result, engine):
+    """Compress only completed routine routes; preserve other result messages."""
+    message = result.get("message", "")
+    if (result["success"] and result["intent"] == "movement"
+            and result.get("movement_hops")
+            and re.fullmatch(r"(?:You move [a-z]+\.\s*)+", message)):
+        name = engine.get_scene_snapshot()["location"]["name"]
+        return f"You make your way to {name}."
+    return message
 
 
 def print_help() -> None:
@@ -366,11 +398,18 @@ def main() -> None:
     print("Type 'quit' or 'exit' to stop.\n")
 
     last_presented_narration = None
+    continuity = SceneContinuity()
+    scene_player_input = "look"
+    scene_stage = "expand"
     while True:
         narration = engine.get_narration()
+        continuity.enter(engine.get_scene_snapshot()["location"]["location_id"])
 
         if narration != last_presented_narration:
-            print_narration(narration)
+            if engine.get_scene_snapshot()["location"]["location_id"] == "market_square":
+                print_scene_experience(engine, scene_player_input, continuity, scene_stage)
+            else:
+                print_narration(narration)
             last_presented_narration = narration
 
         player_input = input("\n> ").strip()
@@ -392,10 +431,12 @@ def main() -> None:
         if normalized_input == "load":
             try:
                 engine.load(SAVE_PATH)
+                continuity.clear()
                 print("\nGame loaded.")
                 for line in engine.get_resume_summary():
                     print(line)
                 last_presented_narration = None
+                scene_player_input = "look"
             except FileNotFoundError:
                 print("\nNo saved game found.")
             except ValueError as error:
@@ -404,8 +445,10 @@ def main() -> None:
 
         if normalized_input == "reset":
             engine.reset()
+            continuity.clear()
             print("\nGame reset.")
             last_presented_narration = None
+            scene_player_input = "look"
             continue
 
         if normalized_input == "pressures":
@@ -541,6 +584,15 @@ def main() -> None:
             continue
 
         interaction_result = engine.process_command(player_input)
+        if interaction_result["success"]:
+            scene_player_input = player_input
+            scene_stage = "narrow" if interaction_result["intent"] == "conversation" else "follow"
+        if interaction_result["success"] and interaction_result["intent"] in {
+            "observation", "player_intention",
+        }:
+            stage = "expand" if normalized_input in {"look", "look around", "look here"} else "follow"
+            print_scene_experience(engine, player_input, continuity, stage)
+            continue
         actor_knowledge_response = interaction_result.get("actor_knowledge_response")
         if actor_knowledge_response is not None:
             print(actor_knowledge_response["text"])
@@ -566,7 +618,7 @@ def main() -> None:
             elif interaction_result.get("intent") == "west_road_decision":
                 print("You choose to " + normalized_input + ".")
             else:
-                print(interaction_result["message"])
+                print(travel_presentation(interaction_result, engine))
 
         if interaction_result.get("skill_check"):
             check_result = interaction_result["skill_check"]
@@ -576,6 +628,11 @@ def main() -> None:
                 f"result {check_result['result_value']} against "
                 f"difficulty {check_result['target_difficulty']}."
             )
+
+        if (interaction_result["success"] and interaction_result["intent"] == "conversation"
+                and engine.get_scene_snapshot()["location"]["location_id"] == "market_square"):
+            print_scene_experience(engine, player_input, continuity, "narrow")
+            last_presented_narration = engine.get_narration()
 
         if interaction_result.get("time_advancement"):
             time_advancement = interaction_result["time_advancement"]

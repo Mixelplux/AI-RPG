@@ -15,8 +15,14 @@ NARRATION_SOURCE_SCHEMA = "ai_rpg.narration_source_result"
 NARRATION_SOURCE_VERSION = 1
 NARRATION_SOURCE_OPENAI_RESPONSES = "openai_responses_preview"
 NARRATION_SOURCE_REQUIRED_KEYS = frozenset({"schema", "version", "source", "source_prompt", "candidate", "metadata"})
-NARRATION_SOURCE_METADATA = {"candidate_trust": "untrusted", "generation": "provider_generated", "provider": "openai", "api": "responses", "model": "gpt-4.1-mini"}
-OPENAI_MODEL = "gpt-4.1-mini"
+# Provisional owner-selected runtime configuration; no provider routing implied.
+OPENAI_MODEL = "gpt-6-luna"
+OPENAI_REASONING_EFFORT = "low"
+# Preserve the existing o200k local budget tokenizer independently of the API
+# model: the installed tiktoken registry cannot resolve the Luna model name.
+# This is a local counting bound, not a claim about provider-reported usage.
+OPENAI_TOKENIZER_MODEL = "gpt-4.1-mini"
+NARRATION_SOURCE_METADATA = {"candidate_trust": "untrusted", "generation": "provider_generated", "provider": "openai", "api": "responses", "model": OPENAI_MODEL}
 OPENAI_TIMEOUT_SECONDS = 20.0
 OPENAI_MAX_OUTPUT_TOKENS = 256
 OPENAI_MAX_INPUT_TOKENS = 8000
@@ -34,7 +40,7 @@ def _provider_text(prompt: Dict[str, Any]) -> tuple[str, str]:
     validated = validate_narration_prompt_packet(prompt)
     instructions = json.dumps(validated["instructions"], sort_keys=True, separators=(",", ":"))
     input_text = json.dumps(validated["deterministic_input"], sort_keys=True, separators=(",", ":"))
-    encoding = tiktoken.encoding_for_model(OPENAI_MODEL)
+    encoding = tiktoken.encoding_for_model(OPENAI_TOKENIZER_MODEL)
     if len(encoding.encode(instructions)) + len(encoding.encode(input_text)) > OPENAI_MAX_INPUT_TOKENS:
         raise NarrationProviderError("provider_input_limit")
     return instructions, input_text
@@ -50,7 +56,7 @@ def build_openai_responses_narration_source_result(
     if not isinstance(api_key, str) or not api_key.strip():
         raise NarrationProviderError("provider_configuration")
     instructions, input_text = _provider_text(prompt_copy)
-    request = {"model": OPENAI_MODEL, "instructions": instructions, "input": input_text, "max_output_tokens": OPENAI_MAX_OUTPUT_TOKENS, "store": False}
+    request = {"model": OPENAI_MODEL, "reasoning": {"effort": OPENAI_REASONING_EFFORT}, "instructions": instructions, "input": input_text, "max_output_tokens": OPENAI_MAX_OUTPUT_TOKENS, "store": False}
     try:
         client = OpenAI(api_key=api_key, timeout=OPENAI_TIMEOUT_SECONDS, max_retries=0)
         response = (transport or (lambda c, r: c.responses.create(**r)))(client, request)

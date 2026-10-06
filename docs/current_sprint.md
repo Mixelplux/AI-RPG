@@ -1,24 +1,35 @@
-# Sprint 10.79 - West-Road Market Causality
+# Sprint 10.80 - Scene Context V1
 
 ## Status
-Complete, owner-accepted October 4, 2026. Elevated risk. Implementation branch:
-`codex/west-road-market-causality`; protected baseline:
-`8d52ab0ef763846c598af8af29236475d34f42be`.
-Sprint 10.79, Causal Follow-Through V1, is complete and frozen; `next_sprint`
-remains null. Narrative Scenario Quality presentation concerns remain deferred.
+Complete and owner-accepted October 5, 2026 after the final live narrator smoke.
+Routine risk. Branch: `codex/scene-context-v1`. Protected baseline:
+`dad93cea3a6b38aa5cd6b9852f44340676be241f`.
+Sprint 10.80 is complete; `next_sprint` remains null.
 
 ## Milestone
-Implement and verify the bounded two-continuous-hour reduced-coverage theft
-and its later market revelation. Scope and exclusions are in
-`docs/current_capability_package.md`. Sprint 10.78 remains complete and frozen.
-Implementation and bounded completion review passed after a small malformed-load
-rejection correction. Owner smoke confirmed the principal causal cases and
-exposed remote West-Road state leaking into unrelated current-scene prose.
-The bounded road/gate projection correction and affected offline verification
-passed; owner re-smoke then confirmed Market Square no longer exposes remote
-West-Road state while North Gate still shows relevant road state. Owner accepted
-the sprint after the correction and re-smoke. The projection defect is closed.
-See `docs/sprint_10_79_handoff.md` for actual
-allocation/timing, compatibility, observed causal cases and verification.
-Real-tokenizer counts remain unverified because the existing cache is absent;
-offline narration contracts passed and no live provider was contacted.
+Implement and verify the smallest derived Scene Context proving slice within
+the existing narration boundary. Scope, exclusions, authority and completion
+are in `docs/current_capability_package.md`. No persistent state changes;
+automated checks remain offline. The final live narrator smoke used the real
+`gpt-6-luna` narrator with reasoning `low`; the owner accepted the result and
+said “accepted, continue.” The smoke sequence was travel to Market Square, look,
+and focused browsing. Progressive scene resolution, continuity, intent handling,
+second-person narration and consequential-fact boundaries were accepted. Minor
+storm-condition prose repetition is accepted narrative refinement.
+
+Implementation and the owner-requested player-path correction passed focused
+offline verification. The working-diff handoff is READY FOR OWNER RE-SMOKE;
+see `docs/sprint_10_80_handoff.md` for the route correction and verification.
+The known real tokenizer-cache limitation is unchanged; provider transport tests
+use an offline tokenizer stub and fake transport. The latest correction and
+verification evidence is recorded in the handoff. No further live call is needed.
+
+The owner-smoke continuity/progression correction was implemented and staged.
+Current-scene descriptive claims, previous conditions and
+orient/expand/follow/narrow attention reach the existing validated prompt path.
+Routine destination-hop messages are compressed in the CLI. Offline focused and
+affected regressions passed; the owner then re-smoked and accepted the result.
+The exact accepted scope and separation are recorded in the latest handoff section.
+
+Finalization: one Sprint 10.80 commit is authorized. No push or merge is
+authorized; `next_sprint` remains null. Save version 1 is preserved.

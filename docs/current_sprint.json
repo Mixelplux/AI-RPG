@@ -10,18 +10,18 @@
   "active_sprint": null,
   "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "10.79"
+    "id": "10.80"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "10.79",
-    "title": "West-Road Market Causality",
+    "id": "10.80",
+    "title": "Scene Context V1",
     "type": "capability-package",
     "status": "complete",
-    "risk_level": "elevated",
-    "goal": "Two continuous hours of reduced guard coverage establish one independent market-approach theft before observation.",
+    "risk_level": "routine",
+    "goal": "Derived Scene Context grounds experiential narration while permitting bounded low-consequence detail.",
     "predecessor": {
-      "id": "10.78"
+      "id": "10.79"
     },
     "platform": {
       "official_interpreter": ".\\.venv\\Scripts\\python.exe",
@@ -29,10 +29,10 @@
       "provider_requests": "forbidden"
     },
     "scope": [
-      "Specific continuous reduced-coverage timing, one independent lamp-oil theft, local player-safe revelation, additive version-1 persistence and directly affected fiction."
+      "Market Square grounding, conditions-derived activity, declared intention, existing local competence and bounded narrator freedom; no simulation or persistence changes."
     ],
     "verification": [
-      "Exact threshold, tactical headroom, composed activities, restoration, idempotency, copied-load compatibility, rollback, affected offline regressions and maintained Git verification."
+      "Focused Scene Context and narration contracts, competence and causal-locality regressions, maintained Git verification and changed-file review."
     ]
   }
 }

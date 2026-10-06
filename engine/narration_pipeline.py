@@ -13,6 +13,7 @@ from engine.narration_request import (
     validate_narration_request_packet,
 )
 from engine.narration_source import (
+    NARRATION_SOURCE_METADATA,
     NARRATION_SOURCE_OPENAI_RESPONSES,
     NARRATION_SOURCE_SCHEMA,
     NARRATION_SOURCE_VERSION,
@@ -194,13 +195,7 @@ def validate_narration_preview_candidate(
         "source": NARRATION_SOURCE_OPENAI_RESPONSES,
         "source_prompt": deepcopy(narration_prompt),
         "candidate": deepcopy(candidate),
-        "metadata": {
-            "candidate_trust": "untrusted",
-            "generation": "provider_generated",
-            "provider": "openai",
-            "api": "responses",
-            "model": "gpt-4.1-mini",
-        },
+        "metadata": deepcopy(NARRATION_SOURCE_METADATA),
     }
     return _build_preview_from_candidate(
         narration_context,

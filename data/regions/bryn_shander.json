@@ -290,7 +290,7 @@
       "location_id": "market_square",
       "name": "Market Square",
       "type": "market_square",
-      "description_seed": "The central Market Square is Bryn Shander's public trading and gathering ground.",
+      "description_seed": "The central Market Square is Bryn Shander's open public trading and gathering ground. Space for temporary stalls and passage lies between the surrounding commercial lanes and civic buildings, with Town Hall facing its southern side. In ordinary daytime conditions, traders offer everyday provisions and practical goods while townspeople pass through, exchange news and attend public business.",
       "state": {
         "crowd_density": 0.45,
         "activity_level": 0.6

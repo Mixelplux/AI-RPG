@@ -11,6 +11,7 @@ from engine.narration_request import (
     NARRATION_REQUEST_VERSION,
     validate_narration_request_packet,
 )
+from engine.scene_context import SCENE_NARRATION_CONTRACT, validate_scene_context
 
 
 NARRATION_PROMPT_SCHEMA = "ai_rpg.narration_prompt_packet"
@@ -27,6 +28,7 @@ NARRATION_PROMPT_INSTRUCTIONS = {
     "persistence_claims": "forbidden",
     "structured_simulation_commands": "forbidden",
     "provider_payload": "forbidden",
+    "scene_narration_contract": SCENE_NARRATION_CONTRACT,
 }
 
 REQUIRED_PROMPT_KEYS = frozenset({
@@ -44,6 +46,7 @@ REQUIRED_PROMPT_INPUT_KEYS = frozenset({
     "current_time",
     "player",
     "scene_snapshot",
+    "scene_context",
     "history_context",
     "pressure_cue",
     "boundary",
@@ -79,6 +82,7 @@ def build_narration_prompt_packet(
             "current_time": deepcopy(context["current_time"]),
             "player": deepcopy(context["player"]),
             "scene_snapshot": deepcopy(context["scene_snapshot"]),
+            "scene_context": deepcopy(context["scene_context"]),
             "history_context": deepcopy(context["history_context"]),
             "pressure_cue": deepcopy(context["pressure_cue"]),
             "boundary": deepcopy(context["boundary"]),
@@ -174,6 +178,7 @@ def _validate_prompt_input_shape(deterministic_input: Any) -> None:
         )
 
     pressure_cue = deterministic_input.get("pressure_cue")
+    validate_scene_context(deterministic_input.get("scene_context"))
     if not isinstance(pressure_cue, dict):
         raise ValueError("Narration prompt pressure cue must be an object.")
     if pressure_cue and (

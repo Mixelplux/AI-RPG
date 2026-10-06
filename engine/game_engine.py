@@ -695,9 +695,12 @@ class GameEngine:
 
     def get_narration_preview(
         self,
-        player_input: str
+        player_input: str,
+        presentation: Dict[str, Any] | None = None,
     ) -> Dict[str, Any]:
         narration_context = self.get_narration_context(player_input)
+        if presentation is not None:
+            narration_context["scene_context"]["presentation"] = deepcopy(presentation)
         return build_narration_preview_packet(narration_context)
 
     def _prepare_time_advance_candidate(

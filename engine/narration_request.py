@@ -10,6 +10,7 @@ from engine.narration_output import (
     NARRATION_OUTPUT_VERSION,
     build_narration_output_contract,
 )
+from engine.scene_context import validate_scene_context
 
 
 NARRATION_REQUEST_SCHEMA = "ai_rpg.narration_request_packet"
@@ -33,6 +34,7 @@ REQUIRED_NARRATION_CONTEXT_KEYS = frozenset({
     "current_time",
     "player",
     "scene_snapshot",
+    "scene_context",
     "history_context",
     "pressure_cue",
     "boundary",
@@ -141,6 +143,7 @@ def _validate_narration_context_shape(narration_context: Any) -> None:
         )
 
     _validate_pressure_cue(narration_context.get("pressure_cue"))
+    validate_scene_context(narration_context.get("scene_context"))
 
     if not isinstance(narration_context.get("history_context"), dict):
         raise ValueError("Narration context history context must be an object.")

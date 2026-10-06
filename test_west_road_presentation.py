@@ -77,8 +77,16 @@ def test_branch_and_terminal_circumstances():
 
 
 def run_cli(engine, commands):
+    from engine.narration_pipeline import validate_narration_preview_candidate
+
     output = StringIO()
-    with patch.object(play_game.GameEngine, "start_new", return_value=engine), patch("builtins.input", side_effect=commands), redirect_stdout(output):
+    def offline_preview(context):
+        return validate_narration_preview_candidate(context, {
+            "schema": "ai_rpg.narration_output_packet", "version": 1,
+            "narration_text": "Snow drifts across the ground before you.",
+        })
+
+    with patch.object(play_game.GameEngine, "start_new", return_value=engine), patch("builtins.input", side_effect=commands), patch("engine.game_engine.build_narration_preview_packet", side_effect=offline_preview), patch("socket.create_connection", side_effect=AssertionError("network forbidden")), redirect_stdout(output):
         play_game.main()
     return output.getvalue()
 
@@ -100,7 +108,9 @@ def test_no_repeat_after_invalid_or_no_op():
     assert e.get_world_state() == before
     e = GameEngine(REGION)
     text = run_cli(e, ["investigate", "look", "quit"])
-    assert text.count("=== SCENE ===") == 1 and "no new clues" in text
+    assert text.count("=== SCENE ===") == 2 and "no new clues" in text
+    assert "Snow drifts across the ground" in text
+    assert "You take a closer look" not in text
 
 
 def test_refresh_after_material_actions():

@@ -388,6 +388,23 @@ def test_malformed_load_inputs_reject_without_ending_cli_session():
 
 def test_cli_causal_comparisons_and_save_load_fiction():
     import play_game
+    from engine.narration_pipeline import build_narration_preview_packet
+    from engine.narration_source import NARRATION_SOURCE_METADATA
+
+    def offline_preview(context):
+        def source(prompt):
+            # Keep the causal display assertion on the new player-facing route,
+            # without contacting a provider. Only supplied local facts surface.
+            material = json.dumps(prompt["deterministic_input"])
+            text = theft.INCIDENT_TEXT if theft.INCIDENT_TEXT in material else "Snow crosses the square."
+            return {
+                "schema": "ai_rpg.narration_source_result", "version": 1,
+                "source": "openai_responses_preview", "source_prompt": prompt,
+                "metadata": NARRATION_SOURCE_METADATA,
+                "candidate": {"schema": "ai_rpg.narration_output_packet", "version": 1,
+                              "narration_text": text},
+            }
+        return build_narration_preview_packet(context, source_builder=source)
 
     cases = (
         ("ordinary", None, ["arrange guarded local survey", "save", "load", "go to Market Square", "save", "load", "quit"], True),
@@ -407,7 +424,7 @@ def test_cli_causal_comparisons_and_save_load_fiction():
                 return command
 
             path = Path(root) / ("market_theft_cli_" + label + ".json")
-            with patch.object(GameEngine, "start_new", return_value=engine), patch("builtins.input", side_effect=next_input), patch.object(play_game, "SAVE_PATH", str(path)), redirect_stdout(output):
+            with patch.object(GameEngine, "start_new", return_value=engine), patch("builtins.input", side_effect=next_input), patch.object(play_game, "SAVE_PATH", str(path)), patch("engine.game_engine.build_narration_preview_packet", side_effect=offline_preview), patch("socket.create_connection", side_effect=AssertionError("network forbidden")), redirect_stdout(output):
                 play_game.main()
             text = output.getvalue()
             assert "Game loaded." in text and "Goodbye." in text

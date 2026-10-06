@@ -817,6 +817,15 @@ smoke is allowed and records only a sanitized pass/fail line. Provider failures
 fail closed without affecting normal gameplay. This establishes no provider
 framework; a later local source may use the same seam.
 
+Owner-authorized configuration update, October 5, 2026: Sprint 10.80 provisionally
+replaces the Mini default/no-reasoning setting above with `gpt-6-luna` and
+`reasoning.effort=low`, following blind owner evaluation. This is reversible,
+uses the same adapter, and preserves the timeout, retry, output, authority and
+persistence bounds. Local input-budget counting retains the existing tokenizer
+independently of API model-name resolution. Automated tests remain offline;
+the owner separately authorized five focused evaluator scenarios with three
+Luna-low repetitions when API access is available.
+
 ## ADR-059 - Character Information and Spatial Projection Use Minimum Sufficient World Detail
 
 **Status:** Accepted
