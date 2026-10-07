@@ -26,7 +26,10 @@ provider behavior, should be presented as contracts.
 - [Actors & Social Dynamics](actors-social-dynamics.md) — Partial; reviewed October 6, 2026
 - [Narrative Experience](narrative-experience.md) — Partial; finalized October 6, 2026
 - [Scenario & Authored Content](scenario-authored-content.md) — Partial; finalized October 6, 2026
-- [Persistence](persistence.md) — Partial; review candidate October 6, 2026
+- [Persistence](persistence.md) — Partial; finalized October 6, 2026 at
+  `56baf51a26c2ca2effeb098b78937bd381e28304`
+- [Player Presentation](player-presentation.md) — Partial; current review candidate
+  October 6, 2026 at protected baseline `56baf51a26c2ca2effeb098b78937bd381e28304`
 
 Use **Implemented** for behavior evidenced in runtime and tests, **Partial** for
 a responsibility with bounded implementation and material gaps, **Accepted design**
@@ -36,8 +39,10 @@ An accepted direction can also have deferred implementation; state both when
 useful. These labels do not replace the historical status vocabulary in
 simulation principles or authorize scheduling.
 
-The remaining planned manifest is Player Presentation. It is not created or
-authorized by this review.
+All eight planned manifests are now present. Player Presentation is the current
+documentation review candidate, not an accepted implementation package. Protected
+manifests retain their original review-baseline/status wording; the shared index
+and map record subsequent finalization milestones without rewriting those records.
 
 ## Shared doctrines
 

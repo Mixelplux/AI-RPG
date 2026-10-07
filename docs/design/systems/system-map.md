@@ -15,8 +15,11 @@ accepted milestone `63f1a3db8b8996efe0f8245ad21d22ddb234dcbc`;
 at accepted milestone `da362a53a704c27709a137b1d0e363368b49a044`.
 [Scenario & Authored Content](scenario-authored-content.md) was finalized October 6,
 2026 at accepted milestone `1566af02db59c2c9dd5262f589d8255426a30086`.
-[Persistence](persistence.md) has an October 6, 2026 review candidate based on
-that protected baseline. Player Presentation has no manifest yet.
+[Persistence](persistence.md) was finalized October 6, 2026 at accepted milestone
+`56baf51a26c2ca2effeb098b78937bd381e28304`.
+[Player Presentation](player-presentation.md) is the current October 6, 2026
+documentation review candidate at that protected baseline. Existing manifests
+retain their historical review wording; this shared record tracks finalization.
 
 ## Responsibility hierarchy
 
@@ -196,3 +199,30 @@ writing, so interruption can damage the prior save. These are different atomicit
 boundaries. Specific version-1 normalization and intentional prototype rejection
 exist; semantic compatibility with changed authored content remains unresolved.
 This review selects no runtime mechanism or next package.
+
+## Dependencies and information flow around Player Presentation
+
+The [Player Presentation manifest](player-presentation.md) proposes input and
+intent capture, interaction projection, and feedback/display as three
+responsibilities. They describe the human interaction surface across interfaces,
+with current CLI evidence; they neither create runtime modules nor grant fictional
+authority. Raw wording proposes intent. Recognized syntax and displayed choices
+do not establish execution, success, knowledge or another actor's willingness.
+
+| From → To | Information / dependency | Current status |
+|---|---|---|
+| Human player → Player Presentation → Action & Resolution / owning engine operations | Declared intent and supported command requests | Partial: fixed controls, keyword grammar, scenario dispatch and narrow descriptive intention; generic action acceptance does not imply consequential execution |
+| World Simulation / Character System → Player Presentation | Supported local state, navigation, capability/access and retained clues | Partial: clean bounded projections and explicit clue review; general familiarity/access and diagnostic separation remain incomplete |
+| Action & Resolution → Player Presentation | Eligible approaches, cost/uncertainty and accepted outcome/no-op/unavailability | Implemented bounded scenario/competence material; acceptance differs from fictional success; transparency and general feedback remain partial |
+| Actors & Social Dynamics → Player Presentation | Supported interaction targets and accepted behavior/reports | Partial: targetable static actors and fixed replies/effects; display cannot guarantee cooperation or invent intent |
+| Scenario & Authored Content → Player Presentation | Names, labels, clue titles and supported option text | Implemented bounded joins/projections; wording alone creates no executable operation |
+| Player Presentation ↔ Narrative Experience | Declared focus/stage and ephemeral descriptive context in; selected/framed expression out | Partial mixed deterministic/provider CLI integration; Narrative Experience owns semantic selection/repetition, presentation owns placement/refresh mechanics |
+| Player Presentation ↔ Persistence | Explicit save/load/reset request, operational success/failure and return to scene | Implemented fixed-path CLI controls and recap placement; error handling incomplete, no slot/autosave mechanism |
+| Narrator Provider / Model Adapter → Narrative Experience → Player Presentation | Accepted candidate expression or technical unavailability | Implemented fail-closed ordinary scene notice; no rich automatic fallback, retries or fictional-failure inference |
+
+Ephemeral display equality, attention stages, sentence claims and route-hop
+compaction do not mutate fiction or character memory. Successful load/re-entry
+reorients; retained clues remain available even when omitted locally. Help and
+provider display expose supported interaction unevenly; diagnostics and raw dice
+options prevent a universal safe/immersive-display claim. These are documented
+limits, not authorization for parser, help, narration or UI changes.
