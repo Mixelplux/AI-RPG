@@ -13,10 +13,10 @@ accepted milestone `63f1a3db8b8996efe0f8245ad21d22ddb234dcbc`;
 2026 at accepted milestone `ecd3ed246a8c989990d1411582438b58369d3c84`;
 [Narrative Experience](narrative-experience.md) was finalized October 6, 2026
 at accepted milestone `da362a53a704c27709a137b1d0e363368b49a044`.
-[Scenario & Authored Content](scenario-authored-content.md) has an October 6,
-2026 review candidate based on protected baseline
-`da362a53a704c27709a137b1d0e363368b49a044`.
-Persistence and Player Presentation have no manifests yet.
+[Scenario & Authored Content](scenario-authored-content.md) was finalized October 6,
+2026 at accepted milestone `1566af02db59c2c9dd5262f589d8255426a30086`.
+[Persistence](persistence.md) has an October 6, 2026 review candidate based on
+that protected baseline. Player Presentation has no manifest yet.
 
 ## Responsibility hierarchy
 
@@ -171,3 +171,28 @@ character knowledge grant. Current source labels are not a lore-ingestion system
 Active Bryn Shander content is distinct from test-only legacy declarations, and
 some authored scenario behavior/text remains in code. This separation suggests
 future portability without establishing a general modding or scenario framework.
+
+## Dependencies and information flow around Persistence
+
+The [Persistence manifest](persistence.md) proposes durable campaign state,
+restoration and reconstruction, and compatibility as three responsibilities.
+Persistence preserves supported accepted meaning; owning gameplay systems decide
+its fictional semantics and retention needs. Neither the save file nor the
+`world_state` container transfers those responsibilities to one gameplay owner.
+
+| From → To | Information / dependency | Current status |
+|---|---|---|
+| World Simulation ↔ Persistence | Supported external state, time, causal conditions and provenance | Implemented bounded state/coverage/incident continuity; loading does not replay time consequences |
+| Character System ↔ Persistence | Supported capability and selectively retained information | Implemented competence tags, discovery IDs and actor membership; no general memory/familiarity model |
+| Action & Resolution ↔ Persistence | Accepted attempt result, basis, cost, findings and causal references | Implemented West-Road replay without reroll, repayment or republication; no universal ledger |
+| Actors & Social Dynamics ↔ Persistence | Supported social continuity and references | Partial: actor positions, shared reports, witnesses and fixed commitments persist; general goals/relationships are not saved mutable systems |
+| Scenario & Authored Content ↔ Persistence | Region reference and supported identity/compatibility constraints | Partial: current source reloads by path; no frozen revision, content hash, rebasing or migration layer |
+| Persistence → Narrative Experience | Restored truth for reconstructed scenes and recap | Implemented bounded reorientation; generated prose/cache and provider memory are not campaign state |
+| Player Presentation ↔ Persistence | Explicit operations, success and failure | Fixed CLI save/load/reset path and path-based engine calls; no slot catalog, autosave or general error presentation |
+
+Load builds and validates a separate engine before adopting it; tests cover
+pre-adoption failure isolation. Saving opens the destination directly for JSON
+writing, so interruption can damage the prior save. These are different atomicity
+boundaries. Specific version-1 normalization and intentional prototype rejection
+exist; semantic compatibility with changed authored content remains unresolved.
+This review selects no runtime mechanism or next package.
