@@ -17,9 +17,13 @@ at accepted milestone `da362a53a704c27709a137b1d0e363368b49a044`.
 2026 at accepted milestone `1566af02db59c2c9dd5262f589d8255426a30086`.
 [Persistence](persistence.md) was finalized October 6, 2026 at accepted milestone
 `56baf51a26c2ca2effeb098b78937bd381e28304`.
-[Player Presentation](player-presentation.md) is the current October 6, 2026
-documentation review candidate at that protected baseline. Existing manifests
-retain their historical review wording; this shared record tracks finalization.
+[Player Presentation](player-presentation.md) was finalized October 6, 2026 at
+accepted baseline `f18a9512adcf659facbf9e70ae29bdc4a9146607`.
+All eight individual reviews are complete. This cross-system synthesis candidate
+records clarification and consolidation, with no fundamental architectural
+contradiction found. Existing manifests retain their historical review wording;
+this shared record tracks finalization without claiming completed implementation.
+The model and doctrines remain revisable guidance and authorize no implementation.
 
 ## Responsibility hierarchy
 
@@ -31,9 +35,18 @@ retain their historical review wording; this shared record tracks finalization.
 | Cross-Cutting | **Persistence:** durable storage, restoration, and compatibility. |
 | Supporting Infrastructure | **Narrator Provider / Model Adapter:** untrusted model transport and adaptation. **Verification / Evaluation:** evidence and checks. **Runtime / Tooling:** execution and development support. |
 
-Storage in `world_state` does not transfer all conceptual ownership to World
-Simulation. `GameEngine` currently orchestrates multiple responsibilities. The
-hierarchy does not require splitting either into new modules.
+Under [Authority Composition](README.md#authority-composition), storage in
+`world_state`, orchestration in `GameEngine`, shared candidate transitions and
+publication, persistence, and projection do not transfer conceptual authority.
+Each system retains the meaning it establishes. The hierarchy does not require
+splitting containers or orchestration into new modules.
+
+[Causal Continuity](README.md#causal-continuity) connects authoritative state,
+choices, adjudicated outcomes, elapsed time, and supported causal processes.
+Downstream progression stays with the appropriate owner, even within one shared
+transition. Persistence/history preserve enough provenance when future reasoning
+requires established causal meaning; this does not prescribe exhaustive event
+sourcing, continuous simulation, a generalized causal engine, or a scheduler.
 
 ## Dependencies and information flow around World Simulation
 
@@ -44,7 +57,7 @@ hierarchy does not require splitting either into new modules.
 | Character System → Action & Resolution | Capability and recognition affect applicable actions and resolution | Implemented bounded West-Road competence; broader interface provisional |
 | World Simulation → Character System | Observable world facts constrain perception and access; world truth alone does not grant knowledge | Partial: existing perception/discovery boundaries; ordinary lived familiarity remains design direction |
 | World Simulation ↔ Actors & Social Dynamics | Circumstances inform intentional decisions; executed actions return external consequences | Provisional conceptual interface; declared relocation/report effects are implemented, autonomous decisions are not |
-| World Simulation → Narrative Experience → Player Presentation | Local facts, conditions, and safe outcomes become scene context and expression | Implemented bounded projections and Sprint 10.80 context; generalized context selection deferred |
+| World Simulation / Character System → Narrative Experience → Player Presentation | Jointly accessible local facts, conditions, retained information and safe outcomes are selected/framed, then displayed | Implemented bounded projections and Sprint 10.80 context; general access/familiarity and context selection remain deferred |
 | Narrator Provider / Model Adapter → Narrative Experience | Untrusted candidate expression through validated, fail-closed boundaries | Implemented narration path; no reverse authority flow into simulation |
 | World Simulation ↔ Persistence | Validated runtime state saved/restored; scenes rebuilt from state plus content | Implemented version-1 envelope; storage atomicity limitation in manifest |
 | Verification / Evaluation, Runtime / Tooling → supported systems | Checks and execution support | Infrastructure relationships, not fictional authority |
@@ -59,9 +72,13 @@ The [Character System manifest](character-system.md) refines capability,
 perspective, and memory into capability/constraints, informational access, and
 selective retention/continuity. This working decomposition remains provisional.
 World Simulation supplies what exists and its externally observable properties;
-Character System supplies character-specific capability, perspective, and
-constraints or basis relevant to access. Accessible views may be derived jointly
-from both rather than independently established by Character System.
+Character System establishes character-specific capability, informational access
+or basis, and relevant retained continuity. Legitimate accessible views may be
+derived jointly from both. Narrative Experience selects and frames information
+within that view; Player Presentation displays it. Character System does not
+independently establish all perception, and world truth alone does not grant
+character knowledge. This preserves the sparse-epistemic/familiarity direction,
+not a claim of general runtime access filtering.
 
 | From → To | Information / dependency | Current status |
 |---|---|---|
@@ -158,6 +175,15 @@ Content supplies intentional starting material; supported runtime interpreters
 establish applicability and consequences. Legitimate live campaign changes take
 precedence over affected canonical/default facts. Current overlays implement this
 only for supported state, not every authored field.
+
+Authored identities, foundations, motivations, declarations, fixed bounded rules,
+replies, constraints, and possible consequence material do not automatically
+become general actor decision authority. Actors & Social Dynamics owns meaningful
+consequential intentional non-player choice. Action & Resolution adjudicates
+supported attempts where required; World Simulation owns resulting external
+reality and subsequent legitimate causal progression. Existing fixed bounded
+authored scenario behavior remains valid through supported runtime interpretation;
+it does not establish a general actor decision mechanism.
 
 | From → To | Information / dependency | Current status |
 |---|---|---|
