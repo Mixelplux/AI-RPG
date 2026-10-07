@@ -2,7 +2,12 @@
 
 Reviewed October 5, 2026 at `51f595b5c8516ef242a4fffeb246c0e143acc9b3`.
 This is the current conceptual ownership model, subject to evidence and revision.
-It is neither a call graph nor a list of runtime modules. See the separate
+Cross-system synthesis was finalized at commit
+`9f402a352ca038e35dcc96eb2b1876e7f5b0f171`. All eight individual reviews and
+the overall System Manifest completion review are complete; no fundamental
+architectural contradiction was found. The responsibility model remains
+revisable guidance, and completion authorizes no runtime implementation. It is
+neither a call graph nor a list of runtime modules. See the separate
 [runtime architecture](../../architecture.md) and [shared doctrines](README.md).
 The World Simulation baseline is preserved. [Character System](character-system.md)
 was reviewed October 6, 2026 at documentation baseline
@@ -19,11 +24,9 @@ at accepted milestone `da362a53a704c27709a137b1d0e363368b49a044`.
 `56baf51a26c2ca2effeb098b78937bd381e28304`.
 [Player Presentation](player-presentation.md) was finalized October 6, 2026 at
 accepted baseline `f18a9512adcf659facbf9e70ae29bdc4a9146607`.
-All eight individual reviews are complete. This cross-system synthesis candidate
-records clarification and consolidation, with no fundamental architectural
-contradiction found. Existing manifests retain their historical review wording;
-this shared record tracks finalization without claiming completed implementation.
-The model and doctrines remain revisable guidance and authorize no implementation.
+Existing manifests retain their historical review wording; this shared map
+records finalization without claiming completed implementation. The model and
+doctrines remain revisable guidance, and no implementation is authorized.
 
 ## Responsibility hierarchy
 

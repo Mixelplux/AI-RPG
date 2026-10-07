@@ -39,13 +39,14 @@ An accepted direction can also have deferred implementation; state both when
 useful. These labels do not replace the historical status vocabulary in
 simulation principles or authorize scheduling.
 
-All eight individual manifest reviews are complete. Review completion does not
-change their Partial implementation status. The cross-system synthesis candidate
-clarifies their interconnected model; no fundamental architectural contradiction
-was found. Protected manifests retain their original review-baseline/status
-wording; the shared index and map record subsequent finalization milestones
-without rewriting those records. Acceptance of this candidate leads to the
-overall System Manifest completion review, not implementation milestone selection.
+All eight individual manifest reviews are complete, and their Partial
+implementation classifications remain unchanged. Cross-system synthesis was
+finalized at `9f402a352ca038e35dcc96eb2b1876e7f5b0f171`; the overall System
+Manifest completion review was accepted October 7, 2026. No fundamental
+architectural contradiction or missing system responsibility was found.
+Intentional unresolved questions remain deferred. Completion selects no
+implementation package or next milestone. These living manifests and their
+responsibility model may be revised when future evidence supports a better model.
 
 ## Shared doctrines
 
