@@ -193,10 +193,21 @@ def summary(region, world):
         if len(found) == 2 and len(reported) == 2:
             text = "You found signs that west-road travelers were being watched and reported the tracks and Mara's account to Elin. Decide whether to push for an immediate patrol or continue investigating."
     else:
+        route_lead = "then followed the observers' withdrawal route"
+        if phase == "withdrawal_route_found":
+            full_attempt = next(
+                (command for command, attempt in world.get("competence_attempts", {}).items()
+                 if attempt["result"] == "full"), None
+            )
+            route_lead = {
+                "follow withdrawal signs": "then followed the watchers' fresh tracks to their route from the road",
+                "reconstruct local observation circuit": "then compared the watchers' roadside positions and found their route from the road",
+                "arrange guarded local survey": "then arranged a guarded survey that found the withdrawal route",
+            }.get(full_attempt, route_lead)
         text = {
-            "observers_withdrew": "You advocated immediate patrol action. The observers withdrew, leaving fresh signs. Decide whether to pursue them or restore normal coverage.",
+            "observers_withdrew": "You advocated immediate patrol action. The observers withdrew, leaving fresh tracks. Decide whether to pursue them or restore normal coverage.",
             "wagon_intercepted": "You chose one more hour of investigation. Another wagon was intercepted, revealing a threatened supply stop. Decide whether to protect it or search for the raiders.",
-            "withdrawal_route_found": "You advocated immediate patrol action, then followed the observers' withdrawal route. Nobody was captured, and patrol coverage remains extended. The broader threat remains unresolved.",
+            "withdrawal_route_found": "You advocated immediate patrol action, " + route_lead + ". Nobody was captured, and guards remain assigned to the road instead of other approaches. The broader threat remains unresolved.",
             "coverage_restored": "You advocated immediate patrol action. After the observers withdrew, you restored normal coverage rather than following them. The broader threat remains unresolved.",
             "supply_stop_protected": "You chose one more hour of investigation. After another wagon was intercepted, you protected the threatened supply stop. Its next departure is held safely; the raiders remain unlocated.",
             "raider_staging_area_found": "You chose one more hour of investigation, then searched for the raiders and found a likely staging area. There was no confrontation; the supply stop still lacks dedicated protection.",

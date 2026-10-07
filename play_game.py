@@ -3,6 +3,7 @@ import re
 
 from engine.game_engine import GameEngine
 from engine.scene_continuity import SceneContinuity
+from engine.west_road_presentation import ROUTE_FOLLOWTHROUGH
 
 
 REGION_PATH = "data/regions/bryn_shander.json"
@@ -22,16 +23,45 @@ def print_clue_presentation(presentation: dict) -> None:
     )
 
 
-def print_narration(narration: dict) -> None:
+def print_narration(narration: dict, previous: dict | None = None,
+                    result: dict | None = None) -> bool:
+    description = narration["description"]
+    sections = narration.get("scene_sections")
+    prior = previous.get("scene_sections") if previous and previous.get("title") == narration["title"] else None
+    if sections and prior and result and result.get("success"):
+        parts = []
+        for key in ("orientation", "conditions", "presence", "situation", "evidence", "choices", "other"):
+            current = sections.get(key, [] if key in ("conditions", "evidence") else None)
+            before = prior.get(key, [] if key in ("conditions", "evidence") else None)
+            if key in ("conditions", "evidence"):
+                additions = [text for text in current if text not in before]
+                if key == "evidence":
+                    additions = [text for text in additions if text not in result.get("message", "")]
+                parts.extend(additions)
+            elif current and current != before:
+                if key == "situation" and result.get("intent") == "west_road_decision":
+                    continue  # The accepted outcome and actor replies have just supplied it.
+                if (key == "situation" and result.get("intent") == "west_road_competence"
+                        and result.get("changed") and result.get("accepted_outcome", {}).get("result") == "full"):
+                    parts.append(ROUTE_FOLLOWTHROUGH)
+                    continue  # The finding was delivered; retain the continuing cost and reactions.
+                parts.append(current)
+        if (result.get("intent") == "clue_presentation" and sections.get("other") != prior.get("other")
+                and sections.get("choices") == prior.get("choices") and sections.get("choices")):
+            parts.insert(0, sections["choices"])
+        if not parts:
+            return False
+        description = "\n\n".join(parts)
     print("\n=== SCENE ===\n")
 
     print(narration["title"])
     print()
-    print(narration["description"])
+    print(description)
     print()
 
     if narration.get("player_prompt"):
         print(narration["player_prompt"])
+    return True
 
 
 def print_scene_experience(engine: GameEngine, player_input: str,
@@ -91,6 +121,7 @@ def print_help() -> None:
     print("- advocate patrol / continue investigation: Choose at the North Gate after reporting evidence to Elin.")
     print("- pursue observers / restore coverage: Follow up after patrol action.")
     print("- protect supply stop / locate raiders: Follow up after further investigation.")
+    print("- follow withdrawal signs / reconstruct local observation circuit / arrange guarded local survey: Follow the watchers' tracks, compare their positions, or coordinate a search with Grey and Elin.")
     print("- help: Show this help message.")
     print("- quit or exit: End the game.")
     print("- Any other input is treated as a player action.")
@@ -401,6 +432,7 @@ def main() -> None:
     continuity = SceneContinuity()
     scene_player_input = "look"
     scene_stage = "expand"
+    last_interaction_result = None
     while True:
         narration = engine.get_narration()
         continuity.enter(engine.get_scene_snapshot()["location"]["location_id"])
@@ -409,8 +441,9 @@ def main() -> None:
             if engine.get_scene_snapshot()["location"]["location_id"] == "market_square":
                 print_scene_experience(engine, scene_player_input, continuity, scene_stage)
             else:
-                print_narration(narration)
+                print_narration(narration, last_presented_narration, last_interaction_result)
             last_presented_narration = narration
+            last_interaction_result = None
 
         player_input = input("\n> ").strip()
         normalized_input = player_input.lower()
@@ -436,6 +469,7 @@ def main() -> None:
                 for line in engine.get_resume_summary():
                     print(line)
                 last_presented_narration = None
+                last_interaction_result = None
                 scene_player_input = "look"
             except FileNotFoundError:
                 print("\nNo saved game found.")
@@ -448,6 +482,7 @@ def main() -> None:
             continuity.clear()
             print("\nGame reset.")
             last_presented_narration = None
+            last_interaction_result = None
             scene_player_input = "look"
             continue
 
@@ -584,6 +619,7 @@ def main() -> None:
             continue
 
         interaction_result = engine.process_command(player_input)
+        last_interaction_result = interaction_result
         if interaction_result["success"]:
             scene_player_input = player_input
             scene_stage = "narrow" if interaction_result["intent"] == "conversation" else "follow"
@@ -599,24 +635,40 @@ def main() -> None:
         player_discovery_response = interaction_result.get("player_discovery_response")
         if player_discovery_response is not None:
             print(player_discovery_response["text"])
+        specific_conversation_response = (
+            interaction_result.get("intent") == "conversation"
+            and (actor_knowledge_response is not None or player_discovery_response is not None)
+        )
         if interaction_result.get("intent") == "clue_recall":
             print_known_clues(interaction_result["known_clues"])
-        if interaction_result.get("intent") == "clue_presentation":
+        specific_response_printed = False
+        if interaction_result.get("intent") == "clue_presentation" and "presentation" in interaction_result:
             presentation = interaction_result["presentation"]
             print_clue_presentation(presentation)
-        if interaction_result.get("intent") == "investigation":
-            investigation = interaction_result.get("investigation", {})
+            specific_response_printed = True
+        if interaction_result.get("intent") == "investigation" and "investigation" in interaction_result:
+            investigation = interaction_result["investigation"]
             if investigation.get("changed"):
                 print(investigation["text"])
             else:
                 print("You find no new clues here.")
+            specific_response_printed = True
 
-        if interaction_result.get("message"):
+        if interaction_result.get("message") and not specific_response_printed and not specific_conversation_response:
             print()
             if interaction_result.get("intent") == "west_road_decision" and not interaction_result["success"]:
                 print(engine.get_narration().get("current_choice_hint", interaction_result["message"]))
             elif interaction_result.get("intent") == "west_road_decision":
-                print("You choose to " + normalized_input + ".")
+                response = interaction_result["scene_response"]
+                print(response["outcome"])
+                print("Grey: " + response["grey"])
+                print("Elin: " + response["elin"])
+            elif interaction_result.get("intent") == "west_road_competence" and interaction_result["success"]:
+                if interaction_result.get("changed"):
+                    hours = interaction_result["accepted_outcome"]["cost_hours"]
+                    print(("An hour passes." if hours == 1 else f"{hours} hours pass.") + "\n" + interaction_result["message"])
+                else:
+                    print("That approach has already been resolved. " + interaction_result["message"])
             else:
                 print(travel_presentation(interaction_result, engine))
 
@@ -634,7 +686,7 @@ def main() -> None:
             print_scene_experience(engine, player_input, continuity, "narrow")
             last_presented_narration = engine.get_narration()
 
-        if interaction_result.get("time_advancement"):
+        if interaction_result.get("time_advancement") and interaction_result.get("intent") not in {"west_road_decision", "west_road_competence"}:
             time_advancement = interaction_result["time_advancement"]
             print(
                 "Time advanced: "
@@ -646,6 +698,7 @@ def main() -> None:
             target_resolution
             and target_resolution["status"] == "resolved"
             and interaction_result["intent"] != "movement"
+            and not specific_conversation_response
         ):
             print(f"Target: {target_resolution['display_name']}.")
 

@@ -69,13 +69,10 @@ def derive_contextual_action_projection(
 
     from engine import west_road_predicament as west_road
     if west_road.enabled(region):
+        from engine.west_road_presentation import choice_text, competence_choice_text
         for command in west_road.available_commands(world_state, scene_snapshot):
-            cost = " (one hour; other approaches lose coverage)" if command == "advocate patrol" else " (one hour; traffic remains exposed)" if command == "continue investigation" else ""
-            opportunities.append("You can choose: " + command + cost + ".")
+            opportunities.append(choice_text(command))
         from engine import character_competence
         for approach in character_competence.project(region, world_state, scene_snapshot)["approaches"]:
-            rule = "uncertain investigation" if approach["uncertain"] else "deterministic with committed guard assistance"
-            if approach["uncertain"]:
-                rule += "; specialist: partial on 1-2, full on 3-6" if approach["specialist"] else "; d6: failure on 1-2, partial on 3-4, full on 5-6"
-            opportunities.append(f"You can choose: {approach['command']} ({approach['cost_hours']} hour(s); {rule}).")
+            opportunities.append(competence_choice_text(approach))
     return {"opportunities": opportunities}

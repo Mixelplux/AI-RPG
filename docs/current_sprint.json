@@ -10,18 +10,18 @@
   "active_sprint": null,
   "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "10.80"
+    "id": "10.81"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "10.80",
-    "title": "Scene Context V1",
+    "id": "10.81",
+    "title": "West-Road Scene Flow V1",
     "type": "capability-package",
     "status": "complete",
-    "risk_level": "routine",
-    "goal": "Derived Scene Context grounds experiential narration while permitting bounded low-consequence detail.",
+    "risk_level": "elevated",
+    "goal": "Make the existing North Gate to West-Road commitment and first follow-up read as one coherent scene without changing mechanics.",
     "predecessor": {
-      "id": "10.79"
+      "id": "10.80"
     },
     "platform": {
       "official_interpreter": ".\\.venv\\Scripts\\python.exe",
@@ -29,10 +29,10 @@
       "provider_requests": "forbidden"
     },
     "scope": [
-      "Market Square grounding, conditions-derived activity, declared intention, existing local competence and bounded narrator freedom; no simulation or persistence changes."
+      "Bounded deterministic West-Road scene flow, eligible choice wording, accepted actor response, result continuity and approach-aware recap; no mechanics, provider or persistence changes."
     ],
     "verification": [
-      "Focused Scene Context and narration contracts, competence and causal-locality regressions, maintained Git verification and changed-file review."
+      "Focused deterministic presentation checks, competence, causal-locality and save/load regressions, lifecycle validation, maintained Git verification and scope review."
     ]
   }
 }

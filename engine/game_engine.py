@@ -945,51 +945,106 @@ class GameEngine:
             environment = [projection["location"]["description"]]
             weather = self.world_state["weather"].get("type")
             if weather:
-                environment.append("Weather: " + weather + ".")
-            environment.extend(cue["text"] for cue in perception["pressure_cues"])
-            parts = [" ".join(environment)]
+                environment.append("A blizzard sweeps across the area." if weather == "blizzard" else "The weather is " + weather + ".")
+            sections = {"orientation": " ".join(environment)}
+            sections["conditions"] = [cue["text"] for cue in perception["pressure_cues"]]
             present = names + [str(g["count"]) + " " + g["display_name"] for g in groups]
             if present:
-                parts.append("Here: " + ", ".join(present) + ".")
+                one_actor = len(names) == 1 and not groups
+                one_group = not names and len(groups) == 1 and groups[0]["count"] == 1
+                sections["presence"] = ", ".join(present) + (" is here." if one_actor or one_group else " are here.")
             phase = self.world_state["west_road_predicament"]["phase"]
-            parts.append(CURRENT_CIRCUMSTANCES[phase])
+            sections["situation"] = CURRENT_CIRCUMSTANCES[phase]
             competence = self.get_competence_projection()
             outcome_texts = [item["text"] for item in competence["accepted_outcomes"]]
+            evidence_parts = []
             for layer in ("observations", "recognition", "findings"):
-                parts.extend(item["text"] for item in competence[layer]
-                             if layer != "findings" or not any(item["text"] in text for text in outcome_texts))
-            parts.extend(outcome_texts)
+                evidence_parts.extend(
+                    ("The guards report: " if layer == "observations" and item["status"] == "guard report" else "") + item["text"]
+                    for item in competence[layer]
+                    if layer != "findings" or not any(item["text"] in text for text in outcome_texts)
+                )
+            evidence_parts.extend(outcome_texts)
+            sections["evidence"] = evidence_parts
             opportunities = perception["contextual_actions"]["opportunities"]
             choices = [text.removeprefix("You can choose: ") for text in opportunities if text.startswith("You can choose:")]
             if choices:
-                parts.append("What now?\n" + "\n".join("- " + choice for choice in choices))
+                sections["choices"] = "What now?\n" + "\n".join("- " + choice for choice in choices)
                 choice_hint = CURRENT_CHOICE_HINTS[phase] if phase != "investigating" else "Choose 'advocate patrol' or 'continue investigation' now that Elin has both reports."
             else:
                 next_action = CURRENT_CHOICE_HINTS[phase]
                 if phase == "investigating":
                     discovered = set(self.world_state["player_discoveries"])
                     shared = set(self.world_state["actor_knowledge"].get(west_road.ELIN, []))
+                    tracks_reported = west_road.shared_id("west_road_tracks") in shared
+                    mara_reported = west_road.shared_id("west_road_merchant_account") in shared
                     if set(west_road.INITIAL_EVIDENCE) <= discovered:
-                        missing_reports = [d["title"] for d in self.region["discovery_declarations"] if d["discovery_id"] in west_road.INITIAL_EVIDENCE and west_road.shared_id(d["discovery_id"]) not in shared]
-                        next_action = "Report " + " and ".join(missing_reports) + " to Elin at the North Gate before choosing a response."
-                        if not missing_reports:
-                            next_action = "Return to Grey and Elin at the North Gate to choose a response."
+                        report_labels = {
+                            "west_road_tracks": "what the tracks show",
+                            "west_road_merchant_account": "what Mara saw",
+                        }
+                        missing_ids = [discovery_id for discovery_id in west_road.INITIAL_EVIDENCE if west_road.shared_id(discovery_id) not in shared]
+                        missing_reports = [report_labels[discovery_id] for discovery_id in missing_ids]
+                        if missing_reports:
+                            if self.world_state["player"]["current_location_id"] == west_road.GATE:
+                                commands = [
+                                    "present " + next(d["title"] for d in self.region["discovery_declarations"] if d["discovery_id"] == discovery_id) + " to Elin"
+                                    for discovery_id in missing_ids
+                                ]
+                                next_action = (
+                                    "Tell Elin about " + " and ".join(missing_reports)
+                                    + " before choosing a response. Use: " + "; ".join(commands) + "."
+                                )
+                            else:
+                                next_action = (
+                                    "Return to the North Gate (go to North Gate). Once there, tell Elin about "
+                                    + " and ".join(missing_reports) + " before choosing a response."
+                                )
+                        else:
+                            next_action = "Grey and Elin must be at the North Gate to choose a response."
+                            if self.world_state["player"]["current_location_id"] != west_road.GATE:
+                                next_action = "Return to Grey and Elin at the North Gate (go to North Gate) to choose a response."
                     elif self.world_state["player"]["current_location_id"] == west_road.ROAD:
                         if "west_road_tracks" in discovered:
-                            next_action = "Speak with Mara about the overdue caravan."
+                            next_action = (
+                                ("Elin has your report about the tracks. " if tracks_reported else "The tracks show people watched the road. ")
+                                + "Ask Mara what she saw near the overdue caravan (talk to Mara). "
+                                + ("Elin still needs Mara's report." if tracks_reported else "Elin needs both reports.")
+                            )
                         elif "west_road_merchant_account" in discovered:
-                            next_action = "Investigate the tracks beside the road (investigate)."
+                            next_action = (
+                                ("Elin has Mara's report. " if mara_reported else "Mara saw two observers but could not identify them. ")
+                                + "Examine the tracks beside the road (investigate). "
+                                + ("Elin still needs your findings from the tracks." if mara_reported else "Elin needs both reports.")
+                            )
                         else:
-                            next_action = "Investigate the tracks and speak with Mara about the overdue caravan."
+                            next_action = "Examine the tracks beside the road (investigate) and ask Mara what she saw near the overdue caravan (talk to Mara)."
+                    elif "west_road_tracks" in discovered:
+                        next_action = (
+                            ("Elin has your report about the tracks. " if tracks_reported else "The tracks show people watched the road. ")
+                            + "Travel to the Southwest Trade Road (go to Southwest Trade Road). Once there, ask Mara what she saw; "
+                            + ("Elin still needs Mara's report." if tracks_reported else "Elin needs both reports.")
+                        )
+                    elif "west_road_merchant_account" in discovered:
+                        next_action = (
+                            ("Elin has Mara's report. " if mara_reported else "Mara saw two observers but could not identify them. ")
+                            + "Travel to the Southwest Trade Road (go to Southwest Trade Road). Once there, examine the tracks; "
+                            + ("Elin still needs your findings from the tracks." if mara_reported else "Elin needs both reports.")
+                        )
                 elif phase in ("observers_withdrew", "wagon_intercepted"):
                     next_action = "Return to Grey and Elin at the North Gate. " + next_action
-                parts.append("What now?\n" + next_action)
+                sections["choices"] = "What now?\n" + next_action
                 choice_hint = next_action
             secondary = compact_secondary_actions(opportunities)
             routes = " ".join(cue["text"] for cue in perception["navigation"]["route_cues"])
             if secondary or routes:
-                parts.append("Other actions:\n" + "\n".join(text for text in (secondary, routes) if text))
-            base["description"] = "\n\n".join(parts)
+                sections["other"] = "Other actions:\n" + "\n".join(text for text in (secondary, routes) if text)
+            base["scene_sections"] = sections
+            base["description"] = "\n\n".join(
+                text for key in ("orientation", "conditions", "presence", "situation", "evidence", "choices", "other")
+                for text in (sections.get(key, []) if key in ("conditions", "evidence") else [sections.get(key)])
+                if text
+            )
             base["visible_entities"] = names
             base["player_prompt"] = ""
             base["current_choice_hint"] = choice_hint
@@ -1029,7 +1084,12 @@ class GameEngine:
         candidate = add_history_entry(candidate, "west_road_evidence_shared", "Player reported " + clue["title"] + " to " + target["display_name"] + ".", get_player_location_id(candidate), deepcopy(candidate["time"]), {"actor_id": actor, "discovery_id": clue["discovery_id"]})
         candidate, _ = self._prepare_actor_knowledge_from_event_candidate(candidate, actor, knowledge, candidate["history"][-1]["history_id"])
         self._publish_west_road_candidate(candidate)
-        result.update(changed=True, response_text=target["display_name"] + " receives the report. It informs the decision; it does not prove the observers' identity or select a response.")
+        response_text = target["display_name"] + " hears the report. The observers' identity remains unknown."
+        if (actor == west_road.GREY and clue["discovery_id"] in west_road.INITIAL_EVIDENCE
+                and candidate["west_road_predicament"]["phase"] == "investigating"
+                and knowledge not in candidate["actor_knowledge"].get(west_road.ELIN, [])):
+            response_text += " Elin still needs this report before she can decide whether to divert guards."
+        result.update(changed=True, response_text=response_text)
         return result
 
     def _process_west_road_command(self, command):
@@ -1063,7 +1123,12 @@ class GameEngine:
         candidate["west_road_predicament"] = {"phase": after, "last_outcome_history_id": candidate["history"][-1]["history_id"]}
         west_road_market_theft.allocation_changed(candidate, was_reduced)
         responses = [west_road.actor_response(self.region, candidate, actor)["text"] for actor in (west_road.GREY, west_road.ELIN)]
-        result.update(success=True, message=self.region["west_road_predicament"]["phase_text"][after] + "\nGrey: " + responses[0] + "\nElin: " + responses[1])
+        phase_text = self.region["west_road_predicament"]["phase_text"][after]
+        result.update(
+            success=True,
+            message=phase_text + "\nGrey: " + responses[0] + "\nElin: " + responses[1],
+            scene_response={"outcome": phase_text, "grey": responses[0], "elin": responses[1]},
+        )
         return candidate, deepcopy(result)
 
     def get_competence_projection(self):

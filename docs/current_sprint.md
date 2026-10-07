@@ -1,35 +1,29 @@
-# Sprint 10.80 - Scene Context V1
+# Sprint 10.81 — West-Road Scene Flow V1
 
 ## Status
-Complete and owner-accepted October 5, 2026 after the final live narrator smoke.
-Routine risk. Branch: `codex/scene-context-v1`. Protected baseline:
-`dad93cea3a6b38aa5cd6b9852f44340676be241f`.
-Sprint 10.80 is complete; `next_sprint` remains null.
+
+Complete and owner-accepted October 7, 2026. Narrative Scenario Quality V1.
+Elevated risk. Branch `codex/narrative-scenario-quality-v1-10.81` from protected
+baseline `c217388e6c32cb3090b91d0738450584ebbba778`. Sprint 10.81 is
+the latest completed sprint; the lifecycle is idle and `next_sprint` is null.
 
 ## Milestone
-Implement and verify the smallest derived Scene Context proving slice within
-the existing narration boundary. Scope, exclusions, authority and completion
-are in `docs/current_capability_package.md`. No persistent state changes;
-automated checks remain offline. The final live narrator smoke used the real
-`gpt-6-luna` narrator with reasoning `low`; the owner accepted the result and
-said “accepted, continue.” The smoke sequence was travel to Market Square, look,
-and focused browsing. Progressive scene resolution, continuity, intent handling,
-second-person narration and consequential-fact boundaries were accepted. Minor
-storm-condition prose repetition is accepted narrative refinement.
 
-Implementation and the owner-requested player-path correction passed focused
-offline verification. The working-diff handoff is READY FOR OWNER RE-SMOKE;
-see `docs/sprint_10_80_handoff.md` for the route correction and verification.
-The known real tokenizer-cache limitation is unchanged; provider transport tests
-use an offline tokenizer stub and fake transport. The latest correction and
-verification evidence is recorded in the handoff. No further live call is needed.
+Implement and verify the bounded deterministic North Gate and Southwest Trade
+Road presentation slice through a West-Road commitment and first follow-up.
+Scope, mechanical invariants, exclusions and review boundary are in
+`docs/current_capability_package.md`. The owner accepted the final smoke under
+the stipulated already-briefed, already-involved player state. This milestone
+proves an integrated situation → evidence → commitment → consequence → follow-up
+→ bounded outcome loop; first-contact construction, organic involvement,
+free-form intent, final AI action narration and general prose polish remain
+outside its scope.
 
-The owner-smoke continuity/progression correction was implemented and staged.
-Current-scene descriptive claims, previous conditions and
-orient/expand/follow/narrow attention reach the existing validated prompt path.
-Routine destination-hop messages are compressed in the CLI. Offline focused and
-affected regressions passed; the owner then re-smoked and accepted the result.
-The exact accepted scope and separation are recorded in the latest handoff section.
+## Implementation handoff
 
-Finalization: one Sprint 10.80 commit is authorized. No push or merge is
-authorized; `next_sprint` remains null. Save version 1 is preserved.
+The deterministic presentation and authored wording changes are accepted for
+one final candidate commit. Focused scene, choice, competence, predicament,
+Market Square causality/locality, current-scene, traversal, topology, player
+route and save/load regressions pass offline. Lifecycle validation, syntax/JSON
+checks and maintained Git verification pass. The disposable test save and ten
+unrelated untracked narrator/evaluation/tooling files remain outside the package.

@@ -234,7 +234,7 @@ def test_cli_smoke():
             text = output.getvalue()
             assert "Game loaded." in text and "Previously:" in text
             assert "broader threat remains unresolved" in text
-            assert "Time advanced: 1 hour." in text
+            assert ("After an hour, the patrol" if initial == "advocate patrol" else "After another hour of investigation") in text
             for internal in ("[Intent:", "Project-authored", "elapsed_hours", "west_road_received:", "history_"):
                 assert internal not in text
         finally:

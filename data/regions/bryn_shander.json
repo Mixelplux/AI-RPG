@@ -47,7 +47,7 @@
       "title": "Overlapping Watch Positions",
       "trace_id": "west_road_observation_overlap_trace",
       "location_id": "outside_trade_road_west",
-      "text": "Two trampled patches overlook the same road stretch. Their overlap supports a local observation circuit, but its complete route remains unconfirmed."
+      "text": "Two trampled patches overlook the same road stretch. The watchers may have used both positions, but the route between them remains unconfirmed."
     },
     {
       "discovery_id": "west_road_tracks",
@@ -75,7 +75,7 @@
       "title": "Escaped Driver Report",
       "trace_id": "west_road_driver_account_trace",
       "location_id": "bryn_shander_gate_north",
-      "text": "An escaped driver reports that a second wagon was intercepted during your investigation. The attackers questioned its supply-stop destination; that stop may be their next target."
+      "text": "An escaped driver reports that another wagon was intercepted during your investigation. The attackers questioned its supply-stop destination; that stop may be their next target."
     },
     {
       "discovery_id": "west_road_withdrawal_route",
@@ -107,7 +107,7 @@
     "cue_id": "winter_deepens_observation",
     "pressure_id": "bryn_shander_winter",
     "minimum_level": 70,
-    "text": "The cold has become noticeably more severe."
+    "text": "Bitter cold persists across the area."
   },
   "time": {
     "calendar_system": "standard_fantasy",
@@ -632,9 +632,9 @@
     "premise": "West-road travelers report being watched, and one caravan is overdue. Grey suspects organized raiders; Elin wants specific evidence before diverting patrols. The caravan may have been delayed rather than destroyed.",
     "phase_text": {
       "investigating": "Grey fears a developing threat to trade. Elin will not divert limited guards on rumor alone. Investigate the Southwest Trade Road, speak with Mara, then report both findings to Elin at the North Gate. Acting may alert the observers and divert coverage; waiting leaves traffic exposed.",
-      "observers_withdrew": "You advocated immediate patrol action. After one hour, guards disrupted the observers, who withdrew and left fresh signs. Grey considers intervention justified; Elin notes the cost to other coverage. Choose: pursue observers, or restore coverage.",
-      "wagon_intercepted": "You chose one more hour of investigation while normal coverage remained. You found patrol-timing signs, but another wagon was intercepted. Its escaped driver identified a threatened supply stop. Elin understands your restraint; Grey regrets the delay. Choose: protect supply stop, or locate raiders.",
-      "withdrawal_route_found": "You pursued local signs and found the withdrawal route. Road-focused patrol coverage remains extended; other approaches have fewer guards. Nobody was captured. The broader threat remains unresolved.",
+      "observers_withdrew": "After an hour, the patrol scattered the watchers. They withdrew, leaving fresh tracks; guards remain away from other approaches.",
+      "wagon_intercepted": "After another hour of investigation, you found patrol-timing signs, but another wagon was intercepted. Its escaped driver warns that a supply stop may be next.",
+      "withdrawal_route_found": "Fresh signs lead to an abandoned lookout beside the local road. You have found a withdrawal route, but captured nobody. Guards remain on the road instead of their other approaches. The broader threat remains unresolved.",
       "coverage_restored": "You restored ordinary local coverage. Other approaches are protected again, but the withdrawal route remains unexplored and the observers unlocated. The broader threat remains unresolved.",
       "supply_stop_protected": "You warned the supply stop and arranged protection. Its next departure is held safely, but the raiders remain unlocated. The broader threat remains unresolved.",
       "raider_staging_area_found": "You investigated nearby signs and found a likely staging area without confrontation. The supply stop has no dedicated protection. The broader threat remains unresolved."
@@ -642,8 +642,8 @@
     "actor_responses": {
       "captain_darvin_grey": {
         "investigating": "We need credible information before a threat to trade grows. Tracks alone cannot prove a raid.",
-        "observers_withdrew": "Your patrol broke up the watchers. We should learn where they went, but Elin must weigh the cost of keeping guards away.",
-        "wagon_intercepted": "Your caution brought stronger information, but another driver paid for the delay. We must choose protection or a local search.",
+        "observers_withdrew": "They scattered. We should learn where they went while the signs are fresh.",
+        "wagon_intercepted": "The marks matter, but another driver paid for the delay. We should protect the stop or search nearby.",
         "withdrawal_route_found": "The withdrawal route gives us useful information. We have not eliminated the threat.",
         "coverage_restored": "Normal coverage is restored. I remain concerned about the observers we did not follow.",
         "supply_stop_protected": "The next departure is protected. We still do not know where the raiders are.",
@@ -651,9 +651,9 @@
       },
       "guard_elin_voss": {
         "investigating": "Bring me the tracks and the merchant account. Immediate patrols cost other coverage; further investigation takes an hour while traffic remains exposed.",
-        "observers_withdrew": "I committed guards because you advocated action on credible but incomplete evidence. Do we follow the signs or restore coverage?",
-        "wagon_intercepted": "Your request for better evidence was reasonable. Normal coverage stayed in place, but the interception now forces another decision.",
-        "withdrawal_route_found": "We followed the local trail without a confrontation. Road coverage remains extended.",
+        "observers_withdrew": "Those guards are still off their ordinary circuit. Follow the signs, or bring them back?",
+        "wagon_intercepted": "Normal coverage held. The driver's warning leaves us a choice: protect the stop or search for the raiders.",
+        "withdrawal_route_found": "The route from the road is known, but nobody was captured. Guards are still committed to the road.",
         "coverage_restored": "Our guards are back on ordinary coverage. We left the withdrawal trail unexamined.",
         "supply_stop_protected": "The supply stop has been warned and its next departure held safely.",
         "raider_staging_area_found": "We found a likely staging area without a confrontation. No dedicated guards protect the supply stop."
