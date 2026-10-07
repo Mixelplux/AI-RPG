@@ -11,9 +11,12 @@ was reviewed October 6, 2026 at documentation baseline
 accepted milestone `63f1a3db8b8996efe0f8245ad21d22ddb234dcbc`;
 [Actors & Social Dynamics](actors-social-dynamics.md) was finalized October 6,
 2026 at accepted milestone `ecd3ed246a8c989990d1411582438b58369d3c84`;
-[Narrative Experience](narrative-experience.md) has an October 6, 2026 review
-candidate at baseline `ecd3ed246a8c989990d1411582438b58369d3c84`.
-Later systems have no manifests yet.
+[Narrative Experience](narrative-experience.md) was finalized October 6, 2026
+at accepted milestone `da362a53a704c27709a137b1d0e363368b49a044`.
+[Scenario & Authored Content](scenario-authored-content.md) has an October 6,
+2026 review candidate based on protected baseline
+`da362a53a704c27709a137b1d0e363368b49a044`.
+Persistence and Player Presentation have no manifests yet.
 
 ## Responsibility hierarchy
 
@@ -143,3 +146,28 @@ bounded descriptive continuity support this direction without semantic repetitio
 suppression or authoritative provider memory. Technical resets can require
 reorientation without creating fictional discontinuity. General context selection,
 incidental-detail promotion and long-term narrative continuity remain unsettled.
+
+## Dependencies and information flow around Scenario & Authored Content
+
+The [Scenario & Authored Content manifest](scenario-authored-content.md) proposes
+foundations, declarations and narrative material as three responsibilities.
+Content supplies intentional starting material; supported runtime interpreters
+establish applicability and consequences. Legitimate live campaign changes take
+precedence over affected canonical/default facts. Current overlays implement this
+only for supported state, not every authored field.
+
+| From → To | Information / dependency | Current status |
+|---|---|---|
+| Scenario & Authored Content → World Simulation | Initial conditions, geography, supported constraints and effects | Implemented bounded seeds/declarations; no universal live override or generic effect language |
+| Scenario & Authored Content → Character System | Supported actor knowledge seeds, identity foundations and evidence material | Partial: new-game membership and bounded clues/recognition; biography and canonical lore do not automatically grant access or competence |
+| Scenario & Authored Content → Action & Resolution | Supported prerequisites, costs and result material | Partial: declaration interpretation plus code-defined West-Road eligibility/costs/results; option text cannot grant success |
+| Scenario & Authored Content → Actors & Social Dynamics | Roles, relationship/motivation foundations, replies and bounded behavior | Partial: fixed behavior and profile representation; numeric relationships/faction objectives are not general decision policy |
+| Scenario & Authored Content → Narrative Experience | Grounding, dialogue, tone foundations and scenario framing | Implemented bounded material; current truth/access constrain expression, with no universal semantic reconciliation |
+| Scenario & Authored Content → Player Presentation | Names, labels, clue titles and eligible option wording | Implemented bounded projections; parsing and UI mechanics remain outside content ownership |
+| Scenario & Authored Content ↔ Persistence | Stable references connecting source material and saved campaign state | Partial: saves reload a region path and validate supported references; content revision compatibility/pinning remains unsettled |
+
+Canonical lore conceptually supplies foundations, not a campaign reset or a
+character knowledge grant. Current source labels are not a lore-ingestion system.
+Active Bryn Shander content is distinct from test-only legacy declarations, and
+some authored scenario behavior/text remains in code. This separation suggests
+future portability without establishing a general modding or scenario framework.
