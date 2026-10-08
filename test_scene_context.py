@@ -41,7 +41,7 @@ def test_grounding_and_conditions():
     assert derived["expected_activity"]["availability"] == "ordinary"
     assert "permitted" in derived["expected_activity"]["constraint"]
     assert derived["conditions"]["weather"] == before["weather"]
-    assert derived["conditions"]["time"] == before["time"]
+    assert derived["conditions"]["time"] == {k: v for k, v in before["time"].items() if k != "calendar_system"}
     assert ordinary.get_narration_context(context["player_input"]) == context
     context["scene_context"]["conditions"]["weather"]["severity"] = 1
     assert ordinary.get_world_state() == before

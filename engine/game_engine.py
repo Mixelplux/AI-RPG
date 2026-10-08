@@ -669,7 +669,8 @@ class GameEngine:
     def get_narration_context(
         self,
         player_input: str,
-        history_count: int | None = None
+        history_count: int | None = None,
+        *, accepted_action_id: str | None = None,
     ) -> Dict[str, Any]:
         perception = self.get_player_perception()
         pressure_cues = perception["pressure_cues"]
@@ -679,6 +680,8 @@ class GameEngine:
             player_input,
             history_count=history_count,
             pressure_cue=pressure_cues[0] if pressure_cues else None,
+            region=self.region, public_scene=self.get_current_scene_projection(),
+            accepted_action_id=accepted_action_id,
         )
         if west_road_market_theft.visible_text(self.world_state, get_player_location_id(self.world_state)):
             packet["boundary"]["drift_guardrail"] += " " + west_road_market_theft.NARRATION_LIMIT
@@ -697,8 +700,11 @@ class GameEngine:
         self,
         player_input: str,
         presentation: Dict[str, Any] | None = None,
+        *, accepted_action_id: str | None = None,
     ) -> Dict[str, Any]:
-        narration_context = self.get_narration_context(player_input)
+        narration_context = self.get_narration_context(
+            player_input, accepted_action_id=accepted_action_id,
+        )
         if presentation is not None:
             narration_context["scene_context"]["presentation"] = deepcopy(presentation)
         return build_narration_preview_packet(narration_context)
@@ -1100,6 +1106,7 @@ class GameEngine:
             return result
         candidate, result = self._prepare_west_road_command(copy_world_state(self.world_state), command, result)
         self._publish_west_road_candidate(candidate)
+        result["narrative_action_id"] = candidate["west_road_predicament"]["last_outcome_history_id"]
         return result
 
     def _prepare_west_road_command(self, candidate, command, result, source_id=None):
@@ -1140,7 +1147,7 @@ class GameEngine:
         accepted = self.world_state.get("competence_attempts", {}).get(command)
         result = {"success": False, "intent": "west_road_competence", "message": "", "action": {"type": "west_road_competence", "target": None, "parameters": {}, "confidence": 1.0}}
         if accepted is not None:
-            result.update(success=True, changed=False, accepted_outcome=deepcopy(accepted), message=character_competence.outcome_text(self.region, command, accepted))
+            result.update(success=True, changed=False, narrative_action_id=accepted["outcome_history_id"], accepted_outcome=deepcopy(accepted), message=character_competence.outcome_text(self.region, command, accepted))
             return result
         decision = character_competence.assess(self.region, self.world_state, self.scene_snapshot, command)
         if not decision["eligible"]:
@@ -1168,7 +1175,7 @@ class GameEngine:
         candidate["history"][-1]["attempt"] = deepcopy(attempt)
         candidate.setdefault("competence_attempts", {})[command] = attempt
         self._publish_west_road_candidate(candidate)
-        result.update(success=True, changed=True, accepted_outcome=deepcopy(attempt), time_advancement=time_result, message=character_competence.outcome_text(self.region, command, attempt))
+        result.update(success=True, changed=True, narrative_action_id=attempt["outcome_history_id"], accepted_outcome=deepcopy(attempt), time_advancement=time_result, message=character_competence.outcome_text(self.region, command, attempt))
         return result
 
     def _merchant_account(self):

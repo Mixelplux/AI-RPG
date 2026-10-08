@@ -12,6 +12,7 @@ from engine.narration_request import (
     validate_narration_request_packet,
 )
 from engine.scene_context import SCENE_NARRATION_CONTRACT, validate_scene_context
+from engine.narrative_projection import validate_projection
 
 
 NARRATION_PROMPT_SCHEMA = "ai_rpg.narration_prompt_packet"
@@ -43,12 +44,8 @@ REQUIRED_PROMPT_KEYS = frozenset({
 
 REQUIRED_PROMPT_INPUT_KEYS = frozenset({
     "player_input",
-    "current_time",
-    "player",
-    "scene_snapshot",
     "scene_context",
-    "history_context",
-    "pressure_cue",
+    "narrative_projection",
     "boundary",
     "constraints",
 })
@@ -79,12 +76,8 @@ def build_narration_prompt_packet(
         "instructions": deepcopy(NARRATION_PROMPT_INSTRUCTIONS),
         "deterministic_input": {
             "player_input": context["player_input"],
-            "current_time": deepcopy(context["current_time"]),
-            "player": deepcopy(context["player"]),
-            "scene_snapshot": deepcopy(context["scene_snapshot"]),
             "scene_context": deepcopy(context["scene_context"]),
-            "history_context": deepcopy(context["history_context"]),
-            "pressure_cue": deepcopy(context["pressure_cue"]),
+            "narrative_projection": deepcopy(context["narrative_projection"]),
             "boundary": deepcopy(context["boundary"]),
             "constraints": deepcopy(request_copy["constraints"]),
         },
@@ -177,39 +170,15 @@ def _validate_prompt_input_shape(deterministic_input: Any) -> None:
             f"{', '.join(sorted(extra_keys))}."
         )
 
-    pressure_cue = deterministic_input.get("pressure_cue")
-    validate_scene_context(deterministic_input.get("scene_context"))
-    if not isinstance(pressure_cue, dict):
-        raise ValueError("Narration prompt pressure cue must be an object.")
-    if pressure_cue and (
-        set(pressure_cue) != {"cue_id", "pressure_id", "text"}
-        or any(
-            not isinstance(pressure_cue.get(field), str)
-            or not pressure_cue[field]
-            for field in ("cue_id", "pressure_id", "text")
-        )
-    ):
-        raise ValueError("Narration prompt pressure cue is malformed.")
-
-    if not isinstance(deterministic_input.get("current_time"), dict):
-        raise ValueError("Narration prompt current time must be an object.")
-
-    if not isinstance(deterministic_input.get("player"), dict):
-        raise ValueError("Narration prompt player must be an object.")
-
-    if "current_location_id" not in deterministic_input["player"]:
-        raise ValueError(
-            "Narration prompt player is missing current_location_id."
-        )
-
-    if not isinstance(deterministic_input.get("scene_snapshot"), dict):
-        raise ValueError("Narration prompt scene snapshot must be an object.")
-
-    if not isinstance(deterministic_input.get("history_context"), dict):
-        raise ValueError("Narration prompt history context must be an object.")
-
-    if not isinstance(deterministic_input.get("boundary"), dict):
-        raise ValueError("Narration prompt boundary must be an object.")
-
-    if not isinstance(deterministic_input.get("constraints"), dict):
-        raise ValueError("Narration prompt constraints must be an object.")
+    if not isinstance(deterministic_input["player_input"], str):
+        raise ValueError("Narration player input must be text.")
+    validate_scene_context(deterministic_input["scene_context"])
+    validate_projection(deterministic_input["narrative_projection"])
+    boundary = deterministic_input["boundary"]
+    if not isinstance(boundary, dict) or set(boundary) != {
+        "type", "rule", "drift_guardrail", "atmosphere_example", "durability",
+    } or any(not isinstance(v, str) for v in boundary.values()):
+        raise ValueError("Narration boundary has unsupported fields.")
+    from engine.narration_request import NARRATION_REQUEST_CONSTRAINTS
+    if deterministic_input["constraints"] != NARRATION_REQUEST_CONSTRAINTS:
+        raise ValueError("Narration constraints are not supported.")

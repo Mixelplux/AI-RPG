@@ -2,6 +2,7 @@
 
 from copy import deepcopy
 import re
+from engine.narrative_projection import project_conditions, validate_conditions
 
 
 MAX_DETAILS = 24
@@ -45,7 +46,7 @@ class SceneContinuity:
             # Prefer retaining orientation and the newest discovery. If those
             # alone fill the budget, discard the oldest description.
             self.details.pop(4 if len(self.details) > 5 else 0)
-        self.conditions = deepcopy(conditions)
+        self.conditions = project_conditions(conditions)
 
 
 def validate_scene_presentation(value):
@@ -53,6 +54,8 @@ def validate_scene_presentation(value):
         "stage", "focus", "established_details", "previous_conditions",
     }:
         raise ValueError("Scene presentation is malformed.")
+    if value["previous_conditions"]:
+        validate_conditions(value["previous_conditions"])
     details = value["established_details"]
     if (value["stage"] not in STAGES or not isinstance(value["focus"], str)
             or not isinstance(details, list) or len(details) > MAX_DETAILS

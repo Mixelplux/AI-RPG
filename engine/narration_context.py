@@ -4,6 +4,7 @@ from typing import Any, Dict
 from engine.history_context import build_history_context_packet
 from engine.scene_context import build_scene_context
 from engine.world_state import get_player_location_id, get_time
+from engine.narrative_projection import build_projection
 
 
 NARRATION_CONTEXT_SCHEMA = "ai_rpg.narration_context_packet"
@@ -35,6 +36,9 @@ def build_narration_context_packet(
     player_input: str,
     history_count: int | None = None,
     pressure_cue: Dict[str, str] | None = None,
+    region: Dict[str, Any] | None = None,
+    public_scene: Dict[str, Any] | None = None,
+    accepted_action_id: str | None = None,
 ) -> Dict[str, Any]:
     history_context = build_history_context_packet(
         world_state,
@@ -57,6 +61,11 @@ def build_narration_context_packet(
         "scene_context": build_scene_context(scene_snapshot, player_input),
         "history_context": history_context,
         "pressure_cue": deepcopy(pressure_cue or {}),
+        "narrative_projection": build_projection(
+            region or {}, world_state,
+            public_scene or {"entities": {"actors": [], "groups": []}, "exits": []},
+            pressure_cue, accepted_action_id,
+        ),
         "boundary": {
             "type": "read_only_narration_input",
             "rule": NARRATION_CONTEXT_BOUNDARY_RULE,

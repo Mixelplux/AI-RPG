@@ -31,7 +31,7 @@ def main():
     assert baseline["accepted"]
     assert baseline["display_text"] == "The street remains quiet."
     assert baseline["narration_context"]["pressure_cue"] == {}
-    assert baseline["narration_prompt"]["deterministic_input"]["pressure_cue"] == {}
+    assert baseline["narration_prompt"]["deterministic_input"]["narrative_projection"]["pressure_cue"] == {}
 
     engine.process_command("wait")
     world_before = engine.get_world_state()
@@ -43,7 +43,7 @@ def main():
     assert preview["accepted"]
     assert preview["narration_context"]["pressure_cue"] == CUE
     assert preview["narration_request"]["narration_context"]["pressure_cue"] == CUE
-    assert preview["narration_prompt"]["deterministic_input"]["pressure_cue"] == CUE
+    assert preview["narration_prompt"]["deterministic_input"]["narrative_projection"]["pressure_cue"] == {"text": CUE["text"]}
     assert preview["display_text"].count(cue_text) == 1
     assert preview["validated_output"]["narration_text"].count(cue_text) == 1
     def keys(value):

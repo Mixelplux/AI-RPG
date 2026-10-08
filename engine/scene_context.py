@@ -3,6 +3,7 @@
 from copy import deepcopy
 from typing import Any
 from engine.scene_continuity import validate_scene_presentation
+from engine.narrative_projection import project_conditions, project_perspective, validate_conditions, validate_perspective
 
 
 SCENE_NARRATION_CONTRACT = {
@@ -171,10 +172,10 @@ def build_scene_context(scene: dict[str, Any], player_input: str) -> dict[str, A
             "name": location.get("name", ""),
             "description": location.get("description_seed", ""),
         },
-        "conditions": {"weather": deepcopy(weather), "time": deepcopy(time)},
+        "conditions": project_conditions({"weather": weather, "time": time}),
         "expected_activity": activity,
         "player_intention": {"declared_text": player_input},
-        "character_perspective": deepcopy(scene.get("character_competence", {})),
+        "character_perspective": project_perspective(scene.get("character_competence", {})),
     }
 
 
@@ -201,3 +202,5 @@ def validate_scene_context(context: Any) -> None:
         not isinstance(value, dict) for value in conditions.values()
     ):
         raise ValueError("Narration Scene Context conditions are malformed.")
+    validate_conditions(conditions)
+    validate_perspective(context["character_perspective"])

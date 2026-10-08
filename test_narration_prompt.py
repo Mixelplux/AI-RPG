@@ -69,14 +69,9 @@ def main():
     assert deterministic_input["player_input"] == (
         narration_context["player_input"]
     )
-    assert deterministic_input["current_time"] == narration_context["current_time"]
-    assert deterministic_input["player"] == narration_context["player"]
-    assert deterministic_input["scene_snapshot"] == (
-        narration_context["scene_snapshot"]
-    )
-    assert deterministic_input["history_context"] == (
-        narration_context["history_context"]
-    )
+    assert not {"scene_snapshot", "history_context", "player", "current_time", "pressure_cue"} & set(deterministic_input)
+    assert deterministic_input["scene_context"] == narration_context["scene_context"]
+    assert deterministic_input["narrative_projection"] == narration_context["narrative_projection"]
     assert deterministic_input["boundary"] == narration_context["boundary"]
     assert deterministic_input["constraints"] == narration_request["constraints"]
 
@@ -94,7 +89,7 @@ def main():
     )
 
     narration_prompt["deterministic_input"]["player_input"] = "mutated"
-    narration_prompt["deterministic_input"]["scene_snapshot"]["scene_id"] = (
+    narration_prompt["deterministic_input"]["scene_context"]["location_facts"]["name"] = (
         "mutated_scene"
     )
     narration_prompt["instructions"]["state_mutation"] = "allowed"
@@ -102,7 +97,7 @@ def main():
     assert build_narration_prompt_packet(narration_request) == repeated_prompt
 
     validated_prompt = validate_narration_prompt_packet(repeated_prompt)
-    validated_prompt["deterministic_input"]["player"]["current_location_id"] = (
+    validated_prompt["deterministic_input"]["scene_context"]["location_facts"]["name"] = (
         "mutated_location"
     )
     assert validate_narration_prompt_packet(repeated_prompt) == repeated_prompt
@@ -132,12 +127,12 @@ def main():
         assert "messages" in str(error)
 
     malformed_input_prompt = deepcopy(repeated_prompt)
-    del malformed_input_prompt["deterministic_input"]["scene_snapshot"]
+    del malformed_input_prompt["deterministic_input"]["narrative_projection"]
     try:
         validate_narration_prompt_packet(malformed_input_prompt)
         raise AssertionError("Malformed deterministic input was accepted.")
     except ValueError as error:
-        assert "scene_snapshot" in str(error)
+        assert "narrative_projection" in str(error)
 
     assert engine.get_world_state() == world_state_before_prompt
     assert engine.get_history() == history_before_prompt

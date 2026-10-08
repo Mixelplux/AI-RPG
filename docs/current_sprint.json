@@ -10,18 +10,18 @@
   "active_sprint": null,
   "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "10.81"
+    "id": "bounded-narration-input-foundation"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "10.81",
-    "title": "West-Road Scene Flow V1",
+    "id": "bounded-narration-input-foundation",
+    "title": "Bounded Narration Input Foundation",
     "type": "capability-package",
     "status": "complete",
-    "risk_level": "elevated",
-    "goal": "Make the existing North Gate to West-Road commitment and first follow-up read as one coherent scene without changing mechanics.",
+    "risk_level": "routine",
+    "goal": "Extract safe narration serialization and read-only recorded West-Road results without experimental expression behavior.",
     "predecessor": {
-      "id": "10.80"
+      "id": "10.82"
     },
     "platform": {
       "official_interpreter": ".\\.venv\\Scripts\\python.exe",
@@ -29,10 +29,10 @@
       "provider_requests": "forbidden"
     },
     "scope": [
-      "Bounded deterministic West-Road scene flow, eligible choice wording, accepted actor response, result continuity and approach-aware recap; no mechanics, provider or persistence changes."
+      "Selected structural projection, result-reference retrieval and serialized-request verification only."
     ],
     "verification": [
-      "Focused deterministic presentation checks, competence, causal-locality and save/load regressions, lifecycle validation, maintained Git verification and scope review."
+      "Offline transport capture, attribution, historical results, non-mutation, baseline presentation/failure regressions and maintained checks."
     ]
   }
 }

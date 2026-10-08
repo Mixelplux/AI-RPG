@@ -1,46 +1,11 @@
-# Narrative Scenario Quality V1 — Sprint 10.81
+# Bounded Narration Input Foundation
 
-## Status and authority
+Owner-accepted October 8, 2026 following independent review with no required corrections. Completed isolated structural extraction from protected 618ad922c15d78d9d413cde73420fe1b0ce686fe. Routine risk.
 
-Owner-accepted October 7, 2026. Completed bounded capability package on
-`codex/narrative-scenario-quality-v1-10.81`, based on protected `main` HEAD
-`c217388e6c32cb3090b91d0738450584ebbba778`. Elevated risk for
-player-facing presentation and authored-content changes across responsibilities.
-The System Manifest Review is complete and frozen. Sprint 10.81 is the latest
-completed sprint; no next package is selected and `next_sprint` remains null.
+Retain safe projected provider input and read-only accepted West-Road result references. Exclude Condition E, hybrid CLI/fallback/deduplication, literary changes, general familiarity, simulation and persistence changes. No paid APIs are authorized.
 
-## Scope
+Sprint 10.82 remains closed and unaccepted; its unchanged closure record is preserved in sprint_10_82_closure.md. Original checkout and evidence remain untouched. Structural acceptance does not establish generated-prose fidelity.
 
-Improve the deterministic North Gate → West-Road commitment → first follow-up
-scene flow. Foreground the current situation and decision, carry unchanged
-context implicitly, present eligible choices as fictional intentions with clear
-cost and uncertainty, show existing accepted Grey/Elin response at commitment,
-avoid immediate result/scene repetition, and correct bounded approach-aware recap
-wording. Reuse current safe projections and eligibility. Change only Narrative
-Experience, Player Presentation, Scenario & Authored Content, and directly
-related tests or records.
+Owner authorized one coherent candidate commit with the protected baseline as its direct parent. Merge, fast-forward publication and push remain separately unauthorized.
 
-## Invariants and exclusions
-
-No changes to the six commands, seven phases, prerequisites, actor presence,
-eligibility, costs, competence applicability/draws/bands/results, evidence limits,
-accepted-attempt persistence or replay, reduced-coverage timing, market theft,
-local information filtering, save/load behavior, or provider authority.
-Provider-backed look, narration context, Scene Context provider inputs, and
-prompt contracts are explicitly deferred. No general parser, actor autonomy,
-knowledge, memory, outcome framework, lore ingestion, campaign management,
-save schema, or broad UI redesign.
-
-## Verification and completion
-
-Use deterministic offline checks for eligibility/display parity, costs,
-resolution and epistemic limits, result distinctions, actor-response authority,
-recap fidelity, time/state/causal invariants, locality and save/load regression.
-Run relevant syntax checks, lifecycle validation, maintained Git verification,
-diff/scope review, and focused affected-system tests. The owner accepted the
-final experience smoke. The proving loop assumes an already-briefed,
-already-involved player: established situation, evidence, commitment, cost and
-consequence, follow-up opportunity, and bounded outcome. This package does not
-claim first-contact Scene Construction, organic involvement, free-form intent,
-final AI action narration, or general prose polish. Finalization prepares one
-candidate commit without merging to `main`.
+The bounded-narration-input-foundation milestone is complete. Lifecycle is idle; no next task is selected. See current_sprint.md for verification and the nonblocking review qualification.

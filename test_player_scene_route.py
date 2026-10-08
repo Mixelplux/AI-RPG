@@ -94,11 +94,11 @@ def test_owner_smoke_route():
         for prompt in prompts:
             context = prompt["deterministic_input"]
             scene = context["scene_context"]
-            assert context["player"]["current_location_id"] == "market_square"
+            assert "player" not in context and "scene_snapshot" not in context
             assert "temporary stalls" in scene["location_facts"]["description"]
             assert scene["expected_activity"]["availability"] == availability
             assert scene["conditions"]["weather"]["type"] == kind
-            assert scene["conditions"]["time"] == context["current_time"]
+            assert "calendar_system" not in scene["conditions"]["time"]
             assert scene["player_intention"]["declared_text"] == context["player_input"]
             contract = prompt["instructions"]["scene_narration_contract"]
             assert "Do not contradict" in contract["continuity"]
