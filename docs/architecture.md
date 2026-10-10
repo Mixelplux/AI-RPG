@@ -177,6 +177,16 @@ under separate live-call authorization. Failure retains the established determin
 outcome and scene delta. Prose and intermediate content are never persisted or
 used to resolve gameplay. Structural validation does not prove semantic fidelity.
 
+Scene Construction V1 composes the bounded North Gate / Southwest Trade Road
+views through the same preparation/realization pattern using local adapters.
+It joins existing accessible context, public actor roles, and derived opportunities
+with the shared scene-section refresh selection. The adapter source is a narrow
+read-only handoff, not a universal scene schema; Revised A remains adapter-private.
+CLI command guidance stays derived, including on choice-only refreshes. No scene
+authority, encounter flag, narrative persistence, gameplay rule or save field is
+added. Other locations and explicit preview/observation routes retain their
+existing behavior. See scene_construction_v1_handoff.md for verification and limits.
+
 ## Context Loading
 
 Do not read this file for every routine implementation turn.

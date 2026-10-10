@@ -46,7 +46,7 @@ def test_initial_and_evidence_presentation():
     e = GameEngine(REGION)
     e.process_command("go to Southwest Trade Road")
     e.process_command("investigate")
-    assert "What now?\nThe tracks show people watched the road. Ask Mara" in render(e)
+    assert "What now?\nThe tracks suggest people watched the road. Ask Mara" in render(e)
     e.process_command("talk to Mara")
     e.process_command("go to North Gate")
     text = render(e)

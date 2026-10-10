@@ -10,18 +10,18 @@
   "active_sprint": null,
   "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "provisional-narrative-pipeline"
+    "id": "scene-construction-v1"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "provisional-narrative-pipeline",
-    "title": "Provisional Narrative Pipeline Integration",
+    "id": "scene-construction-v1",
+    "title": "Scene Construction V1",
     "type": "capability-package",
     "status": "complete",
     "risk_level": "elevated",
-    "goal": "Express one resolved West Road investigation with replaceable Revised A preparation and stateless realization, preserving authority and fallback.",
+    "goal": "Compose a voluntary North Gate first-contact scene and bounded action refresh using existing safe projections and replaceable local narration.",
     "predecessor": {
-      "id": "bounded-narration-input-foundation"
+      "id": "provisional-narrative-pipeline"
     },
     "platform": {
       "official_interpreter": ".\\.venv\\Scripts\\python.exe",
@@ -29,10 +29,10 @@
       "provider_requests": "forbidden"
     },
     "scope": [
-      "Bounded narration adapters, read-only orchestration, CLI presentation and offline verification."
+      "Read-only scene composition, local narrative adapters, existing opportunity handoff, CLI integration and focused offline verification."
     ],
     "verification": [
-      "Fidelity, knowledge/attribution, failure/fallback, non-mutation, save/load, single presentation and affected-system regressions."
+      "First contact, access and epistemic fidelity, eligibility/cost parity, voluntary participation, causal continuity, no duplicate outcomes, non-mutation, version-1 compatibility, fallback, adapter replacement and affected regressions."
     ]
   }
 }

@@ -687,6 +687,36 @@ class GameEngine:
             packet["boundary"]["drift_guardrail"] += " " + west_road_market_theft.NARRATION_LIMIT
         return packet
 
+    def get_scene_narration(self, previous=None, result=None, *, preparer=None, realizer=None):
+        """Compose the bounded current scene, never execute an action or save.
+
+        Source projections remain independent of the chosen preparation format.
+        Other locations retain their accepted presentation.
+        """
+        from engine.scene_composition import (
+            PUBLIC_ROLES, build_scene_source, narrate_scene_source,
+            prepare_scene_revised_a, realize_scene_locally,
+        )
+        if not west_road.scene_relevant(self.region, self.world_state):
+            return {"accepted": False, "display_text": "", "failure_stage": "source"}
+        try:
+            context = self.get_narration_context("scene orientation or refresh")
+            roles = [{"display_name": actor["name"], "role": PUBLIC_ROLES[actor["type"]]}
+                     for actor in self.region["entities"] if actor.get("type") in PUBLIC_ROLES]
+            invitation = ""
+            if (get_player_location_id(self.world_state) == west_road.GATE
+                    and self.world_state["west_road_predicament"]["phase"] == "investigating"):
+                invitation = "Whether to get involved in the road reports is up to you."
+            source = build_scene_source(
+                context, self.get_narration(),
+                self.get_player_perception()["contextual_actions"]["opportunities"],
+                roles, previous, result, invitation,
+            )
+        except Exception:
+            return {"accepted": False, "display_text": "", "failure_stage": "source"}
+        return narrate_scene_source(source, preparer or prepare_scene_revised_a,
+                                    realizer or realize_scene_locally)
+
     def get_narration_output_contract(self) -> Dict[str, Any]:
         return build_narration_output_contract()
 
@@ -1038,13 +1068,13 @@ class GameEngine:
                     elif self.world_state["player"]["current_location_id"] == west_road.ROAD:
                         if "west_road_tracks" in discovered:
                             next_action = (
-                                ("Elin has your report about the tracks. " if tracks_reported else "The tracks show people watched the road. ")
+                                ("Elin has your report about the tracks. " if tracks_reported else "The tracks suggest people watched the road. ")
                                 + "Ask Mara what she saw near the overdue caravan (talk to Mara). "
                                 + ("Elin still needs Mara's report." if tracks_reported else "Elin needs both reports.")
                             )
                         elif "west_road_merchant_account" in discovered:
                             next_action = (
-                                ("Elin has Mara's report. " if mara_reported else "Mara saw two observers but could not identify them. ")
+                                ("Elin has Mara's report. " if mara_reported else "You have Mara's account. ")
                                 + "Examine the tracks beside the road (investigate). "
                                 + ("Elin still needs your findings from the tracks." if mara_reported else "Elin needs both reports.")
                             )
@@ -1052,13 +1082,13 @@ class GameEngine:
                             next_action = "Examine the tracks beside the road (investigate) and ask Mara what she saw near the overdue caravan (talk to Mara)."
                     elif "west_road_tracks" in discovered:
                         next_action = (
-                            ("Elin has your report about the tracks. " if tracks_reported else "The tracks show people watched the road. ")
+                            ("Elin has your report about the tracks. " if tracks_reported else "The tracks suggest people watched the road. ")
                             + "Travel to the Southwest Trade Road (go to Southwest Trade Road). Once there, ask Mara what she saw; "
                             + ("Elin still needs Mara's report." if tracks_reported else "Elin needs both reports.")
                         )
                     elif "west_road_merchant_account" in discovered:
                         next_action = (
-                            ("Elin has Mara's report. " if mara_reported else "Mara saw two observers but could not identify them. ")
+                            ("Elin has Mara's report. " if mara_reported else "You have Mara's account. ")
                             + "Travel to the Southwest Trade Road (go to Southwest Trade Road). Once there, examine the tracks; "
                             + ("Elin still needs your findings from the tracks." if mara_reported else "Elin needs both reports.")
                         )

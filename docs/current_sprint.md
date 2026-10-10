@@ -1,29 +1,35 @@
-# Provisional Narrative Pipeline Integration
+# Scene Construction V1
 
-Status: complete and owner-accepted October 10, 2026, including the separately
-authorized bounded live smoke. Lifecycle is idle; active_sprint,
-active_capability_package and next_sprint are null. Elevated risk; accepted baseline
-942504a7d7019eb94f81f6db6d281ffa779367a2.
+Status: complete and owner-accepted October 10, 2026. Elevated posture.
+Baseline: 48d469f07bb68e9ed4b1538ea09bd0525abde296.
+Branch: codex/scene-construction-v1; isolated worktree:
+D:/AI RPG/.artifacts/scene-construction-v1.
 
-Implement the smallest accepted-result West Road investigation slice using
-replaceable Revised A preparation followed by stateless realization. Preserve
-simulation authority, knowledge, location, costs, persistence and deterministic
-fallback. See current_capability_package.md for exclusions and authority.
+One bounded milestone: a voluntary North Gate introduction and coherent refresh
+through the existing evidence/report-sharing, patrol commitment and failed
+tracking route. The accepted premise concerns an overdue caravan, not a missing
+patrol. See current_capability_package.md for boundaries and authority.
 
-Offline verification covers fidelity, attribution, prior/new distinctions,
-failure/fallback, non-mutation, save/load and single presentation. No provider
-calls authorized for finalization. The owner separately authorized staging and
-one bounded implementation commit for merge review. Merge and push require
-separate authorization.
+Required verification: syntax; focused first-contact/access/agency/eligibility,
+continuity/non-mutation/fallback/adapter tests; directly affected regressions;
+version-1 save/load; preflight; lifecycle validator; and diff/scope checks.
+All automated verification is offline. Owner smoke assesses experience.
 
-Ten new offline checks and 17 affected regression scripts passed, plus syntax,
-preflight, lifecycle validation and diff checks during implementation. Final
-offline verification passed all ten integration checks and all 17 affected
-regression scripts, seven changed-file syntax checks, maintained workflow
-verification, lifecycle validation and diff checks before committing the accepted
-changes. Preflight: 19 passes, two expected warnings (PowerShell 5.1 and pending
-worktree changes), zero failures or blocks. Lifecycle: seven passes.
-The accepted live smoke made two separately authorized requests; finalization
-makes no provider calls.
-See provisional_narrative_pipeline_handoff.md for scope, limitations, changed
-files and the short offline experiential launcher. No next package is selected.
+Implementation and automated verification are complete and owner-accepted.
+Lifecycle is idle: active_sprint, active_capability_package and next_sprint are null.
+Fourteen new offline checks and all 20 directly affected regression scripts passed
+with network connections blocked. Final source/recap refinements were verified with
+the newly affected focused suites. Nine changed Python files pass syntax checks.
+Worktree preflight: 20 passes, one expected working-diff warning, no failures/blocks.
+Maintained GitWorkflowTools verification with the canonical profile and additional
+worktree checks passed; lifecycle validation reports seven passes. Diff checks pass.
+The offline launcher completed the cold-start route. Automated acceptance passed
+12 gameplay routes, 110 commands, 26 evaluation cases and 1,775 final assertions;
+no blocking structural defect or provider/network attempt was found.
+See scene_construction_v1_handoff.md for scope, limitations and exact smoke commands.
+
+The owner separately authorized final offline verification, staging and one
+implementation commit for merge review. Merge and push require separate authority.
+Original experimental work and owner saves remain untouched. JSON is the lifecycle
+authority; no next package is selected. The four nonblocking acceptance findings
+remain deferred; see scene_construction_v1_handoff.md.

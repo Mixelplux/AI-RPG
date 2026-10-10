@@ -3,7 +3,7 @@ import re
 
 from engine.game_engine import GameEngine
 from engine.scene_continuity import SceneContinuity
-from engine.west_road_presentation import ROUTE_FOLLOWTHROUGH
+from engine.scene_context import select_scene_sections
 
 
 REGION_PATH = "data/regions/bryn_shander.json"
@@ -27,28 +27,11 @@ def print_narration(narration: dict, previous: dict | None = None,
                     result: dict | None = None) -> bool:
     description = narration["description"]
     sections = narration.get("scene_sections")
-    prior = previous.get("scene_sections") if previous and previous.get("title") == narration["title"] else None
-    if sections and prior and result and result.get("success"):
-        parts = []
-        for key in ("orientation", "conditions", "presence", "situation", "evidence", "choices", "other"):
-            current = sections.get(key, [] if key in ("conditions", "evidence") else None)
-            before = prior.get(key, [] if key in ("conditions", "evidence") else None)
-            if key in ("conditions", "evidence"):
-                additions = [text for text in current if text not in before]
-                if key == "evidence":
-                    additions = [text for text in additions if text not in result.get("message", "")]
-                parts.extend(additions)
-            elif current and current != before:
-                if key == "situation" and result.get("intent") == "west_road_decision":
-                    continue  # The accepted outcome and actor replies have just supplied it.
-                if (key == "situation" and result.get("intent") == "west_road_competence"
-                        and result.get("changed") and result.get("accepted_outcome", {}).get("result") == "full"):
-                    parts.append(ROUTE_FOLLOWTHROUGH)
-                    continue  # The finding was delivered; retain the continuing cost and reactions.
-                parts.append(current)
-        if (result.get("intent") == "clue_presentation" and sections.get("other") != prior.get("other")
-                and sections.get("choices") == prior.get("choices") and sections.get("choices")):
-            parts.insert(0, sections["choices"])
+    if sections:
+        selected = select_scene_sections(narration, previous, result)
+        parts = [text for key in ("orientation", "conditions", "presence", "situation", "evidence", "choices", "other")
+                 for text in (selected.get(key, []) if key in ("conditions", "evidence") else [selected.get(key)])
+                 if text]
         if not parts:
             return False
         description = "\n\n".join(parts)
@@ -62,6 +45,17 @@ def print_narration(narration: dict, previous: dict | None = None,
     if narration.get("player_prompt"):
         print(narration["player_prompt"])
     return True
+
+
+def print_composed_scene(engine, narration, previous=None, result=None, *, preparer=None, realizer=None):
+    packet = engine.get_scene_narration(previous, result, preparer=preparer, realizer=realizer)
+    if not packet["accepted"]:
+        return print_narration(narration, previous, result)
+    parts = [packet["display_text"]] if packet["display_text"] else []
+    parts.extend(packet["guidance"][key] for key in ("choices", "other") if key in packet["guidance"])
+    if not parts:
+        return False
+    return print_narration({"title": narration["title"], "description": "\n\n".join(parts)})
 
 
 def print_scene_experience(engine: GameEngine, player_input: str,
@@ -420,7 +414,8 @@ def parse_history_query(player_input: str) -> dict:
     }
 
 
-def main(*, narration_preparer=None, narration_realizer=None) -> None:
+def main(*, narration_preparer=None, narration_realizer=None,
+         scene_preparer=None, scene_realizer=None) -> None:
     configure_stdout()
     engine = GameEngine.start_new(REGION_PATH)
 
@@ -441,7 +436,8 @@ def main(*, narration_preparer=None, narration_realizer=None) -> None:
             if engine.get_scene_snapshot()["location"]["location_id"] == "market_square":
                 print_scene_experience(engine, scene_player_input, continuity, scene_stage)
             else:
-                print_narration(narration, last_presented_narration, last_interaction_result)
+                print_composed_scene(engine, narration, last_presented_narration, last_interaction_result,
+                                     preparer=scene_preparer, realizer=scene_realizer)
             last_presented_narration = narration
             last_interaction_result = None
 

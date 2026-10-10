@@ -176,14 +176,15 @@ def summary(region, world):
         evidence = [(INITIAL_EVIDENCE[0], "the tracks"), (INITIAL_EVIDENCE[1], "Mara's account")]
         found = [label for discovery, label in evidence if discovery in discoveries]
         reported = [label for discovery, label in evidence if shared_id(discovery) in received]
-        lines = ["You were investigating reports that west-road travelers were being watched."]
+        lines = ["West-road travelers report being watched."]
         if found:
             lines.append("You gathered " + " and ".join(found) + ".")
         if reported:
             lines.append("You reported " + " and ".join(reported) + " to Elin.")
         if len(found) < 2:
             missing = [label for discovery, label in evidence if discovery not in discoveries]
-            lines.append("You still need " + " and ".join(missing) + ".")
+            lines.append(("You still need " + " and ".join(missing) + ".") if found else
+                         "If you want to investigate, gather the tracks and Mara's account before discussing a response with Elin.")
         elif len(reported) < 2:
             missing = [label for discovery, label in evidence if shared_id(discovery) not in received]
             lines.append("Report " + " and ".join(missing) + " to Elin before choosing a response.")

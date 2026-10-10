@@ -69,7 +69,7 @@ def build_track_source(context):
         prior.append(f"Previously acquired by the player ({item['status']}): {item['text']}")
     return {
         "resolved_development": {
-            "attempt": "The player attempted to find a followable trail in the withdrawal signs.",
+            "attempt": "The player attempted to find a followable trail in the reported prints.",
             "outcome": action["outcome"], "cost_hours": action["cost_hours"],
             "location": scene["location_facts"]["name"],
         },

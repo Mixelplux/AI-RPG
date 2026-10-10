@@ -204,3 +204,42 @@ def validate_scene_context(context: Any) -> None:
         raise ValueError("Narration Scene Context conditions are malformed.")
     validate_conditions(conditions)
     validate_perspective(context["character_perspective"])
+
+
+def select_scene_sections(narration, previous=None, result=None):
+    """Existing CLI refresh selection, shared by local composition and fallback.
+
+    Inputs are derived presentation records. Omission changes no fictional state.
+    An accepted result has already been delivered before this refresh.
+    """
+    sections = narration.get("scene_sections")
+    if not sections:
+        return None
+    prior = (previous.get("scene_sections")
+             if previous and previous.get("title") == narration["title"] else None)
+    if not (prior and result and result.get("success")):
+        return deepcopy(sections)
+    selected = {}
+    for key in ("orientation", "conditions", "presence", "situation", "evidence", "choices", "other"):
+        current = sections.get(key, [] if key in ("conditions", "evidence") else None)
+        before = prior.get(key, [] if key in ("conditions", "evidence") else None)
+        if key in ("conditions", "evidence"):
+            additions = [text for text in current if text not in before]
+            if key == "evidence":
+                additions = [text for text in additions if text not in result.get("message", "")]
+            if additions:
+                selected[key] = additions
+        elif current and current != before:
+            if key == "situation" and result.get("intent") == "west_road_decision":
+                continue
+            if (key == "situation" and result.get("intent") == "west_road_competence"
+                    and result.get("changed") and result.get("accepted_outcome", {}).get("result") == "full"):
+                from engine.west_road_presentation import ROUTE_FOLLOWTHROUGH
+                selected[key] = ROUTE_FOLLOWTHROUGH
+            else:
+                selected[key] = current
+    if (result.get("intent") == "clue_presentation" and sections.get("other") != prior.get("other")
+            and sections.get("choices") == prior.get("choices") and sections.get("choices")):
+        # Recipient-specific guidance remains prominent after sharing a report.
+        selected["choices"] = sections["choices"]
+    return selected
