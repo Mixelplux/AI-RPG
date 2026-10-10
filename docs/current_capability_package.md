@@ -1,11 +1,25 @@
-# Bounded Narration Input Foundation
+# Provisional Narrative Pipeline Integration
 
-Owner-accepted October 8, 2026 following independent review with no required corrections. Completed isolated structural extraction from protected 618ad922c15d78d9d413cde73420fe1b0ce686fe. Routine risk.
+Owner-authorized October 10, 2026. Elevated posture. Protected accepted baseline:
+942504a7d7019eb94f81f6db6d281ffa779367a2. Work occurs only in the isolated
+codex/provisional-narrative-pipeline worktree; rejected Sprint 10.82 is preserved.
 
-Retain safe projected provider input and read-only accepted West-Road result references. Exclude Condition E, hybrid CLI/fallback/deduplication, literary changes, general familiarity, simulation and persistence changes. No paid APIs are authorized.
+Implement one real resolved West Road investigation through replaceable Revised A
+content preparation and stateless realization using the accepted narration input
+foundation. Simulation retains resolution, costs, consequences, knowledge and
+version-1 persistence. Generated material is presentation only. Deterministic
+fallback remains available and the CLI presents one outcome exactly once.
 
-Sprint 10.82 remains closed and unaccepted; its unchanged closure record is preserved in sprint_10_82_closure.md. Original checkout and evidence remain untouched. Structural acceptance does not establish generated-prose fidelity.
+Scope: narration adapters, read-only engine orchestration, CLI presentation and
+offline verification. No dialogue specialization, generic scenes/schema, models,
+training, world expansion, persistence changes or broad refactor. The owner accepted
+the implementation and separately authorized final offline verification, staging
+and one bounded implementation commit October 10, 2026. The separately authorized
+live smoke is complete; no further provider calls, merge or push are authorized.
 
-Owner authorized one coherent candidate commit with the protected baseline as its direct parent. Merge, fast-forward publication and push remain separately unauthorized.
+Research basis: C:/tmp/AI-RPG-Narrative-Selection-Diagnostic-Live-20261010-01a12722/report.md.
+Revised A is provisional, not a universal fidelity guarantee.
 
-The bounded-narration-input-foundation milestone is complete. Lifecycle is idle; no next task is selected. See current_sprint.md for verification and the nonblocking review qualification.
+The single milestone is complete and owner-accepted. Finalization verifies scope,
+affected-system regressions and compatibility, then prepares a committed merge
+review. Lifecycle is idle; no next package is selected.

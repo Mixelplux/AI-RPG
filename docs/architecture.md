@@ -167,6 +167,16 @@ Narration:
 - does not run automatically during normal gameplay;
 - must fail closed without changing deterministic gameplay.
 
+The provisional failed `follow withdrawal signs` gameplay slice also uses a
+read-only accepted-result route: recorded result -> accepted player-safe input
+foundation -> replaceable content preparation -> stateless realization -> existing
+output validation -> one CLI outcome. Revised A is private to the initial
+narration adapters; a replacement pair may use a different handoff representation.
+Normal gameplay uses local adapters. Provider adapters must be explicitly supplied
+under separate live-call authorization. Failure retains the established deterministic
+outcome and scene delta. Prose and intermediate content are never persisted or
+used to resolve gameplay. Structural validation does not prove semantic fidelity.
+
 ## Context Loading
 
 Do not read this file for every routine implementation turn.

@@ -420,7 +420,7 @@ def parse_history_query(player_input: str) -> dict:
     }
 
 
-def main() -> None:
+def main(*, narration_preparer=None, narration_realizer=None) -> None:
     configure_stdout()
     engine = GameEngine.start_new(REGION_PATH)
 
@@ -665,8 +665,15 @@ def main() -> None:
                 print("Elin: " + response["elin"])
             elif interaction_result.get("intent") == "west_road_competence" and interaction_result["success"]:
                 if interaction_result.get("changed"):
-                    hours = interaction_result["accepted_outcome"]["cost_hours"]
-                    print(("An hour passes." if hours == 1 else f"{hours} hours pass.") + "\n" + interaction_result["message"])
+                    packet = engine.get_resolved_narration(
+                        interaction_result["narrative_action_id"],
+                        preparer=narration_preparer, realizer=narration_realizer,
+                    )
+                    if packet["accepted"]:
+                        print(packet["display_text"])
+                    else:
+                        hours = interaction_result["accepted_outcome"]["cost_hours"]
+                        print(("An hour passes." if hours == 1 else f"{hours} hours pass.") + "\n" + interaction_result["message"])
                 else:
                     print("That approach has already been resolved. " + interaction_result["message"])
             else:

@@ -10,18 +10,18 @@
   "active_sprint": null,
   "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "bounded-narration-input-foundation"
+    "id": "provisional-narrative-pipeline"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "bounded-narration-input-foundation",
-    "title": "Bounded Narration Input Foundation",
+    "id": "provisional-narrative-pipeline",
+    "title": "Provisional Narrative Pipeline Integration",
     "type": "capability-package",
     "status": "complete",
-    "risk_level": "routine",
-    "goal": "Extract safe narration serialization and read-only recorded West-Road results without experimental expression behavior.",
+    "risk_level": "elevated",
+    "goal": "Express one resolved West Road investigation with replaceable Revised A preparation and stateless realization, preserving authority and fallback.",
     "predecessor": {
-      "id": "10.82"
+      "id": "bounded-narration-input-foundation"
     },
     "platform": {
       "official_interpreter": ".\\.venv\\Scripts\\python.exe",
@@ -29,10 +29,10 @@
       "provider_requests": "forbidden"
     },
     "scope": [
-      "Selected structural projection, result-reference retrieval and serialized-request verification only."
+      "Bounded narration adapters, read-only orchestration, CLI presentation and offline verification."
     ],
     "verification": [
-      "Offline transport capture, attribution, historical results, non-mutation, baseline presentation/failure regressions and maintained checks."
+      "Fidelity, knowledge/attribution, failure/fallback, non-mutation, save/load, single presentation and affected-system regressions."
     ]
   }
 }

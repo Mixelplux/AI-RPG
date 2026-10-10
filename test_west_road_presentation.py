@@ -228,7 +228,11 @@ def test_result_flow_and_replay():
         with patch.object(character_competence, "draw_d6", return_value=draw):
             text = run_cli(engine, ["follow withdrawal signs", "follow withdrawal signs", "quit"])
         assert phrase in text
-        assert text.count("An hour passes.") == 1
+        if draw == 1:
+            assert text.count("You spend an hour at North Gate searching") == 1
+            assert "An hour passes." not in text
+        else:
+            assert text.count("An hour passes.") == 1
         assert text.count("That approach has already been resolved.") == 1
         assert engine.world_state["competence_attempts"]["follow withdrawal signs"]["draw"] == draw
         assert text.count("A blizzard sweeps") == 1

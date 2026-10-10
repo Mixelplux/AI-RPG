@@ -690,6 +690,31 @@ class GameEngine:
     def get_narration_output_contract(self) -> Dict[str, Any]:
         return build_narration_output_contract()
 
+    def get_resolved_narration(self, accepted_action_id: str, *,
+                               preparer=None, realizer=None) -> Dict[str, Any]:
+        """Express an existing result without executing or persisting anything.
+
+        Out-of-location references are left to baseline narration.
+        Revised A is private to the narration adapters, not an engine contract.
+        """
+        from engine.resolved_narration import (
+            narrate_resolved_track, prepare_revised_a, realize_locally,
+        )
+        event = next((entry for entry in self.world_state["history"]
+                      if entry["history_id"] == accepted_action_id), None)
+        attempt = self.world_state.get("competence_attempts", {}).get("follow withdrawal signs", {})
+        if (not event or event["event_type"] != "west_road_competence_result"
+                or attempt.get("outcome_history_id") != accepted_action_id
+                or event.get("location") != get_player_location_id(self.world_state)):
+            return {"accepted": False, "display_text": "", "failure_stage": "source"}
+        try:
+            context = self.get_narration_context("resolved investigation",
+                                                 accepted_action_id=accepted_action_id)
+        except Exception:
+            return {"accepted": False, "display_text": "", "failure_stage": "source"}
+        return narrate_resolved_track(context, preparer or prepare_revised_a,
+                                     realizer or realize_locally)
+
     def validate_narration_output(
         self,
         narration_output: Dict[str, Any]
