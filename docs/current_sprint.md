@@ -1,35 +1,41 @@
-# Scene Construction V1
+# North-Gate Working Context V1 — completed milestone
 
-Status: complete and owner-accepted October 10, 2026. Elevated posture.
-Baseline: 48d469f07bb68e9ed4b1538ea09bd0525abde296.
-Branch: codex/scene-construction-v1; isolated worktree:
-D:/AI RPG/.artifacts/scene-construction-v1.
+Owner-accepted October 11, 2026 following corrected conversational smoke. Routine.
+The milestone is complete; lifecycle is idle with active_sprint,
+active_capability_package and next_sprint null. Latest completed milestone is
+north-gate-working-context-v1. No new sprint/package is selected or staged.
+JSON is the sole machine lifecycle authority.
 
-One bounded milestone: a voluntary North Gate introduction and coherent refresh
-through the existing evidence/report-sharing, patrol commitment and failed
-tracking route. The accepted premise concerns an overdue caravan, not a missing
-patrol. See current_capability_package.md for boundaries and authority.
+## Accepted result
 
-Required verification: syntax; focused first-contact/access/agency/eligibility,
-continuity/non-mutation/fallback/adapter tests; directly affected regressions;
-version-1 save/load; preflight; lifecycle validator; and diff/scope checks.
-All automated verification is offline. Owner smoke assesses experience.
+The owner accepted session-local focus, natural talk-based resumption,
+receipt-aware Elin dialogue, suspension, conclusion and authority boundaries.
+Returning alone does not resume; talking does not automatically share reports
+or select a decision. Fourteen focused tests and ten affected regression scripts
+passed offline. Focused and isolated routes have identical authoritative results.
+The correction route reduced seven repeated paused notices to one suspension and
+one natural resumption notice; owner smoke accepted the conversational improvement.
 
-Implementation and automated verification are complete and owner-accepted.
-Lifecycle is idle: active_sprint, active_capability_package and next_sprint are null.
-Fourteen new offline checks and all 20 directly affected regression scripts passed
-with network connections blocked. Final source/recap refinements were verified with
-the newly affected focused suites. Nine changed Python files pass syntax checks.
-Worktree preflight: 20 passes, one expected working-diff warning, no failures/blocks.
-Maintained GitWorkflowTools verification with the canonical profile and additional
-worktree checks passed; lifecycle validation reports seven passes. Diff checks pass.
-The offline launcher completed the cold-start route. Automated acceptance passed
-12 gameplay routes, 110 commands, 26 evaluation cases and 1,775 final assertions;
-no blocking structural defect or provider/network attempt was found.
-See scene_construction_v1_handoff.md for scope, limitations and exact smoke commands.
+Scope remains one immediate report-and-patrol exchange, separate from the wider
+West-Road predicament. Working context is session-only; saving retains the running
+focus but load/reset/exit/restart do not persist it. No new simulation mechanics,
+save fields/schema/version or doctrine changes.
 
-The owner separately authorized final offline verification, staging and one
-implementation commit for merge review. Merge and push require separate authority.
-Original experimental work and owner saves remain untouched. JSON is the lifecycle
-authority; no next package is selected. The four nonblocking acceptance findings
-remain deferred; see scene_construction_v1_handoff.md.
+## Deferred findings and Git disposition
+
+Authored advance knowledge of Mara/tracks and fixed report prerequisites are
+accepted testing limitations. [Deferred findings](deferred_findings.md) consolidates
+DF-001 through DF-005 and earlier nonblocking observations DF-006/007. No deferred
+capability or conceptual research question becomes a new requirement through closeout.
+
+Protected baseline and unchanged HEAD: c0d75f0cd4b026eba0326f7f6cafc5348c6b70ca.
+Branch: codex/north-gate-working-context-v1. Accepted implementation remains an
+uncommitted working diff; index empty. Acceptance/completion does not establish
+Git publication or advance the baseline. Separate publication authorization is
+required before staging/commit, merge or push. Owner changes/saves and prior
+research/experimental evidence remain preserved.
+
+See [accepted handoff](north_gate_working_context_v1_handoff.md) and
+[correction record](north_gate_working_context_v1_correction.md) for changes,
+verification, transcripts and closeout evidence. Stop after closeout verification;
+no next milestone begins automatically.

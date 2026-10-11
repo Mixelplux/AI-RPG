@@ -156,10 +156,23 @@ def available_commands(world, scene):
     return [c for c, (before, _) in COMMANDS.items() if before == phase]
 
 
-def actor_response(region, world, actor_id):
+def actor_response(region, world, actor_id, scene=None):
     if actor_id not in (GREY, ELIN):
         return None
     phase = world["west_road_predicament"]["phase"]
+    if actor_id == ELIN and phase == "investigating":
+        receipts = world["actor_knowledge"].get(ELIN, [])
+        tracks = shared_id(INITIAL_EVIDENCE[0]) in receipts
+        account = shared_id(INITIAL_EVIDENCE[1]) in receipts
+        if tracks and account:
+            text = "I have your track report and Mara's account. "
+            if scene is not None and not available_commands(world, scene):
+                return {"text": text + "We cannot choose a patrol response here without Grey and me at the North Gate."}
+            return {"text": text + "We can weigh an immediate patrol against another hour of investigation. A patrol draws guards from other approaches; waiting leaves road traffic exposed. The choice is still yours."}
+        if tracks:
+            return {"text": "I've received your report about the tracks. I still need Mara's account before we choose a response."}
+        if account:
+            return {"text": "I've received Mara's account from you. I still need your report about the tracks before we choose a response."}
     if phase != "investigating":
         outcome = next(e for e in world["history"] if e["history_id"] == world["west_road_predicament"]["last_outcome_history_id"])
         if actor_id not in outcome["witness_entity_ids"]:

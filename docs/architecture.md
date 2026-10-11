@@ -199,3 +199,29 @@ Read it when:
 - a material architecture conflict must be resolved.
 
 For ordinary bounded work, use the current capability package, current sprint, and specifically named ADRs.
+
+## North-Gate session working context
+
+The CLI owns one optional `NorthGateDiscussion` per running session. Explicit
+player commands accept a patrol-response focus with Elin; its record contains
+only participant/focus, pending or suspended status, and at most four accepted
+history references. It is not World State, narrator memory or save data.
+Current public context, report receipts and action prerequisites are read afresh.
+A copied source passes through existing local scene preparation/realization;
+malformed adapters fall back to the deterministic focused text.
+
+Travel/presence loss suspends the exchange; returning never automatically resumes
+it. A successful ordinary conversation with Elin or the optional explicit resume
+control revalidates Elin's presence, location and undecided response.
+Existing predicates still adjudicate report sharing and decisions. An accepted
+response concludes the immediate exchange, not the West-Road predicament.
+Cancellation retires local focus without changing world records. Successful load,
+reset and exit visibly interrupt it; failed load preserves it and saving alone
+retains it. New processes start without unsaved agendas. Prose never establishes
+local acceptance and structural validation makes no semantic fidelity guarantee.
+
+Elin's bounded ordinary and focused dialogue share the same receipt-aware
+projection. Zero/one/two receipts determine her acknowledgement and remaining
+question; accepted phases use existing witnessed outcome responses. Unrelated
+commands do not replay focus/status. Report exchanges receive current dialogue,
+while suspension, resumption and conclusion are communicated at transitions.

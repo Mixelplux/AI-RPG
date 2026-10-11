@@ -1624,7 +1624,7 @@ class GameEngine:
 
         if west_road.enabled(self.region) and interaction_result["intent"] == "conversation" and interaction_result["success"]:
             actor = interaction_result.get("target_resolution", {}).get("identifier")
-            response = west_road.actor_response(self.region, self.world_state, actor)
+            response = west_road.actor_response(self.region, self.world_state, actor, self.scene_snapshot)
             if response:
                 interaction_result["actor_knowledge_response"] = response
         return deepcopy(interaction_result)

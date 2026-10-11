@@ -1,35 +1,42 @@
-# Scene Construction V1
+# North-Gate Working Context V1 — accepted and complete
 
-Owner-authorized October 10, 2026, following the accepted Foundation Review.
-Elevated posture. Protected baseline: 48d469f07bb68e9ed4b1538ea09bd0525abde296.
-Isolated branch: codex/scene-construction-v1. The older experimental checkout,
-unrelated files and owner saves are preserved.
+Owner accepted the corrected milestone after conversational smoke on October 11,
+2026. Routine posture. Lifecycle is idle: this package is complete and no next
+package or sprint is selected. JSON remains the machine lifecycle authority.
 
-Compose a coherent North Gate first contact for an unbriefed player, with voluntary
-engagement, then maintain the existing report-sharing, patrol commitment and failed
-tracking route. Reuse current scene/knowledge/eligibility projections, bounded
-Scene Context and replaceable preparation/realization. Revised A is adapter-private.
-Local realization and deterministic fallback only; no provider calls.
+Protected baseline and unchanged branch HEAD:
+`c0d75f0cd4b026eba0326f7f6cafc5348c6b70ca`.
+Branch: `codex/north-gate-working-context-v1`, isolated managed worktree.
+Acceptance is product acceptance; Git publication remains pending. The accepted
+implementation is an uncommitted working diff with an empty index. No staging,
+commit, merge, push or protected-baseline advancement is authorized by closeout.
 
-The accepted public premise is an overdue caravan and reports of watchers, not a
-missing patrol. Preserve this authoritative premise without inventing an event.
-Scene exposure does not acquire clues, share reports, assign a mission or commit
-the player. Re-entry/load reorients without asserting a first-ever meeting or
-adding encounter persistence. Keep the diagnostic presentation available.
+## Accepted scope and verification
 
-Allowed surfaces: derived scene/narrative composition, read-only GameEngine
-orchestration, CLI feedback, directly necessary bounded wording, tests and records.
-Simulation owns outcomes, costs, knowledge, presence and causal consequences.
-No parser, NPC autonomy, mechanics, procedural content, sensory/familiarity system,
-persistent narrative memory, schema/migration, model or broad UI redesign.
+One session-owned report-and-patrol discussion with Elin, bounded actor/event
+references and fresh outside truths. Existing report prerequisites and outcomes
+remain authoritative. Travel suspends; return alone does not resume. Successful
+ordinary talk or explicit resume revalidates current context. Accepted patrol
+choices or cancellation conclude the local exchange; load/reset/exit interrupt
+its unsaved focus. Saving alone retains it in the running session.
 
-One milestone: initial orientation through existing evidence/report sharing,
-patrol commitment and failed tracking, with accurate remaining opportunities.
-Syntax, focused offline tests, affected regressions, version-1 compatibility,
-preflight, lifecycle and diff checks precede owner experiential smoke.
-The owner accepted the implementation October 10, 2026 and separately authorized
-final offline verification, staging and one implementation commit for merge review.
-The milestone is complete; lifecycle is idle. No further gameplay research,
-implementation, provider calls, merge or push is authorized. No next package is
-selected. Acceptance evidence and deferred findings are recorded in
-scene_construction_v1_handoff.md.
+Corrected smoke accepted receipt-aware ordinary/focused Elin dialogue, natural
+resumption, transition-only status and clear conclusion with authority boundaries.
+Fourteen focused tests and ten affected regression scripts passed offline, with
+zero network attempts. Focused and isolated routes produce identical authoritative
+save payloads. No new simulation mechanics, save fields/version, persistence schema,
+provider behavior or doctrine changes. The wider West-Road predicament remains distinct.
+
+## Deferred limitations and records
+
+Authored advance knowledge of Mara/tracks and fixed report prerequisites are
+accepted testing limitations; no further corrections belong to V1. See
+[deferred findings](deferred_findings.md), DF-001 through DF-005, and consolidated
+prior Scene Construction observations DF-006/007. Conceptual research questions
+are not implementation requirements or authorization for a future package.
+
+[Accepted handoff](north_gate_working_context_v1_handoff.md) records exact changes,
+evidence and publication disposition; [correction handoff](north_gate_working_context_v1_correction.md)
+retains before/after transcripts. Accepted integration assessment:
+C:/tmp/AI-RPG-Scene-Context-Integration/run-ed779548/assessment.md.
+Owner changes, saves and earlier experimental/research evidence remain preserved.

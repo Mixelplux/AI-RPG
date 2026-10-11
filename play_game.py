@@ -3,6 +3,7 @@ import re
 
 from engine.game_engine import GameEngine
 from engine.scene_continuity import SceneContinuity
+from engine.north_gate_discussion import NorthGateDiscussion
 from engine.scene_context import select_scene_sections
 
 
@@ -425,6 +426,8 @@ def main(*, narration_preparer=None, narration_realizer=None,
 
     last_presented_narration = None
     continuity = SceneContinuity()
+    discussion = NorthGateDiscussion()
+    print("Patrol discussions are session-only. Start with 'discuss patrol with Elin'; load, reset and exit discard unsaved focus.")
     scene_player_input = "look"
     scene_stage = "expand"
     last_interaction_result = None
@@ -445,11 +448,22 @@ def main(*, narration_preparer=None, narration_realizer=None,
         normalized_input = player_input.lower()
 
         if normalized_input in ["quit", "exit"]:
+            interruption = discussion.interrupt("exit")
+            if interruption:
+                print(interruption)
             print("\nGoodbye.")
             break
 
         if normalized_input == "help":
+            print("discuss patrol with Elin | resume patrol discussion | cancel patrol discussion")
             print_help()
+            continue
+
+        if normalized_input in {item.casefold() for item in discussion.CONTROLS}:
+            print(discussion.control(engine, player_input))
+            focused = discussion.present(engine, preparer=scene_preparer, realizer=scene_realizer)
+            if focused:
+                print(focused)
             continue
 
         if normalized_input == "save":
@@ -460,6 +474,9 @@ def main(*, narration_preparer=None, narration_realizer=None,
         if normalized_input == "load":
             try:
                 engine.load(SAVE_PATH)
+                interruption = discussion.interrupt("load")
+                if interruption:
+                    print(interruption)
                 continuity.clear()
                 print("\nGame loaded.")
                 for line in engine.get_resume_summary():
@@ -475,6 +492,9 @@ def main(*, narration_preparer=None, narration_realizer=None,
 
         if normalized_input == "reset":
             engine.reset()
+            interruption = discussion.interrupt("reset")
+            if interruption:
+                print(interruption)
             continuity.clear()
             print("\nGame reset.")
             last_presented_narration = None
@@ -614,7 +634,11 @@ def main(*, narration_preparer=None, narration_realizer=None,
             )
             continue
 
+        previous_history_count = len(engine.get_history())
         interaction_result = engine.process_command(player_input)
+        discussion_notice = discussion.observe(engine, interaction_result, previous_history_count)
+        focused = (discussion.present(engine, preparer=scene_preparer, realizer=scene_realizer)
+                   if discussion.relevant_progress(engine, interaction_result) else None)
         last_interaction_result = interaction_result
         if interaction_result["success"]:
             scene_player_input = player_input
@@ -683,6 +707,11 @@ def main(*, narration_preparer=None, narration_realizer=None,
                 f"result {check_result['result_value']} against "
                 f"difficulty {check_result['target_difficulty']}."
             )
+
+        if discussion_notice:
+            print(discussion_notice)
+        if focused:
+            print(focused)
 
         if (interaction_result["success"] and interaction_result["intent"] == "conversation"
                 and engine.get_scene_snapshot()["location"]["location_id"] == "market_square"):
