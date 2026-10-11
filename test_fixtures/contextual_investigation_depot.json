@@ -1,0 +1,81 @@
+{
+  "region_id": "package_depot_fixture",
+  "name": "Depot interface fixture",
+  "locations": [
+    {
+      "location_id": "depot",
+      "name": "Depot",
+      "description_seed": "A porter stands beside stacked crates and a chalk tally.",
+      "connected_locations": [
+        {
+          "direction": "east",
+          "location_id": "annex"
+        }
+      ],
+      "spawn_rules": {}
+    },
+    {
+      "location_id": "annex",
+      "name": "Annex",
+      "description_seed": "An enclosed storage annex.",
+      "connected_locations": [
+        {
+          "direction": "west",
+          "location_id": "depot"
+        }
+      ],
+      "spawn_rules": {}
+    }
+  ],
+  "entities": [
+    {
+      "entity_id": "porter",
+      "name": "Porter",
+      "persistence": "static",
+      "location": "depot",
+      "knowledge": []
+    }
+  ],
+  "factions": [],
+  "region_state": {
+    "weather": {
+      "type": "clear",
+      "severity": 0,
+      "wind_speed_kmh": 0
+    },
+    "economy_state": {},
+    "security_state": {},
+    "population_state": {}
+  },
+  "time": {
+    "elapsed_hours": 0,
+    "current_date": "fixture",
+    "time_of_day": "day"
+  },
+  "simulation_hooks": {
+    "entry_location": "depot"
+  },
+  "discovery_declarations": [
+    {
+      "discovery_id": "tally",
+      "title": "Chalk Tally",
+      "trace_id": "tally_trace",
+      "location_id": "depot",
+      "text": "The tally records two delivered crates; their contents are unestablished."
+    },
+    {
+      "discovery_id": "seal",
+      "title": "Crate Seal",
+      "trace_id": "seal_trace",
+      "location_id": "depot",
+      "text": "One crate seal is broken; this does not establish who opened it."
+    },
+    {
+      "discovery_id": "annex_note",
+      "title": "Annex Note",
+      "trace_id": "note_trace",
+      "location_id": "annex",
+      "text": "A note lists a delivery date; authorship is unknown."
+    }
+  ]
+}

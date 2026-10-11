@@ -28,6 +28,19 @@ def find_eligible_investigation_discovery(
     )
 
 
+def find_selected_investigation_discovery(region, world_state, discovery_id):
+    """Applicability for one selected declaration, independent of list order."""
+    location_id = world_state["player"]["current_location_id"]
+    declaration = next((d for d in region.get("discovery_declarations", [])
+                        if d["discovery_id"] == discovery_id), None)
+    if declaration is None or declaration["location_id"] != location_id:
+        return None
+    expected = {"trace_id": declaration["trace_id"],
+                "evidence_id": declaration.get("evidence_id", declaration["discovery_id"]),
+                "location_id": location_id}
+    return declaration if expected in world_state["evidence_traces"] else None
+
+
 def is_clue_presentation_acceptable(
     region: dict[str, Any],
     world_state: dict[str, Any],

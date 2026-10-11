@@ -1,41 +1,27 @@
-# North-Gate Working Context V1 — completed milestone
+# Bounded Contextual Investigation V1 â€” accepted and complete
 
-Owner-accepted October 11, 2026 following corrected conversational smoke. Routine.
-The milestone is complete; lifecycle is idle with active_sprint,
-active_capability_package and next_sprint null. Latest completed milestone is
-north-gate-working-context-v1. No new sprint/package is selected or staged.
+Owner-authorized October 11, 2026. Elevated. Protected baseline:
+bdbf07b232a5a59c82ba93eb153fd019114ebe04.
+Completed milestone: bounded-contextual-investigation-v1. Lifecycle is idle;
+active sprint/package and next sprint are null.
 JSON is the sole machine lifecycle authority.
 
-## Accepted result
+Implement the reviewed package in the isolated feature checkout. Complete all
+15 acceptance groups and affected offline regressions, independent depot
+validation, authority/rollback/save compatibility checks, gameplay comparison
+and an isolated owner-smoke launcher. No production provider calls.
 
-The owner accepted session-local focus, natural talk-based resumption,
-receipt-aware Elin dialogue, suspension, conclusion and authority boundaries.
-Returning alone does not resume; talking does not automatically share reports
-or select a decision. Fourteen focused tests and ten affected regression scripts
-passed offline. Focused and isolated routes have identical authoritative results.
-The correction route reduced seven repeated paused notices to one suspension and
-one natural resumption notice; owner smoke accepted the conversational improvement.
+Findings and recipient receipts use existing persistence; leads/focus are derived
+or session-local. Preserve authored evidence, existing decision prerequisites,
+mechanics, owner changes and all earlier evidence. Save version stays 1.
 
-Scope remains one immediate report-and-patrol exchange, separate from the wider
-West-Road predicament. Working context is session-only; saving retains the running
-focus but load/reset/exit/restart do not persist it. No new simulation mechanics,
-save fields/schema/version or doctrine changes.
-
-## Deferred findings and Git disposition
-
-Authored advance knowledge of Mara/tracks and fixed report prerequisites are
-accepted testing limitations. [Deferred findings](deferred_findings.md) consolidates
-DF-001 through DF-005 and earlier nonblocking observations DF-006/007. No deferred
-capability or conceptual research question becomes a new requirement through closeout.
-
-Protected baseline and unchanged HEAD: c0d75f0cd4b026eba0326f7f6cafc5348c6b70ca.
-Branch: codex/north-gate-working-context-v1. Accepted implementation remains an
-uncommitted working diff; index empty. Acceptance/completion does not establish
-Git publication or advance the baseline. Separate publication authorization is
-required before staging/commit, merge or push. Owner changes/saves and prior
-research/experimental evidence remain preserved.
-
-See [accepted handoff](north_gate_working_context_v1_handoff.md) and
-[correction record](north_gate_working_context_v1_correction.md) for changes,
-verification, transcripts and closeout evidence. Stop after closeout verification;
-no next milestone begins automatically.
+Implementation and offline automated acceptance completed. All 15 package groups
+and 44 affected regression scripts pass after the documented direct repair.
+Owner experiential smoke and acceptance completed October 11, 2026. Exact protected
+baseline comparison reproduced the first/repeated look retry-only response under
+equivalent offline conditions, with equal authoritative states and unchanged
+fallback functions. No V1 regression found; existing fallback limitation recorded
+as DF-008. Milestone complete; no next milestone selected.
+See contextual_investigation_v1_handoff.md for evidence, comparison and launch command.
+Delivery is an uncommitted working diff. Stop before Git staging/commit, merge,
+push or baseline advancement; do not select another milestone.

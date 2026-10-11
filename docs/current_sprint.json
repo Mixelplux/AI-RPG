@@ -10,18 +10,18 @@
   "active_sprint": null,
   "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "north-gate-working-context-v1"
+    "id": "bounded-contextual-investigation-v1"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "north-gate-working-context-v1",
-    "title": "North-Gate Working Context V1",
+    "id": "bounded-contextual-investigation-v1",
+    "title": "Bounded Contextual Investigation V1",
     "type": "capability-package",
     "status": "complete",
-    "risk_level": "routine",
-    "goal": "Preserve one accepted session-local patrol discussion with Elin across existing exchanges and explicit suspension, resumption and retirement.",
+    "risk_level": "elevated",
+    "goal": "Integrate bounded intent, current access, selected examination, acquired findings, selective receipts and session-local continuation without new persistent state.",
     "predecessor": {
-      "id": "scene-construction-v1"
+      "id": "north-gate-working-context-v1"
     },
     "platform": {
       "official_interpreter": ".\\.venv\\Scripts\\python.exe",
@@ -29,10 +29,12 @@
       "provider_requests": "forbidden"
     },
     "scope": [
-      "Session-local focus and references; fresh outside context; existing report/patrol predicates and outcomes; local narration and deterministic fallback; CLI interruption policy. No persistent state, mechanics, provider or doctrine changes."
+      "Owner-authorized October 11, 2026 under C:/tmp/AI-RPG-Contextual-Investigation-V1-Package/implementation_package.md. Survey/examine/ask/report, independent depot fixture and all 15 acceptance groups; no providers or new save structures."
     ],
     "verification": [
-      "Fourteen focused tests and ten affected regression scripts passed offline with zero network attempts; identical authoritative focused/isolated results; corrected conversational owner smoke accepted October 11, 2026; documentation/lifecycle/diff and maintained Git checks passed for closeout."
+      "All 15 acceptance groups passed offline; independent depot, transaction rollback and exact version-1 shape verified.",
+      "44 affected regression scripts passed after one directly repaired historical projection regression; final CLI checks and maintained mechanical verification recorded in handoff.",
+      "Owner October 11, 2026 experiential smoke and acceptance complete. Controlled exact-baseline offline comparison found no V1 look regression; existing retry-only fallback limitation is DF-008. Milestone complete, lifecycle idle, no next sprint. No Git staging, commit, merge or push authorization."
     ]
   }
 }

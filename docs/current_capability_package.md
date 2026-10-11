@@ -1,42 +1,27 @@
-# North-Gate Working Context V1 — accepted and complete
+# Bounded Contextual Investigation V1 â€” accepted and complete
 
-Owner accepted the corrected milestone after conversational smoke on October 11,
-2026. Routine posture. Lifecycle is idle: this package is complete and no next
-package or sprint is selected. JSON remains the machine lifecycle authority.
+Owner accepted and complete October 11, 2026 at protected baseline
+bdbf07b232a5a59c82ba93eb153fd019114ebe04. Elevated posture.
+Controlling specification: C:/tmp/AI-RPG-Contextual-Investigation-V1-Package/implementation_package.md,
+including its 15 acceptance groups, independent depot fixture and exclusions.
 
-Protected baseline and unchanged branch HEAD:
-`c0d75f0cd4b026eba0326f7f6cafc5348c6b70ca`.
-Branch: `codex/north-gate-working-context-v1`, isolated managed worktree.
-Acceptance is product acceptance; Git publication remains pending. The accepted
-implementation is an uncommitted working diff with an empty index. No staging,
-commit, merge, push or protected-baseline advancement is authorized by closeout.
+Scope: bounded survey, focused examination, questioning and selective reporting;
+current authoritative access, existing discoveries/history/recipient receipts;
+session-local focus, revalidation and retirement; CLI and safe deterministic expression.
+Legacy commands and West-Road mechanics remain supported. No new save fields,
+lead persistence, provider calls, doctrine revisions, general planner or scene manager.
 
-## Accepted scope and verification
+Work occurs only in the isolated codex/bounded-contextual-investigation-v1 checkout.
+The dirty experimental checkout, owner saves/indices and prior evidence are preserved.
+Save version remains 1. Runtime changes publish a validated candidate once.
 
-One session-owned report-and-patrol discussion with Elin, bounded actor/event
-references and fresh outside truths. Existing report prerequisites and outcomes
-remain authoritative. Travel suspends; return alone does not resume. Successful
-ordinary talk or explicit resume revalidates current context. Accepted patrol
-choices or cancellation conclude the local exchange; load/reset/exit interrupt
-its unsaved focus. Saving alone retains it in the running session.
-
-Corrected smoke accepted receipt-aware ordinary/focused Elin dialogue, natural
-resumption, transition-only status and clear conclusion with authority boundaries.
-Fourteen focused tests and ten affected regression scripts passed offline, with
-zero network attempts. Focused and isolated routes produce identical authoritative
-save payloads. No new simulation mechanics, save fields/version, persistence schema,
-provider behavior or doctrine changes. The wider West-Road predicament remains distinct.
-
-## Deferred limitations and records
-
-Authored advance knowledge of Mara/tracks and fixed report prerequisites are
-accepted testing limitations; no further corrections belong to V1. See
-[deferred findings](deferred_findings.md), DF-001 through DF-005, and consolidated
-prior Scene Construction observations DF-006/007. Conceptual research questions
-are not implementation requirements or authorization for a future package.
-
-[Accepted handoff](north_gate_working_context_v1_handoff.md) records exact changes,
-evidence and publication disposition; [correction handoff](north_gate_working_context_v1_correction.md)
-retains before/after transcripts. Accepted integration assessment:
-C:/tmp/AI-RPG-Scene-Context-Integration/run-ed779548/assessment.md.
-Owner changes, saves and earlier experimental/research evidence remain preserved.
+Implementation and automated verification are authorized. Git staging, commits,
+merge, push and protected-baseline advancement are not authorized. Owner smoke and experiential acceptance completed October 11, 2026. No next
+milestone is selected. JSON is lifecycle authority.
+Implementation and offline verification are delivered as an uncommitted working
+diff. All 15 acceptance groups and the independent depot are implemented.
+Owner experiential acceptance is complete following the October 11, 2026 smoke.
+Controlled comparison found the offline look retry-only response already present
+at the exact protected baseline; it is deferred as DF-008, not a V1 regression.
+The package is complete; lifecycle is idle with no next milestone selected.
+See contextual_investigation_v1_handoff.md for verification and known limits.

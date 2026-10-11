@@ -74,6 +74,10 @@ from engine import character_competence
 from engine import west_road_market_theft
 
 
+from engine import contextual_investigation as investigation
+from engine.action_eligibility import find_selected_investigation_discovery
+
+
 class GameEngine:
     """
     Orchestrates the core AI Narrative RPG Engine pipeline.
@@ -83,7 +87,8 @@ class GameEngine:
         self,
         region_path: str,
         entry_location_id: str | None = None,
-        initial_world_state: Dict[str, Any] | None = None
+        initial_world_state: Dict[str, Any] | None = None,
+        *, investigation_policy=None,
     ):
         self.region_path = region_path
         self.region = load_region(region_path)
@@ -107,6 +112,21 @@ class GameEngine:
             self.region,
             self.world_state
         )
+
+        self._investigation_policy = investigation_policy or investigation.WestRoadInvestigation()
+        self._investigation_focus = investigation.InvestigationFocus()
+
+    def get_investigation_context(self):
+        """Copied internal selection context; not a narration/provider packet."""
+        return investigation.context(self)
+
+    def process_contextual_investigation(self, player_input=None, *, frame=None):
+        if frame is not None and player_input is not None:
+            raise ValueError("Supply input or a semantic frame, not both.")
+        return investigation.process(self, player_input, frame=frame)
+
+    def interrupt_investigation(self, reason):
+        return self._investigation_focus.interrupt(reason)
 
     @classmethod
     def start_new(
@@ -158,11 +178,21 @@ class GameEngine:
             if declaration["discovery_id"] in known_ids
         )
 
-    def investigate(self) -> Dict[str, Any]:
+    def investigate(self, *, discovery_id=None) -> Dict[str, Any]:
         candidate = copy_world_state(self.world_state)
         location_id = get_player_location_id(candidate)
-        declaration = find_eligible_investigation_discovery(self.region, candidate)
         result = {"changed": False, "discovery_id": None, "text": None, "history_id": None}
+        if discovery_id is None:
+            declaration = find_eligible_investigation_discovery(self.region, candidate)
+        else:
+            # Named execution has the same current access boundary as projection.
+            permitted = any(c.kind == "evidence" and c.finding_id == discovery_id
+                            for c in self._investigation_policy.candidates(self))
+            if not permitted:
+                return result
+            declaration = find_selected_investigation_discovery(self.region, candidate, discovery_id)
+            if declaration is not None and discovery_id in candidate["player_discoveries"]:
+                return {**result, "discovery_id": discovery_id, "text": declaration["text"]}
         if declaration is None:
             return result
         candidate["player_discoveries"].append(declaration["discovery_id"])
@@ -980,6 +1010,10 @@ class GameEngine:
 
         if west_road.enabled(self.region):
             perception["character_competence"] = self.get_competence_projection()
+        for lead in self._investigation_policy.candidates(self):
+            perception["contextual_actions"]["opportunities"].append(
+                "You can survey for leads or examine local signs." if lead.kind == "evidence"
+                else "You can ask the present driver what she saw.")
         return perception
 
     def get_current_scene_projection(self) -> Dict[str, Any]:
@@ -1313,6 +1347,7 @@ class GameEngine:
         self.region = other.region
         self.world_state = other.get_world_state()
         self.scene_snapshot = other.get_scene_snapshot()
+        self._investigation_focus.clear()
 
     def _compose_resolved_conversation_consequences(
         self,
@@ -1426,6 +1461,15 @@ class GameEngine:
         return candidate_world_state
 
     def process_command(self, player_input: str) -> Dict[str, Any]:
+        result = self.process_contextual_investigation(player_input)
+        if result is None:
+            result = self._process_legacy_command(player_input)
+        notice = self._investigation_focus.observe(self, result)
+        if notice:
+            result["investigation_notice"] = notice
+        return result
+
+    def _process_legacy_command(self, player_input: str) -> Dict[str, Any]:
         if player_input.strip().lower() in character_competence.OPERATIONS:
             return self.attempt_competence(player_input)
         if west_road.enabled(self.region) and player_input.strip().lower() in west_road.COMMANDS:

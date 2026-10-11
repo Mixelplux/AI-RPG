@@ -225,3 +225,27 @@ projection. Zero/one/two receipts determine her acknowledgement and remaining
 question; accepted phases use existing witnessed outcome responses. Unrelated
 commands do not replay focus/status. Report exchanges receive current dialogue,
 while suspension, resumption and conclusion are communicated at transitions.
+
+
+## Bounded Contextual Investigation V1
+
+`engine.contextual_investigation` interprets one survey, examination, supported
+question or selective report into an immutable transient `ActionFrame`. A small
+West-Road policy derives accessible candidates from current local traces, actor
+presence and the initial inquiry phase. Candidates and copied focus are internal
+selection data; presentation receives only sanctioned cues and existing qualified
+results. A survey grants attention without acquiring findings or writing history.
+
+The engine revalidates stable target identity, method, restrictions and recipient
+before dispatching to selected `investigate`, the supported Mara account, or
+existing `present_clue` transactions. Selected acquisition is independent of
+content order and replays only that finding. Simulation retains discovery,
+history, recipient knowledge, costs and decision authority. Interpretation never
+runs a list of legacy commands or chooses a consequential branch.
+
+One unsaved focus holds a frame, location and at most four subject/event references.
+Travel suspends it; resumption and new input recheck current subjects and execute
+nothing automatically. Successful load/reset and exit retire it; failed load keeps
+it. Findings and receipts remain in existing owners. Save version 1 and its shape
+are unchanged. The test-only depot supplies a second concrete policy through the
+same engine seam; no production region, registry or saved lead structure is added.

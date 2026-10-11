@@ -117,6 +117,10 @@ def print_help() -> None:
     print("- pursue observers / restore coverage: Follow up after patrol action.")
     print("- protect supply stop / locate raiders: Follow up after further investigation.")
     print("- follow withdrawal signs / reconstruct local observation circuit / arrange guarded local survey: Follow the watchers' tracks, compare their positions, or coordinate a search with Grey and Elin.")
+    print("- Survey the area for leads: Identify accessible subjects without acquiring complete clues.")
+    print("- Examine local marks / ask Mara what she saw / tell Elin about the tracks: Bounded contextual inquiries.")
+    print("- investigate: Legacy focused clue acquisition, distinct from a general survey.")
+    print("- cancel investigation / finish investigation / resume investigation: Unsaved local focus controls.")
     print("- help: Show this help message.")
     print("- quit or exit: End the game.")
     print("- Any other input is treated as a player action.")
@@ -448,6 +452,9 @@ def main(*, narration_preparer=None, narration_realizer=None,
         normalized_input = player_input.lower()
 
         if normalized_input in ["quit", "exit"]:
+            investigation_notice = engine.interrupt_investigation("exit")
+            if investigation_notice:
+                print(investigation_notice)
             interruption = discussion.interrupt("exit")
             if interruption:
                 print(interruption)
@@ -473,7 +480,10 @@ def main(*, narration_preparer=None, narration_realizer=None,
 
         if normalized_input == "load":
             try:
+                had_investigation = engine.get_investigation_context()["focus"] is not None
                 engine.load(SAVE_PATH)
+                if had_investigation:
+                    print("The unsaved investigation focus ends on load; accepted information is reconstructed from the save.")
                 interruption = discussion.interrupt("load")
                 if interruption:
                     print(interruption)
@@ -491,7 +501,10 @@ def main(*, narration_preparer=None, narration_realizer=None,
             continue
 
         if normalized_input == "reset":
+            had_investigation = engine.get_investigation_context()["focus"] is not None
             engine.reset()
+            if had_investigation:
+                print("The unsaved investigation focus ends on reset; a new game state begins.")
             interruption = discussion.interrupt("reset")
             if interruption:
                 print(interruption)
@@ -708,6 +721,8 @@ def main(*, narration_preparer=None, narration_realizer=None,
                 f"difficulty {check_result['target_difficulty']}."
             )
 
+        if interaction_result.get("investigation_notice"):
+            print(interaction_result["investigation_notice"])
         if discussion_notice:
             print(discussion_notice)
         if focused:

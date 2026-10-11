@@ -125,3 +125,31 @@ and the linked existing system manifests. No earlier evidence is superseded or o
 - Disposition: deferred nonblocking presentation limitation.
 - Resolution conditions: separately authorize bounded wording work; check loaded
   reorientation and prove it neither executes nor implies a new authoritative attempt.
+
+
+## DF-008 — Narration-unavailable deterministic fallback experience
+
+- Missing capability/limitation: successful `look` observations use the provider
+  preview and, when it is unavailable, offer only a retry notice rather than a
+  usable deterministic scene fallback. Provider fail-closed safety remains intact.
+- Examples/source: October 11, 2026 Contextual Investigation V1 smoke; controlled
+  exact-baseline comparison reproduces first/repeated `look` output:
+  "Scene narration is unavailable. You can retry with 'look'." Both protected
+  baseline and uncommitted V1 match with missing configuration or the offline
+  launcher's blocked constructor. This predates V1 and is not launcher-exclusive.
+  Initial/travel deterministic scenes and later clue acquisition remain available;
+  `look` changes no authoritative state. Consolidates the existing
+  [Player Presentation failure/status limitation](design/systems/player-presentation.md)
+  and [Narrative Experience partial fallback](design/systems/narrative-experience.md).
+  See [final V1 handoff](contextual_investigation_v1_handoff.md#final-baseline-classification-and-acceptance--october-11-2026)
+  and `C:/tmp/AI-RPG-Contextual-Investigation-V1-Final-Verification/classification.md`.
+- Responsible system: [Player Presentation](design/systems/player-presentation.md)
+  and [Narrative Experience](design/systems/narrative-experience.md).
+- Disposition: existing nonblocking baseline experience limitation; deferred and
+  unscheduled. No V1 regression, narration redesign or provider work authorized.
+  Matching baseline behavior establishes provenance, not fallback desirability.
+- Resolution conditions: separately authorize bounded offline/provider-failure
+  presentation work; verify usable deterministic reorientation after first/repeated
+  observation while preserving simulation authority, costs, discoveries, history,
+  receipts and provider fail-closed behavior. Expected provider unavailability and
+  fallback experience quality must be evaluated separately.
