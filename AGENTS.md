@@ -54,6 +54,14 @@ Do not routinely read the full ADR ledger, roadmap, architecture history, or dup
 
 Within authorized scope, Codex may implement accepted behavior, make routine local choices, repair directly caused defects, update required documentation, run verification, and progress through authorized internal milestones.
 
+Documentation reconciliation is an automatic part of completing every
+implementation. Before presenting it for owner acceptance or publication,
+follow `WORKFLOW.md` to identify, update, and verify affected documentation,
+and record meaningful no-change determinations in the completion report.
+Routine reconciliation is authorized within implementation scope; stop for
+owner input if it introduces a material new architectural decision, doctrine
+change, or otherwise exceeds authorized scope.
+
 Scope is the approved capability and architectural subsystems. Expected files
 are guidance; directly necessary additional files within those subsystems may
 change without another approval if product scope stays bounded. Report them

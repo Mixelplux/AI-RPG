@@ -71,6 +71,31 @@ sandbox/ACL failure. Never loop on blocked paths or modify ACLs without new,
 narrowly scoped evidence. Live-provider actions require explicit authorization;
 automated tests remain offline.
 
+## Documentation Reconciliation
+
+Complete documentation reconciliation for every implementation before
+presenting it for owner acceptance or publication, including after corrections
+that affect documentation. Identify documentation affected by the actual
+changes and update relevant runtime architecture documentation, system
+manifests, relationship maps, architectural decisions, deferred findings, and
+package records where warranted. Do not require every document to change at
+every milestone or reconcile unrelated historical documentation.
+
+Preserve distinctions between implemented behavior, accepted design,
+provisional research, and deferred capabilities; documentation must not imply
+owner acceptance of an unaccepted implementation. Verify affected documentation
+against the implemented behavior and accepted design so that it accurately
+represents the implementation submitted for acceptance and, before publication,
+the accepted implementation. Record the documentation updates and meaningful
+no-change determinations, with brief reasons, in the existing completion report.
+
+Routine reconciliation is part of authorized implementation scope and needs no
+separate owner authorization. Stop for owner input only if reconciliation
+introduces a material new architectural decision, doctrine change, or otherwise
+exceeds authorized scope. Use proportionate documentation/record checks and
+diff review; this adds no mandatory report, approval gate, or formal review packet
+and does not change lifecycle or acceptance authority.
+
 ## Git, Review, and Completion
 
 Continue using `D:\Codex Tools\GitWorkflowTools` with
