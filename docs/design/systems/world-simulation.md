@@ -125,6 +125,17 @@ future change. Active processes earn explicit tracking by consequential need.
 General inference, dormant reconciliation, and promotion between specificity
 levels are not implemented lifecycle machinery.
 
+October 12 reconciliation against published baseline `a6ff3164` confirms later
+[material handling](../../contextual_action_consequence_v1_handoff.md) adds optional
+finite `material_conditions`: stability, fitting, position and integrity, bounded
+cooperation and causal handling/development references. Routine preparation,
+whole-hour effort, changed-feasibility interruption and accepted effects compose
+through the existing candidate transaction. One declared elapsed-time development
+per target can apply or record that it no longer applies, including offscreen.
+This supports the opt-in Market passage and independent archive fixture, not a
+general physical model, active scene simulator or autonomous NPC schedule.
+Investigation and North-Gate session focus own no additional world truth.
+
 ## Inputs
 
 - Validated Region Packs: initial fields, locations/connections, constraints,
@@ -173,7 +184,7 @@ sewer, and wilderness traversal do not inherently need exhaustive tiles/nodes.
 
 | Capability | Classification and evidenced limit |
 |---|---|
-| World/location state | **Implemented, bounded:** player location, weather/time, history, pressures, actor-location overrides, traces and scenario state. Locations, descriptions and connectivity remain authored. No general mutable physical/accessibility model. |
+| World/location state | **Implemented, bounded:** player location, weather/time, history, pressures, actor-location overrides, traces, scenario state and optional finite material conditions. Locations, descriptions and connectivity remain authored. No general mutable physical/accessibility model. |
 | Fictional time | **Partial:** positive integer hour advancement updates `elapsed_hours`, records a time event and invokes supported effects. `timekeeper` copies other fields unchanged; it does not advance a calendar, `time_of_day`, or weather. |
 | Movement/connectivity | **Implemented, bounded:** directional/named connections and named-destination graph routing; route hops execute sequentially. One declared West-Road exit traversal costs one hour atomically with its supported effects. General travel costs, interruptions and arbitrary local geometry are deferred. |
 | Environment/world conditions | **Partial:** initial weather is copied into runtime state, saved, and projected; pressure levels have supported mutations. Economy, security and population in the scene remain authored Region Pack values. No general weather evolution, maintenance or condition simulation. |

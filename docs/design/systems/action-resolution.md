@@ -3,7 +3,8 @@
 ## Status
 
 - Overall: **Partial** — bounded deterministic operations and persistent
-  competence attempts exist; general player-action adjudication does not.
+  competence attempts, contextual investigation and declared material handling exist;
+  general player-action adjudication does not.
 - Last materially reviewed: October 6, 2026, repository baseline
   `d0dba1f5f1da391216cdb8fb8e4dabf8485705c8` (`docs: refine character system authority`).
 - Relevant milestones: [10.77 reference predicament](../../sprint_10_77_handoff.md),
@@ -14,6 +15,13 @@
 This living responsibility model uses the [shared structure and vocabulary](README.md).
 It is a documentation review candidate, not implementation authorization or a
 new action framework. Conceptual ownership does not require separate modules.
+
+Implementation reconciliation: October 12, 2026 at published baseline
+`a6ff316473ce2bafc58be4718479261602f5e3ac`, through October 11 accepted work.
+Later evidence: [Contextual Investigation V1](../../contextual_investigation_v1_handoff.md),
+[Contextual Action & Consequence V1](../../contextual_action_consequence_v1_handoff.md)
+and its [structural correction](../../contextual_action_structural_correction.md).
+The October 6 review identity above remains historical.
 
 ## Purpose
 
@@ -106,8 +114,8 @@ it describes existing seams and open design work, not new runtime components.
 
 | Responsibility | Current grounding and limit |
 |---|---|
-| Frame an executable attempt | Interpret input and combine world facts, character access/capability, authored prerequisites and supported operation policy. Fixed parsing, local targets and shared eligibility predicates exist; open-ended framing and general possibility judgments do not. |
-| Determine outcome and cost | Decide the needed resolution depth and apply bounded rules. Deterministic discovery/decisions, two uncertain investigations and a deterministic survey exist; there is no general policy selector or stakes/difficulty derivation. |
+| Frame an executable attempt | Interpret input and combine world facts, character access/capability, authored prerequisites and supported operation policy. Fixed parsing, local targets, bounded contextual frames and shared assessment predicates exist; open-ended framing and general possibility judgments do not. |
+| Determine outcome and cost | Decide the needed resolution depth and apply bounded rules. Deterministic discovery/decisions, two uncertain competence investigations, a deterministic competence survey and declared material handling exist; there is no general policy selector or stakes/difficulty derivation. |
 | Commit and preserve the accepted result | Compose immediate effects with owning systems, validate and publish the candidate, retaining enough result/basis/provenance for continuity. Explicit attempt replay exists for three West-Road operations, not all commands. |
 
 World facts answer whether a trace or actor is present; character state supplies
@@ -152,6 +160,33 @@ without drawing, charging, rebuilding or publishing. This is distinct from a
 newly unavailable action and from other mechanisms' successful no-ops. Ordinary
 conversations may record a new conversation on repetition even when a declared
 effect is already satisfied; there is no universal command deduplication.
+
+### Later accepted contextual slices
+
+Investigation interprets survey, selected examination, a supported witness question
+or selective reporting into an immutable transient `ActionFrame`. Survey reveals
+sanctioned leads without acquiring a finding or history entry; targeted acquisition
+and reporting reuse existing discovery, Mara-account and recipient transactions.
+Target/method/restrictions/access are revalidated, including resumed unsaved focus.
+This contextual lead survey differs from the paid West-Road competence survey.
+
+Material handling interprets a `HandlingFrame` with objective, stable target,
+authored method and explicit restrictions. Read-only assessment and questions do
+not authorize handling. Disclosed risk/method/one-hour effort precede contextual
+confirmation; revalidation cannot silently discard restrictions or retarget a
+proposal. Routine preparation, time consequences, re-assessment and accepted
+full/partial/failure (or interruption) result publish in one candidate. Stabilization
+is deterministic; supported adjustment/reposition uses the existing d6 primitive.
+This does not grant specialist modifiers to material handling.
+
+Accepted material conditions and causal history survive save/load. An identical
+attempt on unchanged material circumstances cannot redraw; changed circumstances
+or another supported method can permit a new disclosed attempt. General extended
+actions, autonomous intervention, arbitrary repair and conditional plans remain
+deferred. Material interpretation runs first, then investigation, then the legacy
+kernel if unclaimed. This sequential dispatch is accepted implementation, not the
+shared interpretation replacement explored by Option C in the
+[research index](../../architecture_comprehension_review.md).
 
 ### Randomness and technical continuity
 
@@ -253,15 +288,16 @@ the intended final action abstraction.
 
 | Capability | Classification and evidenced limit |
 |---|---|
-| Intent and executable operation | **Partial:** fixed kernel parsing, current-scene target resolution, named graph routes, engine dispatch and scenario command bypasses. Unknown input rejects; generic action acceptance is scaffolding without object/inventory mutation. No general free-text adjudication. |
+| Intent and executable operation | **Partial:** bounded contextual investigation/material framing precedes fixed kernel parsing, current-scene target resolution, graph routes and scenario commands. Unknown input rejects; generic action acceptance is scaffolding without object/inventory mutation. No general free-text adjudication. |
 | Preconditions and recognition | **Implemented, bounded:** local discovery needs a matching present trace and an undiscovered declaration. Competence needs withdrawal phase, encountered tracks, exact physical trace, North Gate and Grey/Elin present; no specialist tag is required to try. Recognition is automatic/read-only on applicable evidence. |
-| Deterministic discovery and interaction | **Implemented, bounded:** investigation acquires the first eligible authored local discovery without roll/time cost. Clue presentation and conversations validate local targets and supported requirements, then apply declared history/knowledge/pressure/relocation/trace or thread effects where supported. These are not general investigation, persuasion or actor-decision systems. Older prototype effects have test-only legacy-fixture coverage rather than proving current Bryn Shander play. |
+| Deterministic discovery and interaction | **Implemented, bounded:** bare investigation acquires the first eligible local discovery; contextual examination selects and revalidates one supported target without roll/time cost. Lead survey grants neither finding nor cost. Clue presentation and conversations validate local targets and supported requirements, then apply declared history/knowledge/pressure/relocation/trace or thread effects where supported. These are not general investigation, persuasion or actor-decision systems. Older prototype effects have test-only legacy-fixture coverage rather than proving current Bryn Shander play. |
 | Fixed predicament decisions | **Implemented, scenario-specific:** phase plus evidence/shared reports and guard coordination determine availability; two initial decisions cost an hour, four follow-ups add none. The accepted engine phase graph applies authored outcomes. This bounded scenario policy is not authority for arbitrary authored future outcomes. |
 | Uncertain competence | **Implemented, scenario-specific resolution:** follow withdrawal signs uses outdoor tracking; reconstruct local observation circuit uses surveillance analysis. Each costs one hour. Ordinary d6: 1–2 failure, 3–4 partial, 5–6 full. Relevant specialist: 1–2 partial, 3–6 full. No general difficulty/modifier system. |
 | Deterministic survey | **Implemented, scenario-specific resolution:** committed guard assistance yields full result; two hours ordinarily, one with tactical assessment, no draw. Presence/coordination requirements apply; assistance is not inferred from biography. |
 | Failure/partial/full semantics | **Implemented, bounded:** failure adds no finding; partial gives supported local direction or overlapping watch-position inference; full reuses the withdrawal-route pursuit outcome. All accepted bands pay cost. Other approaches and ordinary continuation remain after failure/partial. No names, affiliations, distant destinations or capture are inferred. |
 | Movement/travel | **Implemented, bounded:** graph validation and named routing select executable hops; World Simulation changes position/history. One directed West-Gate road hop costs an hour with supported consequences; others are instantaneous. Multi-hop routes commit sequentially, not as one transaction. No general travel-risk or interruption resolution. |
 | Candidate integrity and replay | **Partial system-wide:** competence source/time/findings/outcome validate and publish together; tests inject preparation/validation/scene failures. Accepted competence repeats do not draw/charge/publish. Other candidate transitions exist, but no universal transaction, attempt identity or replay policy is implemented. |
+| Contextual material handling | **Implemented, bounded:** assessment is read-only; stabilization/adjustment/reposition require disclosed contextual authorization. Supported preparation, helper cooperation/refusal, one-hour effort, d6 where applicable and finite material consequences publish atomically. Independent archive fixture demonstrates the shared path, not general repair/physics. |
 | General `check` command | **Implemented scaffold only:** `perform_skill_check` compares constant result 12 with difficulty 10 for a supplied name. It does not consult character competence, draw, charge time or establish a general skill system. |
 | Scene Context intention | **Implemented presentation boundary:** narrow first-person within-scene movement phrases route to descriptive narration; explicit navigation retains its engine route. Providers have no outcome authority. Broader natural-language action resolution is deferred. |
 

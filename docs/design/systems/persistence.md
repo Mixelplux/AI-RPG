@@ -112,10 +112,10 @@ archive, frozen content pack, event-sourced reconstruction or engine snapshot.
 
 | Kind | Stored or reconstructed meaning |
 |---|---|
-| Accepted fictional state | Player location and competence tags; weather/time; pressures; actor overrides and knowledge; traces/discoveries; open/resolved threads; history; supported scenario, attempt and theft records. Their respective gameplay owners retain semantics. |
+| Accepted fictional state | Player location and competence tags; weather/time; pressures; actor overrides and knowledge; traces/discoveries; open/resolved threads; history; supported scenario, attempt, theft and optional material-condition/cooperation records. Their respective gameplay owners retain semantics. |
 | Authored foundations | Region path is stored. Locations/topology, names, descriptions, actor profiles, faction definitions, declarations and reply/clue wording reload from content. No complete mutable relationship, faction, inventory or character-sheet state exists. |
 | Derived runtime state | Scene snapshot, effective actor presence, deterministic spawned template instances, perception, opportunities, competence projections and recap rebuild from state/content. Recognition is derived; accepted findings are retained. |
-| Ephemeral presentation | Current-scene sentence claims, previous presentation conditions, attention stage, current input and last-displayed narration are session-only. No generated transcript or visited-location prose memory is saved. |
+| Ephemeral presentation | Current-scene sentence claims, previous presentation conditions, attention stage, current input and last-displayed narration are session-only. North-Gate discussion, investigation focus and material focus/pending authorization are also unsaved. No generated transcript or visited-location prose memory is saved. |
 | Infrastructure | Provider transport/configuration, requests, credentials, process objects and PRNG state are not campaign save state. Persistence does not make provider memory authoritative. |
 
 The writer copies the whole supported state container rather than selecting a
@@ -163,6 +163,7 @@ still reject a normalized payload whose remaining records require missing facts.
 | `competence_attempts` | Normalize to `{}`. Historical ordinary pursuit needs no synthetic competence attempt. |
 | `west_road_market_theft`, when a predicament record exists | Add the initial incident record. If coverage is already reduced, start its interval at saved elapsed time; otherwise leave the interval absent. Do not count old hours retroactively. Existing theft history without its record rejects. |
 | `west_road_predicament` with revised West-Road content | Reject the unsupported prototype situation with the explicit new-game message under ADR-060. Do not choose a branch. |
+| `material_conditions` with declared targets or material history | Reject missing authoritative material state; do not reconstruct a starting state over accepted consequences. Regions without either need no such field. |
 
 `player.current_location_id`, weather and time are required; they are not supplied
 from new-game defaults on load. History is not universally required by the base
@@ -205,6 +206,23 @@ without erasing a theft that already occurred. Loading does not simulate offline
 wall-clock time, replay threshold effects or identify a thief. Legacy timing
 normalization is the explicit exception where an earlier duration was never
 recorded; it begins tracking at the saved time without inventing a past incident.
+
+### Later accepted material continuity
+
+October 12 reconciliation at published baseline `a6ff3164` confirms
+[Contextual Action & Consequence V1](../../contextual_action_consequence_v1_handoff.md)
+stores optional `material_conditions` and preparation/cooperation/outcome/development
+history with causal references. Region-aware validation reconstructs declared
+transitions and checks accepted costs/results against content. Missing required
+material records reject instead of reseeding; regions without declarations or
+material events need no such field. Version 1 remains unchanged, with no migration.
+This is a bounded exception to empty additive normalization, not a new save version.
+
+Load restores conditions and recorded consequences without re-drawing, charging
+effort or replaying developments. Unsaved pending handling authorization and local
+discussion/investigation focus are retired by successful load/reset; failed load
+preserves the existing session. Saving alone does not retire them. The current
+direct-write disk durability limitation below remains unchanged.
 
 ### Content references and changed defaults
 

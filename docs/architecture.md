@@ -6,6 +6,11 @@ This document is a concise map of the current AI Narrative RPG Engine architectu
 
 Detailed architectural decisions belong in `docs/decisions.md`. Package-specific requirements belong in the current capability package.
 
+Implementation descriptions were reconciled October 12, 2026 against published
+baseline `a6ff316473ce2bafc58be4718479261602f5e3ac`, covering accepted work
+through October 11. Prior research is indexed separately in the non-authoritative
+[architecture comprehension review](architecture_comprehension_review.md).
+
 Living responsibility models and shared design doctrines are indexed in
 [System design manifests](design/systems/README.md). Their
 [system map](design/systems/system-map.md) separates conceptual ownership from
@@ -38,23 +43,25 @@ Do not add sprint history, full schemas, test inventories, or implementation wal
 ## Runtime Flow
 
 ```text
-Player Input
+Player input
     ↓
-Interaction Kernel
+CLI intercepts applicable session controls → session handling / feedback
+    ↓ gameplay input
+GameEngine.process_command() — gameplay orchestration
     ↓
-Structured Interaction Result
+Contextual material action → contextual investigation → legacy fallback
+(next route only if input is unclaimed)
     ↓
-GameEngine
-    ↓
-Candidate State Transition
-    ↓
-Validated World State
-    ↓
-Scene Snapshot
-    ↓
-Player-Safe Projection
-    ↓
-CLI or Narration Preview
+    ├─ Read-only assessment / result → player-facing presentation
+    └─ Consequential operation
+           ↓
+       Prepare candidate state + consequences
+           ↓
+       Validate candidate → build required scene
+           ↓
+       Publish state/scene once → authoritative state/result
+           ↓
+       Derived player-safe views → result / scene / narration presentation
 ```
 
 `GameEngine` is the gameplay-facing orchestration boundary. Player-facing code must not directly mutate lower-level state.
@@ -72,7 +79,9 @@ CLI or Narration Preview
 - actor knowledge;
 - evidence traces and player discoveries;
 - player competence tags and accepted attempts for the bounded West-Road slice;
-- the fixed west-road reference predicament phase and causal outcome reference.
+- the fixed west-road reference predicament phase and causal outcome reference;
+- optional declared material conditions, cooperation and causal handling/development
+  records for the opt-in material scenario.
 
 ### Region Packs
 
@@ -156,16 +165,20 @@ Narration-Output Validation
 Preview Display
 ```
 
-The current live source is an explicit OpenAI Responses preview.
+The provider source is OpenAI Responses through the existing preview boundary.
+Accepted ordinary CLI routes also request it for Market Square automatic display
+and broad observation/descriptive intention. The request mode still says `preview`;
+that label does not mean all narration is a diagnostic-only command.
 
-Narration:
+Narration remains read-only, untrusted, nonpersistent and without simulation
+authority. Source/output validation permits display; it does not certify semantic
+fidelity. Internal context retains a scene snapshot, but the provider prompt
+serializes explicit Scene Context and bounded narrative projection, not that raw
+snapshot or the full history. This is not a general character-access model.
 
-- is preview-only;
-- is untrusted until validated;
-- has no simulation authority;
-- does not persist prose;
-- does not run automatically during normal gameplay;
-- must fail closed without changing deterministic gameplay.
+Failures preserve deterministic gameplay. The bounded local composition routes
+below retain deterministic result/scene fallback; broad provider-backed observation
+still returns only an unavailable/retry notice on failure ([DF-008](deferred_findings.md#df-008--narration-unavailable-deterministic-fallback-experience)).
 
 The provisional failed `follow withdrawal signs` gameplay slice also uses a
 read-only accepted-result route: recorded result -> accepted player-safe input
@@ -185,7 +198,34 @@ read-only handoff, not a universal scene schema; Revised A remains adapter-priva
 CLI command guidance stays derived, including on choice-only refreshes. No scene
 authority, encounter flag, narrative persistence, gameplay rule or save field is
 added. Other locations and explicit preview/observation routes retain their
-existing behavior. See scene_construction_v1_handoff.md for verification and limits.
+existing behavior. See [Scene Construction V1](scene_construction_v1_handoff.md) for verification and limits.
+
+## Bounded Contextual Action & Consequence V1
+
+`engine.contextual_action` proposes immutable `HandlingFrame` instructions for
+declared stabilize, adjust and reposition methods, plus assessment and bounded
+cooperation. It runs before investigation and legacy dispatch; specialized
+interpreters still own their own language grounding. A proposal is not authority.
+Inspection/possible repair is assessment, not commitment. Consequential handling
+discloses method, risk and one-hour effort before contextual confirmation; execution
+rechecks target, conditions, helper presence/refusal, restrictions and disclosure.
+
+Routine preparation, elapsed-time effects, re-assessment, the supported d6 result
+and material consequences share one validated candidate publication. If preparation
+changes feasibility, its accepted effects/cost remain and the remaining action stops
+without a draw. Unchanged completed attempts do not obtain a free redraw. Optional
+`material_conditions` retain finite stability/fitting/position/integrity, cooperation
+and causal references; one declared time development per target is supported.
+Missing required material state is rejected on load, not reseeded. Save version is 1.
+
+Engine-owned `ActionFocus` retains one unsaved focus/proposal; travel suspends focus
+and changed basis invalidates authorization. Load/reset replaces that context;
+accepted consequences remain in World State/history. The opt-in `--scenario market`
+uses deterministic material scenes and observations; the independent archive fixture
+uses the same production path. This is not general physics, repair, NPC planning,
+inventory, conditional planning or a shared general interpreter. See the
+[handoff](contextual_action_consequence_v1_handoff.md) and accepted
+[structural correction](contextual_action_structural_correction.md).
 
 ## Context Loading
 

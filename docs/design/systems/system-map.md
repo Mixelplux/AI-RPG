@@ -28,6 +28,18 @@ Existing manifests retain their historical review wording; this shared map
 records finalization without claiming completed implementation. The model and
 doctrines remain revisable guidance, and no implementation is authorized.
 
+Implementation relationships reconciled October 12, 2026 against published
+baseline `a6ff316473ce2bafc58be4718479261602f5e3ac`, through October 11 accepted work.
+Initial review/finalization identities above remain historical. Later evidence:
+[provisional pipeline](../../provisional_narrative_pipeline_handoff.md),
+[Scene Construction](../../scene_construction_v1_handoff.md),
+[North-Gate context](../../north_gate_working_context_v1_handoff.md),
+[investigation](../../contextual_investigation_v1_handoff.md) and
+[material handling](../../contextual_action_consequence_v1_handoff.md).
+These bounded implementations preserve the conceptual owners and Partial system
+classifications; [Option C research](../../architecture_comprehension_review.md)
+does not replace accepted sequential dispatch.
+
 ## Responsibility hierarchy
 
 | Group | Systems and responsibilities |
@@ -60,7 +72,7 @@ sourcing, continuous simulation, a generalized causal engine, or a scheduler.
 | Character System → Action & Resolution | Capability and recognition affect applicable actions and resolution | Implemented bounded West-Road competence; broader interface provisional |
 | World Simulation → Character System | Observable world facts constrain perception and access; world truth alone does not grant knowledge | Partial: existing perception/discovery boundaries; ordinary lived familiarity remains design direction |
 | World Simulation ↔ Actors & Social Dynamics | Circumstances inform intentional decisions; executed actions return external consequences | Provisional conceptual interface; declared relocation/report effects are implemented, autonomous decisions are not |
-| World Simulation / Character System → Narrative Experience → Player Presentation | Jointly accessible local facts, conditions, retained information and safe outcomes are selected/framed, then displayed | Implemented bounded projections and Sprint 10.80 context; general access/familiarity and context selection remain deferred |
+| World Simulation / Character System → Narrative Experience → Player Presentation | Jointly accessible local facts, conditions, retained information and safe outcomes are selected/framed, then displayed | Implemented bounded safe input, local preparation/realization, scene sections and receipt-aware focus; general access/familiarity and context selection remain deferred |
 | Narrator Provider / Model Adapter → Narrative Experience | Untrusted candidate expression through validated, fail-closed boundaries | Implemented narration path; no reverse authority flow into simulation |
 | World Simulation ↔ Persistence | Validated runtime state saved/restored; scenes rebuilt from state plus content | Implemented version-1 envelope; storage atomicity limitation in manifest |
 | Verification / Evaluation, Runtime / Tooling → supported systems | Checks and execution support | Infrastructure relationships, not fictional authority |
@@ -106,13 +118,13 @@ pipeline or module split. Acceptance of a command differs from fictional success
 
 | From → To | Information / dependency | Current status |
 |---|---|---|
-| Player Presentation → Action & Resolution | Declared intent to interpret as a supported operation | Partial: fixed parsing and scenario commands; descriptive scene intention is not consequential execution, and general action framing remains open |
+| Player Presentation → Action & Resolution | Declared intent to interpret as a supported operation | Partial: contextual investigation/material frames precede legacy parsing; descriptive intention is not commitment, and general framing remains open |
 | World Simulation / Character System → Action & Resolution | External facts and resources; character capability, recognition/access basis and retained information | Implemented bounded premises; neither input owner independently adjudicates the attempt |
-| Scenario & Authored Content → Action & Resolution | Supported prerequisites, evidence, declared costs/effects and bounded resolution material | Implemented narrow declarations plus engine policy; no authority to predetermine arbitrary player outcomes |
+| Scenario & Authored Content → Action & Resolution | Supported prerequisites, evidence, declared costs/effects and bounded resolution material | Implemented investigation policy and finite material methods/risks/outcomes plus engine assessment; no authority to predetermine arbitrary player outcomes |
 | Actors & Social Dynamics ↔ Action & Resolution | Intentional actor choices as inputs; adjudicated contested outcomes as results | Provisional: no general contest or autonomous decision mechanism; resolution does not choose actor intentions |
 | Action & Resolution → World Simulation / Character System | Accepted immediate effects, applicable costs and evidence-grounded information legitimately yielded, committed with owning systems | Implemented bounded candidate paths; external truth/time and later causality remain World Simulation responsibilities, acquired information retains character continuity |
 | Action & Resolution → Narrative Experience / Player Presentation | Safe approaches, uncertainty, costs, accepted results and evidence limits | Implemented bounded projections; provider expression cannot roll, waive costs or repair failure |
-| Action & Resolution ↔ Persistence | Accepted draw/result, basis, cost, findings and causal references survive restoration | Implemented West-Road attempt replay without reroll/recharge/republish; no universal attempt ledger or anti-save-scumming guarantee |
+| Action & Resolution ↔ Persistence | Accepted draw/result, basis, cost, findings and causal references survive restoration | Implemented West-Road replay and material condition/causal-result continuity; unsaved proposals do not survive load; no universal ledger or anti-save-scumming guarantee |
 
 An action's time cost may cross a World Simulation threshold within the same
 candidate. Shared publication does not transfer downstream causal authority to
@@ -155,12 +167,12 @@ expression mechanism alongside authored and deterministic text.
 
 | From → To | Information / dependency | Current status |
 |---|---|---|
-| World Simulation → Narrative Experience | Accessible external facts, conditions and legitimate changes | Partial: bounded local scene and causal projections; provider snapshot still contains internal fields, not a universal safe view |
+| World Simulation → Narrative Experience | Accessible external facts, conditions and legitimate changes | Partial: bounded local scene/causal projections and explicit provider serialization exclude the internal snapshot; no universal access model |
 | Character System → Narrative Experience | Character-specific access basis, capability, recognition and retained findings, jointly constrained by world conditions | Partial: local competence layers; no general perception/familiarity engine; expression cannot grant knowledge |
 | Action & Resolution → Narrative Experience | Accepted results, costs, findings and uncertainty limits | Implemented bounded outcomes; no general outcome stream or permission to repair failure |
 | Actors & Social Dynamics → Narrative Experience | Accepted behavior, attributed reports and established social meaning | Partial authored/scenario behavior; expressive manner cannot invent consequential intentions, promises or disclosures |
 | Scenario & Authored Content → Narrative Experience | Location grounding, dialogue, tone foundations and supported constraints | Implemented bounded content; authored wording remains constrained by live state |
-| Player Presentation ↔ Narrative Experience | Declared focus/presentation context in; selected expressive content out | Partial CLI integration; parsing, widgets and safe display mechanics remain presentation responsibilities |
+| Player Presentation ↔ Narrative Experience | Declared focus/presentation context in; selected expressive content out | Partial CLI integration with local scene/result composition and unsaved discussion focus; display mechanics remain presentation responsibilities |
 | Narrator Provider / Model Adapter → Narrative Experience | Untrusted candidate language | Implemented validated fail-closed path; structural acceptance is not proof of factual prose |
 | Persistence → Narrative Experience | Restored supported fictional state from which scenes and recap are rebuilt | Implemented bounded recap; current-scene prose cache is session-only and not saved; no new storage interface selected |
 
@@ -214,10 +226,10 @@ its fictional semantics and retention needs. Neither the save file nor the
 
 | From → To | Information / dependency | Current status |
 |---|---|---|
-| World Simulation ↔ Persistence | Supported external state, time, causal conditions and provenance | Implemented bounded state/coverage/incident continuity; loading does not replay time consequences |
+| World Simulation ↔ Persistence | Supported external state, time, causal conditions and provenance | Implemented bounded state/coverage/incident and material/development continuity; loading does not replay time consequences |
 | Character System ↔ Persistence | Supported capability and selectively retained information | Implemented competence tags, discovery IDs and actor membership; no general memory/familiarity model |
 | Action & Resolution ↔ Persistence | Accepted attempt result, basis, cost, findings and causal references | Implemented West-Road replay without reroll, repayment or republication; no universal ledger |
-| Actors & Social Dynamics ↔ Persistence | Supported social continuity and references | Partial: actor positions, shared reports, witnesses and fixed commitments persist; general goals/relationships are not saved mutable systems |
+| Actors & Social Dynamics ↔ Persistence | Supported social continuity and references | Partial: actor positions, reports, witnesses, fixed commitments and declared helper cooperation persist; session focus and general goals/relationships are not saved mutable systems |
 | Scenario & Authored Content ↔ Persistence | Region reference and supported identity/compatibility constraints | Partial: current source reloads by path; no frozen revision, content hash, rebasing or migration layer |
 | Persistence → Narrative Experience | Restored truth for reconstructed scenes and recap | Implemented bounded reorientation; generated prose/cache and provider memory are not campaign state |
 | Player Presentation ↔ Persistence | Explicit operations, success and failure | Fixed CLI save/load/reset path and path-based engine calls; no slot catalog, autosave or general error presentation |
@@ -240,14 +252,14 @@ do not establish execution, success, knowledge or another actor's willingness.
 
 | From → To | Information / dependency | Current status |
 |---|---|---|
-| Human player → Player Presentation → Action & Resolution / owning engine operations | Declared intent and supported command requests | Partial: fixed controls, keyword grammar, scenario dispatch and narrow descriptive intention; generic action acceptance does not imply consequential execution |
+| Human player → Player Presentation → Action & Resolution / owning engine operations | Declared intent and supported command requests | Partial: fixed controls, contextual inquiry/handling and sequential legacy dispatch; generic acceptance does not imply consequential execution |
 | World Simulation / Character System → Player Presentation | Supported local state, navigation, capability/access and retained clues | Partial: clean bounded projections and explicit clue review; general familiarity/access and diagnostic separation remain incomplete |
 | Action & Resolution → Player Presentation | Eligible approaches, cost/uncertainty and accepted outcome/no-op/unavailability | Implemented bounded scenario/competence material; acceptance differs from fictional success; transparency and general feedback remain partial |
 | Actors & Social Dynamics → Player Presentation | Supported interaction targets and accepted behavior/reports | Partial: targetable static actors and fixed replies/effects; display cannot guarantee cooperation or invent intent |
 | Scenario & Authored Content → Player Presentation | Names, labels, clue titles and supported option text | Implemented bounded joins/projections; wording alone creates no executable operation |
 | Player Presentation ↔ Narrative Experience | Declared focus/stage and ephemeral descriptive context in; selected/framed expression out | Partial mixed deterministic/provider CLI integration; Narrative Experience owns semantic selection/repetition, presentation owns placement/refresh mechanics |
 | Player Presentation ↔ Persistence | Explicit save/load/reset request, operational success/failure and return to scene | Implemented fixed-path CLI controls and recap placement; error handling incomplete, no slot/autosave mechanism |
-| Narrator Provider / Model Adapter → Narrative Experience → Player Presentation | Accepted candidate expression or technical unavailability | Implemented fail-closed ordinary scene notice; no rich automatic fallback, retries or fictional-failure inference |
+| Narrator Provider / Model Adapter → Narrative Experience → Player Presentation | Accepted candidate expression or technical unavailability | Implemented provider notice plus deterministic fallback on bounded local composition; broad provider observation remains retry-only (DF-008) |
 
 Ephemeral display equality, attention stages, sentence claims and route-hop
 compaction do not mutate fiction or character memory. Successful load/re-entry

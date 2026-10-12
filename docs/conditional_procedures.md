@@ -23,6 +23,21 @@ automatic architecture escalation. Identify the reviewed baseline and diff;
 formal candidates bind to exact branch/HEAD. Recommendations do not authorize
 new capability selection, staging, or implementation.
 
+Before substantive new architectural research or proposing a general principle:
+
+1. Identify the underlying design question, rather than only the latest symptom.
+2. Check relevant existing principles, manifests, ADRs, deferred findings and
+   prior experiments. The non-authoritative
+   [architecture comprehension review](architecture_comprehension_review.md)
+   provides discovery pointers; read the applicable sources, not the entire ledger.
+3. Distinguish accepted design, accepted implementation, provisional hypotheses
+   and unresolved gaps. Local experimental evidence is not production acceptance.
+4. Limit new research to the genuine remaining gap and identify what would provide
+   useful evidence for it.
+
+This is a lightweight precedent check within the existing proportional review,
+not a new approval gate, formal packet, standalone report or research mandate.
+
 ## Capability Sequencing and Planning Horizon
 
 **Trigger:** The owner asks for a next-capability recommendation, a planning

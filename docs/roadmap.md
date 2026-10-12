@@ -19,8 +19,21 @@ world reactions, actor knowledge, and player-safe projections.
 
 Persistent changes use copied candidate state, validation, derived-scene
 construction, and one publication. Causal history is durable and referenceable.
-Save compatibility remains version 1. Narration is an explicit, untrusted,
-provider-neutral preview boundary rather than simulation authority.
+Save compatibility remains version 1. Through October 11 accepted work at published
+baseline `a6ff3164`, bounded contextual investigation supports selected examination,
+questions and reporting; optional declared material handling supports disclosed
+authorization, preparation, outcomes, cooperation and causal conditions. The opt-in
+Market passage and independent test fixtures do not establish general action,
+physics, social agency or multi-system composition.
+
+Narration remains untrusted and non-authoritative. Bounded accepted result/scene
+composition uses replaceable preparation and stateless realization with local
+adapters; ordinary provider preview routes coexist. North-Gate working focus is
+session-only. General narration selection/fidelity and the broad-observation
+fallback experience remain incomplete. See the [runtime architecture](architecture.md),
+[deferred findings](deferred_findings.md) and non-authoritative
+[research index](architecture_comprehension_review.md). Research candidates,
+including Option C, do not select or authorize the next capability.
 
 ## Strategic Directions
 

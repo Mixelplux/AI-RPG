@@ -278,8 +278,9 @@ system manifest is authorized here.
   familiarity/access check. ADR-059 says topology alone must not grant knowledge.
   These bounded shortcuts do not prove universal legitimate access; a future
   package must determine when destination naming needs character grounding.
-- **Presentation terminology:** architecture's preview-only/not-automatic summary
-  predates the accepted 10.80 CLI presentation paths. Scene continuity's remembered
+- **Presentation terminology:** the [runtime architecture](../../architecture.md)
+  now distinguishes accepted CLI narration/composition paths from the provider
+  request mode still named `preview`. Scene continuity's remembered
   descriptive claims are untrusted presentation state, not character memory or
   consequential truth. Owner smoke reports improved attention progression, not a
   persistent epistemic capability.

@@ -18,6 +18,14 @@ Sources: [North-Gate acceptance](north_gate_working_context_v1_handoff.md),
 [Scene Construction V1 findings](scene_construction_v1_handoff.md#acceptance-and-deferred-findings),
 and the linked existing system manifests. No earlier evidence is superseded or overwritten.
 
+Reconciled October 12, 2026 against published baseline `a6ff3164`, including
+[Contextual Investigation V1](contextual_investigation_v1_handoff.md) and
+[Contextual Action & Consequence V1](contextual_action_consequence_v1_handoff.md).
+Bounded progress below does not close the general gaps. The
+[research index](architecture_comprehension_review.md) separates local experiments
+from accepted implementation; Option C and combined-content A/B findings are not
+production architecture or an accepted general capability.
+
 ## DF-001 — Discovery and information exposure
 
 - Missing capability/limitation: contextual discovery and player/NPC information
@@ -39,13 +47,21 @@ and the linked existing system manifests. No earlier evidence is superseded or o
 - Missing capability/limitation: bounded interpretation of reasonable contextual
   player intent beyond currently supported commands.
 - Examples/source: broad investigation, intermediate actions, natural reporting and
-  selective disclosure raised around North-Gate V1 smoke. They remain future scope;
-  ordinary talk resumption is the accepted narrow exception. Consolidates the
-  existing Action Resolution manifest's intent gap and access-boundary questions.
+  selective disclosure raised around North-Gate V1 smoke. Contextual Investigation
+  V1 now resolves sanctioned lead survey, selected examination, Mara's supported
+  account and selective report/exclusion. Action & Consequence V1 resolves bounded
+  material assessment, routine preparation, disclosed handling authorization and
+  helper cooperation/refusal. Ordinary talk resumption is also accepted. These
+  resolve specific examples, not general intent, arbitrary disclosure or planning.
+  Unsupported/ambiguous methods and cross-purpose composition remain gaps; current
+  specialized interpretation is sequential. Consolidates the Action Resolution
+  intent and access-boundary questions.
 - Responsible system: [Action Resolution](design/systems/action-resolution.md),
   [Player Presentation](design/systems/player-presentation.md) and actor knowledge
   ownership for disclosures.
-- Disposition: deferred capability/research; no general intent or disclosure system selected.
+- Disposition: partially addressed by accepted bounded V1 behavior; the remaining
+  general capability/research is deferred. No general interpreter or disclosure
+  system is selected; local A/B and Option C experiments do not change that status.
 - Resolution conditions: owner-approved bounded command family, explicit ambiguity
   and confirmation policy where needed, and tests that inferred commands still pass
   current eligibility, disclosure, cost and authority predicates.
@@ -77,7 +93,13 @@ and the linked existing system manifests. No earlier evidence is superseded or o
 - Responsible system: [Narrative Experience](design/systems/narrative-experience.md),
   [World Simulation](design/systems/world-simulation.md) and
   [Actors & Social Dynamics](design/systems/actors-social-dynamics.md).
-- Disposition: deferred capability/architecture question; no general scene manager selected.
+- Bounded progress: accepted material handling now retains finite physical
+  conditions and causal preparation/outcome history; changed feasibility after
+  paid preparation can interrupt the remainder without a draw. Investigation and
+  handling retain unsaved focus, not additional scene truth. This does not resolve
+  arbitrary temporary facts, external intervention or general NPC activity.
+- Disposition: partially addressed in declared material cases; general capability/
+  architecture question remains deferred. No general scene manager is selected.
 - Resolution conditions: an owner-authorized concrete causal use case must establish
   fact ownership, lifetime, interruption/revalidation and consequence boundaries;
   verify that temporary context never duplicates or overrides authoritative truth.
@@ -95,7 +117,13 @@ and the linked existing system manifests. No earlier evidence is superseded or o
 - Responsible system: [World Simulation](design/systems/world-simulation.md),
   [Actors & Social Dynamics](design/systems/actors-social-dynamics.md), with
   [Scenario / Authored Content](design/systems/scenario-authored-content.md) for caravan identity.
-- Disposition: deferred capability/research; no combat, autonomy or offscreen simulation selected.
+- Bounded progress: the accepted material slice has one declared elapsed-time
+  development per target, revalidating helper presence and finite conditions even
+  while offscreen, with once-only causal history. It does not resolve caravan
+  identity, arbitrary knowledge propagation, NPC death or independent developments.
+- Disposition: partially addressed by a declared consequence slice; the general
+  capability remains deferred. No combat, autonomy or general offscreen simulator
+  is selected.
 - Resolution conditions: separately authorize a concrete consequence chain, assign
   state/knowledge ownership and propagation triggers, and verify relevance, causal
   provenance, exactly-once commitment and compatibility for that bounded chain.

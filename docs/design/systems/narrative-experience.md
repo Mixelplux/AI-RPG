@@ -16,6 +16,14 @@ vocabulary](README.md). It refines responsibility, not implementation authority.
 No new module, persistence model, prompt change, sprint or provider run follows
 from it.
 
+Implementation reconciliation: October 12, 2026 at published baseline
+`a6ff316473ce2bafc58be4718479261602f5e3ac`, covering accepted work through October 11.
+The initial review identity above remains historical. See
+[input foundation/provisional pipeline](../../provisional_narrative_pipeline_handoff.md),
+[Scene Construction](../../scene_construction_v1_handoff.md),
+[North-Gate context](../../north_gate_working_context_v1_handoff.md) and
+[material correction](../../contextual_action_structural_correction.md).
+
 ## Purpose
 
 Turn authoritative, legitimately accessible material into coherent, selective,
@@ -189,17 +197,18 @@ new model calls may need reorientation without suggesting fictional forgetting.
 | Recent presentation/history | Bounded event context, previous conditions and prior descriptive claims. These have distinct trust and meaning; neither is a complete character memory. |
 | Provider instructions | Expression and authority rules supplied by the application, not new fictional facts. |
 
-The live context contains a copied **scene snapshot**, derived Scene Context,
+The internal context contains a copied **scene snapshot**, derived Scene Context,
 current time/location, raw input, bounded history and at most the first applicable
 pressure cue. Recent history is first bounded, then restricted to conversation,
 movement and time-advance event types; it is not relevance-ranked or a complete
 action-result stream. It does not refill the window after filtering.
 
-The provider path does **not** simply consume the clean current-scene projection.
-Its snapshot still contains internal IDs, debug/spawn data, faction IDs and
-regional local-state fields. It omits full actor profiles/knowledge and full world
-history, but must not be described as a universal knowledge-safe projection.
-Prompt constraints and bounded scenario filtering carry part of the burden.
+The accepted input foundation separates internal context from provider input.
+`narration_prompt` serializes explicit Scene Context and a validated bounded
+`narrative_projection`, excluding the raw snapshot and full history. Supported
+projection preserves qualified reports, findings and accepted results. This is
+not a universal character-access filter or semantic fidelity guarantee. The
+rejected 10.82 experiment remains historical evidence, not accepted runtime.
 
 ## Outputs
 
@@ -264,7 +273,7 @@ choices and one-hour costs are intentional aids, not a mandate to hide all mecha
 | Outcome/epistemic fidelity | **Partial:** competence packets separate observation/report, limited recognition/inference, findings and accepted outcomes; deterministic prose states failure and remaining unknowns. General freeform factuality is not verified. |
 | Provider boundary | **Implemented:** copied context → validated request → validated prompt → untrusted source → source-result validation → output validation → display. No state-application path consumes generated prose. Failure yields no candidate display text. |
 | Provider transport | **Implemented, bounded:** provisional Luna-low configuration; synchronous call, no tools/conversation state, no retries, 20-second timeout, 8,000 locally counted input tokens, 256 output tokens and 4,000 output characters. These are implementation limits, not narrative principles. |
-| Fallback behavior | **Partial experience:** deterministic narration remains used on ordinary non-market scene paths. Provider-backed scene failure prints an unavailable/retry notice; it does not automatically substitute a rich deterministic scene or another model. Fail-closed state safety is not a complete fallback narrative experience. |
+| Fallback behavior | **Partial experience:** bounded local preparation/realization retains deterministic result/scene fallback. Broad provider observation and default market failure print an unavailable/retry notice without deterministic scene substitution or another model. Fail-closed state safety is not a complete fallback narrative experience. |
 | Pressure composition | **Implemented, narrow:** pipeline removes exact occurrences of the selected cue from candidate text and appends that cue once. This is not semantic deduplication or cross-turn condition suppression. |
 | Recap/save-load | **Implemented, bounded:** West-Road `Previously:` derives from saved phase/discoveries/report state. Save/load rebuilds scenes; narration/cache is not saved. It is not a general campaign recap or complete attempt-history summary. |
 | Incidental expression | **Accepted design with implemented prompt permission:** compatible ordinary texture is allowed. Continuity remembers descriptive claims, not authoritative props, NPCs, inventories or discoveries. Semantic compliance remains **Partial**. |
@@ -274,6 +283,28 @@ deleting discoveries, phase or outcomes. This demonstrates selection versus trut
 Sprint 10.80's accepted live arrival/look/browsing smoke demonstrated useful
 progression and reduced repetition in that sequence. Minor storm repetition was
 accepted. Neither proves universal prose quality or complete information safety.
+
+### Later accepted preparation and realization
+
+The provisional pipeline is accepted bounded integration: a recorded failed
+`follow withdrawal signs` result passes through player-safe source, replaceable
+preparation, stateless realization and existing output validation. Normal gameplay
+uses local adapters; provider adapters require explicit supply and separate live
+authorization. Revised A is private to the default adapter pair, not a universal
+scene or gameplay schema. Rejection preserves deterministic outcome/scene delta.
+
+Scene Construction V1 applies that pattern to North Gate/Southwest Trade Road
+selected sections, public roles and derived opportunities. Command guidance is
+joined independently of prose, including choice-only refreshes. North-Gate focus
+reuses this local expression path and receipt-aware dialogue without establishing
+reports, choices or world facts. Opt-in material scenes/observations use deterministic
+authoritative condition text; no provider integration was added for that slice.
+Other broad observation routes retain the provider preview and its retry-only
+unavailability experience ([DF-008](../../deferred_findings.md#df-008--narration-unavailable-deterministic-fallback-experience)).
+
+Accepted owner smoke establishes these bounded experiences. Structural tests and
+supplied prose examples establish contracts, not general generated factuality,
+universal scene coverage or long-term narrative memory.
 
 ## Accepted decisions
 
@@ -304,19 +335,20 @@ to narration merely because a model might generate the language.
 
 ## Known tensions / open questions
 
-- **Documentation drift:** architecture says provider narration does not run in
-  normal gameplay; ADR-058 retains an explicit-preview framing. Current CLI and
-  accepted Sprint 10.80 routes include market presentation and observation/intention
-  calls. This is a historical description mismatch, not permission to run providers
-  during this review. Canonical architecture/ADR wording needs separate reconciliation.
+- **Historical provider framing:** runtime architecture now distinguishes accepted
+  ordinary CLI provider routes and bounded local composition. ADR-058 records its
+  original preview decision and later configuration note; subsequent accepted
+  handoffs document bounded integration. This does not authorize live calls in
+  documentation work or establish general provider-driven gameplay.
 - **Older restrictive examples:** ADR-027, legacy `llm_prompt_builder` and retained
   atmosphere examples emphasize no unstated specifics; newer accepted Scene Context
   permits ordinary incidental detail. Preserve player-equipment and consequential
   limits while recognizing the later permission. Exact guidance cleanup is outside
   this documentation scope; do not infer that every adjective needs World State.
-- **Safety coverage:** clean current-scene projection is not the provider payload.
-  Internal snapshot fields remain present, and validators check structure rather
-  than every claim. How much further filtering is justified by observed leaks?
+- **Safety coverage:** internal snapshots are excluded from provider serialization
+  by the accepted input foundation. Its bounded Scene Context/narrative projection
+  still does not establish universal character access or semantic fidelity. What
+  further changes are justified by concrete observed gaps remains unresolved.
 - **Descriptive carry-forward:** accepted-for-display prose can contain unsupported
   claims; remembering it may reinforce an error. Instructions prioritize authority,
   but no semantic reconciliation proves compatibility. Determine the smallest useful
@@ -355,7 +387,7 @@ evidence, not new live results.
 | [Source](../../../engine/narration_source.py), [pipeline](../../../engine/narration_pipeline.py), [output](../../../engine/narration_output.py) | Transport limits, structural rejection, cue composition and lack of semantic proof |
 | [Scene Context](../../../engine/scene_context.py), [continuity](../../../engine/scene_continuity.py), [context tests](../../../test_scene_context.py), [route tests](../../../test_player_scene_route.py) | Activity interpretation, stages, carry-forward, bounded cache, ordinary CLI route and failure display |
 | [CLI](../../../play_game.py), [GameEngine](../../../engine/game_engine.py), [kernel](../../../engine/interaction_kernel.py), [scene narrator](../../../engine/scene_narrator.py), [legacy prompt](../../../engine/llm_prompt_builder.py) | Mixed authored/deterministic/generated paths, intention versus execution, observation and old wording |
-| [Scene loader](../../../engine/scene_loader.py), [perception](../../../engine/perception_builder.py), [safe scene projection](../../../engine/current_scene_projection.py) | Derived truth, visibility simplification and difference from provider snapshot |
+| [Scene loader](../../../engine/scene_loader.py), [perception](../../../engine/perception_builder.py), [safe scene projection](../../../engine/current_scene_projection.py) | Derived truth, visibility simplification and distinction between internal snapshot and provider serialization |
 | [Competence](../../../engine/character_competence.py), [predicament](../../../engine/west_road_predicament.py), [presentation](../../../engine/west_road_presentation.py), [theft](../../../engine/west_road_market_theft.py) | Evidence-limited outcomes, authored reports, recap, phase rendering and local causal reveal |
 | [Locality tests](../../../test_west_road_scene_relevance.py), [presentation tests](../../../test_west_road_presentation.py), [save/load tests](../../../test_save_load.py) | Local omission without state loss, no-op refresh suppression, save reconstruction |
 | [Output tests](../../../test_narration_output.py), [pipeline tests](../../../test_narration_pipeline.py), [adapter tests](../../../test_openai_responses_narration.py) | Structural safety and fake-transport boundary evidence, not generated quality |

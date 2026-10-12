@@ -131,7 +131,7 @@ demonstrated by the legacy fixture, not active starting knowledge.
 | Pressures | Supported initial records copied; runtime setters/declared consequences own changes. A winter-pressure increase is not a weather-record mutation. |
 | Static actor position | Sparse World State override wins; absence falls back to authored location. Returning to that baseline removes the override. |
 | Actor knowledge | New-game seeds only; runtime membership subsequently wins. Missing legacy saved membership normalizes empty, never reseeds from current content. |
-| Geography, profiles and local source fields | Loaded from content. No general mutable topology, profile, relationship, faction, gate-open or location-condition overlay exists. |
+| Geography, profiles and local source fields | Loaded from content. Optional material targets have finite runtime condition overlays; no general mutable topology, profile, relationship, faction, gate-open or location-condition model exists. |
 | Scene grounding | Authored description plus bounded runtime-derived additions. The market incident is appended only after occurrence; current weather/time and effective actor placement feed the scene. |
 
 Scene construction still reads economy, security and population from the pack.
@@ -139,6 +139,23 @@ Location `state` fields and relationship numbers do not thereby become live
 simulation. Spawns are rebuilt deterministically from `count` or the floored
 midpoint of `count_range`; their template records have no stable individual
 ownership. This is not a population model, schedule or persistent crowd.
+
+### Later accepted bounded material content
+
+At published baseline `a6ff3164`, [Contextual Action & Consequence V1](../../contextual_action_consequence_v1_handoff.md)
+adds optional `material_targets`: stable local identity/feature aliases, finite
+stability/fitting/position/integrity domains and transitions, declared handling
+methods, constraints/risks, bounded helper responses, result text/effects and one
+elapsed-time development. Runtime assessment and transactions interpret these
+declarations; they are not an arbitrary effect language or narrator authority.
+
+`data/regions/market_passage_v1.json` is selected explicitly by `--scenario market`;
+it does not replace default Bryn Shander. `test_fixtures/archive_shutter.json`
+demonstrates the same material path independently. Investigation's second depot
+policy is test-only. These examples support bounded reuse, not general authoring,
+physical simulation or an accepted shared interpretation framework. New material
+games seed their declared state; load must retain/validate it rather than silently
+reinitialize missing records. Other supported content keeps its own requirements.
 
 ### Content evolution and canonical foundations
 
@@ -228,8 +245,9 @@ talking, investigating, clue presentation, West-Road choices and competence
 approaches. Execution checks its own predicates. Displaying an option does not
 grant its result, and arbitrary instructions embedded in text do not create a
 new executable action. Clean display projections hide internal IDs, but the
-provider's scene snapshot still contains internal fields; it is not a universal
-safe information view (see Narrative Experience).
+internal scene snapshot contains additional fields, but the provider prompt uses
+explicit bounded serialization. This is not a universal character-access model
+(see Narrative Experience).
 
 ## Current implementation
 

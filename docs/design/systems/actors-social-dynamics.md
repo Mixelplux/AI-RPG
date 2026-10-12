@@ -91,8 +91,8 @@ they are not runtime modules or a required pipeline.
 
 | Responsibility | Meaning and present grounding |
 |---|---|
-| Social continuity | Identify the same participant and retain only consequential stance, relationships, motivations, commitments, and prior decisions. Stable authored identity and bounded history exist; mutable social continuity is largely future work. |
-| Decision basis | Combine relevant external circumstances, legitimate informational access, capability, authored constraints, and established social continuity. Consume Character System information without copying it into a social model. Present basis is fixed scenario eligibility. |
+| Social continuity | Identify the same participant and retain only consequential stance, relationships, motivations, commitments, and prior decisions. Stable authored identity and bounded history exist; fixed West-Road commitments and optional material-helper willingness/refusal are retained, while general social continuity remains future work. |
+| Decision basis | Combine relevant external circumstances, legitimate informational access, capability, authored constraints, and established social continuity. Consume Character System information without copying it into a social model. Present basis is fixed scenario eligibility plus declared material conditions, helper presence and refusal policy. |
 | Intentional choice | Establish a meaningful response or independent action and pass attempts/consequences to their owners. Present behavior is bounded authored policy; general decision selection and independent activity remain deferred. |
 
 Identity is a continuity requirement across systems, not a demand for a general
@@ -159,6 +159,18 @@ it sealed to obstruct the player requires authoritative intentional choice and
 enough retained causal provenance to distinguish obstruction from maintenance.
 Neither requires an exhaustive worker schedule. Lazy resolution may not rewrite
 already established history to invent convenient motives or connections.
+
+October 12 reconciliation at published baseline `a6ff3164`: accepted
+[North-Gate context](../../north_gate_working_context_v1_handoff.md) and its
+[dialogue correction](../../north_gate_working_context_v1_correction.md) read
+Elin's existing zero/one/two report receipts and witnessed outcomes afresh. The
+CLI's unsaved discussion focus is not an NPC goal or memory store. Accepted
+[material handling](../../contextual_action_consequence_v1_handoff.md) adds one
+declared helper's condition-based willingness/refusal, rechecked against presence
+and restrictions before handling. Its cooperation record and causal events are
+durable bounded policy outcomes; they establish neither arbitrary persuasion,
+relationships nor independent planning. NPC decisions remain with their gameplay
+owners rather than presentation or a language interpreter.
 
 ## Inputs
 
