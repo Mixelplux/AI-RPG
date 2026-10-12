@@ -19,6 +19,8 @@ def validate_region(region: dict) -> None:
     except ModuleNotFoundError:
         from west_road_predicament import validate_content
     validate_content(region)
+    from engine.material_state import validate_declarations
+    validate_declarations(region)
     locations = region.get("locations", [])
     entities = region.get("entities", [])
     simulation_hooks = region.get("simulation_hooks", {})

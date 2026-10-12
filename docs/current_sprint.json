@@ -10,18 +10,18 @@
   "active_sprint": null,
   "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "bounded-contextual-investigation-v1"
+    "id": "bounded-contextual-action-consequence-v1"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "bounded-contextual-investigation-v1",
-    "title": "Bounded Contextual Investigation V1",
+    "id": "bounded-contextual-action-consequence-v1",
+    "title": "Bounded Contextual Action & Consequence V1",
     "type": "capability-package",
     "status": "complete",
     "risk_level": "elevated",
-    "goal": "Integrate bounded intent, current access, selected examination, acquired findings, selective receipts and session-local continuation without new persistent state.",
+    "goal": "Reusable bounded material actions with contextual authorization, authoritative effects and independent reuse.",
     "predecessor": {
-      "id": "north-gate-working-context-v1"
+      "id": "bounded-contextual-investigation-v1"
     },
     "platform": {
       "official_interpreter": ".\\.venv\\Scripts\\python.exe",
@@ -29,12 +29,16 @@
       "provider_requests": "forbidden"
     },
     "scope": [
-      "Owner-authorized October 11, 2026 under C:/tmp/AI-RPG-Contextual-Investigation-V1-Package/implementation_package.md. Survey/examine/ask/report, independent depot fixture and all 15 acceptance groups; no providers or new save structures."
+      "Owner-authorized October 11, 2026: opt-in market and independent archive; shared handling, additive material conditions, cooperation, time and presentation; no providers or Git publication.",
+      "Owner accepted the final bounded implementation and authorized controlled publication; existing Medium-integrity publication checkout approved. No next milestone or architecture review is authorized by this task."
     ],
     "verification": [
-      "All 15 acceptance groups passed offline; independent depot, transaction rollback and exact version-1 shape verified.",
-      "44 affected regression scripts passed after one directly repaired historical projection regression; final CLI checks and maintained mechanical verification recorded in handoff.",
-      "Owner October 11, 2026 experiential smoke and acceptance complete. Controlled exact-baseline offline comparison found no V1 look regression; existing retry-only fallback limitation is DF-008. Milestone complete, lifecycle idle, no next sprint. No Git staging, commit, merge or push authorization."
+      "24 production acceptance groups pass; raw/structured reuse, constraints/confirmation, all draws, rollback, timed interruption, persistence and compatibility verified offline.",
+      "30 existing assertion-based regression scripts pass; one legacy print-only script executed. Resolved narration has 8 passes and 2 failures reproduced at exact protected baseline; provider correction and DF-008 remain outside scope.",
+      "Changed syntax, lifecycle and GitWorkflowTools mechanical verification pass. Uncommitted working diff awaiting owner experiential smoke/acceptance; no Git staging, commit, merge, push, publication or providers.",
+      "Owner smoke correction: 14 correction groups and all 24 prior action groups pass; 13 affected regressions pass. Exact failed sequence completes once through production CLI and separate --scenario market process. No new scope, save changes or Git publication.",
+      "Final structural correction: 13 new groups, all 38 prior action groups and 13 affected regressions pass. Production CLI demonstrates read-only inspection/possible repair, confirmed fitting alignment, separately confirmed cooperative movement and duplicate-confirmation safety. Controlled full/partial/failure outcomes, refusal/absence, constraints, atomicity and save version 1 verified; uncommitted candidate awaits owner acceptance.",
+      "Owner acceptance closes this milestone. Publication revalidates the unchanged accepted implementation, 51 action groups, 13 affected regressions, preservation, exact candidate ancestry and strict fast-forward synchronization. Final commit identity and remote/preservation evidence are recorded in the ignored publication handoff; prior baseline provider-fixture failures remain distinguished."
     ]
   }
 }

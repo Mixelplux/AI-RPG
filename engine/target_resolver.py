@@ -29,6 +29,9 @@ def resolve_scene_target(
         for candidate in candidates
         if query in candidate["aliases"]
     ]
+    if not exact_matches and query.startswith(("the ", "a ", "an ")):
+        query = query.split(" ", 1)[1]
+        exact_matches = [candidate for candidate in candidates if query in candidate["aliases"]]
     matches = exact_matches or [
         candidate
         for candidate in candidates
@@ -65,11 +68,7 @@ def _entity_candidates(
     for entity_id in entities.get("static", []):
         metadata = catalog_by_id.get(entity_id, {})
         display_name = metadata.get("name") or _display_name(entity_id)
-        aliases = {
-            _normalize(entity_id),
-            _normalize(display_name),
-            _normalize(metadata.get("type", "")),
-        }
+        aliases = actor_aliases(metadata, entity_id)
         candidates.append(_candidate(
             "entity", entity_id, None, display_name, aliases
         ))
@@ -90,6 +89,27 @@ def _entity_candidates(
         ))
 
     return candidates
+
+
+def actor_aliases(metadata: Dict[str, Any], entity_id: str, *, names_only=False, components=False) -> set[str]:
+    """Canonical authored identity, personal name and established role references.
+
+    Split the display-name role separator rather than treating punctuation as a
+    name token. Shared with contextual handling; ambiguity remains resolver-owned.
+    """
+    display = metadata.get("name") or _display_name(entity_id)
+    personal, _, role = display.partition(",")
+    names = {_normalize(personal), _normalize(display)}
+    if components:
+        names.update(_normalize(personal).split())
+    if names_only:
+        return {alias for alias in names if alias}
+    kind = _normalize(metadata.get("type", ""))
+    aliases = names | {_normalize(entity_id), _normalize(role), kind}
+    for title in (_normalize(role), kind):
+        if title and components:
+            aliases.add(title.split()[-1])
+    return {alias for alias in aliases if alias}
 
 
 def _exit_candidates(

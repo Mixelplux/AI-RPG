@@ -13,6 +13,7 @@ from engine.scene_narrator import narrate_scene
 from engine.navigation_projection import derive_navigation_projection
 from engine.current_scene_projection import build_current_scene_projection
 from engine.interaction_kernel import process_player_input
+from engine import contextual_action, material_state
 from engine.world_update import apply_interaction
 from engine.region_validator import validate_region
 from engine.destination_resolver import (
@@ -115,6 +116,18 @@ class GameEngine:
 
         self._investigation_policy = investigation_policy or investigation.WestRoadInvestigation()
         self._investigation_focus = investigation.InvestigationFocus()
+        self._action_focus = contextual_action.ActionFocus()
+
+    def process_contextual_action(self, player_input=None, *, frame=None):
+        if (player_input is None) == (frame is None):
+            raise ValueError("Supply exactly one input or handling frame.")
+        return contextual_action.process(self, player_input, frame=frame)
+
+    def assess_contextual_action(self, frame):
+        return deepcopy(contextual_action.assess(self, frame))
+
+    def get_action_context(self):
+        return self._action_focus.snapshot()
 
     def get_investigation_context(self):
         """Copied internal selection context; not a narration/provider packet."""
@@ -727,7 +740,7 @@ class GameEngine:
             PUBLIC_ROLES, build_scene_source, narrate_scene_source,
             prepare_scene_revised_a, realize_scene_locally,
         )
-        if not west_road.scene_relevant(self.region, self.world_state):
+        if not (west_road.scene_relevant(self.region, self.world_state) or material_state.observations(self.region, self.world_state)):
             return {"accepted": False, "display_text": "", "failure_stage": "source"}
         try:
             context = self.get_narration_context("scene orientation or refresh")
@@ -878,6 +891,9 @@ class GameEngine:
             evidence_trace_consequence["effect_id"] = trace_effect["effect_id"]
             evidence_trace_consequence["trigger_elapsed_hours"] = trace_effect["trigger_elapsed_hours"]
 
+        candidate_world_state = material_state.advance_candidate(
+            self.region, candidate_world_state, previous_time, new_time, source_history_id
+        )
         return candidate_world_state, {
             "duration_hours": duration_hours,
             "previous_time": previous_time,
@@ -1029,6 +1045,21 @@ class GameEngine:
 
     def get_narration(self) -> Dict[str, Any]:
         perception = self.get_player_perception()
+        observations = material_state.observations(self.region, self.world_state)
+        if observations:
+            projection = self.get_current_scene_projection()
+            base = narrate_scene(perception)
+            names = [a["display_name"] for a in projection["entities"]["actors"]]
+            sections = {
+                "orientation": projection["location"]["description"],
+                "conditions": [], "presence": ", ".join(names) + " is here." if names else "",
+                "situation": " ".join(observations), "evidence": [], "choices": "",
+                "other": " ".join(cue["text"] for cue in perception["navigation"]["route_cues"]),
+            }
+            base.update(scene_sections=sections, description="\n\n".join(
+                sections[k] for k in ("orientation", "presence", "situation", "other") if sections[k]),
+                player_prompt="")
+            return base
         if west_road.scene_relevant(self.region, self.world_state):
             from engine.west_road_presentation import CURRENT_CIRCUMSTANCES, CURRENT_CHOICE_HINTS, compact_secondary_actions
             projection = self.get_current_scene_projection()
@@ -1152,6 +1183,9 @@ class GameEngine:
         return west_road.summary(self.region, self.world_state)
 
     def _publish_west_road_candidate(self, candidate):
+        self._publish_candidate(candidate)
+
+    def _publish_candidate(self, candidate):
         validate_world_state(candidate, self.region)
         scene = build_scene(self.region, candidate)
         self.world_state, self.scene_snapshot = candidate, scene
@@ -1348,6 +1382,7 @@ class GameEngine:
         self.world_state = other.get_world_state()
         self.scene_snapshot = other.get_scene_snapshot()
         self._investigation_focus.clear()
+        self._action_focus.clear()
 
     def _compose_resolved_conversation_consequences(
         self,
@@ -1461,9 +1496,12 @@ class GameEngine:
         return candidate_world_state
 
     def process_command(self, player_input: str) -> Dict[str, Any]:
-        result = self.process_contextual_investigation(player_input)
+        result = self.process_contextual_action(player_input)
+        if result is None:
+            result = self.process_contextual_investigation(player_input)
         if result is None:
             result = self._process_legacy_command(player_input)
+        self._action_focus.observe(self)
         notice = self._investigation_focus.observe(self, result)
         if notice:
             result["investigation_notice"] = notice

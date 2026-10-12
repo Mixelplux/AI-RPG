@@ -420,9 +420,10 @@ def parse_history_query(player_input: str) -> dict:
 
 
 def main(*, narration_preparer=None, narration_realizer=None,
-         scene_preparer=None, scene_realizer=None) -> None:
+         scene_preparer=None, scene_realizer=None, region_path=None, save_path=None) -> None:
     configure_stdout()
-    engine = GameEngine.start_new(REGION_PATH)
+    engine = GameEngine.start_new(region_path or REGION_PATH)
+    session_save_path = save_path or (".artifacts/contextual_action_save.json" if region_path else SAVE_PATH)
 
     print("\n=== AI Narrative RPG ===")
     print("Type 'help' for commands.")
@@ -431,7 +432,8 @@ def main(*, narration_preparer=None, narration_realizer=None,
     last_presented_narration = None
     continuity = SceneContinuity()
     discussion = NorthGateDiscussion()
-    print("Patrol discussions are session-only. Start with 'discuss patrol with Elin'; load, reset and exit discard unsaved focus.")
+    if not engine.region.get("material_targets"):
+        print("Patrol discussions are session-only. Start with 'discuss patrol with Elin'; load, reset and exit discard unsaved focus.")
     scene_player_input = "look"
     scene_stage = "expand"
     last_interaction_result = None
@@ -440,7 +442,7 @@ def main(*, narration_preparer=None, narration_realizer=None,
         continuity.enter(engine.get_scene_snapshot()["location"]["location_id"])
 
         if narration != last_presented_narration:
-            if engine.get_scene_snapshot()["location"]["location_id"] == "market_square":
+            if not engine.region.get("material_targets") and engine.get_scene_snapshot()["location"]["location_id"] == "market_square":
                 print_scene_experience(engine, scene_player_input, continuity, scene_stage)
             else:
                 print_composed_scene(engine, narration, last_presented_narration, last_interaction_result,
@@ -452,6 +454,7 @@ def main(*, narration_preparer=None, narration_realizer=None,
         normalized_input = player_input.lower()
 
         if normalized_input in ["quit", "exit"]:
+            engine._action_focus.clear()
             investigation_notice = engine.interrupt_investigation("exit")
             if investigation_notice:
                 print(investigation_notice)
@@ -462,8 +465,12 @@ def main(*, narration_preparer=None, narration_realizer=None,
             break
 
         if normalized_input == "help":
-            print("discuss patrol with Elin | resume patrol discussion | cancel patrol discussion")
-            print_help()
+            if engine.region.get("material_targets"):
+                print("Describe an objective or approach, including any restrictions. A disclosed proposal can be confirmed conversationally.")
+                print("look | wait | go to <place> | cancel action | save | load | reset | quit")
+            else:
+                print("discuss patrol with Elin | resume patrol discussion | cancel patrol discussion")
+                print_help()
             continue
 
         if normalized_input in {item.casefold() for item in discussion.CONTROLS}:
@@ -474,14 +481,14 @@ def main(*, narration_preparer=None, narration_realizer=None,
             continue
 
         if normalized_input == "save":
-            engine.save(SAVE_PATH)
+            engine.save(session_save_path)
             print("\nGame saved.")
             continue
 
         if normalized_input == "load":
             try:
                 had_investigation = engine.get_investigation_context()["focus"] is not None
-                engine.load(SAVE_PATH)
+                engine.load(session_save_path)
                 if had_investigation:
                     print("The unsaved investigation focus ends on load; accepted information is reconstructed from the save.")
                 interruption = discussion.interrupt("load")
@@ -659,6 +666,10 @@ def main(*, narration_preparer=None, narration_realizer=None,
         if interaction_result["success"] and interaction_result["intent"] in {
             "observation", "player_intention",
         }:
+            if engine.region.get("material_targets"):
+                print_composed_scene(engine, engine.get_narration(),
+                                     preparer=scene_preparer, realizer=scene_realizer)
+                continue
             stage = "expand" if normalized_input in {"look", "look around", "look here"} else "follow"
             print_scene_experience(engine, player_input, continuity, stage)
             continue
@@ -729,6 +740,7 @@ def main(*, narration_preparer=None, narration_realizer=None,
             print(focused)
 
         if (interaction_result["success"] and interaction_result["intent"] == "conversation"
+                and not engine.region.get("material_targets")
                 and engine.get_scene_snapshot()["location"]["location_id"] == "market_square"):
             print_scene_experience(engine, player_input, continuity, "narrow")
             last_presented_narration = engine.get_narration()
@@ -763,4 +775,8 @@ def main(*, narration_preparer=None, narration_realizer=None,
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--scenario", choices=["market"])
+    args = parser.parse_args()
+    main(region_path="data/regions/market_passage_v1.json" if args.scenario else None)

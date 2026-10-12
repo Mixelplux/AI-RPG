@@ -1,0 +1,358 @@
+{
+  "region_id": "market_passage_v1",
+  "name": "Market Square — The Blocked Passage",
+  "locations": [
+    {
+      "location_id": "market_square",
+      "name": "Market Square",
+      "description_seed": "Daylight falls across a market passage. Pedestrians pass between the surrounding stalls and lanes.",
+      "connected_locations": [
+        {
+          "direction": "east",
+          "location_id": "side_lane"
+        },
+        {
+          "direction": "north",
+          "location_id": "far_end"
+        }
+      ],
+      "spawn_rules": {}
+    },
+    {
+      "location_id": "side_lane",
+      "name": "Side Lane",
+      "description_seed": "A clear side lane leads around the market passage.",
+      "connected_locations": [
+        {
+          "direction": "west",
+          "location_id": "market_square"
+        },
+        {
+          "direction": "north",
+          "location_id": "far_end"
+        }
+      ],
+      "spawn_rules": {}
+    },
+    {
+      "location_id": "far_end",
+      "name": "Far End",
+      "description_seed": "The far end of the passage opens onto a quiet street.",
+      "connected_locations": [
+        {
+          "direction": "south",
+          "location_id": "market_square"
+        },
+        {
+          "direction": "west",
+          "location_id": "side_lane"
+        }
+      ],
+      "spawn_rules": {}
+    }
+  ],
+  "entities": [
+    {
+      "entity_id": "delivery_driver",
+      "name": "Tessa, Delivery Driver",
+      "type": "caravan_driver",
+      "persistence": "static",
+      "location": "market_square",
+      "knowledge": []
+    }
+  ],
+  "factions": [],
+  "region_state": {
+    "weather": {
+      "type": "clear",
+      "severity": 0,
+      "wind_speed_kmh": 0
+    },
+    "economy_state": {},
+    "security_state": {},
+    "population_state": {}
+  },
+  "time": {
+    "elapsed_hours": 0,
+    "current_date": "fixture",
+    "time_of_day": "day"
+  },
+  "simulation_hooks": {
+    "entry_location": "market_square"
+  },
+  "material_targets": [
+    {
+      "target_id": "delivery_cart",
+      "location_id": "market_square",
+      "label": "loaded delivery cart",
+      "aliases": [
+        "cart",
+        "wheel",
+        "fitting",
+        "passage",
+        "cargo",
+        "driver"
+      ],
+      "conditions": {
+        "stability": {
+          "initial": "loose",
+          "values": {
+            "loose": "The cart is not braced.",
+            "braced": "The cart has stable support."
+          },
+          "transitions": [
+            [
+              "loose",
+              "braced"
+            ]
+          ]
+        },
+        "fitting": {
+          "initial": "crooked",
+          "values": {
+            "crooked": "A wheel appears crooked.",
+            "seated": "The wheel is partly seated; its alignment is still imperfect.",
+            "aligned": "The wheel sits aligned.",
+            "jammed": "The wheel fitting is jammed."
+          },
+          "transitions": [
+            [
+              "crooked",
+              "seated"
+            ],
+            [
+              "crooked",
+              "aligned"
+            ],
+            [
+              "crooked",
+              "jammed"
+            ],
+            [
+              "seated",
+              "aligned"
+            ],
+            [
+              "seated",
+              "jammed"
+            ],
+            [
+              "aligned",
+              "jammed"
+            ]
+          ]
+        },
+        "position": {
+          "initial": "blocked",
+          "values": {
+            "blocked": "The loaded cart partly obstructs the passage.",
+            "narrow": "The cart stands partly aside, leaving a narrow passage.",
+            "clear": "The cart stands clear of the passage."
+          },
+          "transitions": [
+            [
+              "blocked",
+              "narrow"
+            ],
+            [
+              "blocked",
+              "clear"
+            ],
+            [
+              "narrow",
+              "clear"
+            ]
+          ]
+        },
+        "integrity": {
+          "initial": "intact",
+          "values": {
+            "intact": "The cargo remains intact.",
+            "damaged": "Some cargo was damaged during the accepted handling attempt."
+          },
+          "transitions": [
+            [
+              "intact",
+              "damaged"
+            ]
+          ]
+        }
+      },
+      "methods": [
+        {
+          "method_id": "brace_load",
+          "operation": "stabilize",
+          "label": "support the cart steadily",
+          "when": {
+            "stability": [
+              "loose"
+            ]
+          },
+          "brace": true,
+          "cooperate": false,
+          "risk": "",
+          "conflicts": [],
+          "outcomes": {
+            "full": {
+              "effects": {
+                "stability": "braced"
+              },
+              "text": "You support the cart without moving it or changing the wheel."
+            },
+            "partial": {
+              "effects": {},
+              "text": "Support remains incomplete."
+            },
+            "failure": {
+              "effects": {},
+              "text": "No stable support is established."
+            }
+          }
+        },
+        {
+          "method_id": "seat_fitting",
+          "operation": "adjust",
+          "label": "adjust the crooked wheel fitting",
+          "when": {
+            "fitting": [
+              "crooked",
+              "seated"
+            ],
+            "position": [
+              "blocked"
+            ]
+          },
+          "brace": true,
+          "cooperate": false,
+          "risk": "The fitting can jam on a failed adjustment.",
+          "conflicts": [],
+          "outcomes": {
+            "full": {
+              "effects": {
+                "fitting": "aligned"
+              },
+              "text": "The wheel is seated and aligned; the cart still occupies its previous position."
+            },
+            "partial": {
+              "effects": {
+                "fitting": "seated"
+              },
+              "text": "The fitting seats partway; the passage is still obstructed."
+            },
+            "failure": {
+              "effects": {
+                "fitting": "jammed"
+              },
+              "text": "The fitting jams. The cart has not moved and the cargo remains intact."
+            }
+          }
+        },
+        {
+          "method_id": "coordinated_shift",
+          "operation": "reposition",
+          "label": "shift the cart with the driver's cooperation",
+          "when": {
+            "position": [
+              "blocked",
+              "narrow"
+            ],
+            "fitting": [
+              "crooked",
+              "seated",
+              "aligned"
+            ]
+          },
+          "brace": true,
+          "cooperate": true,
+          "risk": "",
+          "conflicts": [],
+          "outcomes": {
+            "full": {
+              "effects": {
+                "position": "clear"
+              },
+              "text": "Together you move the cart clear of the passage. This does not repair its wheel."
+            },
+            "partial": {
+              "effects": {
+                "position": "narrow"
+              },
+              "text": "Together you shift the cart partly aside; only a narrow passage is open."
+            },
+            "failure": {
+              "effects": {},
+              "text": "The cart resists the coordinated shift. Its position and cargo are unchanged."
+            }
+          }
+        },
+        {
+          "method_id": "force_shift",
+          "operation": "reposition",
+          "label": "force the loaded cart aside alone",
+          "when": {
+            "position": [
+              "blocked",
+              "narrow"
+            ],
+            "fitting": [
+              "crooked",
+              "seated",
+              "aligned"
+            ]
+          },
+          "brace": false,
+          "cooperate": false,
+          "risk": "Forcing the loaded cart can jam its wheel and damage the cargo.",
+          "conflicts": [
+            "preserve_integrity"
+          ],
+          "outcomes": {
+            "full": {
+              "effects": {
+                "position": "clear"
+              },
+              "text": "You force the cart clear of the passage; the wheel is not repaired."
+            },
+            "partial": {
+              "effects": {
+                "position": "narrow"
+              },
+              "text": "The cart shifts only partly aside."
+            },
+            "failure": {
+              "effects": {
+                "fitting": "jammed",
+                "integrity": "damaged"
+              },
+              "text": "The forced attempt jams the wheel and damages some cargo; the passage remains as it was."
+            }
+          }
+        }
+      ],
+      "cooperation": {
+        "actor_id": "delivery_driver",
+        "refuse_when": {
+          "fitting": "jammed"
+        },
+        "offer": "Tessa agrees to help with a careful, supported shift.",
+        "refusal": "Tessa refuses to shift the cart while its fitting is jammed."
+      },
+      "development": {
+        "after_hours": 2,
+        "when": {
+          "position": [
+            "blocked"
+          ],
+          "fitting": [
+            "crooked",
+            "seated"
+          ]
+        },
+        "effects": {
+          "position": "narrow"
+        },
+        "text": "After two hours, the driver shifts the cart partly aside."
+      }
+    }
+  ]
+}

@@ -9,6 +9,7 @@ from math import isfinite
 
 from engine import character_competence as competence
 from engine import west_road_predicament as west
+from engine import material_state
 from engine.west_road_presentation import CURRENT_CIRCUMSTANCES, ROUTE_FOLLOWTHROUGH
 
 
@@ -118,6 +119,20 @@ def accepted_action(region, world, action_id):
         raise ValueError("Narration requires an accepted West-Road outcome reference.")
     events = {e["history_id"]: e for e in world["history"]}
     event = events.get(action_id)
+    if event and event["event_type"] in {"material_outcome", "material_cooperation"}:
+        material_state.validate_state(world, region)
+        item = material_state.target(region, event["target_id"])
+        action = next(m["label"] for m in item["methods"] if m["method_id"] == event["method_id"]) if "method_id" in event else "request cooperation"
+        packet = {
+            "action": action,
+            "competence_basis": "Engine-owned untrained resolution; no new competence granted.",
+            "outcome": event["summary"], "result": event.get("result", "cooperation"),
+            "cost_hours": 1 if event["event_type"] == "material_outcome" else 0,
+            "consequences": [], "actor_responses": [],
+            "remaining_uncertainty": ["Only this bounded result is established."],
+        }
+        validate_action(packet)
+        return packet
     if not event or event["event_type"] not in {"west_road_outcome", "west_road_competence_result"}:
         raise ValueError("Narration requires an accepted West-Road outcome reference.")
     responses = []
@@ -185,7 +200,7 @@ def build_projection(region, world, public_scene, pressure_cue, action_id=None):
                 inference = d["discovery_id"] in {"west_road_tracks", "west_road_patrol_signs", "west_road_staging_area", "west_road_observation_overlap", "west_road_sign_direction"}
                 information.append({"text": d["text"], "status": "attributed report" if report else "limited inference" if inference else "established finding"})
     packet = {
-        "current_situation": CURRENT_CIRCUMSTANCES[world["west_road_predicament"]["phase"]] if local else "",
+        "current_situation": CURRENT_CIRCUMSTANCES[world["west_road_predicament"]["phase"]] if local else " ".join(material_state.observations(region, world)),
         "presence": [{"display_name": a["display_name"]} for a in public_scene["entities"]["actors"]],
         "groups": [{"display_name": g["display_name"], "count": g["count"]} for g in public_scene["entities"]["groups"]],
         "routes": [{"orientation": e["orientation"], "destination_name": e["destination_name"]} for e in public_scene["exits"]],

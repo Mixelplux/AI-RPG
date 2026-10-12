@@ -1,0 +1,266 @@
+{
+  "region_id": "archive_shutter_fixture",
+  "name": "Archive Room — Wind-Loosened Shutter",
+  "locations": [
+    {
+      "location_id": "archive_room",
+      "name": "Archive Room",
+      "description_seed": "Wind reaches an archive room beside its reading area.",
+      "connected_locations": [
+        {
+          "direction": "south",
+          "location_id": "corridor"
+        }
+      ],
+      "spawn_rules": {}
+    },
+    {
+      "location_id": "corridor",
+      "name": "Corridor",
+      "description_seed": "A sheltered corridor adjoins the archive.",
+      "connected_locations": [
+        {
+          "direction": "north",
+          "location_id": "archive_room"
+        }
+      ],
+      "spawn_rules": {}
+    }
+  ],
+  "entities": [],
+  "factions": [],
+  "region_state": {
+    "weather": {
+      "type": "clear",
+      "severity": 0,
+      "wind_speed_kmh": 0
+    },
+    "economy_state": {},
+    "security_state": {},
+    "population_state": {}
+  },
+  "time": {
+    "elapsed_hours": 0,
+    "current_date": "fixture",
+    "time_of_day": "day"
+  },
+  "simulation_hooks": {
+    "entry_location": "archive_room"
+  },
+  "material_targets": [
+    {
+      "target_id": "window_shutter",
+      "location_id": "archive_room",
+      "label": "loose archive shutter",
+      "aliases": [
+        "shutter",
+        "window",
+        "fitting",
+        "draft",
+        "reading area"
+      ],
+      "conditions": {
+        "stability": {
+          "initial": "loose",
+          "values": {
+            "loose": "The shutter swings without support.",
+            "braced": "The shutter is held with stable support."
+          },
+          "transitions": [
+            [
+              "loose",
+              "braced"
+            ]
+          ]
+        },
+        "fitting": {
+          "initial": "loose",
+          "values": {
+            "loose": "Its fitting is loose.",
+            "seated": "The fitting holds imperfectly.",
+            "aligned": "Its fitting is aligned.",
+            "jammed": "Its fitting is jammed."
+          },
+          "transitions": [
+            [
+              "loose",
+              "seated"
+            ],
+            [
+              "loose",
+              "aligned"
+            ],
+            [
+              "loose",
+              "jammed"
+            ],
+            [
+              "seated",
+              "aligned"
+            ],
+            [
+              "seated",
+              "jammed"
+            ]
+          ]
+        },
+        "position": {
+          "initial": "open",
+          "values": {
+            "open": "An open shutter exposes the reading area to drafts.",
+            "ajar": "The shutter is partly closed; drafts still reach the area.",
+            "closed": "The shutter is closed against the draft."
+          },
+          "transitions": [
+            [
+              "open",
+              "ajar"
+            ],
+            [
+              "open",
+              "closed"
+            ],
+            [
+              "ajar",
+              "closed"
+            ]
+          ]
+        },
+        "integrity": {
+          "initial": "intact",
+          "values": {
+            "intact": "The shutter remains intact.",
+            "damaged": "The shutter has been damaged."
+          },
+          "transitions": [
+            [
+              "intact",
+              "damaged"
+            ]
+          ]
+        }
+      },
+      "methods": [
+        {
+          "method_id": "support_panel",
+          "operation": "stabilize",
+          "label": "support the loose shutter",
+          "when": {
+            "stability": [
+              "loose"
+            ]
+          },
+          "brace": true,
+          "cooperate": false,
+          "risk": "",
+          "conflicts": [],
+          "outcomes": {
+            "full": {
+              "effects": {
+                "stability": "braced"
+              },
+              "text": "You hold the shutter steady; it remains in its prior position."
+            },
+            "partial": {
+              "effects": {},
+              "text": "Support is incomplete."
+            },
+            "failure": {
+              "effects": {},
+              "text": "The shutter remains unsupported."
+            }
+          }
+        },
+        {
+          "method_id": "align_hinge",
+          "operation": "adjust",
+          "label": "align the shutter fitting",
+          "when": {
+            "fitting": [
+              "loose",
+              "seated"
+            ]
+          },
+          "brace": true,
+          "cooperate": false,
+          "risk": "An unsuccessful adjustment can jam the fitting.",
+          "conflicts": [],
+          "outcomes": {
+            "full": {
+              "effects": {
+                "fitting": "aligned"
+              },
+              "text": "The fitting aligns; the shutter's position is unchanged."
+            },
+            "partial": {
+              "effects": {
+                "fitting": "seated"
+              },
+              "text": "The fitting holds partway, leaving further adjustment uncertain."
+            },
+            "failure": {
+              "effects": {
+                "fitting": "jammed"
+              },
+              "text": "The adjustment jams the fitting; the shutter's position is unchanged."
+            }
+          }
+        },
+        {
+          "method_id": "close_panel",
+          "operation": "reposition",
+          "label": "close the supported shutter",
+          "when": {
+            "position": [
+              "open",
+              "ajar"
+            ],
+            "fitting": [
+              "loose",
+              "seated",
+              "aligned"
+            ]
+          },
+          "brace": true,
+          "cooperate": false,
+          "risk": "",
+          "conflicts": [],
+          "outcomes": {
+            "full": {
+              "effects": {
+                "position": "closed"
+              },
+              "text": "You close the shutter, sheltering the reading area from drafts."
+            },
+            "partial": {
+              "effects": {
+                "position": "ajar"
+              },
+              "text": "The shutter closes partway; a draft still reaches the reading area."
+            },
+            "failure": {
+              "effects": {},
+              "text": "The shutter resists closing and remains in its previous position."
+            }
+          }
+        }
+      ],
+      "cooperation": null,
+      "development": {
+        "after_hours": 2,
+        "when": {
+          "stability": [
+            "loose"
+          ],
+          "position": [
+            "open"
+          ]
+        },
+        "effects": {
+          "fitting": "jammed"
+        },
+        "text": "A gust catches the unsupported shutter and jams its fitting."
+      }
+    }
+  ]
+}

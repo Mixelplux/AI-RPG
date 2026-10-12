@@ -1,27 +1,38 @@
-# Bounded Contextual Investigation V1 â€” accepted and complete
+# Bounded Contextual Action & Consequence V1 — accepted and complete
 
-Owner accepted and complete October 11, 2026 at protected baseline
-bdbf07b232a5a59c82ba93eb153fd019114ebe04. Elevated posture.
-Controlling specification: C:/tmp/AI-RPG-Contextual-Investigation-V1-Package/implementation_package.md,
-including its 15 acceptance groups, independent depot fixture and exclusions.
+Owner accepted the final bounded implementation and authorized controlled
+publication on October 11, 2026. Elevated.
+Starting protected baseline: 09d660af6da8b75f980ac2a32d664ba28d3ba8a0.
+Candidate branch: codex/bounded-contextual-action-consequence-v1.
 
-Scope: bounded survey, focused examination, questioning and selective reporting;
-current authoritative access, existing discoveries/history/recipient receipts;
-session-local focus, revalidation and retirement; CLI and safe deterministic expression.
-Legacy commands and West-Road mechanics remain supported. No new save fields,
-lead persistence, provider calls, doctrine revisions, general planner or scene manager.
+The completed package provides reusable assessment, constrained routine-action
+inference, disclosed contextual authorization, engine-owned d6 resolution and
+effort costs, optional authoritative material conditions, atomic consequences,
+bounded NPC cooperation/refusal, causal follow-through and deterministic scene
+presentation. Market Square is opt-in; the archive fixture exercises the shared
+production pathway independently. Save compatibility remains version 1.
 
-Work occurs only in the isolated codex/bounded-contextual-investigation-v1 checkout.
-The dirty experimental checkout, owner saves/indices and prior evidence are preserved.
-Save version remains 1. Runtime changes publish a validated candidate once.
+The final structural correction separates epistemic inspection/possible repair
+from conditional authorization and declares the visible fitting target reference.
+Owner accepts bounded language, authored methods and outcomes, position-dependent
+fitting adjustment and lack of unrestricted conditional planning. No general
+physics, inventory, cargo transfer, economy, combat, arbitrary persuasion,
+provider integration or broad narration redesign is included.
 
-Implementation and automated verification are authorized. Git staging, commits,
-merge, push and protected-baseline advancement are not authorized. Owner smoke and experiential acceptance completed October 11, 2026. No next
-milestone is selected. JSON is lifecycle authority.
-Implementation and offline verification are delivered as an uncommitted working
-diff. All 15 acceptance groups and the independent depot are implemented.
-Owner experiential acceptance is complete following the October 11, 2026 smoke.
-Controlled comparison found the offline look retry-only response already present
-at the exact protected baseline; it is deferred as DF-008, not a V1 regression.
-The package is complete; lifecycle is idle with no next milestone selected.
-See contextual_investigation_v1_handoff.md for verification and known limits.
+Accepted verification and correction records are in
+contextual_action_consequence_v1_handoff.md,
+contextual_action_owner_smoke_correction.md and
+contextual_action_structural_correction.md. All 51 action acceptance groups and
+13 affected regression scripts pass. Previously documented baseline provider
+fixture failures remain separate; no unrelated finding is repaired here.
+
+The publication procedure verifies the exact accepted content, closes lifecycle
+in the milestone commit, strictly fast-forwards main, pushes without force and
+independently checks GitHub synchronization and owner-data preservation.
+The existing publication checkout is used under the owner-approved normal
+Medium-integrity context. Shared tools/profiles and Windows permissions remain
+unchanged. Final published identity is recorded in publication evidence.
+
+No capability package or sprint is active. No next milestone is selected.
+docs/current_sprint.json remains the sole machine authority. The planned
+Architecture Comprehension and Complexity Review is not started by this task.
