@@ -309,9 +309,9 @@ universal scene coverage or long-term narrative memory.
 ## Accepted decisions
 
 [F01 — Truthful Presentation and Epistemic Fidelity](../f01-truthful-presentation-and-epistemic-fidelity.md)
-records five owner-accepted gameplay decisions. That record is authoritative for
-F01; its documentation integration is proposed for review and does not claim
-implementation or select mechanisms.
+records ten owner-accepted gameplay decisions, including revised D10. That record
+is authoritative for F01; its consolidation wording is proposed for owner review
+and does not claim implementation or select mechanisms.
 
 Simulation authority; untrusted fail-closed providers; read-only bounded narration
 contracts; distinction between truth, access, report and inference; minimum

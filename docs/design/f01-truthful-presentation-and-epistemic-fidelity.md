@@ -2,10 +2,12 @@
 
 ## Status and scope
 
-**Accepted design.** Recorded October 14, 2026 from the five owner-accepted
-F01 decisions supplied in the documentation integration authorization.
-This is the single authoritative Design record for those decisions. The
-proposed documentation integration awaits owner review and publication.
+**Accepted design; consolidation proposed for owner review.** This is the
+single authoritative Design record for F01-D1–D10. D1–D5 retain their original
+owner-accepted wording. D6–D10, including revised D10 and the accepted D8/D9
+clarifications, reproduce the owner-supplied accepted text with line wrapping
+only. This documentation consolidation awaits owner review and grants no
+publication authority.
 
 These are intended gameplay requirements, not a claim of implemented behavior
 or authorization to implement them. They apply to presentation of established
@@ -106,32 +108,206 @@ because time has passed.
 
 Players may act on historical knowledge and accept the associated uncertainty.
 
-## Cross-system implications
+### F01-D6 — Minimum Sufficient Information Principle
 
-These relationships track where faithful presentation matters. They do not
-make adjacent capabilities prerequisites or select interfaces or mechanisms.
+Narrative Experience must have sufficient authoritative information to
+preserve the consequential meaning of what it communicates.
 
-| Responsibility | F01 implication and retained boundary |
+The necessary information is determined contextually by the player's
+situation, available character knowledge, current activity and plausible
+consequences.
+
+Meaningful distinctions must be available explicitly or reliably derivable
+from authoritative information.
+
+Ordinary incidental detail does not require exhaustive representation.
+
+Where required information is unavailable, narration must not invent
+consequential meaning to compensate.
+
+F01 establishes these information requirements and their ownership boundaries
+without prescribing a universal representation, storage mechanism or narrative
+pipeline.
+
+### F01-D7 — Grounded Contextual Interpretation
+
+Narrative Experience may communicate interpretations reasonably supported by
+the character's established observations, knowledge, familiarity, experience
+and competence.
+
+Ordinary contextual inference may be expressed without separate adjudication
+when its meaning is adequately grounded in available information.
+
+Interpretations that establish consequential new knowledge, resolve meaningful
+uncertainty or materially alter the player's available understanding require
+sufficient authority from the responsible gameplay systems.
+
+Where multiple explanations remain plausible, narration may convey supported
+possibilities without presenting one as established fact.
+
+Interpretation should support the character's competence and the player's
+understanding without independently solving investigations or introducing
+unearned hints.
+
+### F01-D8 — Selective Consequential Provenance
+
+The game must preserve sufficient information about the origin, evidential
+basis, verification and temporal relevance of consequential information to
+support faithful interpretation and narration.
+
+Provenance requirements are proportional to their significance for player
+understanding, decisions, investigations and future consequences.
+
+Narrative Experience must distinguish established facts from reports, beliefs,
+hypotheses and interpretations when those distinctions matter.
+
+Repeated transmission of a claim does not independently verify it. New
+evidence may strengthen, weaken or contradict a claim according to what that
+evidence actually establishes.
+
+Information retains its historical meaning even when its current applicability
+changes.
+
+Attribution and uncertainty should be communicated naturally, with explicit
+clarification when omission would materially mislead the player.
+
+**Accepted D8 clarification — Retention and recall**
+
+Use significance-based retention and relevance-based recall as the working
+design direction.
+
+Information not mentioned is not necessarily forgotten. Consequential
+information should remain available when necessary for meaningful decisions
+and continuity. Ordinary information may be supplied through relevant context,
+familiarity or reasonable inference.
+
+Do not introduce universal provenance expiration, detailed memory decay or
+exhaustive memory tracking without demonstrated gameplay need.
+
+Specific memory retention and recall behavior remains a Character System
+design dependency.
+
+### F01-D9 — Consequence-Sensitive Fidelity and Recovery
+
+Narrative fidelity is assessed according to whether expression preserves
+consequential meaning, including established facts, outcomes, character
+knowledge, attribution, uncertainty, temporal context and materially relevant
+costs.
+
+Harmless expressive variation is acceptable.
+
+Narration that materially distorts established meaning or introduces
+unsupported consequential information must be rejected or corrected.
+
+Fidelity assessment considers the context and plausible effects on player
+understanding and subsequent choices rather than requiring literal
+reproduction of source information.
+
+When a material error reaches the player, the game must provide an appropriate
+correction while preserving authoritative gameplay state.
+
+Recovery should be proportional to the significance of the error and minimize
+unnecessary interruption to play.
+
+Where a player has already acted in reliance on incorrect narration, the
+discrepancy must be considered in subsequent gameplay reconciliation.
+
+**Accepted D9 clarification — Proportional safeguards**
+
+Prioritize reliable gameplay without introducing extensive preventative
+controls before demonstrated need.
+
+Harmless expressive variation does not require exhaustive verification.
+
+Additional validation, recovery mechanisms or control layers require evidence
+of meaningful gameplay failures.
+
+Player reliance on incorrect narration remains a gameplay fairness principle.
+It does not mandate an automated reconciliation system in advance.
+
+### F01-D10 — Gameplay-Centered Fidelity Validation
+
+F01 is evaluated through representative gameplay situations and extended
+gameplay testing, assessing consequential accuracy, epistemic fidelity,
+character-grounded interpretation, continuity and narrative quality.
+
+Focused automated checks, fidelity harnesses and controlled experiments may be
+used to identify failures, characterize their causes and prevent regressions.
+These validation mechanisms need not become player-facing runtime systems.
+
+Actual gameplay is an ongoing source of design evidence. Observed failures may
+justify changes to narration, supporting systems, evaluation methods or
+accepted design assumptions.
+
+Validation should prioritize meaningful gameplay consequences and recurring
+weaknesses over superficial imperfections. Additional runtime safeguards and
+architectural complexity should be justified by demonstrated need rather than
+hypothetical production requirements.
+
+F01 does not require a fixed release-quality threshold or comprehensive
+player-facing recovery infrastructure.
+
+## Cross-system requirements and deferred dependencies
+
+These requirements identify the meaning each responsibility must supply or
+preserve. They select no interface, mechanism or implementation prerequisite.
+The linked manifests retain their implementation classifications and authority.
+
+| Responsibility | F01 requirement and retained boundary |
 |---|---|
-| [Narrative Experience](systems/narrative-experience.md) | Preserve consequential meaning, attribution, grounded interpretation, actual results and relevant historical distinctions in expression. Selection and emphasis do not establish truth or access. |
-| [Action & Resolution](systems/action-resolution.md) | Actual investigative outcomes and their supported findings constrain narration. F01 selects no action interpretation or resolution mechanism. |
-| [World Simulation](systems/world-simulation.md) | Established circumstances and legitimate changes constrain present and historical claims. F01 adds no actor simulation, offscreen progression or new causal policy. |
-| [Character System](systems/character-system.md) | Interpretations remain grounded in established character observations, knowledge, experience and competence. General discovery, familiarity and access mechanisms remain separately scoped. |
-| [Actors & Social Dynamics](systems/actors-social-dynamics.md) | Reports retain consequential source and verification distinctions. Their expression establishes no new actor knowledge, motive, choice or propagation. |
-| [Player Presentation](systems/player-presentation.md) | Display of supplied narrative and results preserves their consequential meaning. F01 selects no interaction surface, parsing mechanism or display layout. |
-| [Persistence](systems/persistence.md) | Historical reference preserves relevant temporal and access meaning. F01 selects no information storage, retrieval, retention, save-version change or migration. |
+| [Narrative Experience](systems/narrative-experience.md) | Receive sufficient authoritative information, explicit or reliably derivable, and express accessible context faithfully; preserve consequential meaning, attribution, grounded interpretation, actual results and historical continuity. Selection and emphasis do not establish truth or access. |
+| [Action & Resolution](systems/action-resolution.md) | Supply actual accepted findings, outcomes, material costs and limits so attempts and their consequences remain intelligible. Narration cannot invent progress, waive costs or repair failure. |
+| [World Simulation](systems/world-simulation.md) | Supply established external circumstances, legitimate changes and consequential causal continuity. Presentation error does not authorize a world-state change or new offscreen causal policy. |
+| [Character System](systems/character-system.md) | Supply legitimate informational access, experience, competence and relevant retained continuity to ground interpretation and recall. World truth and narrator context alone do not grant knowledge. General retention/recall is deferred below. |
+| [Actors & Social Dynamics](systems/actors-social-dynamics.md) | Supply accepted behavior and reports with consequential source/verification distinctions. Expression establishes no new actor knowledge, intention, commitment or propagation. |
+| [Scenario & Authored Content](systems/scenario-authored-content.md) | Supply grounding and supported evidence/result material consistent with established campaign meaning. Authored wording alone grants neither current truth, access nor an outcome. |
+| [Player Presentation](systems/player-presentation.md) | Display sufficient supplied context, choices, results and material corrections intelligibly; preserve the distinction between technical failure and fictional outcome. F01 selects no layout or input mechanism. |
+| [Persistence](systems/persistence.md) | Preserve supported accepted meaning and selectively required provenance across restoration. Gameplay owners determine retention needs; storage does not choose relevance, grant access or establish new facts. |
 
-Scene content selection, information discovery/access, actor knowledge and
-memory/history remain relevant separately scoped questions. No general solution
-to them is required by this documentation integration.
+**Deferred Character System dependency:** the
+[accepted D8 clarification](#f01-d8--selective-consequential-provenance) supplies
+significance-based retention and relevance-based recall as the working design
+direction. Specific memory retention and recall behavior remains deferred to
+Character System design. Character informational continuity differs from
+authoritative campaign history and a narrator's transcript or cache. Existing
+bounded records do not establish a general memory capability; this consolidation
+selects no expiration, decay, storage or retrieval mechanism.
+
+Scene/context selection, incidental-detail promotion, consequential provenance
+representation and recovery procedures remain separately scoped dependencies.
+They need no general solution for this documentation consolidation. Validation
+can exercise bounded or stipulated character/context inputs if their limits are
+explicit; doing so does not claim that deferred systems are implemented.
+
+## Development and validation posture
+
+This is a personal, single-player project intended to evolve through an extended
+beta. Pursue useful, coherent gameplay with reasonable fidelity and iterative
+improvement from observed failures. Apply the existing
+[proportional engineering posture](../engineering_posture.md); credible
+consequence and recovery difficulty determine rigor.
+
+Focused offline fidelity harnesses, representative scenario fixtures, controlled
+comparisons and owner play evaluation are compatible with this posture when
+separately authorized. Their purpose is to reveal meaningful gameplay failures
+and guide the smallest justified improvement. A harness may need explicit source
+and result material for assessment without requiring that structure in every
+runtime response.
+
+F01 mandates no speculative semantic validator, runtime monitoring/control
+framework, universal automated judge, retry/fallback architecture or release gate.
+Add controls only when observed need and consequence justify separately scoped
+work. Existing simulation authority, untrusted provider boundaries, fail-closed
+provider behavior, atomicity and save-compatibility obligations remain intact.
+This posture does not authorize live provider calls or evaluation in this task.
 
 ## Research context and implementation boundary
 
 The completed external [protocol verification](<C:/tmp/AI-RPG-F01-Protocol-Verification-20261014/f01_protocol_verification.md>)
 and [focused review](<C:/tmp/AI-RPG-F01-Focused-Review-20261014/f01_focused_review.md>)
 provide historical research context and limitations. They prepared consideration
-of F01 before the five decisions were accepted; their open alternatives are
-not additional accepted requirements. Research evidence remains separate from
+of F01 before the original five decisions were accepted. Their open alternatives
+are not additional accepted requirements. Research evidence remains separate from
 the accepted Design decisions above and establishes no general reliability claim.
 
 F01 selects no narrator model or prompt, schema or validator, narrative pipeline,
@@ -146,3 +322,8 @@ and does not begin F02.
 - October 14, 2026: record the five owner-accepted F01 gameplay decisions and
   relevant cross-system implications; documentation integration proposed for
   owner review and publication, with implementation requiring separate authorization.
+- October 14, 2026: consolidate accepted D6–D9 and revised D10; preserve D1–D5;
+  record deferred Character System retention/recall, cross-system requirements
+  and the personal-project extended-beta validation posture. Use owner-supplied
+  accepted D6–D10 and D8/D9 clarifications with line wrapping only; documentation
+  proposed for owner review; no implementation, research or lifecycle advancement.

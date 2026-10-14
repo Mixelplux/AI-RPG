@@ -15,4 +15,7 @@ Existing sources remain at their original paths:
 
 ## Accepted design records
 
-- [F01 — Truthful Presentation and Epistemic Fidelity](f01-truthful-presentation-and-epistemic-fidelity.md) — five owner-accepted gameplay decisions; documentation integration proposed for review. Implementation requires separate authorization.
+- [F01 — Truthful Presentation and Epistemic Fidelity](f01-truthful-presentation-and-epistemic-fidelity.md) — ten owner-accepted gameplay decisions,
+  including revised D10; documentation consolidation proposed for owner review.
+  Includes deferred Character System retention/recall and proportional extended-beta
+  validation. Implementation and evaluation require separate authorization.
