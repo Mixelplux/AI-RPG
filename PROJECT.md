@@ -10,13 +10,15 @@ Use the [Story-First Design Doctrine v0.3](docs/story_first_design_doctrine.md)
 as the design-evaluation lens for future decisions; its provisional mechanisms
 and hypotheses do not mandate implementation.
 
-## Development Approach
+### Development Approach
 
 Development proceeds through small, bounded capability packages.
 
-Each package should deliver one coherent capability, build on established architecture, remain testable, and avoid speculative infrastructure.
+Each implementation package must realize approved design, remain testable, and avoid speculative infrastructure. Existing architecture is evidence and a candidate for reuse, not presumed design authority. Existing mechanisms may be retained, revised, or replaced when justified by the approved design.
 
-Implement the minimum sufficient detail justified by current player or architecture needs.
+Applicable accepted gameplay requirements, integrity constraints, and explicit architectural commitments remain authoritative within their documented scope unless explicitly superseded. Where proposed or approved design conflicts with a prior accepted commitment, identify the conflict and obtain owner resolution before implementing the conflicting change.
+
+Implement the minimum sufficient detail justified by meaningful gameplay needs and applicable engineering constraints.
 
 Use `docs/engineering_posture.md`: Routine is the default, Elevated covers
 meaningful persistence or cross-system consequences, and Critical covers rare
