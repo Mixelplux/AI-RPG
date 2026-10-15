@@ -1,0 +1,76 @@
+{
+  "frozen_utc": "2026-10-15T20:16:03.224163+00:00",
+  "case_ids": [
+    "N1",
+    "N2",
+    "T3",
+    "T4",
+    "I5",
+    "C6"
+  ],
+  "cases_sha256": "c9f1f959602b0c362b5afba6a83d81caec086e4be0130429e7c57a26e4fb19fb",
+  "baseline_component_sha256": "f94bd039eb670ab58c13270f3efda5fd4e7ee6bceca94adb3d2d63a938522e8d",
+  "baseline_instructions_sha256": "58b8ac0977a62ebb731e6076230dfc2c2b0a078fc00524733cb5892bb8584d2a",
+  "prior_experimental_revision_sha256": "be430843b2a8b703cc4726bfd359180d7cb9e7956befbb508f1d3f17b438e5b7",
+  "settings": {
+    "model": "gpt-6-luna",
+    "reasoning": {
+      "effort": "low"
+    },
+    "max_output_tokens": 2048,
+    "store": false,
+    "timeout_seconds": 20,
+    "max_retries": 0
+  },
+  "schedule": [
+    {
+      "case": "N1",
+      "condition": "original"
+    },
+    {
+      "case": "N1",
+      "condition": "corrected"
+    },
+    {
+      "case": "N2",
+      "condition": "corrected"
+    },
+    {
+      "case": "N2",
+      "condition": "original"
+    },
+    {
+      "case": "T3",
+      "condition": "original"
+    },
+    {
+      "case": "T3",
+      "condition": "corrected"
+    },
+    {
+      "case": "T4",
+      "condition": "corrected"
+    },
+    {
+      "case": "T4",
+      "condition": "original"
+    },
+    {
+      "case": "I5",
+      "condition": "original"
+    },
+    {
+      "case": "I5",
+      "condition": "corrected"
+    },
+    {
+      "case": "C6",
+      "condition": "corrected"
+    },
+    {
+      "case": "C6",
+      "condition": "original"
+    }
+  ],
+  "status": "six independent contexts and fidelity/presentation criteria frozen before presentation instruction correction"
+}

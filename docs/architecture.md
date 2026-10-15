@@ -149,6 +149,30 @@ See ADR-059 for governing detail.
 
 ## Narration Boundary
 
+F01 Narrative Realization V1 provides an owner-accepted bounded component in
+`engine/narrative_realization.py`; ordinary gameplay routes are unchanged.
+It validates explicit caller-supplied context, serializes it to one injected
+generator and applies the existing prose output validator. The opt-in provider
+adapter reuses `narration_source.request_narration_text`; no provider is called
+by default. Relevant semantic continuity is supplied by the caller, with no stored
+transcript, memory policy or simulation references. Shape validation does not
+authenticate authority, prove sufficiency or certify prose fidelity.
+
+The accepted implementation is the original candidate with the instruction-only
+[presentation correction](f01_presentation_correction_v1_report.md), covering direct
+substantive NPC speech, activity-integrated time and relevance-sensitive
+qualifications. Input shape, single-call stateless execution, transport and output
+validation are unchanged. No new gameplay or persistence authority is established.
+See [owner acceptance and limitations](f01_narrative_realization_v1_acceptance.md).
+
+The [first A–D evaluation](f01_narrative_realization_v1_evaluation.md), mixed
+[generic correction comparison](f01_generalizable_realization_correction_v1.md)
+and [original connected evaluation](f01_connected_experience_v1_report.md) remain
+historical evidence. The generic revision is not the accepted runtime. The owner
+found connected progression/pacing satisfactory and accepted remaining presentation
+limitations; unrestricted fidelity and single-call adequacy are not established.
+Alternative architectures remain available for separately authorized work.
+
 ```text
 Bounded Narration Context
     ↓

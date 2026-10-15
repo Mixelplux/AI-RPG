@@ -1,0 +1,29 @@
+{
+  "started_utc": "2026-10-15T17:30:45.653526+00:00",
+  "model": "gpt-6-luna",
+  "reasoning": "low",
+  "max_output_tokens": 2048,
+  "retries": 0,
+  "records": [
+    {
+      "moment": "A",
+      "status": "candidate",
+      "text": "A stone breaks loose beneath your boot, but you catch secure purchase and finish the climb. Two minutes pass; you reach the battlements unharmed. The gate guard is there to speak with, but you haven’t yet learned which way the merchant went."
+    },
+    {
+      "moment": "B",
+      "status": "candidate",
+      "text": "The guard says porter Mara told him she saw the merchant leave through the west gate yesterday. He didn’t see it himself, and doesn’t know which road the merchant took."
+    },
+    {
+      "moment": "C",
+      "status": "candidate",
+      "text": "The west gate settles fully shut below you, sealing the courtyard exit. Beside you, the guard explains that it’s the scheduled noon closure, then continues speaking as you listen from the battlements."
+    },
+    {
+      "moment": "D",
+      "status": "candidate",
+      "text": "You ask the guard whether there’s another way out while the west gate is shut. He pauses before replying; his answer is still pending."
+    }
+  ]
+}

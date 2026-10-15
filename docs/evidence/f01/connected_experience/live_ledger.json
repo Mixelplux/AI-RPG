@@ -1,0 +1,153 @@
+{
+  "started_utc": "2026-10-15T19:38:13.198017+00:00",
+  "settings": {
+    "model": "gpt-6-luna",
+    "reasoning": {
+      "effort": "low"
+    },
+    "max_output_tokens": 2048,
+    "store": false,
+    "timeout_seconds": 20,
+    "max_retries": 0
+  },
+  "candidate": "preserved original, not revised",
+  "records": [
+    {
+      "moment": "E1",
+      "status": "candidate",
+      "transport_calls": 1,
+      "actual_request_matches_frozen": true,
+      "returned_model": "gpt-6-luna",
+      "provider_status": "completed",
+      "usage": {
+        "input_tokens": 568,
+        "output_tokens": 79,
+        "total_tokens": 647,
+        "reasoning_tokens_included_in_output": 0
+      },
+      "text": "After a short walk, you enter the receiving office and present the Tern Bindery delivery note. Clerk Sela is at the desk and agrees to hear your inquiry. Through an open door, ordinary river and depot sounds drift in from the working yard.\n\nThe crate hasn’t reached the bindery, and you don’t yet know where it is or why it’s overdue.",
+      "elapsed_seconds": 14.5599,
+      "context_unchanged": true
+    },
+    {
+      "moment": "E2",
+      "status": "candidate",
+      "transport_calls": 1,
+      "actual_request_matches_frozen": true,
+      "returned_model": "gpt-6-luna",
+      "provider_status": "completed",
+      "usage": {
+        "input_tokens": 622,
+        "output_tokens": 55,
+        "total_tokens": 677,
+        "reasoning_tokens_included_in_output": 0
+      },
+      "text": "Sela confirms she checked in the Tern Bindery’s paper crate this morning. She says Orin later told her he’d wheeled it to the covered landing, but she didn’t see him move it and hasn’t checked where it is now.",
+      "elapsed_seconds": 2.945441,
+      "context_unchanged": true
+    },
+    {
+      "moment": "E3",
+      "status": "candidate",
+      "transport_calls": 1,
+      "actual_request_matches_frozen": true,
+      "returned_model": "gpt-6-luna",
+      "provider_status": "completed",
+      "usage": {
+        "input_tokens": 627,
+        "output_tokens": 60,
+        "total_tokens": 687,
+        "reasoning_tokens_included_in_output": 0
+      },
+      "text": "Sela says the crate bears a blue crane stamp and two iron bands—marks she saw when she received it. She points to the cabinet beside her desk and says its dispatch slip is inside; you have her permission to inspect the slip. The crate’s current whereabouts remain unknown.",
+      "elapsed_seconds": 3.70105,
+      "context_unchanged": true
+    },
+    {
+      "moment": "E4",
+      "status": "candidate",
+      "transport_calls": 1,
+      "actual_request_matches_frozen": true,
+      "returned_model": "gpt-6-luna",
+      "provider_status": "completed",
+      "usage": {
+        "input_tokens": 688,
+        "output_tokens": 66,
+        "total_tokens": 754,
+        "reasoning_tokens_included_in_output": 0
+      },
+      "text": "You carefully lift the dispatch slip from the cabinet and read the destination line: **covered landing**. Then a brittle corner tears. You stop as soon as you notice, leaving the slip in the cabinet with the corner still torn. The inspection has taken about five minutes; the rest of the text remains unread.",
+      "elapsed_seconds": 2.930856,
+      "context_unchanged": true
+    },
+    {
+      "moment": "E5",
+      "status": "candidate",
+      "transport_calls": 1,
+      "actual_request_matches_frozen": true,
+      "returned_model": "gpt-6-luna",
+      "provider_status": "completed",
+      "usage": {
+        "input_tokens": 689,
+        "output_tokens": 103,
+        "total_tokens": 792,
+        "reasoning_tokens_included_in_output": 0
+      },
+      "text": "The scheduled unloading begins in the yard, and workers rope off the direct receiving lane for the crane’s loads. You take the open east walkway instead and, a few minutes later, reach the covered landing beneath its roof, beside the loading racks. The unloading is ordinary depot work, unrelated to your inquiry.\n\nYou came to look for the crate with the blue crane stamp and two iron bands. The slip named this landing as its destination, but that alone doesn’t establish that the crate is here.",
+      "elapsed_seconds": 3.951481,
+      "context_unchanged": true
+    },
+    {
+      "moment": "E6",
+      "status": "candidate",
+      "transport_calls": 1,
+      "actual_request_matches_frozen": true,
+      "returned_model": "gpt-6-luna",
+      "provider_status": "completed",
+      "usage": {
+        "input_tokens": 752,
+        "output_tokens": 99,
+        "total_tokens": 851,
+        "reasoning_tokens_included_in_output": 0
+      },
+      "text": "You search the accessible racks beneath the landing roof, but none holds a crate matching Sela’s description: a blue crane stamp and two iron bands. Several sets of wheel marks overlap nearby; none forms a continuous trail you can follow from the landing.\n\nA few minutes pass. You haven’t entered the roped-off work area or handled any cargo. The search finds no match in these racks, but doesn’t establish whether the crate reached the landing or where it is now.",
+      "elapsed_seconds": 3.715825,
+      "context_unchanged": true
+    },
+    {
+      "moment": "E7",
+      "status": "candidate",
+      "transport_calls": 1,
+      "actual_request_matches_frozen": true,
+      "returned_model": "gpt-6-luna",
+      "provider_status": "completed",
+      "usage": {
+        "input_tokens": 735,
+        "output_tokens": 78,
+        "total_tokens": 813,
+        "reasoning_tokens_included_in_output": 0
+      },
+      "text": "In the adjacent cart lane, you find continuous wheel ruts pressed into the soft ground. You follow them on foot until they reach the paved yard, where the visible ruts end; beyond that, the trail is no longer followable. About ten minutes have passed, and you stop at the paving. The trail reveals no connection to the paper crate or its handler.",
+      "elapsed_seconds": 2.873202,
+      "context_unchanged": true
+    },
+    {
+      "moment": "E8",
+      "status": "candidate",
+      "transport_calls": 1,
+      "actual_request_matches_frozen": true,
+      "returned_model": "gpt-6-luna",
+      "provider_status": "completed",
+      "usage": {
+        "input_tokens": 929,
+        "output_tokens": 80,
+        "total_tokens": 1009,
+        "reasoning_tokens_included_in_output": 0
+      },
+      "text": "Back at Sela’s desk, you ask whether the ledger records an actual handover. She opens it to an entry for the marked Tern Bindery paper crate, handed to the covered-landing crew earlier today. She says she wrote it after witnessing the handover herself.\n\nThe entry confirms the crate reached the crew, but Sela doesn’t know where it went afterward.",
+      "elapsed_seconds": 3.388812,
+      "context_unchanged": true
+    }
+  ],
+  "completed_utc": "2026-10-15T19:38:51.333974+00:00"
+}

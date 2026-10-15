@@ -1,0 +1,244 @@
+{
+  "started_utc": "2026-10-15T17:48:56.587171+00:00",
+  "settings": {
+    "model": "gpt-6-luna",
+    "reasoning": {
+      "effort": "low"
+    },
+    "max_output_tokens": 2048,
+    "store": false,
+    "timeout_seconds": 20,
+    "max_retries": 0
+  },
+  "records": [
+    {
+      "position": 1,
+      "case": "J1",
+      "condition": "baseline",
+      "status": "candidate",
+      "transport_calls": 1,
+      "outgoing_request_matches_frozen": true,
+      "returned_model": "gpt-6-luna",
+      "provider_status": "completed",
+      "usage": {
+        "input_tokens": 495,
+        "output_tokens": 51,
+        "total_tokens": 546,
+        "reasoning_tokens_included_in_output": 0
+      },
+      "text": "After six minutes along the familiar lane, you reach the jeweler’s workshop. A wooden sign hangs above the entrance, and your cracked brooch is still in your hand; you haven’t yet gone inside or asked for a repair.",
+      "elapsed_seconds": 4.553791,
+      "context_unchanged": true
+    },
+    {
+      "position": 2,
+      "case": "J1",
+      "condition": "revised",
+      "status": "candidate",
+      "transport_calls": 1,
+      "outgoing_request_matches_frozen": true,
+      "returned_model": "gpt-6-luna",
+      "provider_status": "completed",
+      "usage": {
+        "input_tokens": 578,
+        "output_tokens": 48,
+        "total_tokens": 626,
+        "reasoning_tokens_included_in_output": 0
+      },
+      "text": "After six minutes along the familiar lane, you arrive outside the jeweler’s workshop, the cracked brooch still in your hand. A wooden sign hangs above the entrance; you haven’t gone inside or made a request.",
+      "elapsed_seconds": 1.83651,
+      "context_unchanged": true
+    },
+    {
+      "position": 3,
+      "case": "R2",
+      "condition": "revised",
+      "status": "candidate",
+      "transport_calls": 1,
+      "outgoing_request_matches_frozen": true,
+      "returned_model": "gpt-6-luna",
+      "provider_status": "completed",
+      "usage": {
+        "input_tokens": 606,
+        "output_tokens": 39,
+        "total_tokens": 645,
+        "reasoning_tokens_included_in_output": 0
+      },
+      "text": "The archivist sits opposite you, the catalog already open between you. “The flood chronicle is listed on page eighteen,” she answers; she compiled the entry this morning.",
+      "elapsed_seconds": 2.528671,
+      "context_unchanged": true
+    },
+    {
+      "position": 4,
+      "case": "R2",
+      "condition": "baseline",
+      "status": "candidate",
+      "transport_calls": 1,
+      "outgoing_request_matches_frozen": true,
+      "returned_model": "gpt-6-luna",
+      "provider_status": "completed",
+      "usage": {
+        "input_tokens": 523,
+        "output_tokens": 39,
+        "total_tokens": 562,
+        "reasoning_tokens_included_in_output": 0
+      },
+      "text": "The archivist sits opposite you, the catalog open between you. “The flood chronicle is listed on page eighteen,” she says. “I compiled that entry this morning.”",
+      "elapsed_seconds": 2.11927,
+      "context_unchanged": true
+    },
+    {
+      "position": 5,
+      "case": "M3",
+      "condition": "baseline",
+      "status": "candidate",
+      "transport_calls": 1,
+      "outgoing_request_matches_frozen": true,
+      "returned_model": "gpt-6-luna",
+      "provider_status": "completed",
+      "usage": {
+        "input_tokens": 560,
+        "output_tokens": 59,
+        "total_tokens": 619,
+        "reasoning_tokens_included_in_output": 0
+      },
+      "text": "The coupling releases pressure before you catch what’s happening. Its automatic safety catch arrests the release and completes the reset before you can react. Four minutes pass; the coupling is reset, you’re unharmed, and the replacement collar is spent. Why the pressure released remains unknown.",
+      "elapsed_seconds": 2.410254,
+      "context_unchanged": true
+    },
+    {
+      "position": 6,
+      "case": "M3",
+      "condition": "revised",
+      "status": "candidate",
+      "transport_calls": 1,
+      "outgoing_request_matches_frozen": true,
+      "returned_model": "gpt-6-luna",
+      "provider_status": "completed",
+      "usage": {
+        "input_tokens": 643,
+        "output_tokens": 84,
+        "total_tokens": 727,
+        "reasoning_tokens_included_in_output": 0
+      },
+      "text": "The replacement collar seats as you turn the reset screw. A brief pressure release starts before you detect it, but the coupling’s automatic safety catch arrests it and completes the reset before you can react. Only afterward do you realize what happened: the mill coupling is reset, and you’re unharmed. Four minutes have passed, and the replacement collar is spent. The cause of the pressure release remains unknown.",
+      "elapsed_seconds": 1.881131,
+      "context_unchanged": true
+    },
+    {
+      "position": 7,
+      "case": "P4",
+      "condition": "revised",
+      "status": "candidate",
+      "transport_calls": 1,
+      "outgoing_request_matches_frozen": true,
+      "returned_model": "gpt-6-luna",
+      "provider_status": "completed",
+      "usage": {
+        "input_tokens": 611,
+        "output_tokens": 70,
+        "total_tokens": 681,
+        "reasoning_tokens_included_in_output": 0
+      },
+      "text": "You spend three minutes checking the hand-pump casing. Before you open the ignition-compartment cover, a fuel odor reaches you, and you stop as authorized. The cover stays closed; the compartment remains unexamined, and the odor alone doesn’t reveal its source. No fuel or equipment is used, and no ignition occurs.",
+      "elapsed_seconds": 1.730684,
+      "context_unchanged": true
+    },
+    {
+      "position": 8,
+      "case": "P4",
+      "condition": "baseline",
+      "status": "candidate",
+      "transport_calls": 1,
+      "outgoing_request_matches_frozen": true,
+      "returned_model": "gpt-6-luna",
+      "provider_status": "completed",
+      "usage": {
+        "input_tokens": 528,
+        "output_tokens": 48,
+        "total_tokens": 576,
+        "reasoning_tokens_included_in_output": 0
+      },
+      "text": "After three minutes checking the hand-pump casing, you catch a fuel odor and stop before opening the ignition-compartment cover. It remains closed; you haven’t examined the compartment, and the odor’s source is unknown.",
+      "elapsed_seconds": 2.905617,
+      "context_unchanged": true
+    },
+    {
+      "position": 9,
+      "case": "S5",
+      "condition": "baseline",
+      "status": "candidate",
+      "transport_calls": 1,
+      "outgoing_request_matches_frozen": true,
+      "returned_model": "gpt-6-luna",
+      "provider_status": "completed",
+      "usage": {
+        "input_tokens": 570,
+        "output_tokens": 33,
+        "total_tokens": 603,
+        "reasoning_tokens_included_in_output": 0
+      },
+      "text": "The silversmith’s gaze lingers on the bead. After a brief pause, they look back at you, the answer still to come.",
+      "elapsed_seconds": 2.546211,
+      "context_unchanged": true
+    },
+    {
+      "position": 10,
+      "case": "S5",
+      "condition": "revised",
+      "status": "candidate",
+      "transport_calls": 1,
+      "outgoing_request_matches_frozen": true,
+      "returned_model": "gpt-6-luna",
+      "provider_status": "completed",
+      "usage": {
+        "input_tokens": 653,
+        "output_tokens": 33,
+        "total_tokens": 686,
+        "reasoning_tokens_included_in_output": 0
+      },
+      "text": "You ask what metal the bead is made from. The silversmith glances down at it, then pauses, facing you across the counter.",
+      "elapsed_seconds": 2.033807,
+      "context_unchanged": true
+    },
+    {
+      "position": 11,
+      "case": "W6",
+      "condition": "revised",
+      "status": "candidate",
+      "transport_calls": 1,
+      "outgoing_request_matches_frozen": true,
+      "returned_model": "gpt-6-luna",
+      "provider_status": "completed",
+      "usage": {
+        "input_tokens": 666,
+        "output_tokens": 46,
+        "total_tokens": 712,
+        "reasoning_tokens_included_in_output": 0
+      },
+      "text": "Irena says she saw the festival wagon leave before the noon bell; Tomas says he saw that same wagon leave after it. Neither account is independently confirmed, so you still don’t know which time is right.",
+      "elapsed_seconds": 1.996054,
+      "context_unchanged": true
+    },
+    {
+      "position": 12,
+      "case": "W6",
+      "condition": "baseline",
+      "status": "candidate",
+      "transport_calls": 1,
+      "outgoing_request_matches_frozen": true,
+      "returned_model": "gpt-6-luna",
+      "provider_status": "completed",
+      "usage": {
+        "input_tokens": 583,
+        "output_tokens": 49,
+        "total_tokens": 632,
+        "reasoning_tokens_included_in_output": 0
+      },
+      "text": "Irena says she saw the festival wagon leave before the noon bell. Tomas says he saw that same wagon leave after it. Those are the two accounts you have; neither is independently verified, so when it departed remains unresolved.",
+      "elapsed_seconds": 2.056251,
+      "context_unchanged": true
+    }
+  ],
+  "completed_utc": "2026-10-15T17:49:25.219654+00:00"
+}

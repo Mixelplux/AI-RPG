@@ -1,0 +1,87 @@
+{
+  "description": "Predetermined authoritative four-moment fixture, not implemented gameplay. All access/knowledge/outcomes are stipulated by their named design responsibility. No evaluator-only hidden truth is sent to realization.",
+  "moments": [
+    {
+      "moment": "A",
+      "focus": "Complete the resolved conditional climb to the battlements.",
+      "player_intent": {
+        "objective": "Reach the battlements to speak with the gate guard.",
+        "method": "Climb the courtyard wall using handholds.",
+        "authorization": "Player authorized this climb, stopping if it became too dangerous.",
+        "constraints": ["Do not continue through danger the character recognizes as beyond their ability."]
+      },
+      "developments": [
+        {"id":"climb","meaning":"The character did not notice crumbling mortar before a stone broke loose beneath their boot. Their climbing competence let them regain secure purchase and finish the climb unharmed on the battlements. The stopping condition was not knowingly disregarded. The completed climb cost two minutes.","authority":"Action & Resolution; Character System","status":"resolved","source":"Predetermined accepted action result","time":"Just completed","access":"Player experienced the action; no advance recognition of degraded mortar"}
+      ],
+      "continuity": [],
+      "knowledge_limits": ["No guard knowledge or reaction to the climb is established."],
+      "unresolved": ["The merchant's departure route is unknown to the player."],
+      "boundaries": ["No fall, injury, alarm or other adverse consequence is established.","Do not choose another player action after arrival."]
+    },
+    {
+      "moment": "B",
+      "focus": "Answer the player's question: Which road did the merchant take?",
+      "player_intent": {
+        "objective": "Ask the gate guard which road the merchant took.",
+        "method": "Direct conversation on the battlements.",
+        "authorization": "Only asking this question is authorized; no departure or pursuit.",
+        "constraints": []
+      },
+      "developments": [
+        {"id":"guard_reply","meaning":"The guard answers that porter Mara told him she saw the merchant leave through the west gate yesterday. The guard did not witness it and does not know which road the merchant took after leaving the gate.","authority":"Actors & Social Dynamics","status":"reported","source":"Guard relays Mara's account; not independent verification","time":"Reply now; alleged departure yesterday","access":"Player hears this report from the guard"}
+      ],
+      "continuity": [
+        {"id":"arrival","meaning":"The player has just reached the battlements unharmed and is beside the gate guard.","authority":"Action & Resolution; World Simulation","status":"established","source":"Accepted climb endpoint and stipulated guard presence","time":"Current scene after A","access":"Direct player experience"}
+      ],
+      "knowledge_limits": ["Guard knows Mara's report, not the merchant's route or current whereabouts.","No evidence verifies Mara's report."],
+      "unresolved": ["Merchant's actual route, purpose and current whereabouts."],
+      "boundaries": ["The report supplies no destination or followable trail.","Do not grant an NPC promise, access permission or investigation result."]
+    },
+    {
+      "moment": "C",
+      "focus": "Show the established closure of the west gate and its effect on the courtyard exit.",
+      "player_intent": {
+        "objective": "Continue listening to the guard.",
+        "method": "Remain beside the guard on the battlements.",
+        "authorization": "No new movement, intervention or investigation is authorized.",
+        "constraints": ["Do not spend player resources or choose a new course of action."]
+      },
+      "developments": [
+        {"id":"closure","meaning":"Below the battlements, the west gate is lowered fully shut. The guard tells the player it is the scheduled noon closure. Passage from the courtyard through this gate is now blocked. No cause involving the climb or merchant is established.","authority":"World Simulation; Actors & Social Dynamics","status":"established","source":"Stipulated visible gate closure and accepted guard statement","time":"Now, after B","access":"Player sees the gate close and hears the guard's explanation"}
+      ],
+      "continuity": [
+        {"id":"position","meaning":"Player and guard remain on the battlements overlooking the west gate and courtyard.","authority":"World Simulation","status":"established","source":"Stipulated accessible scene","time":"Current","access":"Direct observation"},
+        {"id":"merchant_report","meaning":"The guard relayed Mara's unverified account of the merchant leaving through the west gate yesterday. The guard does not know the onward route.","authority":"Actors & Social Dynamics","status":"reported","source":"Mara to guard to player in B","time":"Report heard moments ago; alleged sighting yesterday","access":"Retained report, not firsthand merchant observation"}
+      ],
+      "knowledge_limits": ["Gate closure reveals nothing new about the merchant's route or whereabouts."],
+      "unresolved": ["Any alternative route available to the player."],
+      "boundaries": ["No confinement of the player, arrest, threat, alarm or reopening time is established.","Do not infer a causal link between gate closure and the merchant or climb."]
+    },
+    {
+      "moment": "D",
+      "focus": "Continue with the player asking whether another way out exists; keep that answer pending.",
+      "player_intent": {
+        "objective": "Ask the guard whether there is another way out while the west gate is closed.",
+        "method": "Continue the same conversation from the battlements.",
+        "authorization": "The player asks only; no travel, search or commitment.",
+        "constraints": ["Do not convert a question into an attempted departure."]
+      },
+      "developments": [
+        {"id":"question","meaning":"The player turns the conversation to another way out while the west gate is shut. The guard pauses before replying; the substance of the answer has not been established.","authority":"Player Presentation; Actors & Social Dynamics","status":"established","source":"Stipulated player question and harmless conversational pause","time":"Immediately after C","access":"Player participates in the exchange"}
+      ],
+      "continuity": [
+        {"id":"gate_state","meaning":"The west gate below remains closed following the scheduled closure; passage through it from the courtyard is blocked. Player remains beside the guard on the battlements.","authority":"World Simulation","status":"established","source":"Accepted C closure and current stipulated scene","time":"Current","access":"Directly visible from battlements"},
+        {"id":"retained_report","meaning":"Mara's merchant sighting yesterday remains a report relayed by the guard, not a verified route or current whereabouts. Nothing has contradicted or independently verified it.","authority":"Character System; Actors & Social Dynamics","status":"reported","source":"Mara to guard to player in B","time":"Historical sighting; still retained","access":"Player remembers the report; it need not be repeated now"}
+      ],
+      "knowledge_limits": ["The guard's knowledge of alternate exits and willingness to help are not supplied."],
+      "unresolved": ["Whether another exit exists or is usable; the guard's substantive answer."],
+      "boundaries": ["Do not invent an alternate exit, reopening time, refusal, promise or route hint.","Do not recap the climb or merchant report unless needed for the current question."]
+    }
+  ],
+  "evaluation_anchors": {
+    "A": ["Failed early danger recognition; competent recovery; battlements unharmed", "Conditional authorization not knowingly ignored; two-minute cost; no subsequent player choice"],
+    "B": ["Mara-to-guard attribution retained; yesterday sighting reported", "No route or current whereabouts invented; guard lacks firsthand verification"],
+    "C": ["Gate closes; courtyard passage blocked; scheduled closure explained by guard", "No invented connection to merchant or climb; player remains on battlements"],
+    "D": ["Closed gate motivates relevant question; guard answer pending", "No new exit, commitment or travel; no unnecessary recap or compulsory re-verification"]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "checks": {
+    "exact_eight_completed_candidates": true,
+    "exact_moment_order": true,
+    "one_verified_call_per_moment": true,
+    "all_returned_requested_model_completed": true,
+    "exact_authoritative_contexts_in_requests": true,
+    "all_outputs_nonempty_bounded": true,
+    "all_contexts_unchanged": true,
+    "original_source_unchanged": true,
+    "revised_source_unchanged": true,
+    "fixture_criteria_chronology_unchanged": true,
+    "presentation_reconciliation_unchanged": true,
+    "preserved_source_evidence_owner_save_unchanged": true,
+    "requested_settings_unchanged": true,
+    "original_identity_matches_historical_AD": true
+  },
+  "generations": 8,
+  "input_tokens": 5610,
+  "output_tokens": 620,
+  "reasoning_tokens_included_in_output": 0,
+  "latency_sum_seconds": 38.066567,
+  "words": {
+    "E1": 61,
+    "E2": 39,
+    "E3": 48,
+    "E4": 53,
+    "E5": 86,
+    "E6": 80,
+    "E7": 62,
+    "E8": 59
+  }
+}

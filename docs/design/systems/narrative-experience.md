@@ -26,6 +26,23 @@ The initial review identity above remains historical. See
 
 ## Purpose
 
+Implementation reconciliation (October 15, 2026): F01's original stateless,
+single-call realization component plus its bounded
+[presentation correction](../../f01_presentation_correction_v1_report.md) is
+[owner accepted with limitations](../../f01_narrative_realization_v1_acceptance.md).
+It consumes caller-supplied authoritative context and supports connected expression;
+it adds no general context selection, actor knowledge, memory or upstream system.
+Ordinary gameplay routes and this manifest's broader Partial classification remain
+unchanged. Accepted F01 design remains authoritative.
+
+The original A–D evidence, mixed generic correction and original eight-moment
+connected evaluation remain preserved. The owner found the connected progression
+and pacing satisfactory. The generic instruction revision remains unaccepted.
+The accepted presentation correction improves direct dialogue and selected endings;
+mechanical endings and duration inconsistencies remain. Neither unrestricted
+fidelity nor universal single-call sufficiency is established. No further tuning
+or alternative-architecture evaluation begins at closeout.
+
 Turn authoritative, legitimately accessible material into coherent, selective,
 context-aware expression. Own what to foreground, how to preserve its meaning,
 and how to say it. Narrative Experience governs authored, deterministic,

@@ -1,0 +1,75 @@
+{
+  "frozen_utc": "2026-10-15T17:47:30.734087+00:00",
+  "case_ids": [
+    "J1",
+    "R2",
+    "M3",
+    "P4",
+    "S5",
+    "W6"
+  ],
+  "cases_sha256": "5f3fff1c4cecb2e66b9ad0b226194ea03a794ef5cdf660b127fd3dc5e10f913f",
+  "baseline_component_sha256": "f94bd039eb670ab58c13270f3efda5fd4e7ee6bceca94adb3d2d63a938522e8d",
+  "baseline_instructions_sha256": "58b8ac0977a62ebb731e6076230dfc2c2b0a078fc00524733cb5892bb8584d2a",
+  "settings": {
+    "model": "gpt-6-luna",
+    "reasoning": {
+      "effort": "low"
+    },
+    "max_output_tokens": 2048,
+    "store": false,
+    "timeout_seconds": 20,
+    "max_retries": 0
+  },
+  "schedule": [
+    {
+      "case": "J1",
+      "condition": "baseline"
+    },
+    {
+      "case": "J1",
+      "condition": "revised"
+    },
+    {
+      "case": "R2",
+      "condition": "revised"
+    },
+    {
+      "case": "R2",
+      "condition": "baseline"
+    },
+    {
+      "case": "M3",
+      "condition": "baseline"
+    },
+    {
+      "case": "M3",
+      "condition": "revised"
+    },
+    {
+      "case": "P4",
+      "condition": "revised"
+    },
+    {
+      "case": "P4",
+      "condition": "baseline"
+    },
+    {
+      "case": "S5",
+      "condition": "baseline"
+    },
+    {
+      "case": "S5",
+      "condition": "revised"
+    },
+    {
+      "case": "W6",
+      "condition": "revised"
+    },
+    {
+      "case": "W6",
+      "condition": "baseline"
+    }
+  ],
+  "status": "cases and criteria frozen before instruction revision"
+}

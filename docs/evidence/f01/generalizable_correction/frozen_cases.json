@@ -1,0 +1,101 @@
+{
+  "purpose": "Six independent, stipulated authoritative contexts frozen before the instruction revision. Existing local realization input shape only. No original A-D scenario is reused.",
+  "criteria": {
+    "dimensions": ["consequential fidelity", "epistemic fidelity", "agency", "causal meaning", "natural expression", "regressions"],
+    "classifications": ["confirmed fidelity violation", "meaningful omission", "expression weakness", "harmless narrative variation", "uncertain judgment"],
+    "decision": "Promising only if the three targeted distinctions improve without material regressions. Mixed remains mixed. Cautious but uninformative output and fluent distortion do not count as success. No exact-wording requirement.",
+    "protocol": "One baseline and one revised output per case; twelve calls maximum; identical per-case authoritative context and settings; no retries or post-result revision. Separate stateless requests, no generated-history input. Case order fixed, condition order alternates to avoid putting one condition uniformly first."
+  },
+  "cases": [
+    {
+      "id": "J1",
+      "title": "Arrival with an intended service request",
+      "context": {
+        "moment": "J1",
+        "focus": "Describe the completed walk and arrival outside the jeweler's workshop.",
+        "player_intent": {"objective": "Reach the jeweler's workshop to ask the jeweler to repair the cracked brooch you carry.", "method": "Walk along the familiar lane.", "authorization": "The player authorized walking to the workshop, not entering, handing over property or making a transaction.", "constraints": []},
+        "developments": [{"id":"arrival","meaning":"The walk takes six minutes. You now stand outside the workshop beneath its hanging wooden sign, carrying your cracked brooch. No service request has yet been made.","authority":"Action & Resolution; World Simulation","status":"resolved","source":"Predetermined completed movement and current accessible scene","time":"Just completed; current endpoint","access":"Direct player experience"}],
+        "continuity": [],
+        "knowledge_limits": ["The player's goal identifies the intended jeweler but establishes no current whereabouts, presence or service availability."],
+        "unresolved": ["Whether the jeweler is currently present or available to receive a request."],
+        "boundaries": ["No entering, conversation, repair agreement, payment or property transfer is established."]
+      },
+      "criteria": {"must_preserve":["Completed six-minute walk and outside endpoint","Brooch remains carried; service request not made"],"must_not_establish":["Jeweler presence, absence, availability or refusal","Entry or any transaction"],"quality":["Communicate the useful arrival rather than merely stating what is unknown","Do not recite a list of unperformed transactions; harmless compatible atmosphere allowed"],"mechanisms":["objective versus circumstance","excessive caution regression"]}
+    },
+    {
+      "id": "R2",
+      "title": "Present archivist with an authorized useful answer",
+      "context": {
+        "moment": "R2",
+        "focus": "Deliver the archivist's accepted answer about finding the flood chronicle in the catalog.",
+        "player_intent": {"objective":"Learn which catalog page lists the flood chronicle.","method":"Ask the archivist at the reading-room table.","authorization":"The player asked this question; no archive retrieval or payment is authorized.","constraints":[]},
+        "developments":[{"id":"answer","meaning":"The archivist is seated opposite you and answers that the flood chronicle is listed on page eighteen of the catalog. She personally compiled this catalog entry this morning and is willing to answer this question. The catalog is already open between you.","authority":"Actors & Social Dynamics; World Simulation","status":"established","source":"Predetermined actor presence, legitimate knowledge and accepted reply","time":"Current reply; catalog entry compiled this morning","access":"Player sees the archivist and hears her answer"}],
+        "continuity":[],
+        "knowledge_limits":["The supplied catalog listing does not establish that the physical chronicle is currently on its shelf."],
+        "unresolved":["The chronicle's current shelf availability."],
+        "boundaries":["Do not replace the accepted answer with a refusal, pause or demand for verification.","Do not retrieve the chronicle or make a new player commitment."]
+      },
+      "criteria":{"must_preserve":["Archivist's established presence and willing answer","Page eighteen; known firsthand catalog entry"],"must_not_establish":["Current physical book availability or retrieval","Uncertainty about the supplied accepted answer"],"quality":["Useful answer must be delivered clearly; direct speech or natural summary both valid","Avoid mechanically appending the unrelated shelf-availability limitation"],"mechanisms":["overcaution regression","omitted useful detail regression","boundary versus content"]}
+    },
+    {
+      "id": "M3",
+      "title": "Unexpected release during a resolved mill reset",
+      "context": {
+        "moment":"M3",
+        "focus":"Describe the accepted mill-coupling reset, preserving the timing of the unexpected pressure release and safe completion.",
+        "player_intent":{"objective":"Reset the stalled mill coupling.","method":"Seat a replacement collar and turn the reset screw.","authorization":"The player authorized this reset, stopping if pressure began to vent.","constraints":["No deliberate continuation after recognizing an active pressure release is authorized."]},
+        "developments":[{"id":"reset","meaning":"A brief pressure release begins before the character detects it. The coupling's already-installed automatic safety catch arrests the release and completes the reset before the character can react. The character recognizes what happened only afterward. The mill coupling is now reset, the character is unharmed, four minutes elapsed and one replacement collar was consumed. No knowing decision to ignore the stopping condition occurred.","authority":"Action & Resolution; World Simulation; Character System","status":"resolved","source":"Predetermined accepted action, perception timing and costs","time":"Just completed; recognition follows automatic containment and reset","access":"Player experiences the event and its aftermath; no advance recognition"}],
+        "continuity":[],
+        "knowledge_limits":["The cause of the unexpected pressure release is not established."],
+        "unresolved":["Why pressure vented during the reset."],
+        "boundaries":["No injury, additional damage, further repair or new deliberate player action is established.","Do not invent an underlying fault or imply the player knowingly continued through recognized venting."]
+      },
+      "criteria":{"must_preserve":["Pressure release precedes recognition; automatic containment and reset complete before reaction","Safe reset, unharmed character, four minutes and one collar consumed","No knowing disregard of the conditional authorization"],"must_not_establish":["Advance warning, deliberate override, injury, new fault or extra repair"],"quality":["Make chronology intelligible rather than merely listing a successful endpoint","Do not turn the constraint into an explanatory agency disclaimer"],"mechanisms":["essential causal qualification","cost/detail retention","agency"]}
+    },
+    {
+      "id": "P4",
+      "title": "Recognized warning stops a pump inspection",
+      "context": {
+        "moment":"P4",
+        "focus":"Describe the resolved early stop of the hand-pump inspection.",
+        "player_intent":{"objective":"Inspect the hand-pump's ignition compartment.","method":"Check the casing before opening the ignition-compartment cover.","authorization":"The player authorized inspection only while no fuel odor was detectable; stop on noticing fuel odor.","constraints":["Do not open the compartment after detecting fuel odor."]},
+        "developments":[{"id":"stop","meaning":"Before opening the compartment, the character notices a fuel odor and stops the inspection as authorized. The cover remains closed and the ignition compartment has not been examined. Three minutes were spent checking the casing. No fuel or equipment was consumed and no ignition occurred.","authority":"Action & Resolution; Character System","status":"resolved","source":"Predetermined warning recognition, authorized stop and actual result","time":"Just completed; recognition precedes opening","access":"Player directly smells the odor and experiences stopping"}],
+        "continuity":[],
+        "knowledge_limits":["The odor does not establish the location or cause of any leak."],
+        "unresolved":["The ignition compartment's condition and the source of the odor."],
+        "boundaries":["Do not narrate a completed internal inspection, a diagnosed leak or a repair.","No explosion, injury, opening or additional action occurred."]
+      },
+      "criteria":{"must_preserve":["Fuel odor recognized before opening; inspection stops","Closed cover and unexamined interior; three-minute cost"],"must_not_establish":["Completed inspection, identified leak cause, opening, ignition, injury or repair","Invented equipment consumption"],"quality":["Communicate the useful sensory warning and actual incomplete outcome","No mechanical list of every catastrophe that did not occur"],"mechanisms":["recognized-condition control","causal meaning","useful detail versus caution"]}
+    },
+    {
+      "id": "S5",
+      "title": "A silversmith has not yet answered",
+      "context": {
+        "moment":"S5",
+        "focus":"Continue the exchange after the player asks what metal a bead is made from; the answer remains unresolved.",
+        "player_intent":{"objective":"Ask what metal the bead on the counter is made from.","method":"Question the silversmith already standing opposite you.","authorization":"The player asks only; no assay, purchase or transfer is authorized.","constraints":[]},
+        "developments":[{"id":"pause","meaning":"The player asks about the bead's metal. The silversmith glances at the bead and pauses before answering. The substance of the answer has not been established.","authority":"Player Presentation; Actors & Social Dynamics","status":"established","source":"Predetermined player question and ordinary accepted conversational reaction","time":"Current exchange","access":"Player asks and sees the glance and pause"}],
+        "continuity":[{"id":"scene","meaning":"The player and silversmith face each other across the counter; the bead rests between them.","authority":"World Simulation","status":"established","source":"Stipulated current accessible scene","time":"Current","access":"Direct player observation"}],
+        "knowledge_limits":["The silversmith's knowledge of this bead's composition and willingness to perform an assay are not supplied."],
+        "unresolved":["The bead's composition and the silversmith's substantive reply."],
+        "boundaries":["No metal identification, refusal, assurance, price, purchase or commitment is established.","Do not resolve the exchange or advance the player to a new activity."]
+      },
+      "criteria":{"must_preserve":["Asked question and supplied in-scene reaction; answer remains open"],"must_not_establish":["Composition, assay result, refusal, promise or transaction"],"quality":["An unresolved conversational beat should feel like a scene rather than response-status commentary","A pause alone is legitimate here; no substantive answer is required"],"mechanisms":["control language versus prose","safe but natural restraint"]}
+    },
+    {
+      "id": "W6",
+      "title": "Consequential disagreement between eyewitnesses",
+      "context": {
+        "moment":"W6",
+        "focus":"Answer the player's question about when the festival wagon departed, retaining the unresolved conflict between eyewitness accounts.",
+        "player_intent":{"objective":"Learn whether the festival wagon left before or after the noon bell.","method":"Ask the two dockworkers who have already supplied their accounts.","authorization":"Only this conversation is authorized; no pursuit or accusation.","constraints":[]},
+        "developments":[{"id":"before","meaning":"Dockworker Irena says she saw the festival wagon depart before the noon bell.","authority":"Actors & Social Dynamics","status":"reported","source":"Irena's own eyewitness claim, heard by the player","time":"Claim now about departure earlier today","access":"Player hears Irena's report, not firsthand wagon departure"},{"id":"after","meaning":"Dockworker Tomas says he saw that same wagon depart after the noon bell. Neither account has been independently verified and nothing establishes which is correct.","authority":"Actors & Social Dynamics","status":"reported","source":"Tomas's own eyewitness claim and stipulated verification limits","time":"Claim now about departure earlier today","access":"Player hears Tomas's report, not firsthand wagon departure"}],
+        "continuity":[],
+        "knowledge_limits":["The player has no independent confirmation of departure time, route or current wagon position."],
+        "unresolved":["Whether the wagon left before or after the noon bell."],
+        "boundaries":["Do not resolve the conflicting reports or invent lying, forgetfulness, a second departure, a route or a new witness.","Do not omit the two useful reported times merely because neither is verified."]
+      },
+      "criteria":{"must_preserve":["Irena: before noon bell; Tomas: after noon bell","Same wagon, conflicting attributed reports; actual time unresolved"],"must_not_establish":["Confirmed departure time, witness dishonesty, reconciliatory explanation or investigative lead"],"quality":["Make the conflicting information and uncertainty clear enough for a decision","Do not hide useful accounts behind a generic cannot-know reply; avoid a mechanical verification checklist"],"mechanisms":["necessary explicit uncertainty control","epistemic fidelity","useful detail regression"]}
+    }
+  ]
+}

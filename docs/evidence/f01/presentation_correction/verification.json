@@ -1,0 +1,90 @@
+{
+  "checks": {
+    "exact_twelve_completed_candidates": true,
+    "exact_frozen_schedule": true,
+    "one_verified_transport_call_each": true,
+    "all_provider_responses_completed": true,
+    "all_returned_requested_model": true,
+    "no_context_mutation": true,
+    "cases_and_criteria_unchanged": true,
+    "original_component_preserved": true,
+    "revised_component_unchanged_after_request_freeze": true,
+    "production_change_only_instruction_literal": true,
+    "historical_evidence_owner_save_unchanged": true,
+    "same_settings_all_conditions": true,
+    "prior_experimental_revision_preserved": true,
+    "N1_exact_equal_contexts": true,
+    "N2_exact_equal_contexts": true,
+    "T3_exact_equal_contexts": true,
+    "T4_exact_equal_contexts": true,
+    "I5_exact_equal_contexts": true,
+    "C6_exact_equal_contexts": true
+  },
+  "generations": 12,
+  "input_tokens": 8576,
+  "output_tokens": 675,
+  "reasoning_tokens_included_in_output": 0,
+  "latency_sum_seconds": 27.364536,
+  "words": [
+    {
+      "case": "N1",
+      "condition": "original",
+      "words": 35
+    },
+    {
+      "case": "N1",
+      "condition": "corrected",
+      "words": 29
+    },
+    {
+      "case": "N2",
+      "condition": "corrected",
+      "words": 49
+    },
+    {
+      "case": "N2",
+      "condition": "original",
+      "words": 41
+    },
+    {
+      "case": "T3",
+      "condition": "original",
+      "words": 44
+    },
+    {
+      "case": "T3",
+      "condition": "corrected",
+      "words": 55
+    },
+    {
+      "case": "T4",
+      "condition": "corrected",
+      "words": 59
+    },
+    {
+      "case": "T4",
+      "condition": "original",
+      "words": 54
+    },
+    {
+      "case": "I5",
+      "condition": "original",
+      "words": 49
+    },
+    {
+      "case": "I5",
+      "condition": "corrected",
+      "words": 45
+    },
+    {
+      "case": "C6",
+      "condition": "corrected",
+      "words": 30
+    },
+    {
+      "case": "C6",
+      "condition": "original",
+      "words": 30
+    }
+  ]
+}

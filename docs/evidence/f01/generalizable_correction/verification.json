@@ -1,0 +1,89 @@
+{
+  "checks": {
+    "exact_twelve_completed_candidates": true,
+    "exact_frozen_schedule": true,
+    "one_verified_transport_call_each": true,
+    "all_provider_responses_completed": true,
+    "all_returned_requested_model": true,
+    "no_context_mutation": true,
+    "cases_and_criteria_unchanged": true,
+    "original_component_preserved": true,
+    "revised_component_unchanged_after_request_freeze": true,
+    "production_change_only_instruction_literal": true,
+    "prior_AD_evidence_unchanged": true,
+    "same_settings_all_conditions": true,
+    "J1_exact_equal_contexts": true,
+    "R2_exact_equal_contexts": true,
+    "M3_exact_equal_contexts": true,
+    "P4_exact_equal_contexts": true,
+    "S5_exact_equal_contexts": true,
+    "W6_exact_equal_contexts": true
+  },
+  "generations": 12,
+  "input_tokens": 7016,
+  "output_tokens": 599,
+  "reasoning_tokens_included_in_output": 0,
+  "latency_sum_seconds": 28.598251,
+  "words": [
+    {
+      "case": "J1",
+      "condition": "baseline",
+      "words": 38
+    },
+    {
+      "case": "J1",
+      "condition": "revised",
+      "words": 35
+    },
+    {
+      "case": "R2",
+      "condition": "revised",
+      "words": 27
+    },
+    {
+      "case": "R2",
+      "condition": "baseline",
+      "words": 26
+    },
+    {
+      "case": "M3",
+      "condition": "baseline",
+      "words": 45
+    },
+    {
+      "case": "M3",
+      "condition": "revised",
+      "words": 68
+    },
+    {
+      "case": "P4",
+      "condition": "revised",
+      "words": 50
+    },
+    {
+      "case": "P4",
+      "condition": "baseline",
+      "words": 33
+    },
+    {
+      "case": "S5",
+      "condition": "baseline",
+      "words": 21
+    },
+    {
+      "case": "S5",
+      "condition": "revised",
+      "words": 22
+    },
+    {
+      "case": "W6",
+      "condition": "revised",
+      "words": 36
+    },
+    {
+      "case": "W6",
+      "condition": "baseline",
+      "words": 39
+    }
+  ]
+}

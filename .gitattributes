@@ -1,0 +1,8 @@
+# Preserve the owner-accepted source and frozen evaluation fixture identities.
+/engine/narrative_realization.py -text
+/test_fixtures/f01_connected.json -text
+/test_fixtures/f01_correction_cases.json -text
+/test_fixtures/f01_connected_experience_v1.json -text
+/test_fixtures/f01_presentation_correction_v1.json -text
+# Preserve the historical report's existing final blank line.
+/docs/f01_generalizable_realization_correction_v1.md whitespace=-blank-at-eof

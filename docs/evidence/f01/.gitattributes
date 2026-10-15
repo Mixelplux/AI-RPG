@@ -1,0 +1,9 @@
+# Preserve CRLF evidence bytes while retaining checks for actual whitespace errors.
+** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# Historical transcripts retain their final blank line; the approved Markdown
+# fixture retains its existing trailing spaces (hard line breaks).
+original_ad/transcript.md whitespace=cr-at-eol,-blank-at-eof
+generalizable_correction/transcript.md whitespace=cr-at-eol,-blank-at-eof
+connected_experience/transcript.md whitespace=cr-at-eol,-blank-at-eof
+presentation_correction/transcript.md whitespace=cr-at-eol,-blank-at-eof
+information_sufficiency/approved_fixture.md whitespace=cr-at-eol,-blank-at-eol

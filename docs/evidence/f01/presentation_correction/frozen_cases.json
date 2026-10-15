@@ -1,0 +1,102 @@
+{
+  "purpose":"Six independent authoritative regression contexts for the owner-authorized presentation correction. Freeze before instruction modification. Existing original F01 input shape; no extra runtime fields.",
+  "criteria":{
+    "fidelity":["Accepted outcomes, material costs, agency, attribution, uncertainty, chronology and continuity must retain their meaning","Do not trade fidelity for fluency or omit useful accepted information to avoid invention","Qualitative time must preserve duration scale; precise time remains precise when materially consequential"],
+    "presentation":["Prefer natural direct first-person NPC speech for immediate substantive replies; no fixed script or mandatory speech in other cases","Integrate duration into the supplied activity without inventing intermediate events, new findings or extra effort","Avoid low-value concluding inventories or repeated qualifiers, retaining uncertainty where it changes understanding or choices","Assess relevance and readability rather than exact wording or arbitrary length"],
+    "classifications":["confirmed fidelity violation","meaningful omission","presentation improvement","remaining presentation weakness","harmless variation","uncertain judgment"],
+    "decision":"Report all paired results, including mixed outcomes. No general improvement inferred from isolated favorable examples. Owner already considers the earlier connected sequence's progression and pacing satisfactory; acceptance remains pending the three presentation improvements.",
+    "protocol":"One original and one corrected output per case; twelve live generations maximum, identical per-case authoritative contexts/settings, no retries, substitutions or result-driven changes. Alternate condition order. Criteria remain evaluator-side."
+  },
+  "cases":[
+    {
+      "id":"N1",
+      "title":"A potter answers from firsthand knowledge",
+      "context":{
+        "moment":"N1",
+        "focus":"Give potter Lene's immediate accepted answer to whether the ordered blue bowls are ready.",
+        "player_intent":{"objective":"Ask whether the two blue bowls ordered earlier are ready.","method":"Speak to Lene across her workshop counter.","authorization":"The player asks only; no collection, payment or new order.","constraints":[]},
+        "developments":[{"id":"potter_reply","meaning":"Lene answers that she fired the two blue bowls herself this morning, checked them after they cooled, and the order is ready. She has firsthand knowledge of this completed work. She is at the counter willingly answering the question; the finished bowls are on the rack behind her.","authority":"Actors & Social Dynamics; World Simulation","status":"established","source":"Predetermined legitimate firsthand knowledge, presence and accepted substantive reply","time":"Current exchange about completed work earlier today","access":"Player hears Lene's answer and sees her and the bowls on the rack"}],
+        "continuity":[],
+        "knowledge_limits":["No new price, payment status, ownership transfer or later delivery arrangement is supplied."],
+        "unresolved":[],
+        "boundaries":["Do not complete a transaction, hand over the bowls, make a new promise or invent a defect."]
+      },
+      "criteria":{"must_preserve":["Two blue bowls ready; Lene personally fired and checked them","No transaction or extra promise"],"presentation":["Meaningful immediate answer preferably in Lene's own direct speech","Do not append an inventory of payments, transfers or arrangements that did not occur"],"regressions":["No invented commitments or withholding the useful answer"]}
+    },
+    {
+      "id":"N2",
+      "title":"A miller relays a knowledge-bounded secondhand account",
+      "context":{
+        "moment":"N2",
+        "focus":"Answer the player's barge question through miller Daro's legitimate but limited account.",
+        "player_intent":{"objective":"Ask whether the red-sailed barge reached the town.","method":"Ask Daro beside the mill's open doorway.","authorization":"Only this question is authorized; no travel, pursuit or bargain.","constraints":[]},
+        "developments":[{"id":"barge_report","meaning":"Daro answers that carpenter Tavi told him she saw the red-sailed barge pass the old causeway at dusk yesterday. Daro did not see it himself. The causeway is outside town; this report does not establish that the barge reached town, and Daro does not know where it is now. He willingly communicates this answer.","authority":"Actors & Social Dynamics","status":"reported","source":"Tavi's claimed sighting relayed by Daro; no independent confirmation","time":"Reply now about reported sighting yesterday at dusk","access":"Player hears Daro's report; neither narrator context nor player receives a firsthand barge observation"}],
+        "continuity":[{"id":"presence","meaning":"Daro and the player are beside the mill doorway during an ordinary conversation. The old causeway is a familiar landmark outside town.","authority":"World Simulation; Character System","status":"established","source":"Stipulated current presence and ordinary legitimate familiarity","time":"Current","access":"Direct observation and established landmark knowledge"}],
+        "knowledge_limits":["Daro knows Tavi's account, not the barge's current position or confirmed arrival in town."],
+        "unresolved":["Whether the barge reached town and its current whereabouts."],
+        "boundaries":["Do not turn a secondhand report into Daro's firsthand sighting, a confirmed town arrival or a navigable lead.","No new actor motive, verification or commitment is supplied."]
+      },
+      "criteria":{"must_preserve":["Tavi to Daro to player source chain; causeway/dusk/yesterday","Daro did not see it; arrival in town and current location unestablished"],"presentation":["Prefer a natural direct reply without losing attributed secondhand status","Retain useful uncertainty because it answers the actual question; no generic caution substitute for the report"],"regressions":["Fluent speech must not become firsthand confirmation or erase useful source/time information"]}
+    },
+    {
+      "id":"T3",
+      "title":"An ordinary extended sorting activity",
+      "context":{
+        "moment":"T3",
+        "focus":"Describe the completed extended sorting of seed packets in the garden shed.",
+        "player_intent":{"objective":"Sort mixed seed packets by the batch codes already stamped on their labels.","method":"Check faded labels, group the packets and check the finished piles against the written list.","authorization":"The player authorized this sorting only, without opening packets or testing their contents.","constraints":[]},
+        "developments":[{"id":"sorting","meaning":"The player spends ninety minutes checking faded labels, grouping the mixed packets by their existing batch codes, and checking the piles against the written list. The sorting is completed accurately. No packet is opened, no seed is consumed, and no new information about the packets' contents is obtained. The work occupies a substantial stretch of the afternoon; there is no deadline or competing timed event.","authority":"Action & Resolution; World Simulation","status":"resolved","source":"Predetermined completed ordinary activity and actual elapsed time","time":"Just completed after ninety minutes of work","access":"Player experiences the sustained work and has a rough sense of duration, without an established clock reading"}],
+        "continuity":[{"id":"shed","meaning":"The work takes place at the garden shed table with the existing labeled packets and written list. Conditions remain ordinary and unchanged.","authority":"World Simulation","status":"established","source":"Stipulated accessible workspace","time":"Throughout the activity","access":"Direct player observation"}],
+        "knowledge_limits":["Batch-label sorting establishes no inspection or verification of the actual seeds."],
+        "unresolved":[],
+        "boundaries":["Do not invent a discovery, damaged packet, planted seed, interruption or additional task."]
+      },
+      "criteria":{"must_preserve":["Successful sorting by existing labels, not actual seed examination","Ninety minutes' sustained scale; no new finding or material consumption"],"presentation":["Duration should feel part of sustained label-checking/grouping/list-checking rather than a detached time announcement","Qualitative duration appropriate where precision is not material; do not imply a brief glance, several hours or all-day work"],"regressions":["No invented intervening events, extra costs or omitted useful completion"]}
+    },
+    {
+      "id":"T4",
+      "title":"A precise deadline with conditional authorization and an ink blot",
+      "context":{
+        "moment":"T4",
+        "focus":"Describe the resolved copying task, its unintended blot, and the precise remaining courier deadline.",
+        "player_intent":{"objective":"Copy the required permit before the courier departs.","method":"Use the supplied template, paper and pen at the permit-office desk.","authorization":"The player authorized copying, stopping if ink began to bleed on the sheet; no departure from the office is authorized yet.","constraints":["Do not knowingly continue after noticing bleeding ink; do not decide whether to leave for the courier."]},
+        "developments":[{"id":"copy_and_blotted_margin","meaning":"The permit copy is completed legibly. An ink blot begins in its margin before the player notices it; on noticing, the player stops using the pen. The blot remains confined to the margin and no required text is obscured. The work, including stopping, took exactly twelve minutes. The supplied paper and ink used for this copy are consumed as accepted; no second sheet is used.","authority":"Action & Resolution; Character System","status":"resolved","source":"Predetermined accepted completion, perceptual timing, unintended consequence and material costs","time":"Just completed; blot begins before recognition and immediate stop","access":"Player observes the finished sheet and blot and experiences stopping"},{"id":"deadline","meaning":"The wall clock shows that eight minutes remain until the courier's fixed departure. Twenty minutes remained when copying began. The player knows the normal authorized public walk to the courier platform takes seven minutes. No delay to the courier or change in departure time is established.","authority":"World Simulation; Character System","status":"established","source":"Stipulated clock reading, known departure and familiar journey duration","time":"Current after the twelve-minute task","access":"Player can read the clock and legitimately knows the departure and walk time"}],
+        "continuity":[],
+        "knowledge_limits":["No new courier agreement, route shortcut or assurance of an exception is supplied."],
+        "unresolved":["Whether the player will choose to leave for the platform."],
+        "boundaries":["Do not erase the blot, obscure required text, change elapsed time, imply knowing disregard of bleeding ink or choose the next action.","Time precision matters to the available decision; do not replace it with an ambiguous short while."]
+      },
+      "criteria":{"must_preserve":["Legible completed copy, blot confined to margin, onset before recognition and stop","Twelve minutes spent, eight left before departure, known seven-minute walk","Actual one-copy material use, no second sheet or forced departure"],"presentation":["Integrate time with activity while preserving decision-relevant precision","Do not bury the useful deadline under a list of non-events; derived one-minute margin is permissible but not required"],"regressions":["No lost deadline information, extra time/cost, erased consequence, invented transport promise or player choice"]}
+    },
+    {
+      "id":"I5",
+      "title":"An investigation that needs meaningful uncertainty",
+      "context":{
+        "moment":"I5",
+        "focus":"Communicate the greenhouse inspection's actual findings and limits on identifying an entrant or following their path.",
+        "player_intent":{"objective":"Examine the disturbed soil in the greenhouse aisle to learn who passed through.","method":"Inspect the partial impressions amongst the spilled soil.","authorization":"Local visual inspection only; no pursuit or accusation.","constraints":[]},
+        "developments":[{"id":"impressions","meaning":"The inspection finds partial boot impressions in the spilled soil, confirming that someone passed through the aisle. The marks do not identify the person, number of visits or direction of travel, and there is no continuous trail that can be followed. The inspection takes a few minutes. No damage beyond the already disturbed soil is established.","authority":"Action & Resolution; Character System","status":"resolved","source":"Predetermined accepted evidence finding and epistemic limitations","time":"Just completed","access":"Player directly sees the partial marks; no knowledge of their maker"}],
+        "continuity":[{"id":"setting","meaning":"The player remains in the greenhouse aisle, with the disturbed soil and partial marks visible under the benches. No suspect has been named or witnessed here.","authority":"World Simulation","status":"established","source":"Stipulated current accessible scene","time":"Current","access":"Direct player observation"}],
+        "knowledge_limits":["No supplied competence or observation identifies the entrant or yields a usable trail."],
+        "unresolved":["Who passed through, how often, and where they went."],
+        "boundaries":["Do not change signs found without a usable trail into no signs, an identified visitor or a trail followed and lost.","Do not invent a culprit, cause for the soil disturbance or a new clue."]
+      },
+      "criteria":{"must_preserve":["Actual partial boot impressions support passage, not identification or direction","No continuous usable trail; a few minutes of inspection"],"presentation":["State enough uncertainty to answer the player's who question faithfully","Do not suppress useful signs or give only a generic lack-of-knowledge response; avoid an exhaustive explanatory ending"],"regressions":["No erased epistemic limits for fluency and no invented investigation progress"]}
+    },
+    {
+      "id":"C6",
+      "title":"An ordinary continuation with irrelevant unresolved history",
+      "context":{
+        "moment":"C6",
+        "focus":"Continue the quiet reading-room scene through the player's accepted sketching activity.",
+        "player_intent":{"objective":"Return to sketching the leaf already set out on the desk.","method":"Use the player's pencil to sketch the visible leaf on the existing sketch page.","authorization":"The player authorized this ordinary sketching only; no renewed inquiry or new task.","constraints":[]},
+        "developments":[{"id":"sketch","meaning":"The player settles back to sketching the leaf's outline and veins for a short while. The leaf lies beside a small water jar on the same reading-room desk. Light from the window falls across the page. No consequential finding or other change occurs.","authority":"Action & Resolution; World Simulation","status":"established","source":"Predetermined accepted ordinary continuation and accessible sensory context","time":"Immediately after a separate conversation; no meaningful time pressure","access":"Player sees and performs the sketching"}],
+        "continuity":[{"id":"old_report","meaning":"Earlier, the librarian said she did not know who had borrowed an atlas. That question remains unresolved, but the player has turned attention back to the sketch. Nothing about the atlas affects this activity.","authority":"Actors & Social Dynamics; Character System","status":"reported","source":"Earlier retained librarian account, not current focus or a new report","time":"Earlier in the same visit","access":"Player remembers the conversation; it need not be repeated for the sketch to be intelligible"},{"id":"room","meaning":"The player remains at the same quiet reading-room desk. The pencil, sketch page, leaf and water jar are already established. No location transition or new arrival occurs.","authority":"World Simulation","status":"established","source":"Unchanged accessible scene","time":"Current","access":"Direct observation"}],
+        "knowledge_limits":["No new information about the atlas borrower is acquired by sketching."],
+        "unresolved":["The irrelevant atlas-borrower question remains open."],
+        "boundaries":["Do not introduce a clue, NPC answer, new character arrival or consequential player choice.","No action beyond the ordinary supplied sketching is established."]
+      },
+      "criteria":{"must_preserve":["Ordinary leaf sketching at the same desk; no new investigation finding or consequential action"],"presentation":["Keep the relevant sketching and sensory detail in focus","Do not recap the atlas uncertainty, inventory non-actions or manufacture dialogue/drama"],"regressions":["No enforced dialogue in a non-conversational scene; no manufactured clue or importance"]}
+    }
+  ]
+}

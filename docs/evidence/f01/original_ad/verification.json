@@ -1,0 +1,18 @@
+{
+  "checks": {
+    "exact_four_records_in_order": true,
+    "four_nonempty_structurally_valid_candidates": true,
+    "exact_serialized_requests": true,
+    "fixture_unchanged_since_preparation": true,
+    "component_unchanged_since_preparation": true,
+    "fixture_input_not_mutated": true,
+    "requested_configuration": true
+  },
+  "words_per_moment": {
+    "A": 42,
+    "B": 30,
+    "C": 32,
+    "D": 24
+  },
+  "limits": "No semantic scoring; returned model, usage and per-call timing were not captured by the reused text-only adapter. Configuration is requested configuration, not independently observed response metadata."
+}
