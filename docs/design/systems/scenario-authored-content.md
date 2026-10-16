@@ -79,6 +79,17 @@ and ADR-059. The following summarize that direction, not new runtime guarantees:
 - **Stable references support continuity.** Preserve supported identity without
   turning every noun, anonymous person or lore fact into a simulated entity.
 
+### F05 bounded scenario material
+
+**Accepted design:** [F05 integration and later evaluation](../f05-authorized-activities-and-player-control.md#f01-integration-and-later-evaluation)
+allows bounded authoritative circumstances and interactions for future
+implementation/evaluation without complete upstream systems. Predetermined
+fixtures must conform to F01's accepted information contract, preserve player
+decisions and supply legitimate results; prose cannot manufacture missing truth.
+Detailed playable scenarios and their integration milestone remain deferred in
+[DF-009](../../deferred_findings.md#df-009--bounded-f01f05-playable-scenario-evaluation).
+No content format, scenario framework or runtime change is selected here.
+
 ## Current model
 
 Three **Provisional** conceptual responsibilities are sufficient. They are not

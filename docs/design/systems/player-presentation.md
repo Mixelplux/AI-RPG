@@ -109,6 +109,19 @@ and ADR-027–033, 049–051 and 055–061 in the [decision ledger](../../decisi
 These principles synthesize existing authority, agency and comprehension direction.
 They do not claim every current route satisfies the intended experience.
 
+### F05 player control
+
+**Accepted design; implementation remains bounded:** canonical
+[F05](../f05-authorized-activities-and-player-control.md) distinguishes contextual
+inquiry, preparation and commitment without requiring special command syntax.
+A coherent activity may include routine steps and dialogue; it does not authorize
+a queue of separate decisions or consequential methods chosen for the player.
+Return control for a meaningful player-owned choice with a legitimate opportunity
+to respond, including perceptible increased discovery risk for a potentially
+objectionable activity. Do not require continuous approval or elaborate conditional
+programs. Independent bribes, promises, threats, protected disclosures or changes
+of approach return control. These are gameplay boundaries, not parser/UI changes.
+
 ## Current model
 
 Three **Provisional** responsibilities are sufficient; no new modules or general

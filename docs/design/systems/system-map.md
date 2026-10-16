@@ -63,6 +63,35 @@ transition. Persistence/history preserve enough provenance when future reasoning
 requires established causal meaning; this does not prescribe exhaustive event
 sourcing, continuous simulation, a generalized causal engine, or a scheduler.
 
+## F01–F05 design integration boundaries
+
+**Accepted design; implementation not authorized here.**
+[F05 — Authorized Activities and Player Control](../f05-authorized-activities-and-player-control.md)
+is the canonical authority for D1–D6 and the accepted clarifications. It defines
+the player's authorization and return of control across existing responsibilities,
+not a ninth system, scheduler or new architectural layer.
+[F01](../f01-truthful-presentation-and-epistemic-fidelity.md) retains its
+information and fidelity requirements. This is the bounded F01–F05 integration
+boundary supplied by F05; the reference baseline contains no separate canonical
+F02–F04 design records, and no decisions for them are inferred here.
+
+| Responsibility | Retained boundary under F05 |
+|---|---|
+| Human player / Player Presentation | Player owns consequential choices; input distinguishes inquiry, preparation and commitment in context. Return control at meaningful player-owned decisions with a legitimate opportunity to respond, including discovery-sensitive interruption. No special command syntax is required by the design. |
+| Action & Resolution | Establish eligible attempts, resolution, costs and results using available prerequisites. Mechanical resolution, fictional execution and durable changes differ; an already resolved attempt is not rerolled merely because its presentation paused. |
+| World Simulation | Establish external developments, elapsed time, physical changes and traces. Avoiding personal detection does not establish that evidence of the activity went unnoticed. |
+| Character System | Supply established capability, legitimate means and informational access. Competent execution creates no missing prerequisites; unperceived developments need not interrupt or disclose hidden truth. |
+| Actors & Social Dynamics | Establish meaningful NPC decisions, observations, reports and responses. Routine dialogue may accompany an activity; independent consequential player commitments or disclosures return control. |
+| Narrative Experience / F01 | Express supplied authoritative, character-accessible information. Realization cannot execute another action, invent consequential progress or agreements, repair failure, or grant knowledge of hidden developments. |
+| Scenario & Authored Content | Supply bounded circumstances and supported interaction material. Predetermined implementation/evaluation fixtures must satisfy F01's information contract; they do not relax it or require complete upstream systems. |
+| Persistence | Preserve supported established meaning across restoration; F05 selects no new storage, progress checkpoint, save version or migration. Gameplay owners determine what resumption means under current circumstances. |
+
+The [later bounded playable-scenario evaluation](../../deferred_findings.md#df-009--bounded-f01f05-playable-scenario-evaluation)
+follows bounded F05 implementation only when separately authorized. Candidate
+themes are damaged gate, inn confrontation and disappearing trail. Detailed
+scenario design and the integration milestone remain deferred; no package or
+lifecycle state changes through this documentation incorporation.
+
 ## Dependencies and information flow around World Simulation
 
 | From → To | Information / dependency | Current status |

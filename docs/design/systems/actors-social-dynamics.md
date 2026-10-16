@@ -84,6 +84,17 @@ Apply the [shared doctrines](README.md#shared-doctrines),
   established consequential facts constrain later inference.
 - Decisions and consequences have distinct owners even in one atomic transition.
 
+### F05 discovery and conversational decisions
+
+**Accepted design:** [F05 D4 and dialogue boundaries](../f05-authorized-activities-and-player-control.md#d4--meaningful-and-discovery-sensitive-interruption)
+preserve actor authority over observations and responses. Potentially
+objectionable describes the player's activity in context, not a witness's
+attitude; avoiding identification does not establish unnoticed traces. Routine
+conversation may proceed within authorization, while consequential player bribes,
+promises, threats, protected disclosures and approach changes return control.
+Narration cannot invent agreements or actor decisions. No general NPC simulation
+or morality/alignment system is selected.
+
 ## Current model
 
 Three **Provisional** conceptual responsibilities are sufficient for this review;

@@ -48,6 +48,16 @@ Intentional unresolved questions remain deferred. Completion selects no
 implementation package or next milestone. These living manifests and their
 responsibility model may be revised when future evidence supports a better model.
 
+## Accepted design integration
+
+[F01](../f01-truthful-presentation-and-epistemic-fidelity.md) and
+[F05 — Authorized Activities and Player Control](../f05-authorized-activities-and-player-control.md)
+are canonical accepted Design records. Their
+[integration boundaries](system-map.md#f01f05-design-integration-boundaries)
+refine intended gameplay without changing the manifests' implementation status,
+selecting modules or extending the shared doctrines below. F05 incorporation is
+proposed for owner review; no implementation or integration milestone is staged.
+
 ## Shared doctrines
 
 These centrally recorded doctrines apply across responsibilities. Existing

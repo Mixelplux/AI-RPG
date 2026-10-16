@@ -87,6 +87,16 @@ knowledge, relationships, or motivations. This is **Accepted design**, not an
 implemented character-replacement mechanism. The campaign's persistence beyond
 a protagonist does not prohibit durable state for the current character.
 
+### F05 capability and access boundary
+
+**Accepted design:** [F05 D4–D6](../f05-authorized-activities-and-player-control.md#d4--meaningful-and-discovery-sensitive-interruption)
+assumes competent routine execution only within established capabilities, chosen
+method, circumstances and legitimately available means. It creates no missing
+tools, supplies, knowledge or permissions; incidental resources follow the
+existing Specificity Doctrine. Legitimate awareness and opportunity to respond
+constrain interruption; hidden developments need not be revealed. This adds no
+inventory, perception, memory or character-values mechanic.
+
 ## Current model
 
 Use three working responsibilities rather than a separate subsystem for every

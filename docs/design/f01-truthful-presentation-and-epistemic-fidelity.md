@@ -264,6 +264,14 @@ The linked manifests retain their implementation classifications and authority.
 | [Player Presentation](systems/player-presentation.md) | Display sufficient supplied context, choices, results and material corrections intelligibly; preserve the distinction between technical failure and fictional outcome. F01 selects no layout or input mechanism. |
 | [Persistence](systems/persistence.md) | Preserve supported accepted meaning and selectively required provenance across restoration. Gameplay owners determine retention needs; storage does not choose relevance, grant access or establish new facts. |
 
+[F05 — Authorized Activities and Player Control](f05-authorized-activities-and-player-control.md)
+now records the accepted authorization, interruption and resumption boundaries.
+F01's information contract remains unchanged: realization cannot execute actions
+or create consequential progress. Future bounded F01–F05 playable situations and
+their [separately authorized evaluation](../deferred_findings.md#df-009--bounded-f01f05-playable-scenario-evaluation)
+must satisfy that contract even with predetermined fixtures; no full upstream
+system or integration milestone is authorized by this cross-reference.
+
 **Deferred Character System dependency:** the
 [accepted D8 clarification](#f01-d8--selective-consequential-provenance) supplies
 significance-based retention and relevance-based recall as the working design

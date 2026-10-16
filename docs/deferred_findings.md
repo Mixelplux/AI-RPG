@@ -181,3 +181,28 @@ production architecture or an accepted general capability.
   observation while preserving simulation authority, costs, discoveries, history,
   receipts and provider fail-closed behavior. Expected provider unavailability and
   fallback experience quality must be evaluated separately.
+
+## DF-009 — Bounded F01–F05 playable-scenario evaluation
+
+- Deferred activity: after bounded F05 implementation, evaluate F01–F05 together
+  through scenario-specific playable situations. Candidate themes are damaged
+  gate, inn confrontation and disappearing trail; detailed scenarios are deferred.
+- Accepted source: [F05 integration and later evaluation](design/f05-authorized-activities-and-player-control.md#f01-integration-and-later-evaluation),
+  owner-accepted October 16, 2026 at reference baseline
+  `21a5b1e39b2691e4221967d2029b63ff1cedfc8f`.
+- Responsible boundaries: F05 governs player authorization and return of control;
+  owning gameplay systems establish circumstances, attempts, costs, outcomes,
+  knowledge, actor decisions and consequences; F01 expresses only supplied
+  authoritative, character-accessible information under its unchanged contract.
+- Disposition: deferred and unscheduled. Bounded interactions and authoritative
+  scenario circumstances may substitute for complete upstream systems, but
+  predetermined fixtures must conform to F01's contract. No general activity
+  scheduler, progress meter, conditional action language, inventory, morality,
+  NPC/physics simulation or character-values/oath mechanic is implied.
+- Resolution conditions: separately authorize bounded F05 implementation and,
+  later, the integration/evaluation milestone and detailed scenario scope.
+  Evaluate meaningful gameplay evidence for authorization, discovery-sensitive
+  interruption, prerequisites, preserved results, resumption and consequential
+  conversation together with F01 fidelity. Broader interruption, missed-choice,
+  knowledge-leak and timing risks warrant investigation when gameplay evidence
+  makes them material; this entry begins no evaluation or package.

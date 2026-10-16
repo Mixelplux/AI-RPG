@@ -75,6 +75,16 @@ with ADR-012, ADR-059 and Story-First Part I.
   This implemented choice has revision-compatibility limits, not a guarantee that
   any future source at the same path preserves meaning.
 
+### F05 established results and resumption
+
+**Accepted design:** [F05 D6](../f05-authorized-activities-and-player-control.md#d6--preserve-established-results-and-consequences)
+preserves established results, costs and consequences across interruption and
+technical boundaries. Fictional partial progress is not automatically a durable
+mechanical checkpoint. Whether to resume, restart or make a new attempt follows
+the activity, rules, accepted resolution and current circumstances; presentation
+interruption alone cannot reroll a resolved attempt. This imposes no new save
+schema, activity ledger, migration or guarantee that every narrated detail persists.
+
 ## Current model
 
 Three **Provisional** conceptual responsibilities suffice; no runtime module split

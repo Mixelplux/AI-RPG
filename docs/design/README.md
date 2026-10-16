@@ -19,3 +19,9 @@ Existing sources remain at their original paths:
   including revised D10; documentation consolidation proposed for owner review.
   Includes deferred Character System retention/recall and proportional extended-beta
   validation. Implementation and evaluation require separate authorization.
+
+- [F05 — Authorized Activities and Player Control](f05-authorized-activities-and-player-control.md) — owner-accepted D1–D6 and clarifications,
+  including discovery-sensitive interruption, available means, preserved results,
+  resumption and consequential dialogue. Canonical incorporation proposed for
+  owner review; implementation and later bounded F01–F05 playable evaluation
+  require separate authorization.

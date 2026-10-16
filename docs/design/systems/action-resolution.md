@@ -107,6 +107,20 @@ Apply the [shared doctrines](README.md#shared-doctrines),
 The exact d6 bands, one-attempt restriction and survey costs below are accepted
 slice rules, not universal versions of these principles.
 
+### F05 authorization and continuity
+
+**Accepted design; not a claim of implemented support:** canonical
+[F05 D1–D6](../f05-authorized-activities-and-player-control.md#accepted-decisions)
+bounds coherent activity, inquiry/preparation/commitment, resolution and return
+of control. Advance only as authorization, rules and circumstances permit;
+routine events alone need not interrupt. Competence cannot create prerequisites,
+guarantee success or select a materially different or costly method. Mechanical
+resolution, fictional execution and durable progress differ: resumption depends
+on the activity and current circumstances, and presentation interruption alone
+does not justify rerolling an already resolved attempt. Established costs,
+elapsed time, findings and consequences remain. This selects no general activity
+framework or progress representation; existing bounded replay rules remain scoped.
+
 ## Current model
 
 Three working responsibilities suffice. This decomposition is **Provisional**;

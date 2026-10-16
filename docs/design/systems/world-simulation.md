@@ -74,6 +74,17 @@ secrets, important relocations, and player-established alterations may justify
 history. Routine inventory churn, ordinary maintenance, and moved furniture
 normally do not. These examples guide future design, not existing schemas.
 
+### F05 changing circumstances and traces
+
+**Accepted design:** [F05 D3–D6](../f05-authorized-activities-and-player-control.md#d3--resolution-boundary)
+preserves legitimately established time, physical changes, spent resources,
+findings and consequences through interruption or withdrawal. Perceptible
+increased discovery risk can justify returning control before a witness appears
+or reacts; unperceived events need not interrupt or reveal hidden information.
+A character remaining unidentified does not imply opened crates or other evidence
+went unnoticed. Resumption uses current circumstances, without restoring earlier
+conditions or erasing traces. No scheduler or general physics simulation follows.
+
 ## Current model
 
 The following decomposition is **Provisional** conceptual structure, not a claim

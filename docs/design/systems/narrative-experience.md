@@ -337,6 +337,15 @@ direction. Sprint 10.80 explicitly permits compatible incidental expression and
 bounded session continuity. Its later accepted ordinary-player route is material
 evidence when reading older preview-only descriptions.
 
+[F05 — Authorized Activities and Player Control](../f05-authorized-activities-and-player-control.md)
+adds accepted authorization and interruption boundaries. F01 realizes only
+supplied authoritative, character-accessible information: no second action
+execution or check, invented consequential progress, repaired failure, hidden
+knowledge, or new consequential agreement/disclosure. A presentation pause does
+not erase an accepted result or itself create a mechanical checkpoint. Routine
+dialogue can express established NPC replies within the authorized activity.
+This is accepted design, not additional implemented support.
+
 ## Provisional decisions
 
 The three responsibilities, practical fidelity/comprehension/continuity/style
