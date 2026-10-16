@@ -1,0 +1,601 @@
+{
+  "status": "Predetermined offline test authority, not accepted gameplay outcomes or a general upstream implementation.",
+  "design_baseline": "342b9a4670131a22535a3b436e323684c6ab74b3",
+  "hidden_test_sentinel": "concealed_witness_17",
+  "cases": [
+    {
+      "id": "footsteps_during_lockpicking",
+      "authorization": {
+        "purpose": "open the archive lock",
+        "method": "established lockpicks"
+      },
+      "checkpoint": {
+        "purpose": "open the archive lock",
+        "method": "established lockpicks",
+        "resolution_ref": "lock-attempt-1",
+        "developments": [
+          {
+            "kind": "increased_discovery_risk",
+            "potentially_objectionable": true,
+            "choice_key": "footsteps_at_door"
+          }
+        ]
+      },
+      "expected": [
+        "control",
+        "discovery_risk",
+        "reuse"
+      ],
+      "f01_context": {
+        "moment": "footsteps_during_lockpicking",
+        "focus": "open the archive lock",
+        "player_intent": {
+          "objective": "open the archive lock",
+          "method": "established lockpicks",
+          "authorization": "Only this coherent undertaking by this chosen method; independent consequential choices remain player-owned.",
+          "constraints": []
+        },
+        "developments": [
+          {
+            "id": "footsteps_during_lockpicking-current",
+            "meaning": "During unauthorized lockpicking you hear approaching footsteps. They materially increase the possibility that your activity will be observed; you can pause and respond before anyone reaches the doorway.",
+            "authority": "Action & Resolution",
+            "status": "established",
+            "source": "stipulated offline F05 fixture footsteps_during_lockpicking-current",
+            "time": "current",
+            "access": "Explicitly available to the player character in this fixture"
+          }
+        ],
+        "continuity": [
+          {
+            "id": "footsteps_during_lockpicking-retained-0",
+            "meaning": "The skill attempt was already resolved successfully; fictional execution has not finished.",
+            "authority": "Action & Resolution",
+            "status": "established",
+            "source": "stipulated offline F05 fixture footsteps_during_lockpicking-retained-0",
+            "time": "established earlier",
+            "access": "Explicitly available to the player character in this fixture"
+          },
+          {
+            "id": "footsteps_during_lockpicking-retained-1",
+            "meaning": "Two minutes have elapsed. Your lockpicks are established and available.",
+            "authority": "Action & Resolution",
+            "status": "established",
+            "source": "stipulated offline F05 fixture footsteps_during_lockpicking-retained-1",
+            "time": "established earlier",
+            "access": "Explicitly available to the player character in this fixture"
+          }
+        ],
+        "knowledge_limits": [
+          "Only supplied accessible meaning is known; risk does not establish an observer's identity, knowledge or reaction."
+        ],
+        "unresolved": [
+          "No independent consequential method, agreement or disclosure has been selected."
+        ],
+        "boundaries": [
+          "Do not execute actions, reroll accepted results, erase costs or invent consequential progress."
+        ]
+      }
+    },
+    {
+      "id": "warehouse_after_hiding",
+      "authorization": {
+        "purpose": "search the remaining crates",
+        "method": "open and inspect"
+      },
+      "checkpoint": {
+        "purpose": "search the remaining crates",
+        "method": "open and inspect",
+        "resolution_ref": "crate-search-1",
+        "developments": [
+          {
+            "kind": "player_choice",
+            "choice_key": "continue_with_disturbed_crates"
+          }
+        ]
+      },
+      "expected": [
+        "control",
+        "player_choice",
+        "reuse"
+      ],
+      "f01_context": {
+        "moment": "warehouse_after_hiding",
+        "focus": "search the remaining crates",
+        "player_intent": {
+          "objective": "search the remaining crates",
+          "method": "open and inspect",
+          "authorization": "Only this coherent undertaking by this chosen method; independent consequential choices remain player-owned.",
+          "constraints": []
+        },
+        "developments": [
+          {
+            "id": "warehouse_after_hiding-current",
+            "meaning": "You remain unidentified after hiding, but a guard visibly notices the opened crates. Whether to continue searching under these changed circumstances is your choice.",
+            "authority": "Action & Resolution",
+            "status": "established",
+            "source": "stipulated offline F05 fixture warehouse_after_hiding-current",
+            "time": "current",
+            "access": "Explicitly available to the player character in this fixture"
+          }
+        ],
+        "continuity": [
+          {
+            "id": "warehouse_after_hiding-retained-0",
+            "meaning": "The first two crates were searched; their contents and disturbances remain established.",
+            "authority": "Action & Resolution",
+            "status": "established",
+            "source": "stipulated offline F05 fixture warehouse_after_hiding-retained-0",
+            "time": "established earlier",
+            "access": "Explicitly available to the player character in this fixture"
+          },
+          {
+            "id": "warehouse_after_hiding-retained-1",
+            "meaning": "Five minutes and the accepted findings remain; no claim that the activity went unnoticed is established.",
+            "authority": "Action & Resolution",
+            "status": "established",
+            "source": "stipulated offline F05 fixture warehouse_after_hiding-retained-1",
+            "time": "established earlier",
+            "access": "Explicitly available to the player character in this fixture"
+          }
+        ],
+        "knowledge_limits": [
+          "Only supplied accessible meaning is known; risk does not establish an observer's identity, knowledge or reaction."
+        ],
+        "unresolved": [
+          "No independent consequential method, agreement or disclosure has been selected."
+        ],
+        "boundaries": [
+          "Do not execute actions, reroll accepted results, erase costs or invent consequential progress."
+        ]
+      }
+    },
+    {
+      "id": "warehouse_access_blocked",
+      "authorization": {
+        "purpose": "search the remaining crates",
+        "method": "open and inspect"
+      },
+      "checkpoint": {
+        "purpose": "search the remaining crates",
+        "method": "open and inspect",
+        "blocked": true,
+        "resolution_ref": "crate-search-1"
+      },
+      "expected": [
+        "control",
+        "cannot_proceed",
+        "reuse"
+      ],
+      "f01_context": {
+        "moment": "warehouse_access_blocked",
+        "focus": "search the remaining crates",
+        "player_intent": {
+          "objective": "search the remaining crates",
+          "method": "open and inspect",
+          "authorization": "Only this coherent undertaking by this chosen method; independent consequential choices remain player-owned.",
+          "constraints": []
+        },
+        "developments": [
+          {
+            "id": "warehouse_access_blocked-current",
+            "meaning": "The warehouse door is now visibly sealed and your established approach cannot reach the remaining crates.",
+            "authority": "Action & Resolution",
+            "status": "established",
+            "source": "stipulated offline F05 fixture warehouse_access_blocked-current",
+            "time": "current",
+            "access": "Explicitly available to the player character in this fixture"
+          }
+        ],
+        "continuity": [
+          {
+            "id": "warehouse_access_blocked-retained-0",
+            "meaning": "Searched crates, disturbances, elapsed time and accepted findings remain established.",
+            "authority": "Action & Resolution",
+            "status": "established",
+            "source": "stipulated offline F05 fixture warehouse_access_blocked-retained-0",
+            "time": "established earlier",
+            "access": "Explicitly available to the player character in this fixture"
+          }
+        ],
+        "knowledge_limits": [
+          "Only supplied accessible meaning is known; risk does not establish an observer's identity, knowledge or reaction."
+        ],
+        "unresolved": [
+          "No independent consequential method, agreement or disclosure has been selected."
+        ],
+        "boundaries": [
+          "Do not execute actions, reroll accepted results, erase costs or invent consequential progress."
+        ]
+      }
+    },
+    {
+      "id": "spell_restart",
+      "authorization": {
+        "purpose": "cast the established spell",
+        "method": "specified casting"
+      },
+      "checkpoint": {
+        "purpose": "cast the established spell",
+        "method": "specified casting",
+        "restart_required": true,
+        "resolution_ref": "interrupted-casting-1"
+      },
+      "expected": [
+        "control",
+        "restart_requires_authorization",
+        "new_attempt_required"
+      ],
+      "f01_context": {
+        "moment": "spell_restart",
+        "focus": "cast the established spell",
+        "player_intent": {
+          "objective": "cast the established spell",
+          "method": "specified casting",
+          "authorization": "Only this coherent undertaking by this chosen method; independent consequential choices remain player-owned.",
+          "constraints": []
+        },
+        "developments": [
+          {
+            "id": "spell_restart-current",
+            "meaning": "The casting was interrupted. The applicable stipulated spell rule requires a fresh casting attempt; no new attempt has been authorized or resolved.",
+            "authority": "Action & Resolution",
+            "status": "established",
+            "source": "stipulated offline F05 fixture spell_restart-current",
+            "time": "current",
+            "access": "Explicitly available to the player character in this fixture"
+          }
+        ],
+        "continuity": [
+          {
+            "id": "spell_restart-retained-0",
+            "meaning": "The earlier casting cost was spent; its established effects are not reversed.",
+            "authority": "Action & Resolution",
+            "status": "established",
+            "source": "stipulated offline F05 fixture spell_restart-retained-0",
+            "time": "established earlier",
+            "access": "Explicitly available to the player character in this fixture"
+          }
+        ],
+        "knowledge_limits": [
+          "Only supplied accessible meaning is known; risk does not establish an observer's identity, knowledge or reaction."
+        ],
+        "unresolved": [
+          "No independent consequential method, agreement or disclosure has been selected."
+        ],
+        "boundaries": [
+          "Do not execute actions, reroll accepted results, erase costs or invent consequential progress."
+        ]
+      }
+    },
+    {
+      "id": "merchant_routine_inquiry",
+      "authorization": {
+        "purpose": "ask the merchant about opening hours",
+        "method": "routine questions"
+      },
+      "checkpoint": {
+        "purpose": "ask the merchant about opening hours",
+        "method": "routine questions",
+        "developments": [
+          {
+            "kind": "ordinary"
+          }
+        ]
+      },
+      "expected": [
+        "continue",
+        "within_authorization",
+        "unresolved"
+      ],
+      "f01_context": {
+        "moment": "merchant_routine_inquiry",
+        "focus": "ask the merchant about opening hours",
+        "player_intent": {
+          "objective": "ask the merchant about opening hours",
+          "method": "routine questions",
+          "authorization": "Only this coherent undertaking by this chosen method; independent consequential choices remain player-owned.",
+          "constraints": []
+        },
+        "developments": [
+          {
+            "id": "merchant_routine_inquiry-current",
+            "meaning": "The merchant answers that the shop opens at dawn. This routine answer is within the authorized inquiry and establishes no promise or purchase.",
+            "authority": "Action & Resolution",
+            "status": "established",
+            "source": "stipulated offline F05 fixture merchant_routine_inquiry-current",
+            "time": "current",
+            "access": "Explicitly available to the player character in this fixture"
+          }
+        ],
+        "continuity": [],
+        "knowledge_limits": [
+          "Only supplied accessible meaning is known; risk does not establish an observer's identity, knowledge or reaction."
+        ],
+        "unresolved": [
+          "No independent consequential method, agreement or disclosure has been selected."
+        ],
+        "boundaries": [
+          "Do not execute actions, reroll accepted results, erase costs or invent consequential progress."
+        ]
+      }
+    },
+    {
+      "id": "merchant_bribe",
+      "authorization": {
+        "purpose": "ask the merchant about opening hours",
+        "method": "routine questions"
+      },
+      "checkpoint": {
+        "purpose": "ask the merchant about opening hours",
+        "method": "routine questions",
+        "developments": [
+          {
+            "kind": "player_choice",
+            "choice_key": "pay_for_private_information"
+          }
+        ]
+      },
+      "expected": [
+        "control",
+        "player_choice",
+        "unresolved"
+      ],
+      "f01_context": {
+        "moment": "merchant_bribe",
+        "focus": "ask the merchant about opening hours",
+        "player_intent": {
+          "objective": "ask the merchant about opening hours",
+          "method": "routine questions",
+          "authorization": "Only this coherent undertaking by this chosen method; independent consequential choices remain player-owned.",
+          "constraints": []
+        },
+        "developments": [
+          {
+            "id": "merchant_bribe-current",
+            "meaning": "The merchant demands payment before supplying further information. You have not accepted a payment or disclosure.",
+            "authority": "Action & Resolution",
+            "status": "established",
+            "source": "stipulated offline F05 fixture merchant_bribe-current",
+            "time": "current",
+            "access": "Explicitly available to the player character in this fixture"
+          }
+        ],
+        "continuity": [],
+        "knowledge_limits": [
+          "Only supplied accessible meaning is known; risk does not establish an observer's identity, knowledge or reaction."
+        ],
+        "unresolved": [
+          "No independent consequential method, agreement or disclosure has been selected."
+        ],
+        "boundaries": [
+          "Do not execute actions, reroll accepted results, erase costs or invent consequential progress."
+        ]
+      }
+    },
+    {
+      "id": "ordinary_travel_delay",
+      "authorization": {
+        "purpose": "travel along the agreed road",
+        "method": "walk the agreed route"
+      },
+      "checkpoint": {
+        "purpose": "travel along the agreed road",
+        "method": "walk the agreed route",
+        "developments": [
+          {
+            "kind": "ordinary"
+          }
+        ]
+      },
+      "expected": [
+        "continue",
+        "within_authorization",
+        "unresolved"
+      ],
+      "f01_context": {
+        "moment": "ordinary_travel_delay",
+        "focus": "travel along the agreed road",
+        "player_intent": {
+          "objective": "travel along the agreed road",
+          "method": "walk the agreed route",
+          "authorization": "Only this coherent undertaking by this chosen method; independent consequential choices remain player-owned.",
+          "constraints": []
+        },
+        "developments": [
+          {
+            "id": "ordinary_travel_delay-current",
+            "meaning": "Ordinary congestion delays the agreed journey by ten minutes without requiring a new route or method.",
+            "authority": "Action & Resolution",
+            "status": "established",
+            "source": "stipulated offline F05 fixture ordinary_travel_delay-current",
+            "time": "current",
+            "access": "Explicitly available to the player character in this fixture"
+          }
+        ],
+        "continuity": [
+          {
+            "id": "ordinary_travel_delay-retained-0",
+            "meaning": "The elapsed ten minutes remain part of the journey.",
+            "authority": "Action & Resolution",
+            "status": "established",
+            "source": "stipulated offline F05 fixture ordinary_travel_delay-retained-0",
+            "time": "established earlier",
+            "access": "Explicitly available to the player character in this fixture"
+          }
+        ],
+        "knowledge_limits": [
+          "Only supplied accessible meaning is known; risk does not establish an observer's identity, knowledge or reaction."
+        ],
+        "unresolved": [
+          "No independent consequential method, agreement or disclosure has been selected."
+        ],
+        "boundaries": [
+          "Do not execute actions, reroll accepted results, erase costs or invent consequential progress."
+        ]
+      }
+    },
+    {
+      "id": "blocked_route_choice",
+      "authorization": {
+        "purpose": "travel along the agreed road",
+        "method": "walk the agreed route"
+      },
+      "checkpoint": {
+        "purpose": "travel along the agreed road",
+        "method": "walk the agreed route",
+        "developments": [
+          {
+            "kind": "player_choice",
+            "choice_key": "choose_new_route"
+          }
+        ]
+      },
+      "expected": [
+        "control",
+        "player_choice",
+        "unresolved"
+      ],
+      "f01_context": {
+        "moment": "blocked_route_choice",
+        "focus": "travel along the agreed road",
+        "player_intent": {
+          "objective": "travel along the agreed road",
+          "method": "walk the agreed route",
+          "authorization": "Only this coherent undertaking by this chosen method; independent consequential choices remain player-owned.",
+          "constraints": []
+        },
+        "developments": [
+          {
+            "id": "blocked_route_choice-current",
+            "meaning": "A visible obstruction requires a consequential alternative-route choice. No alternative route has been selected.",
+            "authority": "Action & Resolution",
+            "status": "established",
+            "source": "stipulated offline F05 fixture blocked_route_choice-current",
+            "time": "current",
+            "access": "Explicitly available to the player character in this fixture"
+          }
+        ],
+        "continuity": [],
+        "knowledge_limits": [
+          "Only supplied accessible meaning is known; risk does not establish an observer's identity, knowledge or reaction."
+        ],
+        "unresolved": [
+          "No independent consequential method, agreement or disclosure has been selected."
+        ],
+        "boundaries": [
+          "Do not execute actions, reroll accepted results, erase costs or invent consequential progress."
+        ]
+      }
+    },
+    {
+      "id": "missing_lockpicks",
+      "authorization": {
+        "purpose": "open the archive lock",
+        "method": "lockpicking"
+      },
+      "checkpoint": {
+        "purpose": "open the archive lock",
+        "method": "lockpicking",
+        "missing_means": [
+          "lockpicks"
+        ]
+      },
+      "expected": [
+        "control",
+        "cannot_proceed",
+        "unresolved"
+      ],
+      "f01_context": {
+        "moment": "missing_lockpicks",
+        "focus": "open the archive lock",
+        "player_intent": {
+          "objective": "open the archive lock",
+          "method": "lockpicking",
+          "authorization": "Only this coherent undertaking by this chosen method; independent consequential choices remain player-owned.",
+          "constraints": []
+        },
+        "developments": [
+          {
+            "id": "missing_lockpicks-current",
+            "meaning": "The stipulated character lacks lockpicks required by this attempt. Familiarity with locks supplies neither tools nor success.",
+            "authority": "Action & Resolution",
+            "status": "established",
+            "source": "stipulated offline F05 fixture missing_lockpicks-current",
+            "time": "current",
+            "access": "Explicitly available to the player character in this fixture"
+          }
+        ],
+        "continuity": [],
+        "knowledge_limits": [
+          "Only supplied accessible meaning is known; risk does not establish an observer's identity, knowledge or reaction."
+        ],
+        "unresolved": [
+          "No independent consequential method, agreement or disclosure has been selected."
+        ],
+        "boundaries": [
+          "Do not execute actions, reroll accepted results, erase costs or invent consequential progress."
+        ]
+      }
+    },
+    {
+      "id": "completed_search",
+      "authorization": {
+        "purpose": "search the agreed crate",
+        "method": "open and inspect"
+      },
+      "checkpoint": {
+        "purpose": "search the agreed crate",
+        "method": "open and inspect",
+        "complete": true,
+        "resolution_ref": "completed-crate-search"
+      },
+      "expected": [
+        "complete",
+        "concluded",
+        "reuse"
+      ],
+      "f01_context": {
+        "moment": "completed_search",
+        "focus": "search the agreed crate",
+        "player_intent": {
+          "objective": "search the agreed crate",
+          "method": "open and inspect",
+          "authorization": "Only this coherent undertaking by this chosen method; independent consequential choices remain player-owned.",
+          "constraints": []
+        },
+        "developments": [
+          {
+            "id": "completed_search-current",
+            "meaning": "The agreed crate search has concluded with the established findings. It does not authorize searching another building.",
+            "authority": "Action & Resolution",
+            "status": "established",
+            "source": "stipulated offline F05 fixture completed_search-current",
+            "time": "current",
+            "access": "Explicitly available to the player character in this fixture"
+          }
+        ],
+        "continuity": [
+          {
+            "id": "completed_search-retained-0",
+            "meaning": "Accepted findings, three minutes, opened lid and visible disturbance remain established.",
+            "authority": "Action & Resolution",
+            "status": "established",
+            "source": "stipulated offline F05 fixture completed_search-retained-0",
+            "time": "established earlier",
+            "access": "Explicitly available to the player character in this fixture"
+          }
+        ],
+        "knowledge_limits": [
+          "Only supplied accessible meaning is known; risk does not establish an observer's identity, knowledge or reaction."
+        ],
+        "unresolved": [
+          "No independent consequential method, agreement or disclosure has been selected."
+        ],
+        "boundaries": [
+          "Do not execute actions, reroll accepted results, erase costs or invent consequential progress."
+        ]
+      }
+    }
+  ]
+}

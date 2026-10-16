@@ -199,8 +199,15 @@ production architecture or an accepted general capability.
   predetermined fixtures must conform to F01's contract. No general activity
   scheduler, progress meter, conditional action language, inventory, morality,
   NPC/physics simulation or character-values/oath mechanic is implied.
-- Resolution conditions: separately authorize bounded F05 implementation and,
-  later, the integration/evaluation milestone and detailed scenario scope.
+- Owner acceptance update (October 16, 2026): the bounded F05 implementation
+  was accepted after Market experiential review. The owner retained two
+  non-blocking observations for subsequent integration evaluation:
+  `look at the cart` produces a generic fallback while `assess the cart` works;
+  the post-action scene can describe Tessa agreeing to help after she has already
+  completed the action. No correction or integration work is authorized by
+  recording these observations. See [F05 acceptance](f05_authorized_activities_v1_acceptance.md).
+- Resolution conditions: separately authorize the later integration/evaluation
+  milestone and detailed scenario scope; bounded F05 acceptance does not begin it.
   Evaluate meaningful gameplay evidence for authorization, discovery-sensitive
   interruption, prerequisites, preserved results, resumption and consequential
   conversation together with F01 fidelity. Broader interruption, missed-choice,

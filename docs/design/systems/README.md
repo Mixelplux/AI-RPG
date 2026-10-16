@@ -55,8 +55,11 @@ responsibility model may be revised when future evidence supports a better model
 are canonical accepted Design records. Their
 [integration boundaries](system-map.md#f01f05-design-integration-boundaries)
 refine intended gameplay without changing the manifests' implementation status,
-selecting modules or extending the shared doctrines below. F05 incorporation is
-proposed for owner review; no implementation or integration milestone is staged.
+selecting modules or extending the shared doctrines below. The subsequent
+separately authorized [bounded F05 implementation](../../f05_implementation_preflight.md)
+was [owner accepted](../../f05_authorized_activities_v1_acceptance.md) October 16, 2026;
+its policy/material checkpoint and offline fixture coverage do not complete the
+Partial systems or begin the deferred playable integration milestone.
 
 ## Shared doctrines
 

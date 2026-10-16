@@ -10,6 +10,9 @@ import re
 from engine import character_competence as competence
 from engine import material_state as material
 from engine.target_resolver import actor_aliases
+from engine.activity_control import (
+    ActivityAuthorization, ActivityCheckpoint, decide_activity_control,
+)
 
 
 @dataclass(frozen=True)
@@ -364,7 +367,12 @@ def execute(engine, frame, *, authorized=False):
         # The preparation/time effects remain accepted if an authored development
         # makes the remaining action impossible. No draw is consumed then.
         now = assess(engine, frame, world=candidate)
-        if now["status"] not in {"feasible", "uncertain"}:
+        control = decide_activity_control(
+            ActivityAuthorization(frame.objective, frame.method_ref, constraints=frame.constraints),
+            ActivityCheckpoint(frame.objective, frame.method_ref,
+                               blocked=now["status"] not in {"feasible", "uncertain"}),
+        )
+        if control.status == "control":
             draw, outcome, effects = None, "interrupted", {}
             text = "After preparation and 1 hour of effort, changed circumstances stop the remaining action. " + now["reason"]
         else:

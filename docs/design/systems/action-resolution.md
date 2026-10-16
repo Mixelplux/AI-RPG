@@ -121,6 +121,18 @@ does not justify rerolling an already resolved attempt. Established costs,
 elapsed time, findings and consequences remain. This selects no general activity
 framework or progress representation; existing bounded replay rules remain scoped.
 
+**Owner-accepted bounded implementation (October 16, 2026):**
+`engine/activity_control.py` implements a pure continuation/control policy over
+authority-supplied purpose, method, intent, prerequisites, restrictions and
+developments. The material-handling post-preparation assessment uses its blocked/
+continue decision. Accepted result references remain owned by existing
+resolution/history; the policy neither draws, executes, authenticates references
+nor persists progress. Discovery, social-choice and restart cases currently use
+stipulated offline inputs; this is not general F05 gameplay support. Existing
+natural input, candidate publication, costs, replay and save semantics remain
+unchanged. See [acceptance and closeout](../../f05_authorized_activities_v1_acceptance.md)
+and the [implementation coverage](../../f05_implementation_preflight.md).
+
 ## Current model
 
 Three working responsibilities suffice. This decomposition is **Provisional**;

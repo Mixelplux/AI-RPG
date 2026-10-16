@@ -86,6 +86,14 @@ F02–F04 design records, and no decisions for them are inferred here.
 | Scenario & Authored Content | Supply bounded circumstances and supported interaction material. Predetermined implementation/evaluation fixtures must satisfy F01's information contract; they do not relax it or require complete upstream systems. |
 | Persistence | Preserve supported established meaning across restoration; F05 selects no new storage, progress checkpoint, save version or migration. Gameplay owners determine what resumption means under current circumstances. |
 
+A separately owner-authorized bounded F05 implementation was accepted on
+October 16, 2026: `engine/activity_control.py` consumes owning-system checkpoints, with an
+existing material-handling feasibility binding and offline discovery/dialogue/
+restart fixtures. It introduces no new system owner or persistence relationship,
+and F01 is unchanged. This does not claim implemented general suppliers or
+playable integration; see [acceptance](../../f05_authorized_activities_v1_acceptance.md)
+and the [coverage and limits](../../f05_implementation_preflight.md).
+
 The [later bounded playable-scenario evaluation](../../deferred_findings.md#df-009--bounded-f01f05-playable-scenario-evaluation)
 follows bounded F05 implementation only when separately authorized. Candidate
 themes are damaged gate, inn confrontation and disappearing trail. Detailed

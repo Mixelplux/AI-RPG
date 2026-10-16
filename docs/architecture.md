@@ -251,6 +251,39 @@ inventory, conditional planning or a shared general interpreter. See the
 [handoff](contextual_action_consequence_v1_handoff.md) and accepted
 [structural correction](contextual_action_structural_correction.md).
 
+## Bounded F05 activity control — owner accepted
+
+`engine/activity_control.py` provides a deterministic continuation policy over
+one caller-framed immediate purpose and chosen method. Explicit intent, limits,
+available means, completion and owning-system developments determine whether to
+continue or return control. Perceived increased discovery risk for a potentially
+objectionable activity and independent consequential choices can return control
+when the character has an opportunity to respond; routine or inaccessible
+developments alone do not. Previously answered choices apply only by their
+specific supplied reference.
+
+The policy receives authority; it neither infers character access or coherent
+natural-language intent nor authenticates its caller. It does not execute work,
+advance time, roll, retain progress or store outcomes. Accepted resolution
+references are opaque owning-system inputs: reuse and restart-required decisions
+do not themselves perform a replay or fresh attempt.
+
+The existing material-handling post-preparation checkpoint calls this policy
+with its current feasibility assessment. Its candidate publication, one-hour
+cost, prerequisites, draws, replay rules and save version remain unchanged.
+Discovery/social/restart suppliers are stipulated in offline test fixtures;
+general activity execution, NPC observation, inventory/perception systems and
+playable F01–F05 integration are not implemented by this binding.
+
+The ten situations in `test_fixtures/f05_activity_control.json` supply explicit
+F01-compatible meaning, provenance and access. Structural compatibility is not
+a live narration or semantic-fidelity evaluation. F01 runtime/instructions remain
+unchanged. See the [coverage, verification and limitations](f05_implementation_preflight.md).
+Owner accepted this bounded implementation on October 16, 2026 after Market
+scenario review; see [acceptance and limits](f05_authorized_activities_v1_acceptance.md).
+Discovery, dialogue, restart and broader playable integration remain outside this
+package's implemented scope.
+
 ## Context Loading
 
 Do not read this file for every routine implementation turn.
