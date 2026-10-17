@@ -102,6 +102,25 @@ lifecycle state changes through this documentation incorporation.
 
 ## Dependencies and information flow around World Simulation
 
+October 17 structurally owner-accepted damaged-gate integration: the
+[standalone session](../../f01_f05_gate_integration_v1.md) now exercises the
+F01–F05 boundaries above using explicit fixture suppliers, accepted F05 control
+and accepted F01 realization. Its unsaved gate state is isolated from campaign
+persistence and all ordinary routes. This bounded integration does not implement
+general world, character, actor or action suppliers, or the other DF-009 themes.
+Its [offline consequence correction](../../f01_consequential_fidelity_correction.md)
+revises only F01 expression instructions; no relationship or supplier authority
+changes follow from it. Later live comparison evidence remains limited.
+Subsequent [final structural reconciliation](../../f01_f05_final_structural_reconciliation.md)
+separately records four completed comparison samples, revised owner materiality
+judgments and the restriction-on-resumption checkpoint-supplier defect. The
+[SR-01 correction](../../f01_f05_sr01_restriction_correction.md) addresses that
+omission using unchanged F05 policy. The owner [accepted the bounded scope](../../f01_f05_integration_v1_acceptance.md);
+no general responsibility or system relationship changes follow from acceptance.
+An [independent test-local lockpicking sequence](../../f05_independent_activity_validation.md)
+now supplies additional stateful integration evidence beyond the gate; no new
+production supplier, system owner or persistence relationship is implemented.
+
 | From → To | Information / dependency | Current status |
 |---|---|---|
 | Scenario & Authored Content → World Simulation | Initial weather/time, macro locations/connections, authored constraints and effect declarations | Implemented for supported Region Pack fields; broader authoring interfaces provisional |

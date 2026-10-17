@@ -184,6 +184,29 @@ production architecture or an accepted general capability.
 
 ## DF-009 — Bounded F01–F05 playable-scenario evaluation
 
+- October 17 owner acceptance: the damaged-gate integration, corrections,
+  independent F05 validation, API tooling and associated tests/documentation are
+  structurally accepted; see [scope and publication proposal](f01_f05_integration_v1_acceptance.md).
+  This supersedes pending-acceptance wording in the dated accounts below.
+  Inn/trail scenarios, general upstream integration, literary refinement and older
+  Market observations remain deferred; no next package or live work is authorized.
+
+- October 17 final review: [current assessment](f01_f05_final_structural_reconciliation.md)
+  preserves prior live judgments while recording the owner's minor classification
+  of the original pin omission and deferral of literary refinement. Damaged-gate
+  review identified the specific SR-01 restriction-on-resumption blocker, now
+  addressed by the [bounded correction](f01_f05_sr01_restriction_correction.md)
+  pending owner review; implementation acceptance is not claimed.
+  This does not close other DF-009 themes or authorize another package, provider
+  evaluation or publication.
+
+- October 16, 2026 task update: the owner separately authorized damaged-gate
+  implementation/evaluation only. The [unaccepted candidate report](f01_f05_gate_integration_v1.md)
+  tracks that bounded work. Inn/trail scenarios, general integration and the
+  earlier Market look/cooperation observations remain deferred; they are not
+  silently closed by this experiment. Prior deferral wording below records the
+  status before this task authorization.
+
 - Deferred activity: after bounded F05 implementation, evaluate F01–F05 together
   through scenario-specific playable situations. Candidate themes are damaged
   gate, inn confrontation and disappearing trail; detailed scenarios are deferred.

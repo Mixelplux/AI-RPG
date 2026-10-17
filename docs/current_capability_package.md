@@ -1,29 +1,22 @@
-# F05 Extended Activity & Control V1 — complete
+# Capability lifecycle — idle after accepted F01/F05 integration
 
-Owner accepted the bounded implementation after Market scenario experiential
-review on October 16, 2026. Inquiry, proposal, authorization, resolution,
-continuity and the problem → observation → action → completion sequence were
-satisfactory for this stage. Staging, commit, strict fast-forward merge and
-publication are separately authorized by the acceptance/publication instruction.
+No active capability package. The owner structurally accepted
+`f01-f05-bounded-playable-integration-v1` on October 17, 2026 after damaged-gate
+smoke, SR-01 correction and independent activity validation.
 
-Protected starting baseline:
-`342b9a4670131a22535a3b436e323684c6ab74b3`.
-Feature branch: `codex/f05-authorized-activities-v1`. Risk: Routine.
+Accepted scope: bounded F01/F05 playable integration, damaged-gate fixture and
+interaction corrections, consequential narration instructions, restriction
+consistency correction, independent test-local F05 activity validation, API
+environment preflight tooling, associated tests and reconciled documentation.
+General upstream systems, production lockpicking, persistence changes, inn/trail
+scenarios and literary refinement remain outside this package.
 
-See [acceptance and closeout](f05_authorized_activities_v1_acceptance.md) for
-accepted source identities, exact publication paths, verification, preservation
-and limitations, and [implementation coverage](f05_implementation_preflight.md)
-for D1–D6 coverage and the earlier assertion investigation.
+See [acceptance and exact publication proposal](f01_f05_integration_v1_acceptance.md).
+Protected publication parent: `d2ededee58294002f522cef5ab61577270311997`.
+Preparation remains isolated on `codex/f01-f05-bounded-playable-integration-v1`.
+The owner authorizes publication preparation only: index remains empty; staging,
+commit, merge and push require separate authorization. Neither historical live
+budget has any remaining requests; no new API evaluation is authorized.
 
-77 tests and four narration scripts passed offline before publication; owner
-experiential review passed. Final publication mechanics are recorded by the
-established workflow and task completion report. No new live provider call,
-tuning, gameplay correction, upstream system or save change is authorized.
-
-The `look at the cart` fallback and stale post-action Tessa cooperation wording
-are non-blocking deferred integration observations, preserved in DF-009.
-Discovery, dialogue, restart and broader playable F01–F05 integration remain
-outside implemented scope. Accepted F05 D1–D6 and authority boundaries are unchanged.
-
-JSON is the sole machine lifecycle authority: F05 complete, zero active
-packages/sprints, no next milestone selected. Stop after publication.
+JSON is lifecycle authority: zero active sprints/packages, this package latest
+completed, and `next_sprint: null`. No next capability is selected or started.

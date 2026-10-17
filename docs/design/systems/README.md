@@ -63,6 +63,11 @@ Partial systems or begin the deferred playable integration milestone.
 
 ## Shared doctrines
 
+Current bounded implementation evidence: [damaged-gate F01–F05 integration](../../f01_f05_gate_integration_v1.md),
+structurally owner-accepted October 17, 2026; see [acceptance and scope](../../f01_f05_integration_v1_acceptance.md).
+Explicit fixtures do not upgrade general system
+implementation classifications or revise the shared doctrines below.
+
 These centrally recorded doctrines apply across responsibilities. Existing
 accepted reasoning is in Story-First Part I and ADR-059; the rules below express
 that direction and the owner-supplied System Manifest Review foundation.

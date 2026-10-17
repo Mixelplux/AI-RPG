@@ -90,6 +90,16 @@ helping, threats, disclosures, accepting offers, danger or abandonment of a goal
 
 ## Governing principles
 
+Current damaged-gate [structural reconciliation](../../f01_f05_final_structural_reconciliation.md)
+records the owner's minor classification of the original pin omission: state was
+correct and the cost remained discoverable. This does not require every recorded
+change to be narrated. Four revised live samples provide limited observations,
+not reliability guarantees; style/voice refinement is deferred. Historical
+judgments remain preserved. The action/control supplier blocker found by that
+review is addressed by the [SR-01 correction](../../f01_f05_sr01_restriction_correction.md),
+with no narrator change. The owner subsequently [accepted the bounded integration](../../f01_f05_integration_v1_acceptance.md),
+including the earlier instruction correction; literary refinement remains deferred.
+
 Apply the [shared doctrines](README.md#shared-doctrines),
 [Simulation Principles](../../simulation_principles.md),
 [Simulation Model](../../simulation_model.md),
@@ -324,6 +334,20 @@ supplied prose examples establish contracts, not general generated factuality,
 universal scene coverage or long-term narrative memory.
 
 ## Accepted decisions
+
+The [owner-accepted damaged-gate integration](../../f01_f05_gate_integration_v1.md)
+supplies explicit source/status/time/access records and relevant session continuity
+to the unchanged accepted F01 realization seam. Offline display expresses the
+authoritative records directly; opt-in live expression remains untrusted and
+non-authoritative. Neither offline canned expression nor structural acceptance
+certifies generated fidelity. This is an accepted bounded evaluation route,
+not general narrative integration or memory. Its later
+[instruction-only correction](../../f01_consequential_fidelity_correction.md)
+targets the observed omission of a committed pin at the repair decision. It
+preserves the accepted contract/mechanism and adds no semantic validator or
+inventory recital requirement. Four revised samples provide limited comparison
+evidence; [acceptance](../../f01_f05_integration_v1_acceptance.md) does not imply
+statistical reliability or universal generated fidelity.
 
 [F01 — Truthful Presentation and Epistemic Fidelity](../f01-truthful-presentation-and-epistemic-fidelity.md)
 records ten owner-accepted gameplay decisions, including revised D10. That record

@@ -10,18 +10,18 @@
   "active_sprint": null,
   "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "f05-authorized-activities-v1"
+    "id": "f01-f05-bounded-playable-integration-v1"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "f05-authorized-activities-v1",
-    "title": "F05 Extended Activity & Control V1",
+    "id": "f01-f05-bounded-playable-integration-v1",
+    "title": "F01-F05 Bounded Playable Integration V1",
     "type": "capability-package",
     "status": "complete",
     "risk_level": "routine",
-    "goal": "Owner-accepted bounded F05 policy and material checkpoint; close out and publish without additional gameplay or integration work.",
+    "goal": "Owner-accepted bounded F01/F05 integration; prepare exact publication scope without staging, commit, merge or push.",
     "predecessor": {
-      "id": "f01-narrative-realization-v1"
+      "id": "f05-authorized-activities-v1"
     },
     "platform": {
       "provider_requests": "forbidden",
@@ -29,16 +29,12 @@
       "save_version": 1
     },
     "scope": [
-      "Owner accepted F05 on October 16, 2026 after Market scenario review and explicitly authorized staging, commit, strict fast-forward merge and publication from protected baseline 342b9a4670131a22535a3b436e323684c6ab74b3.",
-      "Accepted existing Action & Resolution control policy, material feasibility checkpoint, authoritative offline fixtures and F01 structural compatibility checks. Runtime, tests and fixtures remain unchanged during closeout.",
-      "No upstream discovery, dialogue, restart systems, general activity framework, save change or broader F01-F05 playable integration. Preserve accepted D1-D6 design and cross-system authority.",
-      "Close lifecycle with no next package. Preserve original dirty checkout, owner data, credentials, historical experiments, unrelated worktrees and rejected Sprint 10.82 implementation."
+      "Structurally owner-accepted: bounded playable integration, damaged-gate fixture/interaction corrections, consequential F01 instructions, SR-01 restriction consistency, independent test-local F05 validation, API readiness tooling, tests and reconciled documentation.",
+      "No general upstream systems, production lockpicking, save changes, other scenarios or literary refinement. Existing F05 policy, authority and provider settings are preserved.",
+      "Publication preparation only. Keep index empty; no staging, commit, merge or push without separate owner authorization. Both live budgets are exhausted; provider requests remain forbidden. No next package is selected."
     ],
     "verification": [
-      "Final prepublication syntax passed; 77 automated tests and four narration scripts passed offline; zero investigation network attempts. Owner experiential review of inquiry, proposal, authorization, resolution and continuity passed.",
-      "Publication requires exact accepted source identities/path scope, closed records, shared workflow/preflight/diff checks, candidate parent and clean tree/index, strict fast-forward and matching local/origin/GitHub main identities.",
-      "Look-at-cart fallback and post-action Tessa cooperation wording remain non-blocking deferred integration observations under DF-009; no correction in this package.",
-      "Acceptance/source identity and publication scope: docs/f05_authorized_activities_v1_acceptance.md. F05 complete, zero active sprints/packages, no next milestone selected; stop after publication."
+      "Syntax, focused behavioral/state/contract tests, affected regressions, lifecycle/preflight/diff checks and limited owner smoke."
     ]
   }
 }

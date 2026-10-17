@@ -165,6 +165,16 @@ qualifications. Input shape, single-call stateless execution, transport and outp
 validation are unchanged. No new gameplay or persistence authority is established.
 See [owner acceptance and limitations](f01_narrative_realization_v1_acceptance.md).
 
+The owner-accepted damaged-gate integration includes an **instruction-only
+correction** after live Case 5 omitted a committed pin at a player decision.
+It prioritizes consequential understanding of the next choice, including earlier
+accepted work/costs, while allowing irrelevant known context to carry implicitly.
+Input shape, the single-call mechanism, structural validation, provider settings
+and gameplay authority are unchanged. This is guidance, not semantic enforcement
+or a guarantee of generated fidelity. Four later samples provide limited
+comparison evidence; see the historical [correction report](f01_consequential_fidelity_correction.md)
+and current [acceptance and limitations](f01_f05_integration_v1_acceptance.md).
+
 The [first A–D evaluation](f01_narrative_realization_v1_evaluation.md), mixed
 [generic correction comparison](f01_generalizable_realization_correction_v1.md)
 and [original connected evaluation](f01_connected_experience_v1_report.md) remain
@@ -283,6 +293,33 @@ Owner accepted this bounded implementation on October 16, 2026 after Market
 scenario review; see [acceptance and limits](f05_authorized_activities_v1_acceptance.md).
 Discovery, dialogue, restart and broader playable integration remain outside this
 package's implemented scope.
+
+## Damaged-gate F01–F05 evaluation — accepted bounded integration
+
+`engine/damaged_gate.py` is a standalone, unsaved evaluation session, reached
+through `tools/play_damaged_gate.py`; ordinary campaign routes are unchanged.
+Explicit bounded fixtures stand in for world circumstances, character competence,
+means, guard cooperation and controlled resolution. Copied candidate state is
+published only after F01 context construction succeeds. Accepted F05 policy
+decides continuation, meaningful control return and conclusion. Accepted F01
+realization receives supplied meaning, source, status, time, access and continuity;
+provider prose never drives execution or state. F05 policy and F01 realization
+mechanics remain unchanged; F01 instructions include the accepted correction above.
+Routine repair steps run together; changed support needs return control
+while accepted work/cost/result survive renewed authorization under current means.
+There is no save/load API, general activity framework or upstream system claim.
+The bounded interpreter now recognizes explicit bracing instructions in an already
+started repair; unclear continuation leaves the new timber commitment undecided.
+It reuses the existing F05 resumption path, not a new resolution mechanism. See
+[interaction correction](f01_f05_interrupted_repair_correction.md).
+See [implementation, validation and limits](f01_f05_gate_integration_v1.md).
+The [final structural review](f01_f05_final_structural_reconciliation.md) records
+a gate checkpoint-supplier omission: a recognized restriction conflict was checked
+on initial execution but not repair resumption. The [SR-01 correction](f01_f05_sr01_restriction_correction.md)
+now shares the same existing conflict tuple across both checkpoints. Restriction
+semantics and accepted F05 policy are unchanged. The owner structurally accepted
+this bounded implementation, including independent test-local activity validation
+and API readiness tooling; see [acceptance](f01_f05_integration_v1_acceptance.md).
 
 ## Context Loading
 

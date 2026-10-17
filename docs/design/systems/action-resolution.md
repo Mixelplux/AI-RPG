@@ -135,6 +135,29 @@ and the [implementation coverage](../../f05_implementation_preflight.md).
 
 ## Current model
 
+The structurally owner-accepted [damaged-gate integration](../../f01_f05_gate_integration_v1.md)
+adds a disposable session with bounded intent distinctions, controlled attempts,
+costs and accepted-result reuse. It invokes the accepted F05 policy at gate
+continuation/conclusion points and returns control before committing newly needed
+support. It changes no campaign resolution, save semantics or accepted F05 code;
+see [acceptance and bounded scope](../../f01_f05_integration_v1_acceptance.md).
+Its [bounded interaction correction](../../f01_f05_interrupted_repair_correction.md)
+recognizes explicit timber-bracing instructions against an already started repair,
+then reuses the existing continuation checks and accepted result. Ambiguous input
+retains the pause, progress and costs; this adds no general intent parser.
+The [final review](../../f01_f05_final_structural_reconciliation.md) found SR-01:
+the gate resumption checkpoint omitted the existing restriction conflict supplied
+on initial execution. The [bounded correction](../../f01_f05_sr01_restriction_correction.md)
+now supplies the same conflict on both paths. This changes no restriction semantics,
+accepted control policy or general constraint-adjudication capability; this
+correction is included in the owner's structural acceptance.
+
+The [independent supplier validation](../../f05_independent_activity_validation.md)
+adds one test-local archive-lock sequence using the existing footsteps fixture.
+It derives checkpoints from retained activity state and current authorization;
+this extends integration evidence without adding a production lockpicking route,
+general supplier framework or F05 policy change.
+
 Three working responsibilities suffice. This decomposition is **Provisional**;
 it describes existing seams and open design work, not new runtime components.
 
