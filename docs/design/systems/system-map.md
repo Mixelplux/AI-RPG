@@ -42,6 +42,14 @@ does not replace accepted sequential dispatch.
 
 ## Responsibility hierarchy
 
+Information Resolution Core V1a is an accepted read-only cross-system information
+module, not an additional outcome-deciding system. Authored Content supplies
+foundations; gameplay owners supply current/history and binding meaning; Character
+System supplies legitimate access. Trusted internal retrieval includes hidden
+constraints, while character retrieval filters records and traversal edges by
+supplied grants. Production integrations and source authentication are absent;
+existing owners and F01/F05 remain unchanged. See the [V1a handoff](../../information_resolution_core_v1a_handoff.md).
+
 | Group | Systems and responsibilities |
 |---|---|
 | Core Gameplay | **World Simulation:** external reality and legitimate change. **Character System:** character capability, perspective, and memory. **Action & Resolution:** adjudication of attempted action. **Actors & Social Dynamics:** meaningful intentional NPC/faction decisions. |

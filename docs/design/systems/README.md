@@ -21,7 +21,9 @@ provider behavior, should be presented as contracts.
 - [Responsibility hierarchy and information flow](system-map.md)
 - [Reusable manifest template](system-manifest-template.md)
 - [Information Foundation Functional Design V1](../information-foundation-functional-design-v1.md)
-  — Accepted design; implementation deferred. Cross-system information contracts,
+  — Accepted design; bounded V1a implementation accepted following final code-level review.
+  See the [V1a handoff](../../information_resolution_core_v1a_handoff.md).
+  Cross-system information contracts,
   Region Pack scope, continuity, validation scenarios, rationale and accepted
   gameplay-evaluated risks; existing conceptual ownership is preserved.
 - [World Simulation](world-simulation.md) — Partial; individual review complete October 5, 2026

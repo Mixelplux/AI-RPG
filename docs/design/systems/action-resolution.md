@@ -335,6 +335,12 @@ the intended final action abstraction.
 
 ## Current implementation
 
+Information Resolution Core V1a implements accepted read-only binding-constraint retrieval by
+subject, action and fictional time, including hidden constraints. Conditions,
+exclusions and effects are returned intact for an owning adjudicator; no general
+condition evaluation or outcome decision is implemented. See the
+[V1a handoff](../../information_resolution_core_v1a_handoff.md).
+
 | Capability | Classification and evidenced limit |
 |---|---|
 | Intent and executable operation | **Partial:** bounded contextual investigation/material framing precedes fixed kernel parsing, current-scene target resolution, graph routes and scenario commands. Unknown input rejects; generic action acceptance is scaffolding without object/inventory mutation. No general free-text adjudication. |

@@ -10,18 +10,18 @@
   "active_sprint": null,
   "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "f01-f05-bounded-playable-integration-v1"
+    "id": "information-resolution-core-v1a"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "f01-f05-bounded-playable-integration-v1",
-    "title": "F01-F05 Bounded Playable Integration V1",
+    "id": "information-resolution-core-v1a",
+    "title": "Information Resolution Core V1a",
     "type": "capability-package",
     "status": "complete",
     "risk_level": "routine",
-    "goal": "Owner-accepted bounded F01/F05 integration; prepare exact publication scope without staging, commit, merge or push.",
+    "goal": "Implement the owner-authorized read-only information core and offline validation; submit an uncommitted handoff for owner acceptance.",
     "predecessor": {
-      "id": "f05-authorized-activities-v1"
+      "id": "f01-f05-bounded-playable-integration-v1"
     },
     "platform": {
       "provider_requests": "forbidden",
@@ -29,12 +29,11 @@
       "save_version": 1
     },
     "scope": [
-      "Structurally owner-accepted: bounded playable integration, damaged-gate fixture/interaction corrections, consequential F01 instructions, SR-01 restriction consistency, independent test-local F05 validation, API readiness tooling, tests and reconciled documentation.",
-      "No general upstream systems, production lockpicking, save changes, other scenarios or literary refinement. Existing F05 policy, authority and provider settings are preserved.",
-      "Publication preparation only. Keep index empty; no staging, commit, merge or push without separate owner authorization. Both live budgets are exhausted; provider requests remain forbidden. No next package is selected."
+      "Composable in-memory information, stable identity, supplied current/history, selective relationships, hidden binding constraints, epistemic availability and character access; no production integration or mutation.",
+      "No Region Pack edits/contracts, persistence/save changes, F01/F05 rewrites, providers, general adjudication or V1b. No Git staging, commit, merge, push or publication."
     ],
     "verification": [
-      "Syntax, focused behavioral/state/contract tests, affected regressions, lifecycle/preflight/diff checks and limited owner smoke."
+      "Syntax, focused offline representative and reference-catalog tests, relevant F01/F05 regressions, lifecycle/preflight and diff integrity."
     ]
   }
 }

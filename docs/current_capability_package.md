@@ -1,22 +1,20 @@
-# Capability lifecycle — idle after accepted F01/F05 integration
+# Information Resolution Core V1a
 
-No active capability package. The owner structurally accepted
-`f01-f05-bounded-playable-integration-v1` on October 17, 2026 after damaged-gate
-smoke, SR-01 correction and independent activity validation.
+Owner-authorized October 21, 2026; bounded implementation, Routine risk.
+Baseline: `cd6de8be40407f504aba1438b6d12f8828b81dde`.
 
-Accepted scope: bounded F01/F05 playable integration, damaged-gate fixture and
-interaction corrections, consequential narration instructions, restriction
-consistency correction, independent test-local F05 activity validation, API
-environment preflight tooling, associated tests and reconciled documentation.
-General upstream systems, production lockpicking, persistence changes, inn/trail
-scenarios and literary refinement remain outside this package.
+Implement accepted [Information Foundation V1](design/information-foundation-functional-design-v1.md)
+through read-only composition, consequential identities, current/history retrieval,
+selective relationships, binding conditions, epistemic availability and legitimate
+character access. Supplied fixtures stand in for missing owning systems.
+No production integration, mutation, Region Pack changes, persistence, providers,
+general adjudication or V1b. F01/F05 and conceptual owners remain unchanged.
 
-See [acceptance and exact publication proposal](f01_f05_integration_v1_acceptance.md).
-Protected publication parent: `d2ededee58294002f522cef5ab61577270311997`.
-Preparation remains isolated on `codex/f01-f05-bounded-playable-integration-v1`.
-The owner authorizes publication preparation only: index remains empty; staging,
-commit, merge and push require separate authorization. Neither historical live
-budget has any remaining requests; no new API evaluation is authorized.
+First milestone staged: assessment, implementation, offline validation and
+reconciliation. Lifecycle JSON is authoritative. Completion means a verified
+uncommitted handoff for owner acceptance, with no Git staging/commit/publication.
 
-JSON is lifecycle authority: zero active sprints/packages, this package latest
-completed, and `next_sprint: null`. No next capability is selected or started.
+Implementation, offline verification and reconciliation are complete. The owner
+accepted V1a subject to final code-level review on October 21, 2026; that review
+found no blocking defects. See the [acceptance and review handoff](information_resolution_core_v1a_handoff.md).
+The package is complete and lifecycle idle; no next package is selected.

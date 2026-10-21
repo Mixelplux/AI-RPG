@@ -321,6 +321,18 @@ semantics and accepted F05 policy are unchanged. The owner structurally accepted
 this bounded implementation, including independent test-local activity validation
 and API readiness tooling; see [acceptance](f01_f05_integration_v1_acceptance.md).
 
+## Read-only Information Resolution Core V1a — accepted bounded implementation
+
+`engine/information_resolution.py` supplies an independent immutable information
+snapshot and storage-independent access operations over composed authored inputs,
+supplied current/history records, relationships and binding constraints. Character
+views require explicit owning-system access grants; internal constraint retrieval
+includes hidden information. This module accepts supplied authority, authenticates
+no source and adjudicates no outcome. It is not connected to production gameplay,
+Region Packs, World State, F01/F05 or saves. See the [interface, verification and
+limitations](information_resolution_core_v1a_handoff.md). Owner acceptance followed
+final code-level review on October 21, 2026; the implementation remains uncommitted.
+
 ## Context Loading
 
 Do not read this file for every routine implementation turn.

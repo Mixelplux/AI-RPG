@@ -193,6 +193,11 @@ sewer, and wilderness traversal do not inherently need exhaustive tiles/nodes.
 
 ## Current implementation
 
+Information Resolution Core V1a adds an accepted standalone read-only consumer of
+supplied authoritative current/history records. It does not modify World State,
+apply changes or authenticate inputs. Production integration and history retention
+remain deferred. See [V1a scope and verification](../../information_resolution_core_v1a_handoff.md).
+
 | Capability | Classification and evidenced limit |
 |---|---|
 | World/location state | **Implemented, bounded:** player location, weather/time, history, pressures, actor-location overrides, traces, scenario state and optional finite material conditions. Locations, descriptions and connectivity remain authored. No general mutable physical/accessibility model. |

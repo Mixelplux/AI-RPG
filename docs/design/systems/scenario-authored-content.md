@@ -262,6 +262,12 @@ explicit bounded serialization. This is not a universal character-access model
 
 ## Current implementation
 
+Information Resolution Core V1a implements accepted composition of in-memory authored
+foundations with stable identities and supported scalar canonical-conflict checks.
+Reference definitions are distinct from supplied instances. This local handoff is
+not a Region Pack format or production catalog; no authored data is changed.
+See [V1a scope and verification](../../information_resolution_core_v1a_handoff.md).
+
 ### Active content, legacy mechanisms and representation
 
 | Material | Classification and evidenced limit |

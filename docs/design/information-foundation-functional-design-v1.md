@@ -1,10 +1,11 @@
 # Information Foundation Functional Design V1
 
-**Status: Accepted design; implementation deferred.** Consolidated October 20,
+**Status: Accepted design; bounded V1a implementation accepted.** Consolidated October 20,
 2026 from the owner-supplied accepted design handoff. This is the canonical
 functional design record for D1–D16, their qualifications and reconciliation
 clarifications, representative validation scenarios, rationale, and accepted
-residual risks. It records design acceptance, not implementation acceptance.
+residual risks. Full-design implementation is not claimed; bounded V1a acceptance
+is recorded separately in the implementation handoff linked below.
 
 This design follows the [Story-First Design Doctrine](../story_first_design_doctrine.md)
 and preserves the [system responsibility map](systems/system-map.md) and
@@ -25,6 +26,13 @@ cannot establish consequential truth. No general acceptance protocol or new
 storage, persistence, or ownership model is selected here.
 
 ## Purpose and direction
+
+Implementation status, October 21, 2026: the separately owner-authorized
+[Information Resolution Core V1a](../information_resolution_core_v1a_handoff.md)
+provides an accepted read-only module and offline fixtures following final
+code-level review. It does not implement the full
+design, production integration, adjudication or persistence. D1–D16 below remain
+the accepted design; this status update changes none of their decisions.
 
 ### Purpose
 

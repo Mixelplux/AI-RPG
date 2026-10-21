@@ -232,6 +232,11 @@ persistent informational record.
 
 ## Current implementation
 
+Information Resolution Core V1a adds accepted read-only character views gated by
+supplied Character System grants, including access basis and time bounds. These
+fixtures do not implement general access derivation, familiarity, retention or
+recall. See [V1a scope and verification](../../information_resolution_core_v1a_handoff.md).
+
 | Capability | Classification and evidenced limit |
 |---|---|
 | Character Competence V1 / 10.78 | **Implemented, bounded:** `tactical_assessment`, `outdoor_tracking`, `surveillance_analysis`; applicability requires the withdrawal phase, known tracks, and matching physical trace. No universal skill/stat framework. |
