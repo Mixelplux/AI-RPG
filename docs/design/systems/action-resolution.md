@@ -25,6 +25,20 @@ The October 6 review identity above remains historical.
 
 ## Purpose
 
+Owner-accepted implementation, October 22, 2026: [Information-Grounded Adjudication V1](../../information_grounded_adjudication_v1_handoff.md)
+combines supplied authorization, actual means/capability and V1a-retrieved hidden
+bindings through one finite evaluator and existing d6 policy. Offline proposals
+must agree with supported authoritative conditions/mechanics before acceptance;
+unsupported terms remain unresolved. Rejection is technical, with no fictional
+failure or mutation. F05 controls resumption without reroll/recharge. This bounded
+disposable integration and inquiry correction are accepted; general adjudication remains deferred.
+
+Targeted correction: an inquiry intent can return read-only information about the
+character's accepted observable effect, without a new assessment, proposal, roll,
+cost or result. Mechanical samples remain provisional until candidate acceptance;
+technical rejection stores no roll/result. Explicit retry may sample again, while
+accepted-attempt resumption reuses the recorded result. No pending-roll model.
+
 Adjudicate executable attempts from declared intent, authoritative world and
 character circumstances, and applicable policy. Establish whether an attempt
 can proceed, what resolution it needs, and its accepted immediate result and

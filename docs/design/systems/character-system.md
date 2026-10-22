@@ -18,6 +18,19 @@ unchanged apart from manifest navigation and relationship-map integration.
 
 ## Purpose
 
+Owner-accepted implementation, October 22, 2026: [Information-Grounded Adjudication V1](../../information_grounded_adjudication_v1_handoff.md)
+retrieves supplied objective capability and checks available explicitly chosen
+means before attempts. V1a character grants supply retained knowledge/reports/
+inferences for safe F01 meaning; internal hidden bindings grant no knowledge.
+This accepted disposable integration adds no general capability,
+access derivation, inference engine or campaign character-state model.
+
+Targeted correction: bounded inquiry recalls the character's own accepted effect
+and retrieves only legitimately granted character information. Without additional
+information, the observed effect alone does not establish its cause. Granted
+knowledge, inference and reported claims retain their distinctions and attribution;
+inquiry acquires no new knowledge or authoritative consequence itself.
+
 Establish what a character can do, how character-specific perspective and
 constraints bear on informational access, and what continuity matters to future
 play. Accessible views may be derived jointly from external world conditions

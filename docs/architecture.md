@@ -333,6 +333,35 @@ Region Packs, World State, F01/F05 or saves. See the [interface, verification an
 limitations](information_resolution_core_v1a_handoff.md). Owner acceptance followed
 final code-level review on October 21, 2026; the implementation remains uncommitted.
 
+## Information-Grounded Adjudication V1 — owner-accepted bounded implementation
+
+The October 22, 2026 [implementation handoff](information_grounded_adjudication_v1_handoff.md)
+adds `engine/information_adjudication.py`, a disposable session consuming V1a's
+public InformationAccess operations. Supplied authorized methods/capability/means,
+retrieved facts and hidden bindings govern finite condition evaluation and existing
+d6 mechanics. An offline untrusted proposal must match the owning assessment before
+one publication of costs, time, retained obligations, ended bindings and safe history.
+Technical rejection publishes neither state nor fictional failure. F05 controls
+continuation/resumption; F01 receives only accepted accessible meaning. Later
+interactions apply accepted endings/commitments without erasing earlier results.
+
+The targeted inquiry correction supplies a read-only F01 response when F05 returns
+control for inquiry about that character's accepted observation. It uses only the
+safe historical observation and legitimately granted character facts, preserving
+inference/report status and attribution; it does not query internal bindings,
+execute an action or publish state. A mechanical draw preceding proposal validation
+is provisional: rejection discards it, an explicit retry can sample again, and
+only accepted attempts gain F05 result continuity. No pending-roll storage is added.
+
+The owner accepted this implementation and inquiry correction on October 22,
+2026 and authorized publication through the official strict fast-forward workflow.
+Suppliers own relevance,
+coherent supported terms, authorization, capability and legitimate character access.
+The handoff defines the finite equality/group/effect semantics and their limits.
+No general language/rules interpreter, production route, campaign state/schema,
+save API, Region Pack or provider change is included. This follows the existing
+damaged-gate disposable candidate pattern; conceptual authority remains unchanged.
+
 ## Context Loading
 
 Do not read this file for every routine implementation turn.

@@ -40,6 +40,19 @@ These bounded implementations preserve the conceptual owners and Partial system
 classifications; [Option C research](../../architecture_comprehension_review.md)
 does not replace accepted sequential dispatch.
 
+## Information-grounded adjudication — accepted bounded implementation
+
+The [October 22, 2026 handoff](../../information_grounded_adjudication_v1_handoff.md)
+records owner acceptance of the bounded implementation and inquiry correction.
+Authored/Character suppliers establish methods,
+capability, access and relevance; V1a retrieves trusted premises; Action/Resolution
+applies finite conditions and existing mechanics and validates offline proposals.
+The disposable session publishes accepted world consequences and retained
+commitments atomically, while F05 controls continuation and F01 receives safe
+meaning. Retrieval/proposal/presentation confer no authority themselves. No
+production persistence, autonomous actor choice or general rule engine is added;
+Partial system classifications remain unchanged.
+
 ## Responsibility hierarchy
 
 Information Resolution Core V1a is an accepted read-only cross-system information

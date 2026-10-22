@@ -21,8 +21,11 @@ provider behavior, should be presented as contracts.
 - [Responsibility hierarchy and information flow](system-map.md)
 - [Reusable manifest template](system-manifest-template.md)
 - [Information-Grounded Adjudication V1](../information-grounded-adjudication-v1.md)
-  — Owner-accepted D-A1–D-A6; consolidation for owner review. Retains existing
+  — Owner-accepted D-A1–D-A6 and bounded implementation. Retains existing
   system authority and F01/F05 contracts; implementation separately authorized.
+  The [October 22 bounded implementation](../../information_grounded_adjudication_v1_handoff.md)
+  is owner-accepted with its inquiry correction; finite conditions, offline acceptance and session
+  continuity are implemented without production/persistence integration.
 - [Information Foundation Functional Design V1](../information-foundation-functional-design-v1.md)
   — Accepted design; bounded V1a implementation accepted following final code-level review.
   See the [V1a handoff](../../information_resolution_core_v1a_handoff.md).

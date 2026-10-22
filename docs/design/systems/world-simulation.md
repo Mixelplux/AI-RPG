@@ -193,6 +193,13 @@ sewer, and wilderness traversal do not inherently need exhaustive tiles/nodes.
 
 ## Current implementation
 
+Owner-accepted October 22, 2026: [Information-Grounded Adjudication V1](../../information_grounded_adjudication_v1_handoff.md)
+owns accepted external consequences in a disposable session following the existing
+candidate pattern. Costs/time, ended bindings, retained commitments and meaningful
+history publish once after validation and safe context construction. Later session
+interactions respect these changes. This accepted bounded implementation does not modify
+campaign World State, movement, saves, Region Packs or persistence architecture.
+
 Information Resolution Core V1a adds an accepted standalone read-only consumer of
 supplied authoritative current/history records. It does not modify World State,
 apply changes or authenticate inputs. Production integration and history retention

@@ -10,18 +10,18 @@
   "active_sprint": null,
   "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "information-resolution-core-v1a"
+    "id": "information-grounded-adjudication-v1"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "information-resolution-core-v1a",
-    "title": "Information Resolution Core V1a",
+    "id": "information-grounded-adjudication-v1",
+    "title": "Information-Grounded Adjudication V1",
     "type": "capability-package",
     "status": "complete",
-    "risk_level": "routine",
-    "goal": "Implement the owner-authorized read-only information core and offline validation; submit an uncommitted handoff for owner acceptance.",
+    "risk_level": "elevated",
+    "goal": "Bounded end-to-end adjudication using supplied authorized context, retrieved authoritative premises, offline proposals, atomic acceptance and safe continuity.",
     "predecessor": {
-      "id": "f01-f05-bounded-playable-integration-v1"
+      "id": "information-resolution-core-v1a"
     },
     "platform": {
       "provider_requests": "forbidden",
@@ -29,11 +29,11 @@
       "save_version": 1
     },
     "scope": [
-      "Composable in-memory information, stable identity, supplied current/history, selective relationships, hidden binding constraints, epistemic availability and character access; no production integration or mutation.",
-      "No Region Pack edits/contracts, persistence/save changes, F01/F05 rewrites, providers, general adjudication or V1b. No Git staging, commit, merge, push or publication."
+      "Disposable in-memory ward, agreement and mundane interactions; InformationAccess, bounded term evaluation, existing mechanics, F05 control and F01 safe meaning. No production campaign/save/Region Pack changes.",
+      "Offline suppliers only; no live providers. Owner accepted the implementation, inquiry correction and experiential smoke October 22, 2026 and separately authorized verified Git staging, commit, strict fast-forward merge and push within the exact 17-file publication scope."
     ],
     "verification": [
-      "Syntax, focused offline representative and reference-catalog tests, relevant F01/F05 regressions, lifecycle/preflight and diff integrity."
+      "Syntax, representative offline and changed-premise tests, rejection atomicity, hidden access, F01/F05/information/state/save compatibility regressions, targeted Elevated architecture review, lifecycle and diff checks."
     ]
   }
 }

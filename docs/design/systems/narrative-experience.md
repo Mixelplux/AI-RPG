@@ -26,6 +26,21 @@ The initial review identity above remains historical. See
 
 ## Purpose
 
+Owner-accepted implementation, October 22, 2026: [Information-Grounded Adjudication V1](../../information_grounded_adjudication_v1_handoff.md)
+builds F01 context from accepted safe observations, granted retained information
+and meaningful prior results/commitments. Untrusted proposal rejection produces
+no fictional narration. Safe-context failure prevents publication; later expression
+failure preserves accepted resolution. The disposable smoke uses deterministic
+meaning; the accepted bounded implementation claims no live prose fidelity or
+general semantic validation. The F01 implementation itself is unchanged.
+
+Targeted correction: a read-only inquiry F01 context explicitly labels the earlier
+accepted observation and retains its historical time. It adds only granted
+character information, keeping inference/claim qualifications and report sources.
+It contains neither internal binding records nor retrieval diagnostics, and it
+does not repeat execution or publish another result. The smoke now offers
+`inquire`/`look`, with accounting separately available as `status`.
+
 Implementation reconciliation (October 15, 2026): F01's original stateless,
 single-call realization component plus its bounded
 [presentation correction](../../f01_presentation_correction_v1_report.md) is

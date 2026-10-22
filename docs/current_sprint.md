@@ -1,18 +1,32 @@
-# Information Resolution Core V1a — complete, accepted
+# Information-Grounded Adjudication V1 — complete, owner accepted
 
-The owner authorized this Routine-risk package October 21, 2026. Its first
-milestone was staged and validated before implementation; implementation,
-offline verification and documentation reconciliation are now complete. On
-October 21, 2026 the owner accepted V1a subject to final code-level review.
-That review found no blocking defects; the acceptance condition is satisfied.
-Baseline/HEAD: `cd6de8be40407f504aba1438b6d12f8828b81dde`.
+Owner accepted the bounded implementation, targeted inquiry correction and
+experiential smoke on October 22, 2026. Separate explicit authorization covers
+staging the exact 17 accepted files, one publication commit, verified strict
+fast-forward merge and push. Risk remains Elevated.
 
-See [completion handoff](information_resolution_core_v1a_handoff.md) for public
-operations, assessment, scenario coverage, test results, limitations and exact
-changed files. The read-only core is isolated from production gameplay,
-Region Packs, saves, providers and F01/F05. No general adjudication is claimed.
+Implementation baseline and publication parent:
+`5f493e48d28f1c8591ec22aa8afeb040fc7738e2`.
+Branch: `codex/information-grounded-adjudication-v1`.
+Implementation worktree: `D:\AI RPG\.artifacts\information-grounded-adjudication-v1`.
 
-Lifecycle JSON remains authoritative. The package is complete; active_sprint,
-active_capability_package and next_sprint are null. Nothing selects or starts V1b. Changes are
-uncommitted, index empty; no staging, commit, merge, push or publication authority
-has been granted. The original dirty checkout and existing worktrees remain intact.
+The staged milestone implements bounded end-to-end adjudication using supplied
+context, V1a authoritative information, finite supported conditions, existing
+mechanics, offline untrusted proposals and atomic accepted consequences. Read-only
+inquiry uses accepted observations and legitimate knowledge without new action,
+cost, roll or mutation. Retained commitments, accepted-result continuity and
+hidden-information boundaries remain intact. General interpretation, campaign
+persistence and production integration remain deferred.
+
+Fresh publication verification passed: 48 focused and 85 regression unittest cases
+(133 total), F01 and seven competence script groups, save/load compatibility,
+syntax and both ordinary/informed inquiry smokes. Network connections were denied
+during automated behavior checks. The official Git workflow supplies final
+lifecycle/preflight, whitespace and publication integrity checks. See the
+[acceptance/publication handoff](information_grounded_adjudication_v1_handoff.md)
+for exact inventory, evidence, supported semantics and limitations.
+
+Lifecycle JSON is authoritative: complete and idle; active_sprint,
+active_capability_package and next_sprint are null. No next package is selected.
+The original dirty checkout, owner saves and unrelated worktrees are preserved.
+No live provider action is authorized or performed.

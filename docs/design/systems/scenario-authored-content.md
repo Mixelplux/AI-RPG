@@ -16,6 +16,14 @@ content format. The five existing manifests retain their authority boundaries.
 
 ## Purpose
 
+Owner-accepted implementation, October 22, 2026: [Information-Grounded Adjudication V1](../../information_grounded_adjudication_v1_handoff.md)
+supplies test-only coherent foundations and finite binding terms for ward,
+agreement and mundane cases. Explicit method/capability/access/authority suppliers
+replace missing upstream systems without selecting scenario outcomes. Changed
+premises and opaque identities exercise the same resolution mechanism. This
+implementation is accepted; no Region Pack schema/content or general term
+authoring/import system changes.
+
 Supply intentional setting and scenario material from which owning gameplay
 systems can establish a coherent beginning, interpret supported declarations,
 and express play. Authored foundations enrich the world without becoming a

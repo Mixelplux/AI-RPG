@@ -36,6 +36,12 @@ the accepted design; this status update changes none of their decisions.
 
 ### Purpose
 
+October 22, 2026: the separate [Information-Grounded Adjudication V1 implementation](../information_grounded_adjudication_v1_handoff.md)
+uses the accepted read-only core for a bounded disposable adjudication session.
+It is owner-accepted, including the inquiry correction, with finite condition semantics and offline
+proposals. It does not expand V1a's own authority or claim full Design implementation,
+production integration or campaign persistence.
+
 The Information Foundation provides sufficient reliable information for coherent, consequential gameplay across authored world content, evolving circumstances, meaningful history, actor knowledge, relationships and binding constraints.
 
 It must support open-ended gameplay without exhaustive world modeling, continuous simulation or detailed tracking of every possible fact.

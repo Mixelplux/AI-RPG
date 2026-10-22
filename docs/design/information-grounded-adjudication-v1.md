@@ -1,6 +1,6 @@
 # Information-Grounded Adjudication V1
 
-**Phase: Design. Status: owner-accepted D-A1–D-A6; consolidation for owner review.**
+**Phase: Design. Status: owner-accepted D-A1–D-A6; bounded implementation accepted.**
 Consolidated October 22, 2026 from the owner's accepted decision handoff.
 This is the canonical Design record for those decisions and qualifications.
 Reference publication: `68a3ce6a2c712ffddfa6304fb0e35b0b2beca5ff`
@@ -13,6 +13,16 @@ no package, stages no sprint, and authorizes no implementation or publication.
 [WORKFLOW.md](../../WORKFLOW.md) retains lifecycle and authorization authority.
 
 ## Governing contracts and purpose
+
+Implementation status, October 22, 2026: the separately owner-authorized
+[bounded implementation handoff](../information_grounded_adjudication_v1_handoff.md)
+was owner-accepted with its bounded inquiry correction and experiential smoke
+on October 22, 2026, with separate authorization for Git publication. It implements
+finite supported conditions over
+V1a retrieval, supplied context, existing mechanics, offline proposal acceptance
+and disposable consequential continuity. Production integration, general rules/
+language interpretation and campaign persistence remain deferred. D-A1–D-A6
+below remain accepted Design; only this bounded implementation is accepted.
 
 Consequential gameplay must depend on applicable authoritative information,
 including hidden binding conditions. Retrieval supplies context; the owning
