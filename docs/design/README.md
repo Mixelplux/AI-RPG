@@ -15,6 +15,11 @@ Existing sources remain at their original paths:
 
 ## Accepted design records
 
+- [Information-Grounded Adjudication V1](information-grounded-adjudication-v1.md) —
+  owner-accepted D-A1–D-A6; consolidation for owner review. Records information,
+  authorization and acceptance boundaries, bounded validation and implementation
+  readiness; selects no package and authorizes no implementation.
+
 - [F01 — Truthful Presentation and Epistemic Fidelity](f01-truthful-presentation-and-epistemic-fidelity.md) — ten owner-accepted gameplay decisions,
   including revised D10; documentation consolidation proposed for owner review.
   Includes deferred Character System retention/recall and proportional extended-beta
