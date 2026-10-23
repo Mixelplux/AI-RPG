@@ -15,6 +15,14 @@ Existing sources remain at their original paths:
 
 ## Accepted design records
 
+- [Integrated Gameplay Architecture V1](integrated-gameplay-architecture-v1.md) —
+  owner-accepted IG-01–IG-18 and IG-20–IG-23; IG-19 is not accepted. Canonical
+  consolidation proposed for owner review, covering situated coordination,
+  domain-owned dependencies, authoritative acceptance and continuing gameplay.
+  The [implementation plan](integrated-gameplay-architecture-v1-implementation-plan.md)
+  records I1–I3 over a common reusable runtime. Neither record selects a package
+  or authorizes implementation, lifecycle changes or publication.
+
 - [Information-Grounded Adjudication V1](information-grounded-adjudication-v1.md) —
   owner-accepted D-A1–D-A6; consolidation for owner review. Records information,
   authorization and acceptance boundaries, bounded validation and implementation

@@ -53,6 +53,34 @@ meaning. Retrieval/proposal/presentation confer no authority themselves. No
 production persistence, autonomous actor choice or general rule engine is added;
 Partial system classifications remain unchanged.
 
+## Integrated gameplay architecture — accepted design
+
+[Integrated Gameplay Architecture V1](../integrated-gameplay-architecture-v1.md)
+consolidates owner-accepted IG-01–IG-18 and IG-20–IG-23; IG-19 is not accepted.
+This documentation candidate preserves F01, F05, Information Foundation and
+Information-Grounded Adjudication. It makes no new implementation claim or change
+to Partial system classifications. Its [I1–I3 plan](../integrated-gameplay-architecture-v1-implementation-plan.md)
+extends a common reusable runtime only when separately authorized and staged.
+
+Coordination interprets and manages executable undertaking scope, ordinary
+constituent steps and continuation boundaries. Authoritative scene circumstances,
+including geography, actors, environment and time, ground situated progression;
+responsible domains establish any legitimate additional specificity. Player-owned
+direction, method and risk choices retain F05 control boundaries. Coordination
+acquires no independent authority over world facts, mechanical outcomes or NPC
+decisions and is not an additional outcome-owning system.
+
+Domains normally identify their applicable information requirements, including
+relationships, innate capabilities, equipment and active effects; Information
+Foundation supplies direct and relationship-based retrieval. The coordinator
+facilitates that flow. Accepted consequential facts enter their owning domains
+and remain retrievable. Domain validation and coherent acceptance preserve
+dependent consequences, current-state validity, retry safety and durable
+recognition, including recovery/save-load continuity in the target design.
+F01 still receives only legitimate accessible meaning. Conceptual responsibilities
+mandate neither separate runtime modules nor individual AI calls; see the
+[contract reconciliation](../integrated-gameplay-architecture-v1.md#contract-reconciliation-and-responsibility-relationships).
+
 ## Responsibility hierarchy
 
 Information Resolution Core V1a is an accepted read-only cross-system information
