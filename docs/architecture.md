@@ -49,7 +49,7 @@ CLI intercepts applicable session controls → session handling / feedback
     ↓ gameplay input
 GameEngine.process_command() — gameplay orchestration
     ↓
-Contextual material action → contextual investigation → legacy fallback
+Bounded coordination → contextual material action → contextual investigation → legacy fallback
 (next route only if input is unclaimed)
     ↓
     ├─ Read-only assessment / result → player-facing presentation
@@ -66,6 +66,45 @@ Contextual material action → contextual investigation → legacy fallback
 
 `GameEngine` is the gameplay-facing orchestration boundary. Player-facing code must not directly mutate lower-level state.
 
+## Bounded I1-M1 coordination — owner-accepted bounded implementation
+
+`engine/gameplay_coordination.py` adds one common session-local runtime with
+interpretation, undertaking, situated-context and coordination-decision contracts.
+GameEngine tries this path before contextual/legacy dispatch. Claimed ambiguous,
+unsupported and erroneous requests are terminal; only unclaimed raw commands
+continue. Existing `search for ...` investigation phrasing remains unclaimed.
+
+Owner-supplied domain checkpoints identify applicable responsibilities and the
+next bounded activity. Existing F05 policy decides continuation/control/completion;
+coordination does not resolve mechanics, invent methods/means, choose NPC intent
+or own consequential truth. Permissions are single-use and require fresh matching
+context and domain assessment. Accepted references and constraints remain in the
+logical undertaking; explicit continuation rechecks current prerequisites.
+
+Public results use fixed messages and character-accessible references, with
+numbered choices for explicit clarification instead of hidden keys. Internal context, diagnostics and raw
+exceptions stay out of player output. The small offline grammar covers explicit
+open/search/observe forms, inquiry/preparation/commitment and limited modifiers;
+it is not validated general language understanding. Production observation uses
+existing safe scene projection. Missing search/door/actor capabilities are
+explicit owning-domain fixtures exercising this same GameEngine runtime.
+
+Suppliers own read-only assessment, accurate material revisions and atomic domain
+execution. No universal transaction engine, I2 consequential integration or I3
+persistence/recovery is implemented. Runtime replacement clears session-local
+coordination. Save version 1 and existing owning publication operations are
+unchanged. See [the I1-M1 handoff](current_sprint.md) for validation and trust limits.
+Owner-authorized I1-M1 correction, October 23: accepted receipts now carry explicit
+domain result meaning and a Character-safe result projection. The common runtime
+immediately assesses the next current boundary and continues ordinary supported
+steps only under fresh F05 permission and domain acceptance. A natural decision
+point describes established accessible circumstances without leading questions or
+automatic menus. Explicit ambiguity can still require clarification. Exact
+supplier-supported direction phrases provide bounded free-form choice; they are
+not general navigation or language interpretation. Refinements preserve accepted
+work and apply constraints prospectively. A later failure retains earlier accepted
+results/costs. See the [correction handoff](current_sprint.md) for the finite per-call
+bound and trusted supplier limits; no I2/I3 or new gameplay mechanics are claimed.
 ## Sources of Truth
 
 ### World State

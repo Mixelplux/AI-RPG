@@ -13,6 +13,7 @@ from engine.scene_narrator import narrate_scene
 from engine.navigation_projection import derive_navigation_projection
 from engine.current_scene_projection import build_current_scene_projection
 from engine.interaction_kernel import process_player_input
+from engine import gameplay_coordination as coordination
 from engine import contextual_action, material_state
 from engine.world_update import apply_interaction
 from engine.region_validator import validate_region
@@ -89,7 +90,7 @@ class GameEngine:
         region_path: str,
         entry_location_id: str | None = None,
         initial_world_state: Dict[str, Any] | None = None,
-        *, investigation_policy=None,
+        *, investigation_policy=None, coordination_context=None, coordination_domain=None,
     ):
         self.region_path = region_path
         self.region = load_region(region_path)
@@ -117,6 +118,28 @@ class GameEngine:
         self._investigation_policy = investigation_policy or investigation.WestRoadInvestigation()
         self._investigation_focus = investigation.InvestigationFocus()
         self._action_focus = contextual_action.ActionFocus()
+        self._coordination = coordination.Coordinator(
+            coordination_context or self.get_coordination_context,
+            coordination_domain or coordination.SceneObservation())
+
+    def get_coordination_context(self):
+        """Copied owner inputs. No general access/means/geography is inferred."""
+        import json
+        world = self.get_world_state()
+        location = world["player"]["current_location_id"]
+        visible = self.get_player_perception()["visible"]["location"]
+        # Exact local snapshot identity, not a persisted revision or acceptance ledger.
+        revision = json.dumps((location, world["time"], visible), sort_keys=True)
+        aliases = tuple(dict.fromkeys((location, visible.get("name") or location, "surroundings")))
+        return coordination.SituatedContext(
+            revision, location,
+            targets=(coordination.Target(location, aliases, "observe", ("observe",), "observe"),),
+            accessible=(("scene", visible.get("description_seed") or visible.get("name") or "The surroundings are visible."),))
+
+    def process_coordination(self, player_input=None, *, interpretation=None, resume=False, answers=()):
+        decision = self._coordination.process(text=player_input, interpretation=interpretation,
+                                              resume=resume, answers=answers)
+        return decision.player_result() if decision is not None else None
 
     def process_contextual_action(self, player_input=None, *, frame=None):
         if (player_input is None) == (frame is None):
@@ -1383,6 +1406,7 @@ class GameEngine:
         self.scene_snapshot = other.get_scene_snapshot()
         self._investigation_focus.clear()
         self._action_focus.clear()
+        self._coordination.clear()
 
     def _compose_resolved_conversation_consequences(
         self,
@@ -1496,7 +1520,9 @@ class GameEngine:
         return candidate_world_state
 
     def process_command(self, player_input: str) -> Dict[str, Any]:
-        result = self.process_contextual_action(player_input)
+        result = self.process_coordination(player_input)
+        if result is None:
+            result = self.process_contextual_action(player_input)
         if result is None:
             result = self.process_contextual_investigation(player_input)
         if result is None:

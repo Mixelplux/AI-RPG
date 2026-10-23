@@ -79,6 +79,28 @@ output cannot choose a draw/result, waive a cost, mutate state, or establish
 success. The narrower responsibility map explains who decides what within that
 boundary; it does not weaken validation or atomic publication safeguards.
 
+## Bounded I1-M1 implementation — owner accepted
+
+October 23, 2026: [I1-M1](../../current_sprint.md) adds a common GameEngine
+coordination runtime with untrusted interpretation, undertaking/context contracts
+and existing F05 control. Owning domain suppliers establish applicable
+responsibilities, prerequisites and accepted results. Coordination authorizes
+only the next situated step and rechecks current context before execution;
+it neither resolves mechanics nor replaces domain acceptance. Search/door/guard
+responsibilities are explicitly supplied offline fixtures; production observation
+is read-only. General adjudication, I2 integration and I3 durability remain deferred.
+The overall Partial classification and Action & Resolution authority are unchanged.
+Owner-authorized I1-M1 correction, October 23: accepted receipts now carry explicit
+domain result meaning and a Character-safe result projection. The common runtime
+immediately assesses the next current boundary and continues ordinary supported
+steps only under fresh F05 permission and domain acceptance. A natural decision
+point describes established accessible circumstances without leading questions or
+automatic menus. Explicit ambiguity can still require clarification. Exact
+supplier-supported direction phrases provide bounded free-form choice; they are
+not general navigation or language interpretation. Refinements preserve accepted
+work and apply constraints prospectively. A later failure retains earlier accepted
+results/costs. See the [correction handoff](../../current_sprint.md) for the finite per-call
+bound and trusted supplier limits; no I2/I3 or new gameplay mechanics are claimed.
 ## Explicit non-authority
 
 - **World Simulation:** external facts, physical evidence, positions, actual time

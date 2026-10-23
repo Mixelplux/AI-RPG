@@ -26,6 +26,33 @@ Implementation reconciliation: October 12, 2026 at published baseline
 [material handling correction](../../contextual_action_structural_correction.md).
 The initial review metadata above is historical.
 
+## Bounded I1-M1 integration — owner accepted
+
+October 23, 2026: [I1-M1](../../current_sprint.md) adds a bounded coordination
+route before existing contextual/legacy handling. Recognized unresolved or
+ambiguous input returns a contained public result rather than reaching another
+interpreter. Unclaimed commands retain established handling, including the
+`search for ...` investigation family. Inquiry and preparation assessment do not
+execute the proposed activity. Public choices expose numbered IDs and legitimate
+accessible text; hidden domain keys, internal context and exceptions are omitted.
+
+Explicit continuation/numbered choice is available through
+`GameEngine.process_coordination`; the offline smoke demonstrates it without
+changing production CLI controls. This is bounded offline wording, not general
+language understanding or an independent presentation authority. Production
+observation reuses safe scene projection; extended gameplay examples use declared
+fixture suppliers through the same runtime. Partial status is unchanged.
+Owner-authorized I1-M1 correction, October 23: accepted receipts now carry explicit
+domain result meaning and a Character-safe result projection. The common runtime
+immediately assesses the next current boundary and continues ordinary supported
+steps only under fresh F05 permission and domain acceptance. A natural decision
+point describes established accessible circumstances without leading questions or
+automatic menus. Explicit ambiguity can still require clarification. Exact
+supplier-supported direction phrases provide bounded free-form choice; they are
+not general navigation or language interpretation. Refinements preserve accepted
+work and apply constraints prospectively. A later failure retains earlier accepted
+results/costs. See the [correction handoff](../../current_sprint.md) for the finite per-call
+bound and trusted supplier limits; no I2/I3 or new gameplay mechanics are claimed.
 ## Purpose
 
 Own the interaction surface between the human player and the game: receive

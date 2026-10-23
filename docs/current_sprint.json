@@ -10,18 +10,18 @@
   "active_sprint": null,
   "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "information-grounded-adjudication-v1"
+    "id": "i1-situated-gameplay-coordination-foundation-v1"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "information-grounded-adjudication-v1",
-    "title": "Information-Grounded Adjudication V1",
+    "id": "i1-situated-gameplay-coordination-foundation-v1",
+    "title": "I1-M1 — Common Coordination Runtime (I1 — Situated Gameplay Coordination Foundation V1)",
     "type": "capability-package",
     "status": "complete",
     "risk_level": "elevated",
-    "goal": "Bounded end-to-end adjudication using supplied authorized context, retrieved authoritative premises, offline proposals, atomic acceptance and safe continuity.",
+    "goal": "Owner-accepted I1-M1 Common Coordination Runtime and situated-progression/result-presentation correction; authorized scope complete and lifecycle idle.",
     "predecessor": {
-      "id": "information-resolution-core-v1a"
+      "id": "information-grounded-adjudication-v1"
     },
     "platform": {
       "provider_requests": "forbidden",
@@ -29,11 +29,14 @@
       "save_version": 1
     },
     "scope": [
-      "Disposable in-memory ward, agreement and mundane interactions; InformationAccess, bounded term evaluation, existing mechanics, F05 control and F01 safe meaning. No production campaign/save/Region Pack changes.",
-      "Offline suppliers only; no live providers. Owner accepted the implementation, inquiry correction and experiential smoke October 22, 2026 and separately authorized verified Git staging, commit, strict fast-forward merge and push within the exact 17-file publication scope."
+      "Owner accepted I1-M1 and its documented limits after successful experiential smoke October 23, 2026. Separate authorization covers verified staging/commit/strict fast-forward merge/push of exactly the 12 handoff files. No live providers or later milestones authorized.",
+      "I1-M1: interpretation, undertaking, authoritative situated context, responsibility selection, F05 control, common offline runtime validation and F01-safe failure containment. IG-19 excluded.",
+      "No I2 consequential integration, I3 durable restoration, new save version/migration, Region Pack production edits, unsupported domain mechanics, generic framework, narrative polish or unrelated refactor."
     ],
     "verification": [
-      "Syntax, representative offline and changed-premise tests, rejection atomicity, hidden access, F01/F05/information/state/save compatibility regressions, targeted Elevated architecture review, lifecycle and diff checks."
+      "Preparation: official Windows/interpreter preflight, established lifecycle validator, JSON parsing, Git whitespace/diff-scope and worktree/index checks.",
+      "Implementation: syntax/static, focused offline coordination and affected-system regressions, targeted Elevated ownership/authorization/access review and applicable save compatibility checks. Structural, bounded language, live semantic and integrated gameplay evidence remain distinct. Correction verifies accepted domain result meaning, immediate situated progression, natural decision boundaries, prospective constraints and free-form fixture directions.",
+      "Publication reuses accepted 230-test, F01, script/save and four-smoke evidence; official preflight/lifecycle/JSON/whitespace, exact candidate inventory, unchanged accepted source and clean committed parent/tree checks are required."
     ]
   }
 }

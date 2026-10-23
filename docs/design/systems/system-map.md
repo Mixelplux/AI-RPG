@@ -53,6 +53,32 @@ meaning. Retrieval/proposal/presentation confer no authority themselves. No
 production persistence, autonomous actor choice or general rule engine is added;
 Partial system classifications remain unchanged.
 
+## I1-M1 coordination — owner-accepted bounded implementation
+
+October 23, 2026: the [bounded I1-M1 handoff](../../current_sprint.md) records a
+common GameEngine coordination path before contextual/legacy dispatch. It joins
+untrusted interpretation, coherent undertaking, authoritative situated context
+and F05 control without becoming an outcome-owning system. Claimed unresolved
+input is terminal; applicable responsibilities and checkpoints come from trusted
+gameplay suppliers. Production safe observation reuses existing projection;
+contract-conforming fixtures supply missing World/Character/Action/Actor authority
+for representative search/door/guard validation through that same runtime.
+
+Accepted-step references are logical session continuity, not I3 persistence.
+Atomicity remains an owning-domain contract; I2 acceptance/recovery integration,
+general language reliability and upstream mechanics remain unimplemented.
+Partial classifications, accepted Design and conceptual ownership are unchanged.
+Owner-authorized I1-M1 correction, October 23: accepted receipts now carry explicit
+domain result meaning and a Character-safe result projection. The common runtime
+immediately assesses the next current boundary and continues ordinary supported
+steps only under fresh F05 permission and domain acceptance. A natural decision
+point describes established accessible circumstances without leading questions or
+automatic menus. Explicit ambiguity can still require clarification. Exact
+supplier-supported direction phrases provide bounded free-form choice; they are
+not general navigation or language interpretation. Refinements preserve accepted
+work and apply constraints prospectively. A later failure retains earlier accepted
+results/costs. See the [correction handoff](../../current_sprint.md) for the finite per-call
+bound and trusted supplier limits; no I2/I3 or new gameplay mechanics are claimed.
 ## Integrated gameplay architecture — accepted design
 
 [Integrated Gameplay Architecture V1](../integrated-gameplay-architecture-v1.md)
