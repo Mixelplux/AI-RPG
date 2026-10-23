@@ -110,11 +110,28 @@ canonical save payloads are identical. This checks the implemented continuity
 signals and authoritative equivalence. The owner separately accepted the corrected
 conversational experience on October 11, 2026.
 
-From the isolated worktree root:
+Historical smoke command (October 11, 2026), from the isolated worktree root:
 
 ```powershell
 .\.venv\Scripts\python.exe tools/play_north_gate_discussion_smoke.py
 ```
+
+**Archived historical reproduction.** Restore the archived launcher with its
+matching October 11 source revision in a separate recovery checkout, using the
+recorded provenance. Redirect its disposable saves to fresh generated output
+before execution; the original launcher targets historical `C:/tmp` evidence.
+See [archive recovery](repository_housekeeping_2026_10_22.md).
+
+**Present-day execution.** From a current checkout root, use the replacement:
+
+```powershell
+.\.venv\Scripts\python.exe tools/play_contextual_investigation_smoke.py
+```
+
+The replacement runs the current implementation and redirects disposable saves
+to `.artifacts/contextual-investigation-smoke/owner-smoke-save.json`. The routes
+below are the historical smoke scenarios; running them today verifies current
+behavior.
 
 Primary cold-start route:
 
@@ -211,3 +228,8 @@ owner changes/saves and original evidence bytes were preserved; index empty,
 HEAD and main unchanged. Credential-bearing paths were excluded from byte checks
 and never read or hashed. No unresolved technical closeout blocker; the remaining
 publication prerequisite is separate Git authorization and a committed clean candidate.
+
+Housekeeping note (October 22, 2026): the original North-Gate launcher is archived.
+The smoke instructions above retain the October 11 command and separately identify
+historical recovery and the replacement for current checkouts;
+see [archive recovery](repository_housekeeping_2026_10_22.md).

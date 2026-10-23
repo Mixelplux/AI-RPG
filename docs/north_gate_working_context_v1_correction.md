@@ -86,11 +86,28 @@ See [deferred findings](deferred_findings.md); no further V1 correction is autho
 
 ## Short owner smoke
 
-From the isolated worktree root, run:
+Historical smoke command (October 11, 2026), from the isolated worktree root:
 
 ```powershell
 .\.venv\Scripts\python.exe tools/play_north_gate_discussion_smoke.py
 ```
+
+**Archived historical reproduction.** Restore the archived launcher with its
+matching October 11 source revision in a separate recovery checkout, using the
+recorded provenance. Redirect its disposable saves to fresh generated output
+before execution; the original launcher targets historical `C:/tmp` evidence.
+See [archive recovery](repository_housekeeping_2026_10_22.md).
+
+**Present-day execution.** From a current checkout root, use the replacement:
+
+```powershell
+.\.venv\Scripts\python.exe tools/play_contextual_investigation_smoke.py
+```
+
+The replacement runs the current implementation and redirects disposable saves
+to `.artifacts/contextual-investigation-smoke/owner-smoke-save.json`. The routes
+below are the historical smoke scenarios; running them today verifies current
+behavior.
 
 ```text
 discuss patrol with Elin
@@ -116,3 +133,8 @@ load/reset/exit can be checked using the original interruption route.
 
 No commit/staging/merge/push authority has been granted. Owner acceptance is recorded;
 Git publication remains pending. Lifecycle is complete/idle; no next milestone starts.
+
+Housekeeping note (October 22, 2026): the original North-Gate launcher is archived.
+The smoke instructions above retain the October 11 command and separately identify
+historical recovery and the replacement for current checkouts;
+see [archive recovery](repository_housekeeping_2026_10_22.md).

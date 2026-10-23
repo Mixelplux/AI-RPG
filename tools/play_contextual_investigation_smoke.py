@@ -1,4 +1,4 @@
-"""Offline owner smoke; disposable saves stay under C:/tmp."""
+"""Offline owner smoke; disposable saves stay under the checkout .artifacts directory."""
 from pathlib import Path
 import sys
 from unittest.mock import patch
@@ -12,9 +12,9 @@ def blocked(*args, **kwargs):
 
 
 def main():
-    evidence = Path("C:/tmp/AI-RPG-Contextual-Investigation-V1-Implementation")
+    evidence = Path(__file__).resolve().parents[1] / ".artifacts" / "contextual-investigation-smoke"
     evidence.mkdir(parents=True, exist_ok=True)
-    print("Contextual investigation smoke. Saves use C:/tmp; providers are blocked.")
+    print("Contextual investigation smoke. Saves use .artifacts; providers are blocked.")
     with patch.object(play_game, "SAVE_PATH", str(evidence / "owner-smoke-save.json")), \
          patch("engine.narration_source.OpenAI", side_effect=blocked), \
          patch("socket.create_connection", side_effect=blocked), \

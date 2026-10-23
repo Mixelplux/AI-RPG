@@ -27,19 +27,22 @@ and historical scope. [Deferred findings](deferred_findings.md) retain stable ID
 
 ## Evidence locator and status
 
-All R1–R6 evidence below is local under `C:/tmp`, outside durable repository
-documentation. Paths were checked for this review; availability on another machine
-is not guaranteed. Consult the reports and their linked final ledgers/patches rather
-than duplicating reports here. Counts are historical claims, not checks rerun here.
+R1–R6 reports and selected controlled evidence were archived during owner-authorized
+housekeeping on October 22, 2026. The locators below point to verified archive copies;
+`manifest.json` and `inventory.jsonl` preserve original paths and recovery details.
+Potential private saves, state, raw responses and unknown payloads remain at their
+original locations; restore archived files alongside them before reproducing a study.
+See [housekeeping and recovery](repository_housekeeping_2026_10_22.md). Availability
+on another machine is not guaranteed. Counts remain historical claims, not reruns.
 
 | ID | Local evidence | What it establishes and limits |
 |---|---|---|
-| R1 | `C:/tmp/AI-RPG-Action-Resolution-Experiment-A/evidence_report.md` | Initial fixture block is retained; the appended completed/resumed results supersede its initial blocked status. Wall assessment/preparation/commitment/stopping/disclosure probes show bounded production gaps and a supplied reference evaluator, not production climbing or general physical validation. |
-| R2 | `C:/tmp/AI-RPG-Action-Resolution-Experiment-A/A1/evidence_report.md` | Completed disclosure/authorization comparison. Pending confirmation is one tested policy, not the only safe policy; full action re-entry also satisfies the stipulated boundary. |
-| R3 | `C:/tmp/AI-RPG-Action-Resolution-Experiment-A/A2/evidence_report.md` | Completed six-case revalidation study using A.1's disposable evaluator. Current feasibility/identity/risk revalidation preserves intent and prior accepted effects; fixture success is not a production feature. |
-| R4 | `C:/tmp/AI-RPG-Outcome-First-Research/evidence_report.md` | Six supplied climbing/tracking outcomes, manually reviewed explanations and one continuity follow-up distinguish explanation from unauthorized effects/information. No provider generations, automatic semantic verifier or production mechanic was established. |
-| R5 | `C:/tmp/AI-RPG-Action-Routing-20261012-01a12fd0/comparative_report.md` | Completed A/B negative simplification experiments at `549fd848…`: A adds cross-purpose exclusion; B adds a router while retaining specialized interpretation. Both repair demonstrated combined-fixture collisions, but neither reduces overall runtime complexity. These are different experiments from R1's similarly named wall study. |
-| R6 | `C:/tmp/AI-RPG-Option-C-20261012-01a12fd0/option_c_report.md` | Promising bounded replacement experiment at `549fd848…`: shared interpretation, structured instructions and specialized execution replace the two raw-input pipelines. Handler separation improves; overall complexity changes little. Not accepted production architecture; third-purpose extensibility and general composition are hypotheses. |
+| R1 | `D:/AI-RPG-Archive/2026-10-22-housekeeping/files/C/tmp/AI-RPG-Action-Resolution-Experiment-A/evidence_report.md` | Initial fixture block is retained; the appended completed/resumed results supersede its initial blocked status. Wall assessment/preparation/commitment/stopping/disclosure probes show bounded production gaps and a supplied reference evaluator, not production climbing or general physical validation. |
+| R2 | `D:/AI-RPG-Archive/2026-10-22-housekeeping/files/C/tmp/AI-RPG-Action-Resolution-Experiment-A/A1/evidence_report.md` | Completed disclosure/authorization comparison. Pending confirmation is one tested policy, not the only safe policy; full action re-entry also satisfies the stipulated boundary. |
+| R3 | `D:/AI-RPG-Archive/2026-10-22-housekeeping/files/C/tmp/AI-RPG-Action-Resolution-Experiment-A/A2/evidence_report.md` | Completed six-case revalidation study using A.1's disposable evaluator. Current feasibility/identity/risk revalidation preserves intent and prior accepted effects; fixture success is not a production feature. |
+| R4 | `D:/AI-RPG-Archive/2026-10-22-housekeeping/files/C/tmp/AI-RPG-Outcome-First-Research/evidence_report.md` | Six supplied climbing/tracking outcomes, manually reviewed explanations and one continuity follow-up distinguish explanation from unauthorized effects/information. No provider generations, automatic semantic verifier or production mechanic was established. |
+| R5 | `D:/AI-RPG-Archive/2026-10-22-housekeeping/files/C/tmp/AI-RPG-Action-Routing-20261012-01a12fd0/comparative_report.md` | Completed A/B negative simplification experiments at `549fd848…`: A adds cross-purpose exclusion; B adds a router while retaining specialized interpretation. Both repair demonstrated combined-fixture collisions, but neither reduces overall runtime complexity. These are different experiments from R1's similarly named wall study. |
+| R6 | `D:/AI-RPG-Archive/2026-10-22-housekeeping/files/C/tmp/AI-RPG-Option-C-20261012-01a12fd0/option_c_report.md` | Promising bounded replacement experiment at `549fd848…`: shared interpretation, structured instructions and specialized execution replace the two raw-input pipelines. Handler separation improves; overall complexity changes little. Not accepted production architecture; third-purpose extensibility and general composition are hypotheses. |
 
 Earlier narrative evidence remains discoverable via the accepted
 [provisional pipeline handoff](provisional_narrative_pipeline_handoff.md),

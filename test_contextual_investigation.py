@@ -30,7 +30,7 @@ from engine.scene_composition import prepare_scene_revised_a
 
 REGION = 'data/regions/bryn_shander.json'
 DEPOT = 'test_fixtures/contextual_investigation_depot.json'
-EVIDENCE = Path(r'C:\tmp\AI-RPG-Contextual-Investigation-V1-Implementation')
+EVIDENCE = Path(__file__).resolve().parent / '.artifacts' / 'contextual-investigation-tests'
 TRACKS = 'Examine those off-road marks for signs that people watched the wagons.'
 SURVEY = "Look for useful leads near the road; don't question anyone or follow a trail."
 REPORT = "Tell Elin what the tracks suggest, but don't mention Mara's account."

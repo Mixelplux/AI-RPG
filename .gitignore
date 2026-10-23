@@ -24,3 +24,6 @@ Desktop.ini
 .build/
 .artifacts/*
 !.artifacts/.gitkeep
+
+# Supplied chat attachments are local inputs, not repository sources.
+.codex-remote-attachments/
