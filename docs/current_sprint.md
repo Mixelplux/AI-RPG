@@ -1,13 +1,30 @@
-# I2-M1 — Authoritative In-Memory Consequential Integration
+# I3-M1 — Durable Consequential Continuity and Safe Resumption
 
-Owner reviewed and approved the preparation direction October 23, 2026, then authorized bounded source implementation and offline verification. Risk: **Elevated**. **Owner-accepted October 23, 2026 after successful experiential smoke; verified Git publication authorized.**
+**Owner accepted October 24, 2026.** Interactive and scripted owner smokes passed:
+partial progress survived interruption and fresh restoration; retry changed no
+cost/time/receipt; current restrictions blocked resumption; changed legitimate
+circumstances allowed continuation; later activity retrieved restored consequences.
+Final accounting: 69 seconds, 2 wedges, 3 receipts.
 
-Publication parent: `5567f97506d580c187f9a48cd945500e69562ec4`. Branch: `codex/i2-m1-consequence-integration`. Worktree: `C:\Users\Richard\.codex\worktrees\i2-m1-consequence-integration\AI RPG`. Separate owner authorization covers exactly the 15 handoff paths, one verified commit, strict fast-forward merge and push; no further source implementation. Original checkout and saves remain preserved.
+The [handoff](i3_m1_handoff.md) records the accepted exact 21-file implementation,
+260 unittest cases and 13 standalone regressions, ownership, compatibility,
+recovery guarantees, smoke commands and limitations.
 
-The [complete implementation handoff](i2_m1_handoff.md) records architecture/owners, selective iterative retrieval, one-root authoritative acceptance and current-state rechecks, stable fact/relationship incorporation, retry guarantees, exact 15-file inventory, all verification counts, limits and owner smoke instructions.
+Baseline/HEAD: a4a9874d0576c353c9c6738f7c9091f8555891ea.
+Branch: codex/i3-m1-continuity-preparation.
+Worktree: C:\Users\Richard\.codex\worktrees\i3-m1-continuity-preparation\AI RPG.
 
-Focused I2 verification: 59 tests passed. Thirteen affected regression scripts passed (187 unittest cases plus five separately counted standalone scripts); combined unittest count is 246. Three deterministic smoke premise variants passed. No live-provider execution occurred. Preparation direction is retained in [the original report](i2_m1_preparation.md); source authorization supersedes its historical stop boundary.
+JSON is the sole machine lifecycle authority: complete/idle, no active sprint or
+package, latest completed I3-M1, next_sprint null. Completion applies only to the
+bounded accepted milestone. No source modification or subsequent development.
 
-JSON remains the sole machine lifecycle authority: I2-M1 complete and idle, latest completed activity identifies the authorized I2-M1 scope, and active_sprint, active_capability_package and next_sprint are null. This closes only I2-M1, not I3 or the full integrated design. Git authority is limited to this accepted exact-inventory publication; no save migration or subsequent milestone authority is implied. Cross-session I3, general language/mechanics/actor systems, production content and unrelated work remain excluded. Opt-in I2 has one-engine continuity and rejects save/load before I/O; default production save compatibility remains unchanged.
+Publication preparation alone is authorized. Confirm exact inventory, preserve
+accepted source/config bytes, reconcile acceptance documentation and run focused
+prepublication checks using established tools. Leave the index empty and diff
+uncommitted; a committed candidate requires separate Git authority.
+No staging, commit, merge, push, migration or live provider.
 
-Owner smoke verified ordinary attempt/retry/dependent activity/save refusal, hidden binding without disclosure, authorized exception, legitimate blocked-attempt costs and no repeated expenditure/time. The documented limits are accepted. Stop after publication; do not begin the next milestone automatically.
+Record the consumed-wedge/return-obligation wording as a non-blocking fixture-
+presentation ambiguity. It does not authorize correction or broaden the milestone.
+Original dirty checkout, owner saves, existing ignored artifacts and unrelated
+worktrees remain preserved.

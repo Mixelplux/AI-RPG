@@ -27,3 +27,6 @@ Desktop.ini
 
 # Supplied chat attachments are local inputs, not repository sources.
 .codex-remote-attachments/
+
+# Player-created campaign data; intentional existing fixtures remain tracked.
+/saves/*

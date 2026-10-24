@@ -20,10 +20,10 @@ class GameSession:
         )
 
     @staticmethod
-    def load(save_path: str) -> "GameEngine":
+    def load(save_path: str, *, campaign_draw=None, require_campaign=False) -> "GameEngine":
         from engine.save_system import load_game
 
-        return load_game(save_path)
+        return load_game(save_path, campaign_draw=campaign_draw, require_campaign=require_campaign)
 
     @staticmethod
     def reset(region_path: str) -> "GameEngine":

@@ -91,7 +91,7 @@ class GameEngine:
         entry_location_id: str | None = None,
         initial_world_state: Dict[str, Any] | None = None,
         *, investigation_policy=None, coordination_context=None, coordination_domain=None,
-        consequence_config=None,
+        consequence_config=None, campaign_config=None, campaign_draw=None,
     ):
         self._consequences = None
         self.region_path = region_path
@@ -123,11 +123,53 @@ class GameEngine:
         self._coordination = coordination.Coordinator(
             coordination_context or self.get_coordination_context,
             coordination_domain or coordination.SceneObservation())
+        if campaign_config is not None:
+            if consequence_config is not None or initial_world_state is not None or coordination_context is not None or coordination_domain is not None:
+                raise ValueError("New explicit I3 campaign required; no legacy promotion")
+            from engine.campaign_continuity import attach
+            self._consequences = attach(self, *campaign_config, draw=campaign_draw)
         if consequence_config is not None:
             if coordination_context is not None or coordination_domain is not None:
                 raise ValueError("I2 owns the opt-in coordination adapter")
             from engine.consequence_integration import Runtime
             self._consequences = Runtime(consequence_config)
+
+    @property
+    def world_state(self):
+        runtime = getattr(self, "_consequences", None)
+        return deepcopy(runtime.campaign.world) if runtime and runtime.campaign else self._world_state
+
+    @world_state.setter
+    def world_state(self, value):
+        runtime = getattr(self, "_consequences", None)
+        if runtime and runtime.campaign:
+            raise ValueError("I3 state changes require the owning campaign boundary")
+        self._world_state = value
+
+    @property
+    def scene_snapshot(self):
+        runtime = getattr(self, "_consequences", None)
+        return deepcopy(runtime.campaign.scene) if runtime and runtime.campaign else self._scene_snapshot
+
+    @scene_snapshot.setter
+    def scene_snapshot(self, value):
+        runtime = getattr(self, "_consequences", None)
+        if runtime and runtime.campaign:
+            raise ValueError("I3 derived state is prepared with its campaign root")
+        self._scene_snapshot = value
+
+    def begin_undertaking(self, action, target, method, *, constraints=(), waiting=None):
+        from engine.campaign_continuity import begin
+        return begin(self, action, target, method, constraints=constraints, waiting=waiting)
+
+    def revise_campaign(self, **owner_inputs):
+        from engine.campaign_continuity import revise
+        return revise(self, **owner_inputs)
+
+    def get_campaign_state(self):
+        if self._consequences is None or self._consequences.campaign is None:
+            raise ValueError("I3 required")
+        return deepcopy(self._consequences.campaign.data)
 
     def require_persistent_runtime(self):
         """Guard before any I/O or live-state replacement in opt-in I2."""
@@ -158,15 +200,37 @@ class GameEngine:
         domain = Domain(self, self._consequences)
         domain.bind(request, propose if propose is not None else propose_assessed)
         self._coordination = coordination.Coordinator(domain.context, domain)
+        if self._consequences.campaign is not None:
+            self._consequences.note("interpretation", request)
+            if self._consequences.prior(request) is None:
+                from engine.campaign_continuity import activity
+                try:
+                    a = activity(self._consequences, request)
+                except Exception:
+                    self._consequences.note("authorization", request, "undertaking_unavailable")
+                    return {"success": False, "message": "The activity requires a supported current authorization.",
+                            "coordination": {"status": "unresolved", "failure": "authorization", "results": [], "choices": []}}
+                self._coordination.undertaking = coordination.Undertaking(a.id, a.action, a.action,
+                    a.target, a.method, a.constraints,
+                    accepted_steps=tuple(i for i in a.accepted if i != request.id))
+            self._consequences.note("responsibility_selection", request)
         prior = self._consequences.prior(request)
         try:
             result = self.process_coordination(interpretation=coordination.Interpretation(
                 request.action, request.action, request.target, request.method,
                 request.intent, request.constraints))
+            if self._consequences.campaign is not None:
+                failure = result["coordination"].get("failure")
+                self._consequences.note("presentation", request, failure)
+                if failure is not None and self._consequences.diagnostic is None:
+                    self._consequences.note("authorization" if failure == "authorization" else "coordination",
+                                            request, failure)
             if prior is not None and prior.request == request and result['coordination']['status'] == 'accepted':
                 result['message'] = 'Previously accepted result: ' + result['message']
             return result
         except Exception:
+            if self._consequences.campaign is not None:
+                self._consequences.note("presentation", request, "operation_unavailable")
             # Acceptance already owns a validated safe receipt. A later display
             # failure cannot roll back truth or cause a retry to charge again.
             return {"success": False, "intent": "coordination",
@@ -980,6 +1044,8 @@ class GameEngine:
         }
 
     def advance_time(self, duration_hours: int = 1) -> Dict[str, Any]:
+        if self._consequences is not None and self._consequences.campaign is not None:
+            raise ValueError("I3 time advances only with an accepted authorized increment")
         candidate_world_state, result = self._prepare_time_advance_candidate(
             copy_world_state(self.world_state), duration_hours
         )
@@ -1430,17 +1496,25 @@ class GameEngine:
 
         save_game(self, save_path)
 
-    def load(self, save_path: str) -> None:
+    def load(self, save_path: str, *, campaign_draw=None) -> None:
         """
         Load saved engine state into this GameEngine instance.
         """
 
         from engine.game_session import GameSession
 
-        self.require_persistent_runtime()
-        loaded_engine = GameSession.load(save_path)
-
-        self._replace_runtime_state(loaded_engine)
+        if self._consequences is None or self._consequences.campaign is None:
+            self.require_persistent_runtime()
+        if self._consequences is not None and self._consequences.running:
+            raise ValueError("Cannot load during acceptance")
+        try:
+            loaded_engine = GameSession.load(save_path, campaign_draw=campaign_draw,
+                require_campaign=self._consequences is not None)
+            self._replace_runtime_state(loaded_engine)
+        except Exception:
+            if self._consequences is not None:
+                self._consequences.note("restoration", reason="operation_unavailable")
+            raise
 
     def reset(self) -> None:
         """Replace the current runtime state with a fresh session."""
@@ -1455,6 +1529,16 @@ class GameEngine:
     def _replace_runtime_state(self, other: "GameEngine") -> None:
         """Adopt canonical and derived runtime state from another engine."""
 
+        ours = self._consequences
+        theirs = other._consequences
+        if (ours and ours.campaign) or (theirs and theirs.campaign):
+            if ours and (ours.running or not ours.campaign):
+                raise ValueError("Cannot replace active or legacy opt-in runtime")
+            if not theirs or not theirs.campaign:
+                raise ValueError("No version-1 promotion or I3 state loss")
+            prepared = other.__dict__.copy()
+            self.__dict__ = prepared
+            return
         self.require_persistent_runtime()
         other.require_persistent_runtime()
         self.region_path = other.region_path

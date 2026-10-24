@@ -16,6 +16,34 @@ This living responsibility model follows the [manifest framework](README.md).
 It authorizes no runtime changes, new storage model, migration or next package.
 The six protected manifests retain their responsibility boundaries.
 
+## Opt-in I3 owner-accepted implementation — October 24, 2026
+
+The owner-authorized [I3-M1 implementation](../../i3_m1_handoff.md) adds complete
+bounded consequential campaign persistence through the common runtime. The
+version-1 descriptions below remain the legacy/default contract; they do not
+describe the explicit version-2 path. Overall system classification stays Partial
+and the owner accepted this bounded implementation after successful interactive and scripted smokes. Git publication remains separate.
+
+Version 2 retains a single campaign root with domain-owned declarations, current
+information, selected accepted causal bases, mechanics, costs/commitments, stable
+identities, progress and receipts in World State. Exact integer seconds and temporal
+access distinctions survive restoration. No callable supplier, pending proposal/
+permit, raw provider material or generated/private narration context is saved.
+Validated safe receipts preserve legitimately accessible accepted meaning.
+
+Validation, isolated scene/owner reconstruction and one final adoption precede live
+replacement. Same-directory temporary writes flush/fsync before atomic destination
+replacement; earlier failures preserve the old destination. No directory-level
+power-loss guarantee, autosave journal or cross-branch exactly-once guarantee is
+claimed. No version-1 promotion or migration; changed referenced content rejects.
+Player saves are ignored local data; the lifecycle/publication validator blocks
+tracked player-save changes while allowing the intentional test fixture.
+
+Duration/condition waiting intent is retained without executing event waits.
+Existing finite Period and binding rules supply the bounded expiration/re-entry
+case; no new simulator is inferred. Logical records permit later storage changes,
+but current tuple scans, full snapshot writes and history validation remain bounded.
+
 ## Purpose
 
 Preserve supported accepted campaign meaning across explicit save/load and

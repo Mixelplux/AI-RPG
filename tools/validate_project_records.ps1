@@ -253,8 +253,8 @@ if ($null -ne $jsonRecord) {
             if ($officialInterpreter -ne $null -and $officialInterpreter.Replace('/', '\').ToLowerInvariant() -cne '.\.venv\scripts\python.exe') {
                 Add-Failure "sprint.platform.official_interpreter must be '.\.venv\Scripts\python.exe'; found '$officialInterpreter'."
             }
-            if (($saveVersion -isnot [System.Int32] -and $saveVersion -isnot [System.Int64]) -or $saveVersion -ne 1) {
-                Add-Failure "sprint.platform.save_version must be exactly integer 1; found '$saveVersion'."
+            if (($saveVersion -isnot [System.Int32] -and $saveVersion -isnot [System.Int64]) -or $saveVersion -notin @(1, 2)) {
+                Add-Failure "sprint.platform.save_version must be integer 1 or 2; found '$saveVersion'."
             }
             if ($providerRequests -ne $null -and (ConvertTo-RecordToken -Value $providerRequests) -cne 'forbidden') {
                 Add-Failure "sprint.platform.provider_requests must normalize to required value 'forbidden'; found '$providerRequests'."
@@ -288,6 +288,24 @@ if ($null -ne $jsonRecord) {
             Add-Failure "sprint.status must be 'active' while active_sprint is set; found '$jsonSprintStatus'."
         }
     }
+}
+
+# Player saves are local game data. Existing intentional fixture stays publishable.
+# Check names only; never inspect, hash or print save contents.
+try {
+    $pendingSavePaths = @(git -C $root diff --name-only HEAD -- saves 2>&1)
+    if ($LASTEXITCODE -ne 0) {
+        Add-Failure 'Could not verify the player-save publication boundary.'
+    }
+    elseif (@($pendingSavePaths | Where-Object { $_ -ne 'saves/test_save.json' }).Count -gt 0) {
+        Add-Failure 'Player save changes must not enter source publication; preserve them separately.'
+    }
+    else {
+        Add-Pass 'No player-save changes pending source publication.'
+    }
+}
+catch {
+    Add-Failure 'Could not verify the player-save publication boundary.'
 }
 
 Write-Host ''

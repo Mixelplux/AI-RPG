@@ -102,6 +102,17 @@ Default production behavior/save version remain unchanged. No cross-root coupled
 mutation, general domain/language/actor mechanics, content production or I3 is
 claimed. Partial classifications and accepted Design remain unchanged.
 
+## I3-M1 continuity — owner-accepted bounded implementation
+
+The [I3 handoff](../../i3_m1_handoff.md) extends the accepted I1/I2 path without
+changing conceptual ownership: domain adjudication still owns accepted meaning;
+one engine root couples World State, information inputs, activities and receipts;
+Persistence validates/stores/restores it, while F05 and Character access constrain
+continuation and F01 presentation. Canonical seconds and bounded expiration/
+history survive technical boundaries. Explicit version-2 opt-in does not promote
+legacy saves, scenario fixtures or general event waiting into production systems.
+Partial classifications and later-I3 exclusions remain; owner acceptance was recorded October 24, 2026. Git publication remains separate.
+
 ## Integrated gameplay architecture — accepted design
 
 [Integrated Gameplay Architecture V1](../integrated-gameplay-architecture-v1.md)

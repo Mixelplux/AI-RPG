@@ -160,7 +160,7 @@ class AdjudicationSession:
     """
     def __init__(self, information: InformationAccess, methods: tuple[Method, ...],
                  *, state=SessionState(), grants: tuple[AccessGrant, ...] = (),
-                 draw: Callable[[], int] | None = None):
+                 draw: Callable[[], int] | None = None, time_unit=None):
         from copy import deepcopy
         if not isinstance(methods, tuple) or not methods or not all(isinstance(m, Method) for m in methods):
             raise ValueError("Explicit bounded methods required")
@@ -196,6 +196,7 @@ class AdjudicationSession:
             raise ValueError("Explicit character grants required")
         self._information, self._methods = information, {m.id: m for m in methods}
         self._state, self._grants, self._draw = deepcopy(state), grants, draw
+        self._time_unit = time_unit
         self._running = False
 
     @property
@@ -399,7 +400,7 @@ class AdjudicationSession:
     def _presentation(self, attempt, method, assessment, candidate):
         """Safe deterministic F01 handoff. Never send internal assessment to F01."""
         observation = dict(method.observations)[assessment.result]
-        observation += f" Elapsed effort: {method.duration}."
+        observation += f" Elapsed effort: {method.duration}" + (" seconds." if self._time_unit == "seconds" else ".")
         if method.costs:
             observation += " Used: " + ", ".join(f"{count} {resource}" for resource, count in method.costs) + "."
         def meaning(identity, text, authority, status="resolved", source="Accepted session result", access="Directly observed result"):
@@ -527,7 +528,7 @@ class AdjudicationSession:
         return dict(status="accepted", stage="acceptance", reason="validated", context=deepcopy(context))
 
 
-def prepare_candidate(information, methods, state, attempt, *, grants=(), draw=None,
+def prepare_candidate(information, methods, state, attempt, *, grants=(), draw=None, time_unit=None,
                       propose=propose_assessed):
     """Pure owning-domain preparation over a trusted accepted state snapshot.
 
@@ -537,7 +538,7 @@ def prepare_candidate(information, methods, state, attempt, *, grants=(), draw=N
     """
     from copy import deepcopy
     evaluator = AdjudicationSession(information, methods,
-        state=SessionState(at=state.at, inventory=state.inventory), grants=grants, draw=draw)
+        state=SessionState(at=state.at, inventory=state.inventory), grants=grants, draw=draw, time_unit=time_unit)
     evaluator._state = deepcopy(state)
     result = evaluator.step(attempt, propose)
     return result, evaluator.state

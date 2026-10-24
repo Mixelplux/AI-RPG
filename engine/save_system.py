@@ -1,4 +1,6 @@
 import json
+import os
+from uuid import uuid4
 from copy import deepcopy
 from pathlib import Path
 from typing import Any, Dict
@@ -9,6 +11,7 @@ from engine import west_road_market_theft
 
 
 SAVE_VERSION = 1
+CAMPAIGN_SAVE_VERSION = 2
 
 
 def build_save_data(engine: GameEngine) -> Dict[str, Any]:
@@ -19,6 +22,10 @@ def build_save_data(engine: GameEngine) -> Dict[str, Any]:
     Scene Snapshots, perception, and narration are derived and are not saved.
     """
 
+    runtime = engine._consequences
+    if runtime is not None and runtime.campaign is not None:
+        from engine.campaign_continuity import export
+        return export(engine)
     engine.require_persistent_runtime()
     world_state = engine.get_world_state()
     validate_world_state(world_state)
@@ -38,6 +45,17 @@ def save_game(engine: GameEngine, save_path: str) -> None:
     path = Path(save_path)
     path.parent.mkdir(parents=True, exist_ok=True)
 
+    if save_data["save_version"] == CAMPAIGN_SAVE_VERSION:
+        runtime = engine._consequences
+        runtime.note("persistence", reason="capture")
+        try:
+            # Encoding must complete before opening any destination or temporary file.
+            encoded = json.dumps(save_data, indent=2, allow_nan=False)
+            atomic_write(path, encoded)
+        except Exception:
+            runtime.note("persistence", reason="write_failed")
+            raise
+        return
     with path.open("w", encoding="utf-8") as file:
         json.dump(save_data, file, indent=2)
 
@@ -50,6 +68,14 @@ def load_save_data(save_path: str) -> Dict[str, Any]:
 
     save_data = deepcopy(loaded_data)
 
+    if type(save_data) is not dict:
+        raise ValueError("Invalid save envelope")
+    if type(save_data.get("save_version")) is not int:
+        raise ValueError("Invalid save version")
+    if save_data.get("save_version") == CAMPAIGN_SAVE_VERSION:
+        return save_data  # Strict complete validation in isolated reconstruction.
+    if isinstance(save_data.get("world_state"), dict) and "continuing_gameplay" in save_data["world_state"]:
+        raise ValueError("Version-2 campaign cannot be downgraded")
     if save_data.get("save_version") != SAVE_VERSION:
         raise ValueError(
             f"Unsupported save version: {save_data.get('save_version')}"
@@ -90,10 +116,36 @@ def load_save_data(save_path: str) -> Dict[str, Any]:
     return save_data
 
 
-def load_game(save_path: str) -> GameEngine:
+def load_game(save_path: str, *, campaign_draw=None, require_campaign=False) -> GameEngine:
     save_data = load_save_data(save_path)
-
+    if save_data["save_version"] == CAMPAIGN_SAVE_VERSION:
+        from engine.campaign_continuity import restore
+        try:
+            return restore(save_data, draw=campaign_draw)
+        except Exception as exc:
+            # Public compatibility errors never contain hidden values from the file.
+            raise ValueError("Campaign restoration failed validation or reconstruction") from None
+    if require_campaign:
+        raise ValueError("Version-1 saves cannot restore I3 campaign meaning")
     return GameEngine(
         region_path=save_data["region_path"],
         initial_world_state=save_data["world_state"]
     )
+
+
+def atomic_write(path: Path, encoded: str) -> None:
+    """One same-directory replacement; old destination survives pre-replace failures."""
+    temporary = path.with_name(path.name + "." + uuid4().hex + ".tmp")
+    try:
+        with temporary.open("x", encoding="utf-8", newline="\n") as handle:
+            handle.write(encoded)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+    except BaseException:
+        # Cleanup failure must not mask the earliest write/replace error.
+        try:
+            temporary.unlink(missing_ok=True)
+        except OSError:
+            pass
+        raise

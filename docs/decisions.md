@@ -938,3 +938,25 @@ limited inference, confirmed local findings, approaches/costs and accepted
 outcomes. Narration preserves uncertainty and explicit limits; it cannot grant
 competence/resources or repair failure. No identity, affiliation or unverified
 destination is inferred. The original ordinary continuation remains available.
+
+## ADR-062 — Opt-in durable consequential campaign continuity
+
+Status: Owner-accepted bounded implementation, October 24, 2026, following structural
+verification and successful interactive/scripted owner smokes. Git publication remains separate. Extends ADR-011/012/013 without transferring domain authority.
+
+One engine-owned campaign root couples World State, domain-owned consequences,
+declarative information inputs, undertaking progress and accepted recognition.
+Version-2 JSON stores its continuing-gameplay section within World State.
+Canonical elapsed time is integer seconds with declared origin. No second mutable
+hours clock, executable saved suppliers, proposal ledger or persisted narrator memory.
+Known authored hours convert losslessly at explicit input boundaries only.
+
+Version-1 remains the default legacy path and is never silently promoted to I3.
+Version-2 writes validate and encode before same-directory flush/fsync/atomic
+replacement; restore validates and builds a separate runtime before one adoption.
+Technical operations neither advance time nor replay accepted consequences.
+Power-loss recovery beyond operating-system replacement guarantees is not claimed.
+Waiting retains duration-or-condition intent and accepted progress; a general
+event-wait executor, scheduler and retrospective simulation remain deferred.
+Player saves are local game data, excluded from publication; intentional tracked
+fixtures remain versioned. No save migration or Git publication is authorized.

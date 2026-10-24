@@ -10,32 +10,32 @@
   "active_sprint": null,
   "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "i2-information-grounded-consequence-integration-v1"
+    "id": "i3-continuing-gameplay-integrity-v1"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "i2-information-grounded-consequence-integration-v1",
-    "title": "I2-M1 \u2014 Authoritative In-Memory Consequential Integration (I2 \u2014 Information-Grounded Consequence Integration V1)",
+    "id": "i3-continuing-gameplay-integrity-v1",
+    "title": "I3-M1 — Durable Consequential Continuity and Safe Resumption (I3 — Continuing Gameplay Integrity V1)",
     "type": "capability-package",
     "status": "complete",
     "risk_level": "elevated",
-    "goal": "Owner accepted I2-M1 and documented limitations after successful experiential smoke October 23, 2026. Authorized milestone complete; lifecycle idle; exact 15-file verified Git publication authorized.",
+    "goal": "Owner accepted bounded I3-M1 October 24, 2026 after structural verification and successful interactive/scripted experiential smokes: 69 seconds, 2 wedges, 3 receipts. Lifecycle complete/idle. Exact-inventory publication preparation only; no staging, commit, merge, push or subsequent development authorized.",
     "predecessor": {
-      "id": "i1-situated-gameplay-coordination-foundation-v1"
+      "id": "i2-information-grounded-consequence-integration-v1"
     },
     "platform": {
       "provider_requests": "forbidden",
       "official_interpreter": ".\\.venv\\Scripts\\python.exe",
-      "save_version": 1
+      "save_version": 2
     },
     "scope": [
-      "Owner accepted I2-M1 after implementation review and successful experiential smoke October 23, 2026. Separate authorization covers staging exactly the 15 handoff paths, one verified commit, strict fast-forward publication and push. No further source implementation or later milestone is authorized.",
-      "I2-M1: common I1 coordination, domain-owned iterative retrieval, existing finite mechanics, coherent authoritative in-memory acceptance, subsequent access, current-state validation and retry recognition. One live engine only; explicit opt-in.",
-      "No I3, save version/migration, new mechanics, general language/actor systems, content, live providers, unrelated changes or subsequent package selection. IG-19 excluded. Git authority is limited to the exact accepted 15-file publication."
+      "Owner accepted exactly the 21-file I3-M1 handoff inventory and its bounded limitations. Source/config/test/tool bytes are frozen; only acceptance, lifecycle and publication-readiness documentation may change during this preparation.",
+      "Preserve accepted I1/I2 integration, version-1 compatibility without migration, version-2 atomic persistence, canonical seconds and waiting-intent representation. General event-wait execution, retrospective simulation and later I3 work remain deferred.",
+      "No source fixes, live providers, migration, Git staging/commit/merge/push or next package. Wedge obligation alongside consumed cost is a non-blocking fixture-presentation ambiguity; record only."
     ],
     "verification": [
-      "Official-interpreter syntax checks passed; I2 focused suite 59 tests; 13 affected regression scripts passed (187 unittest cases plus five standalone scripts), total 246 unittest cases; three finite offline smoke variants passed.",
-      "Elevated authority, discovery, Character access, coherent publication, stale-state/retry and save/load boundary review completed. Owner experiential smoke passed and implementation/limits accepted October 23, 2026. Reuse unchanged 246-test/five-script/three-smoke evidence; publication requires official preflight/lifecycle/JSON/syntax/documentation/whitespace/exact-inventory, source pins, verification-mutation and clean candidate/parent checks."
+      "Accepted implementation evidence: 29 I3 matrix tests plus 231 affected unittest cases = 260 unittest cases; 13 standalone regressions passed. Owner interactive and scripted smokes passed, including unchanged retry accounting, blocked resumption, changed circumstances and later dependence; final 69 seconds, 2 wedges, 3 receipts.",
+      "Publication preparation reuses accepted gameplay evidence while verifying exact 21 paths, source/config pins, official-interpreter in-memory syntax, lifecycle/JSON/docs/whitespace, mutation-detecting GitWorkflowTools verification, empty index, baseline and preservation. No gameplay rerun or ignored development-data mutation is required. No candidate commit exists without separate Git authority."
     ]
   }
 }

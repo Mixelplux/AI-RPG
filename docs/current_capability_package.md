@@ -1,13 +1,25 @@
-# I2 — Information-Grounded Consequence Integration V1
+# I3 — Continuing Gameplay Integrity V1
 
-Owner selected/staged I2-M1 October 23, 2026, then reviewed the preparation direction and separately authorized bounded source implementation, offline Elevated verification and documentation reconciliation. Published baseline: `5567f97506d580c187f9a48cd945500e69562ec4`.
+**I3-M1 owner-accepted October 24, 2026.** The owner accepted the exact 21-file
+[implementation handoff](i3_m1_handoff.md) and documented bounded limitations after
+successful structural verification and interactive/scripted experiential smokes.
+Final accounting: 69 seconds, 2 wedges, 3 receipts. Verification evidence: 260
+unittest cases and 13 standalone regressions passed.
 
-**I2-M1 was owner-accepted October 23, 2026 following implementation review and successful experiential smoke.** Separate authorization covers verified staging/commit/strict fast-forward publication and push of exactly the 15 handoff files. Live providers, save migration, further source work and later milestones remain unauthorized. Lifecycle JSON is complete/idle: active_sprint, active_capability_package and next_sprint are null; latest completed activity identifies the authorized I2-M1 scope only.
+Baseline: a4a9874d0576c353c9c6738f7c9091f8555891ea.
+Branch: codex/i3-m1-continuity-preparation. Risk: Elevated.
+The common I1/I2 runtime now provides the accepted bounded durable consequence,
+undertaking/progress, retry, restoration, seconds/history and diagnostic contracts.
+Default version-1 compatibility and opt-in version-2 persistence retain their
+accepted limits. General waiting execution and retrospective simulation remain
+deferred; prior scenarios remain fixtures.
 
-The [implementation handoff](i2_m1_handoff.md) records actual ownership, domain discovery, coherent authoritative in-memory acceptance, later access, retries/stale-state containment, validation, exact inventory and smoke instructions. The [preparation report](i2_m1_preparation.md) remains the approved direction, qualified by the owner's implementation authorization and actual bounded implementation.
+Lifecycle JSON is complete/idle: active_sprint, active_capability_package and
+next_sprint are null; latest completed identifies only the accepted I3-M1 scope.
+This closes I3-M1, not every I3 design obligation, and selects no follow-on package.
 
-The common I1/GameEngine path now accepts explicitly supplied activities under F05, retrieves domain dependencies through Information Foundation, applies existing finite mechanics, and publishes dependent I2 effects with safe receipts into one engine-held authoritative aggregate. Later activities retrieve those effects independently of coordinator/adjudicator objects. Character-safe presentation preserves F01; hidden premises remain private. IG-19 remains excluded.
-
-Continuity is one live engine only. Explicit opt-in rejects save/load before I/O and refuses legacy dispatch/reset/adoption; default production behavior/save version remain unchanged. No I3, general language/domain mechanics, autonomous NPCs, production Region Pack edits, universal framework/ledger or unrelated refactor is included.
-
-Stop after the authorized publication. No next package or I3 preparation begins automatically.
+The owner authorized acceptance recording and exact publication preparation only.
+Accepted source remains unchanged; no staging, commit, merge or push is authorized.
+The wedge obligation alongside consumed-wedge cost is a non-blocking fixture-
+presentation ambiguity, recorded without implementation changes. The
+[preparation](i3_m1_preparation.md) remains historical approved direction.

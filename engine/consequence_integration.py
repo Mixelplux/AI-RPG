@@ -1,4 +1,4 @@
-"""Opt-in I2 owning-domain integration; engine-lifetime truth, no disk durability.
+"""Opt-in I2/I3 owning-domain integration; I2 memory and I3 campaign continuity.
 
 Information suppliers and finite effect declarations are trusted domain inputs.
 Proposals are untrusted. All mutable I2 consequences and receipts share one root.
@@ -35,6 +35,7 @@ class Request:
     related: tuple[str, ...] = ()
     binding: str | None = None
     intent: str = 'commit'
+    undertaking: str | None = None
 
 
 @dataclass(frozen=True)
@@ -233,16 +234,41 @@ class Runtime:
                 or not set(choices).issubset({m.id for m in config.methods})
                 for target, choices in config.targets):
             raise ValueError('Invalid supported target methods')
+        self.campaign = None
+        self.trace = []
         self.config = config
         self._state = State(SessionState(inventory=config.inventory))
         self.running = False
         self.diagnostic = None
 
     @property
+    def _state(self):
+        return self.campaign.data.state if self.campaign is not None else self._memory_state
+
+    @_state.setter
+    def _state(self, value):
+        if self.campaign is not None:
+            raise ValueError("Campaign publication requires a complete root")
+        self._memory_state = value
+
+    def note(self, stage, request=None, reason=None):
+        # Internal IDs/codes only. No hidden values, provider material or player output.
+        try:
+            self.trace.append(dict(stage=stage, attempt=request.id if request else None,
+                revision=self.campaign.data.revision if self.campaign else len(self._state.receipts),
+                reason=reason))
+            del self.trace[:-128]
+        except Exception:
+            pass  # Optional diagnostics cannot affect acceptance.
+
+    @property
     def state(self):
         return deepcopy(self._state)
 
     def information(self):
+        if self.campaign is not None:
+            from engine.campaign_continuity import combined
+            return combined(self.campaign.data.inputs, self._state)
         return InformationView(self.config.information(), self._state)
 
     def prior(self, request):
@@ -336,6 +362,10 @@ class Runtime:
         self.running = True
         self.diagnostic = None
         stage = 'retrieval'
+        campaign_root = self.campaign
+        if campaign_root is not None:
+            from engine.campaign_continuity import activity
+        self.note(stage, request)
         try:
             prior = self.prior(request)
             if prior:
@@ -345,6 +375,11 @@ class Runtime:
             if (request.actor != self.config.actor
                     or request.method not in dict(self.config.targets).get(request.target, ())):
                 raise Unresolved('authorization', 'actor_or_target_scope')
+            if campaign_root is not None:
+                from engine.campaign_continuity import check_continuation, config_for
+                if self.config != config_for(campaign_root.data.blueprint, self.config.information, self.config.draw):
+                    raise Unresolved("validation", "declaration_mismatch")
+                check_continuation(self, request)
             root, config = self._state, self.config
             legacy = engine.get_world_state()
             location = legacy['player']['current_location_id']
@@ -355,11 +390,14 @@ class Runtime:
                 ActivityAuthorization(request.action, request.method, request.intent, request.constraints),
                 request.means, related, binding=request.binding)
             stage = 'adjudication'
+            self.note(stage, request)
             result, state = prepare_candidate(reads, config.methods, root.adjudication, attempt,
-                grants=(*config.grants, *root.grants), draw=config.draw, propose=propose)
+                grants=(*config.grants, *root.grants), draw=config.draw, propose=propose,
+                time_unit="seconds" if campaign_root is not None else None)
             if result['status'] != 'accepted':
                 raise Unresolved(result['stage'], result['reason'])
             stage = 'validation'
+            self.note(stage, request)
             candidate = self._incorporate(replace(root, adjudication=state), reads, request,
                                           state.history[-1].assessment.result)
             stage = 'receipt'
@@ -375,18 +413,29 @@ class Runtime:
                 raise Unresolved('receipt', 'invalid_access')
             candidate = replace(candidate, receipts=(*root.receipts, Receipt(request, receipt)))
             # All fallible construction/validation precedes final freshness check.
+            prepared_root = None
+            if campaign_root is not None:
+                from engine.campaign_continuity import accepted_root, acceptance_basis
+                basis = acceptance_basis(reads, campaign_root.data.inputs, config.grants)
+                prepared_root = accepted_root(self, candidate, request, engine, basis)
             stage = 'acceptance'
+            self.note(stage, request)
             current = self.information()
-            if (self._state is not root or self.config != config or engine.get_world_state() != legacy
+            if (self.campaign is not campaign_root or self._state is not root or self.config != config or engine.get_world_state() != legacy
                     or not reads.current(current)):
                 raise Unresolved('acceptance', 'stale_premises')
-            self._state = candidate
+            if prepared_root is None:
+                self._state = candidate
+            else:
+                self.campaign = prepared_root
             return receipt
         except Unresolved as exc:
             self.diagnostic = (exc.stage, exc.reason)
+            self.note(exc.stage, request, exc.reason)
             raise
         except Exception:
             self.diagnostic = (stage, 'operation_unavailable')
+            self.note(stage, request, 'operation_unavailable')
             raise
         finally:
             self.running = False
@@ -421,14 +470,28 @@ class Domain:
         prior = self.runtime.prior(r)
         available = (r.method,) if prior else tuple(m.id for m in self.runtime.config.methods
             if m.action == r.action and m.id in dict(self.runtime.config.targets).get(r.target, ()))
-        return SituatedContext(str(len(root.receipts)), location,
+        revision = (str(self.runtime.campaign.data.revision) if self.runtime.campaign
+                    else str(len(root.receipts)))
+        return SituatedContext(revision, location,
             targets=(Target(r.target, (r.target,), r.action, available),), means=r.means,
-            accessible=(('limit', CONTINUITY_LIMIT),))
+            accessible=(('limit', 'Explicit durable campaign; legacy commands unavailable.' if self.runtime.campaign else CONTINUITY_LIMIT),))
 
     def assess(self, undertaking, context):
         r = self.request
         prior = self.runtime.prior(r)
         method = next((m for m in self.runtime.config.methods if m.id == r.method), None)
+        if self.runtime.campaign is not None and not prior:
+            from engine.campaign_continuity import activity
+            a = activity(self.runtime, r)
+            boundary = a.boundary
+            crossing = (boundary.not_after_seconds is not None and method is not None
+                        and root_time(self.runtime) + method.duration > boundary.not_after_seconds)
+            return DomainStep(r.id, ActivityCheckpoint(undertaking.ref, r.method,
+                blocked=boundary.blocked or crossing, missing_means=boundary.missing_means,
+                restart_required=boundary.restart_required, developments=boundary.developments,
+                complete=r.id in undertaking.accepted_steps,
+                conflicting_constraints=method.conflicts if method else ()),
+                ('world', 'character', 'action'))
         complete = r.id in undertaking.accepted_steps
         return DomainStep(r.id, ActivityCheckpoint(undertaking.ref, r.method, complete=complete,
             conflicting_constraints=method.conflicts if method and not prior else ()), ('world', 'character', 'action'),
@@ -440,3 +503,7 @@ class Domain:
                 r.action, r.target, r.method, r.constraints):
             raise Unresolved('authorization', 'request_mismatch')
         return self.runtime.accept(r, step, self.engine, self.propose)
+
+
+def root_time(runtime):
+    return runtime._state.adjudication.at

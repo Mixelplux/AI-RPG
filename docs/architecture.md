@@ -23,7 +23,7 @@ Do not add sprint history, full schemas, test inventories, or implementation wal
 - Python 3.13
 - CLI gameplay interface
 - JSON Region Packs for authored world content
-- Version-1 World State saves
+- Default version-1 World State saves; explicit opt-in version-2 consequential campaigns
 - OpenAI Responses narration preview behind provider-neutral engine boundaries
 
 ## Directory Map
@@ -491,3 +491,32 @@ nothing automatically. Successful load/reset and exit retire it; failed load kee
 it. Findings and receipts remain in existing owners. Save version 1 and its shape
 are unchanged. The test-only depot supplies a second concrete policy through the
 same engine seam; no production region, registry or saved lead structure is added.
+
+## Durable consequential runtime — owner-accepted bounded implementation
+
+The explicit I3 campaign configuration extends the existing GameEngine →
+Coordinator → consequential Runtime.accept path. One prepared root couples domain
+state, declarative Information Foundation inputs, undertaking progress and receipt
+recognition with World State and its derived scene. World/Character/Action/Actor
+owners retain their semantics. Legacy I2 remains memory-only; default gameplay
+and version-1 persistence retain their existing behavior.
+
+campaign_records defines a finite, non-executable record vocabulary; campaign_continuity
+validates reference closure, accepted mechanics/costs/time/effects/progress and safe
+receipt meaning, and prepares complete roots. Authoritative elapsed time is integer
+seconds. Trusted owners supply current input/checkpoint changes; initial and resumed
+increments enforce F05 and fresh dependencies. Waiting retains duration-or-condition
+intent without a general waiting executor or scheduler.
+
+Version-2 saves place the continuing-gameplay section inside World State. The writer
+validates/encodes before a same-directory flushed/fsynced atomic file replacement.
+GameSession builds an independent validated engine before a single adoption. Load
+never draws, adjudicates, advances time or replays consequences. Version-1 promotion,
+unsupported legacy scenario time owners and material content revisions fail closed.
+Historical bases contain selected accepted premises; diagnostics remain private,
+bounded and non-authoritative. Pending permits and generated/private presentation
+contexts are rebuilt, not serialized.
+
+See [ADR-062](decisions.md#adr-062--opt-in-durable-consequential-campaign-continuity)
+and the [I3 implementation handoff](i3_m1_handoff.md) for supported boundaries and
+compatibility/recovery evidence. The owner accepted the bounded implementation October 24, 2026; Git publication remains separately authorized.
