@@ -525,3 +525,19 @@ class AdjudicationSession:
         candidate = replace(candidate, history=(*candidate.history, Accepted(attempt, assessment, context)))
         self._state = candidate  # one publication, after all consequential and safe-context checks
         return dict(status="accepted", stage="acceptance", reason="validated", context=deepcopy(context))
+
+
+def prepare_candidate(information, methods, state, attempt, *, grants=(), draw=None,
+                      propose=propose_assessed):
+    """Pure owning-domain preparation over a trusted accepted state snapshot.
+
+    The caller owns current-premise validation and publication. The disposable
+    evaluator below never becomes the authoritative runtime or restoration API.
+    Existing standalone session behavior is unchanged.
+    """
+    from copy import deepcopy
+    evaluator = AdjudicationSession(information, methods,
+        state=SessionState(at=state.at, inventory=state.inventory), grants=grants, draw=draw)
+    evaluator._state = deepcopy(state)
+    result = evaluator.step(attempt, propose)
+    return result, evaluator.state

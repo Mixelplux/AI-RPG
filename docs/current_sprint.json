@@ -10,18 +10,18 @@
   "active_sprint": null,
   "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "i1-situated-gameplay-coordination-foundation-v1"
+    "id": "i2-information-grounded-consequence-integration-v1"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "i1-situated-gameplay-coordination-foundation-v1",
-    "title": "I1-M1 — Common Coordination Runtime (I1 — Situated Gameplay Coordination Foundation V1)",
+    "id": "i2-information-grounded-consequence-integration-v1",
+    "title": "I2-M1 \u2014 Authoritative In-Memory Consequential Integration (I2 \u2014 Information-Grounded Consequence Integration V1)",
     "type": "capability-package",
     "status": "complete",
     "risk_level": "elevated",
-    "goal": "Owner-accepted I1-M1 Common Coordination Runtime and situated-progression/result-presentation correction; authorized scope complete and lifecycle idle.",
+    "goal": "Owner accepted I2-M1 and documented limitations after successful experiential smoke October 23, 2026. Authorized milestone complete; lifecycle idle; exact 15-file verified Git publication authorized.",
     "predecessor": {
-      "id": "information-grounded-adjudication-v1"
+      "id": "i1-situated-gameplay-coordination-foundation-v1"
     },
     "platform": {
       "provider_requests": "forbidden",
@@ -29,14 +29,13 @@
       "save_version": 1
     },
     "scope": [
-      "Owner accepted I1-M1 and its documented limits after successful experiential smoke October 23, 2026. Separate authorization covers verified staging/commit/strict fast-forward merge/push of exactly the 12 handoff files. No live providers or later milestones authorized.",
-      "I1-M1: interpretation, undertaking, authoritative situated context, responsibility selection, F05 control, common offline runtime validation and F01-safe failure containment. IG-19 excluded.",
-      "No I2 consequential integration, I3 durable restoration, new save version/migration, Region Pack production edits, unsupported domain mechanics, generic framework, narrative polish or unrelated refactor."
+      "Owner accepted I2-M1 after implementation review and successful experiential smoke October 23, 2026. Separate authorization covers staging exactly the 15 handoff paths, one verified commit, strict fast-forward publication and push. No further source implementation or later milestone is authorized.",
+      "I2-M1: common I1 coordination, domain-owned iterative retrieval, existing finite mechanics, coherent authoritative in-memory acceptance, subsequent access, current-state validation and retry recognition. One live engine only; explicit opt-in.",
+      "No I3, save version/migration, new mechanics, general language/actor systems, content, live providers, unrelated changes or subsequent package selection. IG-19 excluded. Git authority is limited to the exact accepted 15-file publication."
     ],
     "verification": [
-      "Preparation: official Windows/interpreter preflight, established lifecycle validator, JSON parsing, Git whitespace/diff-scope and worktree/index checks.",
-      "Implementation: syntax/static, focused offline coordination and affected-system regressions, targeted Elevated ownership/authorization/access review and applicable save compatibility checks. Structural, bounded language, live semantic and integrated gameplay evidence remain distinct. Correction verifies accepted domain result meaning, immediate situated progression, natural decision boundaries, prospective constraints and free-form fixture directions.",
-      "Publication reuses accepted 230-test, F01, script/save and four-smoke evidence; official preflight/lifecycle/JSON/whitespace, exact candidate inventory, unchanged accepted source and clean committed parent/tree checks are required."
+      "Official-interpreter syntax checks passed; I2 focused suite 59 tests; 13 affected regression scripts passed (187 unittest cases plus five standalone scripts), total 246 unittest cases; three finite offline smoke variants passed.",
+      "Elevated authority, discovery, Character access, coherent publication, stale-state/retry and save/load boundary review completed. Owner experiential smoke passed and implementation/limits accepted October 23, 2026. Reuse unchanged 246-test/five-script/three-smoke evidence; publication requires official preflight/lifecycle/JSON/syntax/documentation/whitespace/exact-inventory, source pins, verification-mutation and clean candidate/parent checks."
     ]
   }
 }

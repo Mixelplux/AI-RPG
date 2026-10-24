@@ -55,7 +55,7 @@ Partial system classifications remain unchanged.
 
 ## I1-M1 coordination — owner-accepted bounded implementation
 
-October 23, 2026: the [bounded I1-M1 handoff](../../current_sprint.md) records a
+October 23, 2026: the [bounded I1-M1 handoff](../../i1_m1_handoff.md) records a
 common GameEngine coordination path before contextual/legacy dispatch. It joins
 untrusted interpretation, coherent undertaking, authoritative situated context
 and F05 control without becoming an outcome-owning system. Claimed unresolved
@@ -77,8 +77,31 @@ automatic menus. Explicit ambiguity can still require clarification. Exact
 supplier-supported direction phrases provide bounded free-form choice; they are
 not general navigation or language interpretation. Refinements preserve accepted
 work and apply constraints prospectively. A later failure retains earlier accepted
-results/costs. See the [correction handoff](../../current_sprint.md) for the finite per-call
+results/costs. See the [correction handoff](../../i1_m1_handoff.md) for the finite per-call
 bound and trusted supplier limits; no I2/I3 or new gameplay mechanics are claimed.
+## I2-M1 integration — owner-accepted bounded implementation
+
+Owner accepted I2-M1 and its documented limits after successful experiential smoke October 23, 2026. The [I2-M1 handoff](../../i2_m1_handoff.md) describes the opt-in extension of
+I1's same GameEngine/coordinator runtime. Action & Resolution derives selective,
+iterative dependency requirements and applies finite existing mechanics;
+Information Foundation retrieves direct/relationship/definition/binding premises
+without deciding results. World/Character/Actor owners retain consequential
+meaning and legitimate access/consent. Trusted fixtures supply missing upstream
+responsibilities and explicit actor/target/method scopes, not scenario outcomes.
+
+The engine-held aggregate coherently incorporates dependent resources/time,
+conditions, commitments, identities/facts/relationships/grants and logical
+acceptance receipts after current-premise validation. Fresh later domain access
+and accepted retry recognition outlive domain/coordinator objects. F01 sees only
+accepted accessible meaning; private diagnostics establish no independent truth.
+This implementation representation does not become permanent storage doctrine.
+
+Continuity is within one engine lifetime. Opt-in save/load rejects before I/O,
+and legacy dispatch/reset/adoption cannot silently mix or discard I2 state.
+Default production behavior/save version remain unchanged. No cross-root coupled
+mutation, general domain/language/actor mechanics, content production or I3 is
+claimed. Partial classifications and accepted Design remain unchanged.
+
 ## Integrated gameplay architecture — accepted design
 
 [Integrated Gameplay Architecture V1](../integrated-gameplay-architecture-v1.md)

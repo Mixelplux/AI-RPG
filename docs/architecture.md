@@ -66,6 +66,34 @@ Bounded coordination → contextual material action → contextual investigation
 
 `GameEngine` is the gameplay-facing orchestration boundary. Player-facing code must not directly mutate lower-level state.
 
+## I2-M1 consequential integration — owner-accepted bounded implementation
+
+The [I2-M1 handoff](i2_m1_handoff.md) records an explicit GameEngine
+`consequence_config` opt-in and `process_consequence` path through the existing
+I1 coordinator/F05 contracts. Trusted suppliers declare controlled actor and
+target/method scope, authoritative premises, finite supported methods/effects,
+character grants and existing mechanics. The domain discovers direct, linked
+and binding-term dependencies selectively and iteratively; retrieval owns no
+outcome. The bounded adjudicator prepares copied candidates without owning
+integrated truth.
+
+One engine-held authoritative aggregate publishes dependent I2 resources/time,
+conditions, commitments, new facts/identities/relationships/grants and acceptance
+receipts together after candidate/safe-receipt validation and final premise
+rechecks. A matching accepted logical identity reuses its receipt before new
+eligibility or resolution, across reconstructed domain/coordinator objects.
+Later activities retrieve accepted owning-domain records rather than prose.
+Legacy world is a read-only premise here; coupled legacy/I2 mutations are not
+supported. Private diagnostics and Character-safe results remain separate.
+
+This is synchronous, non-reentrant, one-engine in-memory continuity, not I3
+recovery or save restoration. Opt-in save/load rejects before file I/O; reset,
+adoption and legacy command dispatch also refuse to discard/mix this state.
+Default version-1 production save/load and dispatch remain unchanged. No new
+rules, general language/actor implementation, production content or permanent
+storage doctrine is introduced. Owner accepted the implementation and documented limits after successful smoke October 23, 2026;
+conceptual ownership and Partial classifications remain unchanged.
+
 ## Bounded I1-M1 coordination — owner-accepted bounded implementation
 
 `engine/gameplay_coordination.py` adds one common session-local runtime with
@@ -93,7 +121,7 @@ Suppliers own read-only assessment, accurate material revisions and atomic domai
 execution. No universal transaction engine, I2 consequential integration or I3
 persistence/recovery is implemented. Runtime replacement clears session-local
 coordination. Save version 1 and existing owning publication operations are
-unchanged. See [the I1-M1 handoff](current_sprint.md) for validation and trust limits.
+unchanged. See [the I1-M1 handoff](i1_m1_handoff.md) for validation and trust limits.
 Owner-authorized I1-M1 correction, October 23: accepted receipts now carry explicit
 domain result meaning and a Character-safe result projection. The common runtime
 immediately assesses the next current boundary and continues ordinary supported
@@ -103,7 +131,7 @@ automatic menus. Explicit ambiguity can still require clarification. Exact
 supplier-supported direction phrases provide bounded free-form choice; they are
 not general navigation or language interpretation. Refinements preserve accepted
 work and apply constraints prospectively. A later failure retains earlier accepted
-results/costs. See the [correction handoff](current_sprint.md) for the finite per-call
+results/costs. See the [correction handoff](i1_m1_handoff.md) for the finite per-call
 bound and trusted supplier limits; no I2/I3 or new gameplay mechanics are claimed.
 ## Sources of Truth
 

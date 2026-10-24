@@ -1,61 +1,13 @@
-# I1 — Situated Gameplay Coordination Foundation V1
+# I2 — Information-Grounded Consequence Integration V1
 
-Owner selected I1 and staged **I1-M1 — Common Coordination Runtime** October 23,
-2026, then separately authorized bounded source implementation, verification,
-necessary corrections and documentation reconciliation. Risk: **Elevated**.
-Baseline: `ab3014357759a522d7a281325da9c5bc64ac636c`.
+Owner selected/staged I2-M1 October 23, 2026, then reviewed the preparation direction and separately authorized bounded source implementation, offline Elevated verification and documentation reconciliation. Published baseline: `5567f97506d580c187f9a48cd945500e69562ec4`.
 
-## Current status and authority
+**I2-M1 was owner-accepted October 23, 2026 following implementation review and successful experiential smoke.** Separate authorization covers verified staging/commit/strict fast-forward publication and push of exactly the 15 handoff files. Live providers, save migration, further source work and later milestones remain unauthorized. Lifecycle JSON is complete/idle: active_sprint, active_capability_package and next_sprint are null; latest completed activity identifies the authorized I2-M1 scope only.
 
-The owner accepted I1-M1, including its progression/result correction and
-documented limitations, after successful experiential smoke October 23, 2026.
-Separate authorization covers verified publication of exactly the 12 handoff files:
-staging, one commit, strict fast-forward merge and push. Live-provider execution
-and subsequent milestones/packages remain unauthorized.
+The [implementation handoff](i2_m1_handoff.md) records actual ownership, domain discovery, coherent authoritative in-memory acceptance, later access, retries/stale-state containment, validation, exact inventory and smoke instructions. The [preparation report](i2_m1_preparation.md) remains the approved direction, qualified by the owner's implementation authorization and actual bounded implementation.
 
-`docs/current_sprint.json` remains the sole machine authority: complete and idle.
-`active_sprint`, `active_capability_package` and `next_sprint` are null; latest
-completed activity is `i1-situated-gameplay-coordination-foundation-v1`, identifying
-the completed authorized I1-M1 scope only. This does not claim implementation of
-later I1 work or the full integrated architecture. The exact publication inventory,
-verification and retained limitations are in [the handoff](current_sprint.md).
-## Scope and implemented boundary
+The common I1/GameEngine path now accepts explicitly supplied activities under F05, retrieves domain dependencies through Information Foundation, applies existing finite mechanics, and publishes dependent I2 effects with safe receipts into one engine-held authoritative aggregate. Later activities retrieve those effects independently of coordinator/adjudicator objects. Character-safe presentation preserves F01; hidden premises remain private. IG-19 remains excluded.
 
-Follow the accepted [Integrated Gameplay Architecture](design/integrated-gameplay-architecture-v1.md)
-and [implementation plan](design/integrated-gameplay-architecture-v1-implementation-plan.md),
-F05, F01, Information Foundation and the system map. IG-19 is excluded.
+Continuity is one live engine only. Explicit opt-in rejects save/load before I/O and refuses legacy dispatch/reset/adoption; default production behavior/save version remain unchanged. No I3, general language/domain mechanics, autonomous NPCs, production Region Pack edits, universal framework/ledger or unrelated refactor is included.
 
-A common coordinator now implements interpretation, undertaking, authoritative
-situated context and coordination-decision contracts. GameEngine invokes it
-before contextual/legacy dispatch. Claimed unresolved input is terminal; only
-unclaimed raw commands continue through existing routes. F05 remains the control
-policy. Context-bound single-use permissions precede owning-domain execution.
-
-Production support is bounded offline interpretation and existing safe scene
-observation. Contract-conforming World/Character/Action/Actor fixtures exercise
-ordinary local action, situated castle search, constraints, guard circumstances,
-method ambiguity, independent intentions and changed geography/means through
-the same GameEngine/coordinator path. This does not implement upstream search,
-stealth, navigation or NPC mechanics, or general language understanding.
-
-The owner-authorized progression/presentation correction now carries domain-owned
-result meaning through the safe boundary and immediately assesses continuation.
-Natural exploration stops describe established circumstances without mandatory
-questions/menus; explicit clarification and fixture-supported direction phrases
-remain available. Added constraints affect future activity without replaying work.
-
-See [the completion report](current_sprint.md) for contracts, exact changed files,
-reuse decisions, validation, fixture assumptions, risks and owner smoke.
-
-## Exclusions and stop boundary
-
-No I2 consequential integration, I3 durable restoration, new save version or
-migration, Region Pack production edits, universal entity/orchestration framework,
-graph database, exhaustive ledger, general world simulator, narrative polish,
-live calls or unrelated refactoring. Accepted logical step references are session
-local; they are not a durable acceptance ledger. Trusted gameplay authorities
-retain their own atomicity and outcome validation responsibilities.
-
-Stop after the authorized verified publication. Lifecycle remains complete/idle.
-I2 preparation is a separately handled next phase, not authorization to start it.
-No later milestone or package starts automatically.
+Stop after the authorized publication. No next package or I3 preparation begins automatically.

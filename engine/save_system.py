@@ -19,6 +19,7 @@ def build_save_data(engine: GameEngine) -> Dict[str, Any]:
     Scene Snapshots, perception, and narration are derived and are not saved.
     """
 
+    engine.require_persistent_runtime()
     world_state = engine.get_world_state()
     validate_world_state(world_state)
     if "west_road_predicament" in engine.region or "material_targets" in engine.region:

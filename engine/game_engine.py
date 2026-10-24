@@ -91,7 +91,9 @@ class GameEngine:
         entry_location_id: str | None = None,
         initial_world_state: Dict[str, Any] | None = None,
         *, investigation_policy=None, coordination_context=None, coordination_domain=None,
+        consequence_config=None,
     ):
+        self._consequences = None
         self.region_path = region_path
         self.region = load_region(region_path)
 
@@ -121,6 +123,57 @@ class GameEngine:
         self._coordination = coordination.Coordinator(
             coordination_context or self.get_coordination_context,
             coordination_domain or coordination.SceneObservation())
+        if consequence_config is not None:
+            if coordination_context is not None or coordination_domain is not None:
+                raise ValueError("I2 owns the opt-in coordination adapter")
+            from engine.consequence_integration import Runtime
+            self._consequences = Runtime(consequence_config)
+
+    def require_persistent_runtime(self):
+        """Guard before any I/O or live-state replacement in opt-in I2."""
+        if self._consequences is not None:
+            from engine.consequence_integration import CONTINUITY_LIMIT
+            raise ValueError(CONTINUITY_LIMIT)
+
+    def get_consequence_state(self):
+        if self._consequences is None:
+            raise ValueError("I2 requires explicit consequence_config opt-in")
+        return self._consequences.state
+
+    def get_consequence_information(self):
+        if self._consequences is None:
+            raise ValueError("I2 requires explicit consequence_config opt-in")
+        return self._consequences.information()
+
+    def process_consequence(self, request, *, propose=None):
+        """Explicit structured activity through the same common I1 runtime.
+
+        Each call constructs a disposable domain/coordinator. Authoritative
+        state and retry recognition remain with this engine, never those objects.
+        """
+        from engine.consequence_integration import Domain
+        from engine.information_adjudication import propose_assessed
+        if self._consequences is None or self._consequences.running:
+            raise ValueError("I2 unavailable or already executing")
+        domain = Domain(self, self._consequences)
+        domain.bind(request, propose if propose is not None else propose_assessed)
+        self._coordination = coordination.Coordinator(domain.context, domain)
+        prior = self._consequences.prior(request)
+        try:
+            result = self.process_coordination(interpretation=coordination.Interpretation(
+                request.action, request.action, request.target, request.method,
+                request.intent, request.constraints))
+            if prior is not None and prior.request == request and result['coordination']['status'] == 'accepted':
+                result['message'] = 'Previously accepted result: ' + result['message']
+            return result
+        except Exception:
+            # Acceptance already owns a validated safe receipt. A later display
+            # failure cannot roll back truth or cause a retry to charge again.
+            return {"success": False, "intent": "coordination",
+                    "message": "Presentation is unavailable. Accepted progress is retained; retry the same activity.",
+                    "coordination": {"status": "unresolved", "failure": "presentation",
+                                     "results": [], "choices": []}}
+
 
     def get_coordination_context(self):
         """Copied owner inputs. No general access/means/geography is inferred."""
@@ -1384,6 +1437,7 @@ class GameEngine:
 
         from engine.game_session import GameSession
 
+        self.require_persistent_runtime()
         loaded_engine = GameSession.load(save_path)
 
         self._replace_runtime_state(loaded_engine)
@@ -1393,6 +1447,7 @@ class GameEngine:
 
         from engine.game_session import GameSession
 
+        self.require_persistent_runtime()
         fresh_engine = GameSession.reset(self.region_path)
 
         self._replace_runtime_state(fresh_engine)
@@ -1400,6 +1455,8 @@ class GameEngine:
     def _replace_runtime_state(self, other: "GameEngine") -> None:
         """Adopt canonical and derived runtime state from another engine."""
 
+        self.require_persistent_runtime()
+        other.require_persistent_runtime()
         self.region_path = other.region_path
         self.region = other.region
         self.world_state = other.get_world_state()
@@ -1520,6 +1577,8 @@ class GameEngine:
         return candidate_world_state
 
     def process_command(self, player_input: str) -> Dict[str, Any]:
+        self.require_persistent_runtime()
+
         result = self.process_coordination(player_input)
         if result is None:
             result = self.process_contextual_action(player_input)
