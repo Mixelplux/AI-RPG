@@ -49,6 +49,9 @@ CLI intercepts applicable session controls → session handling / feedback
     ↓ gameplay input
 GameEngine.process_command() — gameplay orchestration
     ↓
+Explicit I3 with situated activity supplier → bounded player input → common I1/I2/I3 owners
+(terminal routing: unsupported input cannot enter legacy mutation)
+    or default version-1 runtime:
 Bounded coordination → contextual material action → contextual investigation → legacy fallback
 (next route only if input is unclaimed)
     ↓
@@ -65,6 +68,33 @@ Bounded coordination → contextual material action → contextual investigation
 ```
 
 `GameEngine` is the gameplay-facing orchestration boundary. Player-facing code must not directly mutate lower-level state.
+
+## M2-M1 player input — owner-accepted bounded implementation
+
+Owner accepted October 24, 2026 after handoff review and successful interactive
+smoke (45 seconds, two lamp units remaining, three accepted increments).
+Documented bounded limitations remain; Git publication requires separate authority.
+
+`engine/player_activity.py` connects bounded ordinary inspection/search instructions
+to `process_consequence`, the I1 coordinator/F05 policy and existing domain-owned
+I2/I3 acceptance. Current legitimate suppliers return situated targets, visible
+aliases, available methods/means and accessible descriptions. Interpretation chooses
+no outcome. Inquiry/preparation are read-only; unsupported language/constraints
+return control. Each committed instruction authorizes one finite supported increment.
+`continue` uses durable undertaking scope and current restrictions; a completed
+undertaking does not reroll. No legacy fallback is available on this opt-in path.
+
+Opaque request/undertaking references distinguish retry from a new attempt. Explicit
+retry recognition uses saved accepted receipts before current eligibility, requiring
+no installed supplier result. New attempts require fresh domain information and
+F05 checks. A supplied context is rechecked at execution and immediately before
+acceptance; the existing owning read/root checks still protect dependent effects.
+
+Services are installed explicitly on fresh restoration; callbacks and parser state
+are not saved. Existing-engine load retains its installed context service, called
+with the restored engine. I3's version-2 format/ownership and version-1/default/I2
+boundaries are unchanged. Production CLI/content, general language and domain rules
+remain deferred. See the [M2-M1 handoff](m2_m1_handoff.md) for support and trust limits.
 
 ## I2-M1 consequential integration — owner-accepted bounded implementation
 

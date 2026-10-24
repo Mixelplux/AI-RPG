@@ -113,6 +113,22 @@ history survive technical boundaries. Explicit version-2 opt-in does not promote
 legacy saves, scenario fixtures or general event waiting into production systems.
 Partial classifications and later-I3 exclusions remain; owner acceptance was recorded October 24, 2026. Git publication remains separate.
 
+## M2-M1 player input — owner-accepted bounded implementation
+
+Owner accepted October 24, 2026 after successful interactive smoke and handoff
+review, including documented limitations. Git publication remains separate.
+
+The [M2-M1 handoff](../../m2_m1_handoff.md) connects ordinary supported inspection
+instructions to the same I1 coordination, F05 and I2/I3 owning runtime. Player
+Presentation interprets finite wording and carries opaque request references;
+legitimate World/Character/Action suppliers own current target/method availability,
+means, requirements and access. Domain adjudication and coherent acceptance retain
+all outcome authority. Current situated context joins final premise revalidation.
+Persistence stores existing activities/results/receipts, not services or parser
+state. Current services must be installed after independent restoration. Unsupported
+input never falls through to legacy mutation. No overall system classification or
+accepted Design decision changes; production content/general language remain deferred.
+
 ## Integrated gameplay architecture — accepted design
 
 [Integrated Gameplay Architecture V1](../integrated-gameplay-architecture-v1.md)

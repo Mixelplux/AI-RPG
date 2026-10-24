@@ -1,25 +1,19 @@
-# I3 — Continuing Gameplay Integrity V1
+# M2 — Integrated Player Input V1
 
-**I3-M1 owner-accepted October 24, 2026.** The owner accepted the exact 21-file
-[implementation handoff](i3_m1_handoff.md) and documented bounded limitations after
-successful structural verification and interactive/scripted experiential smokes.
-Final accounting: 69 seconds, 2 wedges, 3 receipts. Verification evidence: 260
-unittest cases and 13 standalone regressions passed.
+Owner accepted M2-M1 on October 24, 2026, including its documented bounded limitations. Risk: Elevated.
+Baseline: f93988958385ec77dc012e0e5ecf8d0af068f893.
 
-Baseline: a4a9874d0576c353c9c6738f7c9091f8555891ea.
-Branch: codex/i3-m1-continuity-preparation. Risk: Elevated.
-The common I1/I2 runtime now provides the accepted bounded durable consequence,
-undertaking/progress, retry, restoration, seconds/history and diagnostic contracts.
-Default version-1 compatibility and opt-in version-2 persistence retain their
-accepted limits. General waiting execution and retrospective simulation remain
-deferred; prior scenarios remain fixtures.
+Connect bounded ordinary inspection instructions to the accepted common I1/I2/I3 runtime. Owning domains supply situated availability and finite methods; interpretation has no outcome authority. Preserve F01, F05, accepted progress, retries and existing persistence boundaries.
 
-Lifecycle JSON is complete/idle: active_sprint, active_capability_package and
-next_sprint are null; latest completed identifies only the accepted I3-M1 scope.
-This closes I3-M1, not every I3 design obligation, and selects no follow-on package.
+No general language coverage, new mechanics, legacy mutating dispatch, save migration or live providers. Acceptance recording and publication preparation only are authorized; no Git staging, commit, merge or push. No next milestone is selected.
 
-The owner authorized acceptance recording and exact publication preparation only.
-Accepted source remains unchanged; no staging, commit, merge or push is authorized.
-The wedge obligation alongside consumed-wedge cost is a non-blocking fixture-
-presentation ambiguity, recorded without implementation changes. The
-[preparation](i3_m1_preparation.md) remains historical approved direction.
+The owner accepted the implementation and successful interactive smoke. The [handoff](m2_m1_handoff.md)
+records supported input, ownership and limits, the 15-file inventory, 293 passing
+unittest cases, 13 passing affected regression entry points and two offline smoke
+circumstances. Owner smoke confirmed 45 seconds, two lamp units remaining and
+three accepted increments. Finite language/domain support, explicit service
+installation after restoration and fixture/deferred-capability limits remain.
+
+Lifecycle is complete/idle: no active sprint or package, latest completed M2-M1,
+next_sprint null. This closes only the accepted bounded M2-M1 scope. The exact
+15-file diff remains uncommitted with an empty index pending separate Git authority.

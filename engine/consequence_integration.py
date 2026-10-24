@@ -356,7 +356,7 @@ class Runtime:
             raise ValueError('Invalid safe receipt')
         return receipt
 
-    def accept(self, request, step, engine, propose=propose_assessed):
+    def accept(self, request, step, engine, propose=propose_assessed, *, context_guard=None):
         if self.running:
             raise Unresolved('acceptance', 'reentrant')
         self.running = True
@@ -420,6 +420,8 @@ class Runtime:
                 prepared_root = accepted_root(self, candidate, request, engine, basis)
             stage = 'acceptance'
             self.note(stage, request)
+            if context_guard is not None and not context_guard():
+                raise Unresolved('acceptance', 'stale_situated_context')
             current = self.information()
             if (self.campaign is not campaign_root or self._state is not root or self.config != config or engine.get_world_state() != legacy
                     or not reads.current(current)):
@@ -443,8 +445,9 @@ class Runtime:
 
 class Domain:
     """I1 adapter. Requirements and acceptance remain with Action/owning runtime."""
-    def __init__(self, engine, runtime):
+    def __init__(self, engine, runtime, *, context_supplier=None):
         self.engine, self.runtime = engine, runtime
+        self.context_supplier = context_supplier
         self.request = None
         self.propose = propose_assessed
 
@@ -464,6 +467,12 @@ class Domain:
         r = self.request
         if r is None:
             raise ValueError('No bound activity')
+        if self.context_supplier is not None:
+            current = self.context_supplier()
+            validate_context(current)
+            if current.location != self.engine.world_state['player']['current_location_id']:
+                raise ValueError('Stale situated location')
+            return current
         location = self.engine.world_state['player']['current_location_id']
         root = self.runtime._state
         # Fresh actual dependency values are rechecked by the owner at acceptance.
@@ -480,7 +489,8 @@ class Domain:
         r = self.request
         prior = self.runtime.prior(r)
         method = next((m for m in self.runtime.config.methods if m.id == r.method), None)
-        if self.runtime.campaign is not None and not prior:
+        public_refs = (r.target,) if self.context_supplier is not None and r.target in dict(context.accessible) else ()
+        if self.runtime.campaign is not None and not prior and r.intent == 'commit':
             from engine.campaign_continuity import activity
             a = activity(self.runtime, r)
             boundary = a.boundary
@@ -491,10 +501,11 @@ class Domain:
                 restart_required=boundary.restart_required, developments=boundary.developments,
                 complete=r.id in undertaking.accepted_steps,
                 conflicting_constraints=method.conflicts if method else ()),
-                ('world', 'character', 'action'))
+                ('world', 'character', 'action'), required_means=method.means if method else (), public_refs=public_refs)
         complete = r.id in undertaking.accepted_steps
         return DomainStep(r.id, ActivityCheckpoint(undertaking.ref, r.method, complete=complete,
             conflicting_constraints=method.conflicts if method and not prior else ()), ('world', 'character', 'action'),
+            required_means=method.means if method and not prior else (), public_refs=public_refs,
             supported_constraints=())
 
     def execute(self, undertaking, step, context):
@@ -502,7 +513,8 @@ class Domain:
         if (undertaking.activity, undertaking.target, undertaking.method, undertaking.constraints) != (
                 r.action, r.target, r.method, r.constraints):
             raise Unresolved('authorization', 'request_mismatch')
-        return self.runtime.accept(r, step, self.engine, self.propose)
+        guard = (lambda: self.context() == context) if self.context_supplier is not None else None
+        return self.runtime.accept(r, step, self.engine, self.propose, context_guard=guard)
 
 
 def root_time(runtime):

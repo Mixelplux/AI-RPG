@@ -79,9 +79,25 @@ output cannot choose a draw/result, waive a cost, mutate state, or establish
 success. The narrower responsibility map explains who decides what within that
 boundary; it does not weaken validation or atomic publication safeguards.
 
+## M2-M1 inspection connection — owner-accepted bounded implementation
+
+Owner accepted October 24, 2026 after successful interactive smoke and handoff
+review, including documented limitations. Git publication remains separate.
+
+The [M2-M1 handoff](../../m2_m1_handoff.md) connects bounded ordinary input to the
+existing I1 coordinator and domain-owned I2/I3 acceptance. Situated suppliers
+declare visible targets, method availability and means; finite method declarations
+still own capability, requirements, existing routine/d6 mechanics, cost, duration
+and result observations. Interpretation never resolves an outcome. Material
+unavailable information stays unresolved; a known failed prerequisite can produce
+an accepted blocked attempt with its declared cost, preserving existing semantics.
+F05 checks durable continuation and current restrictions. Final acceptance also
+checks current supplied context; retry reuses accepted mechanics and costs.
+No new inspection/search rules, universal durations or production content are added.
+
 ## Bounded I1-M1 implementation — owner accepted
 
-October 23, 2026: [I1-M1](../../current_sprint.md) adds a common GameEngine
+October 23, 2026: [I1-M1](../../i1_m1_handoff.md) adds a common GameEngine
 coordination runtime with untrusted interpretation, undertaking/context contracts
 and existing F05 control. Owning domain suppliers establish applicable
 responsibilities, prerequisites and accepted results. Coordination authorizes

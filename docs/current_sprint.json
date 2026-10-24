@@ -10,18 +10,18 @@
   "active_sprint": null,
   "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "i3-continuing-gameplay-integrity-v1"
+    "id": "m2-m1-integrated-player-input-v1"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "i3-continuing-gameplay-integrity-v1",
-    "title": "I3-M1 — Durable Consequential Continuity and Safe Resumption (I3 — Continuing Gameplay Integrity V1)",
+    "id": "m2-m1-integrated-player-input-v1",
+    "title": "M2-M1 \u2014 Integrated Player Input and Consequential Execution",
     "type": "capability-package",
     "status": "complete",
     "risk_level": "elevated",
-    "goal": "Owner accepted bounded I3-M1 October 24, 2026 after structural verification and successful interactive/scripted experiential smokes: 69 seconds, 2 wedges, 3 receipts. Lifecycle complete/idle. Exact-inventory publication preparation only; no staging, commit, merge, push or subsequent development authorized.",
+    "goal": "Owner accepted bounded M2-M1 October 24, 2026 after handoff review and successful interactive smoke: 45 seconds, 2 lamp units remaining, 3 accepted increments. Lifecycle complete/idle. Acceptance recording and publication preparation only; no Git staging, commit, merge, push or next milestone authorized.",
     "predecessor": {
-      "id": "i2-information-grounded-consequence-integration-v1"
+      "id": "i3-continuing-gameplay-integrity-v1"
     },
     "platform": {
       "provider_requests": "forbidden",
@@ -29,13 +29,12 @@
       "save_version": 2
     },
     "scope": [
-      "Owner accepted exactly the 21-file I3-M1 handoff inventory and its bounded limitations. Source/config/test/tool bytes are frozen; only acceptance, lifecycle and publication-readiness documentation may change during this preparation.",
-      "Preserve accepted I1/I2 integration, version-1 compatibility without migration, version-2 atomic persistence, canonical seconds and waiting-intent representation. General event-wait execution, retrospective simulation and later I3 work remain deferred.",
-      "No source fixes, live providers, migration, Git staging/commit/merge/push or next package. Wedge obligation alongside consumed cost is a non-blocking fixture-presentation ambiguity; record only."
+      "Interpret supported inspection objectives, targets, methods, intent and constraints using legitimate situated suppliers; no interpretation outcome authority.",
+      "Reuse existing finite adjudication, F05, coherent acceptance, undertaking/request identities, interruption and version-2 restoration; preserve version-1 and I2 boundaries.",
+      "No general language, new mechanics, legacy mutating dispatch, migration, live providers or Git staging/commit/merge/push."
     ],
     "verification": [
-      "Accepted implementation evidence: 29 I3 matrix tests plus 231 affected unittest cases = 260 unittest cases; 13 standalone regressions passed. Owner interactive and scripted smokes passed, including unchanged retry accounting, blocked resumption, changed circumstances and later dependence; final 69 seconds, 2 wedges, 3 receipts.",
-      "Publication preparation reuses accepted gameplay evidence while verifying exact 21 paths, source/config pins, official-interpreter in-memory syntax, lifecycle/JSON/docs/whitespace, mutation-detecting GitWorkflowTools verification, empty index, baseline and preservation. No gameplay rerun or ignored development-data mutation is required. No candidate commit exists without separate Git authority."
+      "Owner accepts 293 passing unittest cases, 13 affected regression entry points, two scripted smoke circumstances and successful interactive smoke. Reuse accepted gameplay evidence while verifying unchanged six implementation files, exact 15-path scope, lifecycle, documentation, UTF-8, whitespace, baseline, empty index and preservation. No live providers or unrelated gameplay reruns."
     ]
   }
 }

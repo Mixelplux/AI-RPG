@@ -92,8 +92,12 @@ class GameEngine:
         initial_world_state: Dict[str, Any] | None = None,
         *, investigation_policy=None, coordination_context=None, coordination_domain=None,
         consequence_config=None, campaign_config=None, campaign_draw=None,
+        player_activity_context=None,
     ):
         self._consequences = None
+        if player_activity_context is not None and (campaign_config is None or not callable(player_activity_context)):
+            raise ValueError("Player activities require an explicit I3 campaign and current context supplier")
+        self._player_activity_context = player_activity_context
         self.region_path = region_path
         self.region = load_region(region_path)
 
@@ -162,6 +166,16 @@ class GameEngine:
         from engine.campaign_continuity import begin
         return begin(self, action, target, method, constraints=constraints, waiting=waiting)
 
+    def set_player_activity_context(self, supplier):
+        """Install current owning-domain services after independent restoration.
+
+        Services are not campaign truth and are never decoded from save data.
+        """
+        if (self._consequences is None or self._consequences.campaign is None
+                or self._consequences.running or not callable(supplier)):
+            raise ValueError("Idle I3 campaign and situated supplier required")
+        self._player_activity_context = supplier
+
     def revise_campaign(self, **owner_inputs):
         from engine.campaign_continuity import revise
         return revise(self, **owner_inputs)
@@ -187,7 +201,7 @@ class GameEngine:
             raise ValueError("I2 requires explicit consequence_config opt-in")
         return self._consequences.information()
 
-    def process_consequence(self, request, *, propose=None):
+    def process_consequence(self, request, *, propose=None, context_supplier=None):
         """Explicit structured activity through the same common I1 runtime.
 
         Each call constructs a disposable domain/coordinator. Authoritative
@@ -197,12 +211,12 @@ class GameEngine:
         from engine.information_adjudication import propose_assessed
         if self._consequences is None or self._consequences.running:
             raise ValueError("I2 unavailable or already executing")
-        domain = Domain(self, self._consequences)
+        domain = Domain(self, self._consequences, context_supplier=context_supplier)
         domain.bind(request, propose if propose is not None else propose_assessed)
         self._coordination = coordination.Coordinator(domain.context, domain)
         if self._consequences.campaign is not None:
             self._consequences.note("interpretation", request)
-            if self._consequences.prior(request) is None:
+            if self._consequences.prior(request) is None and request.intent == 'commit':
                 from engine.campaign_continuity import activity
                 try:
                     a = activity(self._consequences, request)
@@ -1537,6 +1551,7 @@ class GameEngine:
             if not theirs or not theirs.campaign:
                 raise ValueError("No version-1 promotion or I3 state loss")
             prepared = other.__dict__.copy()
+            prepared['_player_activity_context'] = self._player_activity_context
             self.__dict__ = prepared
             return
         self.require_persistent_runtime()
@@ -1660,7 +1675,11 @@ class GameEngine:
 
         return candidate_world_state
 
-    def process_command(self, player_input: str) -> Dict[str, Any]:
+    def process_command(self, player_input: str, *, request_id=None, undertaking_id=None) -> Dict[str, Any]:
+        if (self._consequences is not None and self._consequences.campaign is not None
+                and self._player_activity_context is not None):
+            from engine.player_activity import process
+            return process(self, player_input, request_id=request_id, undertaking_id=undertaking_id)
         self.require_persistent_runtime()
 
         result = self.process_coordination(player_input)

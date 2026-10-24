@@ -44,6 +44,21 @@ Existing finite Period and binding rules supply the bounded expiration/re-entry
 case; no new simulator is inferred. Logical records permit later storage changes,
 but current tuple scans, full snapshot writes and history validation remain bounded.
 
+## M2-M1 input continuity — owner-accepted bounded implementation
+
+Owner accepted October 24, 2026 after successful interactive smoke and handoff
+review, including documented limitations. Git publication remains separate.
+
+The [M2-M1 handoff](../../m2_m1_handoff.md) connects supported ordinary input to
+existing durable activities and request receipts without changing their records,
+save version or ownership. Opaque references survive through existing version-2
+state; parser state, aliases and callable services are not added to saves. Install
+current owning context services after independent restoration; an existing-engine
+load retains its installed service and calls it with restored state. Accepted
+retry recognition needs no current situational lookup. New continuation still
+requires fresh domain participation and F05 authorization. Default version-1 and
+legacy I2 save boundaries are unchanged; no migration is provided.
+
 ## Purpose
 
 Preserve supported accepted campaign meaning across explicit save/load and

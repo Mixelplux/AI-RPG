@@ -28,7 +28,7 @@ The initial review metadata above is historical.
 
 ## Bounded I1-M1 integration — owner accepted
 
-October 23, 2026: [I1-M1](../../current_sprint.md) adds a bounded coordination
+October 23, 2026: [I1-M1](../../i1_m1_handoff.md) adds a bounded coordination
 route before existing contextual/legacy handling. Recognized unresolved or
 ambiguous input returns a contained public result rather than reaching another
 interpreter. Unclaimed commands retain established handling, including the
@@ -51,8 +51,28 @@ automatic menus. Explicit ambiguity can still require clarification. Exact
 supplier-supported direction phrases provide bounded free-form choice; they are
 not general navigation or language interpretation. Refinements preserve accepted
 work and apply constraints prospectively. A later failure retains earlier accepted
-results/costs. See the [correction handoff](../../current_sprint.md) for the finite per-call
+results/costs. See the [correction handoff](../../i1_m1_handoff.md) for the finite per-call
 bound and trusted supplier limits; no I2/I3 or new gameplay mechanics are claimed.
+## M2-M1 input integration — owner-accepted bounded implementation
+
+Owner accepted October 24, 2026 after successful interactive smoke and handoff
+review, including documented limitations. Git publication remains separate.
+
+The [M2-M1 handoff](../../m2_m1_handoff.md) adds a bounded I3 `process_command`
+route for supplied inspection/search targets, methods, inquiry/preparation and
+explicit continuation. Opaque request/undertaking references are transport data;
+they grant no outcome. Reusing an accepted identity recognizes its receipt;
+a fresh instruction/identity is a new authorized attempt. Explicit `retry` can
+recognize a saved result even when current situational services are unavailable.
+
+Current legitimate context services are installed explicitly, including after
+fresh restoration. Unsupported wording, constraints and independent instructions
+return safely without legacy dispatch. Public descriptions come from Character-safe
+suppliers/accepted receipts. The offline smoke is an input surface over the common
+runtime; production CLI, general language and new gameplay mechanics remain deferred.
+Each instruction commits one finite increment and returns control; it does not
+invent a multistep plan. Overall classification remains Partial.
+
 ## Purpose
 
 Own the interaction surface between the human player and the game: receive
