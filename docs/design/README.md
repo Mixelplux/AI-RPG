@@ -38,3 +38,17 @@ Existing sources remain at their original paths:
   resumption and consequential dialogue. Canonical incorporation proposed for
   owner review; implementation and later bounded F01–F05 playable evaluation
   require separate authorization.
+
+- [Core Gameplay Domains — Cross-Domain Contract Design V1](core-gameplay-domains-cross-domain-contract-design-v1.md) —
+  owner-accepted October 25, 2026: CD-01–CD-09 and the four consolidated
+  architectural directions. Specializes Integrated Gameplay Architecture for
+  World, Character, Action & Resolution and Actors & Social Dynamics; Design only.
+
+- [Physical Traversal Domain Design V1](physical-traversal-domain-design-v1.md) —
+  owner-accepted October 25, 2026: PT-D1–PT-D9 and consolidated Stage B direction.
+  Defines genuine traversal semantics, climbing first and later swimming/jumping
+  generalization; future implementation evidence and sequencing authorize no package.
+
+Both source records are incorporated verbatim. The
+[incorporation review](core-gameplay-domains-incorporation-review.md) records
+source provenance, reconciliation, verification and the documentation-only scope.

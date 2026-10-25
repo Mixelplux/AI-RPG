@@ -157,6 +157,37 @@ F01 still receives only legitimate accessible meaning. Conceptual responsibiliti
 mandate neither separate runtime modules nor individual AI calls; see the
 [contract reconciliation](../integrated-gameplay-architecture-v1.md#contract-reconciliation-and-responsibility-relationships).
 
+## Core gameplay domains and physical traversal — accepted design
+
+October 25, 2026: [Core Gameplay Domains — Cross-Domain Contract Design V1](../core-gameplay-domains-cross-domain-contract-design-v1.md)
+(CD-01–CD-09 and four consolidated directions) and
+[Physical Traversal Domain Design V1](../physical-traversal-domain-design-v1.md)
+(PT-D1–PT-D9 and consolidated Stage B direction) are owner-accepted Design.
+They specialize IG-01–IG-18 and IG-20–IG-23; IG-19 remains excluded.
+The [incorporation review](../core-gameplay-domains-incorporation-review.md)
+records reconciliation and source preservation separately from the accepted text.
+
+| Responsibility / inherited contract | Accepted specialization and retained boundary |
+|---|---|
+| [World Simulation](world-simulation.md) | CD-01, CD-03, CD-05–CD-06; PT-D2, PT-D7: external existence, physical-object identity/condition, compatible spatial/possession/attachment relationships, fictional time and causal progress. Establish material governing circumstances before uncertain resolution; never retrospectively select them to fit a roll. |
+| [Character System](character-system.md) | CD-02, CD-05, CD-07–CD-08; PT-D3: relevant PC/NPC capability, conditions/resources, equipment readiness/use and legitimate informational access. Physical presence/attachment remains World-owned. CD accepts shared relevant rule-facing semantics while sparse representation remains sufficient; the earlier provisional NPC interface does not prescribe its implementation. |
+| [Action & Resolution](action-resolution.md) | CD-02–CD-04; PT-D4–PT-D6: determine feasibility, applicable D&D 2024 mechanics and explicit justified adaptations, uncertainty, costs and accepted result. Ordinary climbing need not roll; failed progress does not automatically establish falling. Existing routine/d6 implementations are bounded evidence, not traversal rules or an accepted adaptation. |
+| [Actors & Social Dynamics](actors-social-dynamics.md) | CD-06–CD-07; PT-D8: meaningful NPC choices and social commitments remain separate from mechanical success and external consequences. Participate when relevant, without mandatory actor processing for solo traversal or a claim of autonomous NPC agency from fixture intent. |
+| [Integrated Gameplay Architecture](../integrated-gameplay-architecture-v1.md) / [F05](../f05-authorized-activities-and-player-control.md) | CD-04, CD-06; PT-D1, PT-D6, PT-D9: coordinate one authorized undertaking and coherent dependent acceptance; preserve meaningful progress, costs and recognition across interruption. Fresh circumstances govern continuation; materially different methods or risks remain player choices. Coordination acquires no outcome authority. |
+| [Information Foundation](../information-foundation-functional-design-v1.md) / [Information-Grounded Adjudication](../information-grounded-adjudication-v1.md) | CD-01–CD-03, CD-09: domains determine selective direct/relationship/history dependencies; retrieval supplies them. Distinguish unspecified, established-but-unavailable and uncertain information. Missing material established facts leave the affected decision unresolved without invention or hidden disclosure. |
+| [F01](../f01-truthful-presentation-and-epistemic-fidelity.md), [Narrative Experience](narrative-experience.md) and [Player Presentation](player-presentation.md) | CD-08; PT-D9: project accepted accessible meaning with consequential attribution, uncertainty and temporal distinctions. Technical rejection is not fictional failure; presentation repair cannot repeat resolution or mutate accepted truth. F01 reliance/reconciliation remains proportional. |
+| [Persistence](persistence.md) | CD-04, CD-09; PT-D9: preserve coherent accepted meaning, stable references/relationships, time, restrictions and retry recognition; failed restoration must preserve the live campaign. No save format, migration, transaction engine, universal ledger or storage technology is selected. |
+| [Scenario & Authored Content](scenario-authored-content.md) | CD-01–CD-03: supply definitions, rules references and coherent foundations, not live outcomes. Explicit accepted adaptations/scoped effects do not license unexplained authored contradictions or automatic retrieval-order precedence. |
+
+Traversal validates these general contracts through genuine World/Character/Action
+semantics, with climbing first and substantially different methods testing reuse.
+Fixtures may supply missing upstream contracts, not preselected outcomes. The
+existing common runtime is a candidate for reuse, assessed against accepted Design.
+No implementation coverage, system classification, shared doctrine, lifecycle,
+save version, migration, provider authorization or package selection changes here.
+Rules-corpus/adaptation details and content-revision compatibility remain scoped
+future questions as stated in the accepted sources.
+
 ## Responsibility hierarchy
 
 Information Resolution Core V1a is an accepted read-only cross-system information

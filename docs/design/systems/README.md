@@ -73,6 +73,19 @@ was [owner accepted](../../f05_authorized_activities_v1_acceptance.md) October 1
 its policy/material checkpoint and offline fixture coverage do not complete the
 Partial systems or begin the deferred playable integration milestone.
 
+## Core gameplay domain design — October 25, 2026
+
+The owner-accepted [cross-domain contracts CD-01–CD-09](../core-gameplay-domains-cross-domain-contract-design-v1.md)
+and [physical traversal PT-D1–PT-D9](../physical-traversal-domain-design-v1.md)
+specialize the accepted Integrated Gameplay Architecture and existing F01/F05,
+Information Foundation and responsibility contracts. See the
+[system-map reconciliation](system-map.md#core-gameplay-domains-and-physical-traversal--accepted-design).
+These are intended semantics, including shared relevant PC/NPC mechanics and
+World-owned physical-object relationships with Character-owned equipment use.
+The manifests' Partial implementation classifications and shared doctrines remain
+unchanged. Proposed traversal implementation and sequencing require separate
+authorization; this incorporation selects no package or lifecycle transition.
+
 ## Shared doctrines
 
 Current bounded implementation evidence: [damaged-gate F01–F05 integration](../../f01_f05_gate_integration_v1.md),
