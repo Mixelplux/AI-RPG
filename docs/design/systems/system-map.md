@@ -497,3 +497,14 @@ reorients; retained clues remain available even when omitted locally. Help and
 provider display expose supported interaction unevenly; diagnostics and raw dice
 options prevent a universal safe/immersive-display claim. These are documented
 limits, not authorization for parser, help, narration or UI changes.
+
+## Physical Traversal M1 — bounded implementation for review
+
+World physical views → Action: selected link, surface, local position, real means
+and established fall occurrence. Character → Action: shared PC/NPC rule statistics,
+conditions, readiness and legitimate route access. Action → common I1/F05:
+read-only assessment with three participating owners. No hidden premise becomes a
+public reference. Action results → future common acceptance: provisional movement
+or fall contributions only; no M1 authoritative effects or new-domain persistence.
+These seams do not introduce another coordinator or outcome authority. See the
+[M1 handoff](../../physical_traversal_m1_handoff.md); overall systems remain Partial.

@@ -23,6 +23,22 @@ Later evidence: [Contextual Investigation V1](../../contextual_investigation_v1_
 and its [structural correction](../../contextual_action_structural_correction.md).
 The October 6 review identity above remains historical.
 
+## Physical Traversal M1 — owner accepted October 26, 2026
+
+`engine/traversal_resolution.py` implements bounded 2024 climb movement and
+circumstance-justified Athletics checks, with proficiency/condition/trait effects,
+and a distinct dry-ground fall-damage contribution. Failed objectives do not
+manufacture falling, injury, a safe final position or a movement charge.
+Assessments/results are unaccepted; stale and unavailable premises reject.
+`traversal_coordination.py` reuses common I1/F05 assessment and refuses execution
+until M2 coherent acceptance is integrated. This neither replaces existing
+accepted gameplay nor routes climbing through the finite d6 policy.
+The owner's October 26 clarification makes coordination a prerequisite of climbing,
+independently of whether a check is needed; Resolution consumes Character's general
+capability instead of imposing a Stunned Speed restriction. Fall sampling validates
+against a captured immutable frame. Grounded exposed/protected/near-ground failure
+consequences remain required M2 validation. See [M1 handoff](../../physical_traversal_m1_handoff.md).
+
 ## Purpose
 
 Owner-accepted implementation, October 22, 2026: [Information-Grounded Adjudication V1](../../information_grounded_adjudication_v1_handoff.md)

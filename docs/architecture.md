@@ -18,6 +18,30 @@ the runtime flow and storage boundaries described here.
 
 Do not add sprint history, full schemas, test inventories, or implementation walkthroughs here.
 
+## Physical Traversal Core V1a — owner-accepted M1 foundations
+
+Owner accepted M1 foundations October 26, 2026 after blocking corrections. World-owned local
+physical views (`physical_world.py`) separate stable objects/attachments and
+position/time/causes from sparse PC/NPC capabilities (`character_rules.py`).
+`traversal_resolution.py` discovers owner dependencies, computes actual 2024
+climbing costs/checks and separate established-fall damage, and rejects missing,
+unsupported or stale premises. Results are provisional, with no save publication.
+
+`traversal_coordination.py` exercises the existing I1 Coordinator/F05 assessment
+interface. It refuses consequential execution pending M2 common-runtime aggregate
+integration. The CLI and GameEngine do not yet route climb commands here. The
+finite d6 adjudicator is not reused as a climbing rule. Existing v1/v2 saves and
+accepted gameplay remain unchanged. See [M1 design](physical_traversal_m1_design.md)
+and [handoff](physical_traversal_m1_handoff.md) for exact limits and compatibility.
+
+The owner's October 26 clarification separates movement allowance from physical
+coordination and action economy through Character's general PhysicalCapability
+view. Resolution requires coordination for climbing even without a check; Stunned
+alone never sets Speed to zero or establishes a fall. Fall validation captures an
+immutable starting frame, including when suppliers reuse mutable view wrappers.
+M2 must ground actual consequences for exposed, protected and near-ground failures;
+provisional objective failure neither asserts safety nor automatically causes falling.
+
 ## Tech Stack
 
 - Python 3.13

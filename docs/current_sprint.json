@@ -10,31 +10,29 @@
   "active_sprint": null,
   "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "m2-m1-integrated-player-input-v1"
+    "id": "physical-traversal-v1a-m1"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "m2-m1-integrated-player-input-v1",
-    "title": "M2-M1 \u2014 Integrated Player Input and Consequential Execution",
+    "id": "physical-traversal-v1a-m1",
+    "title": "Physical Traversal Core V1a \u2014 M1 Core Domain Foundations",
     "type": "capability-package",
     "status": "complete",
     "risk_level": "elevated",
-    "goal": "Owner accepted bounded M2-M1 October 24, 2026 after handoff review and successful interactive smoke: 45 seconds, 2 lamp units remaining, 3 accepted increments. Lifecycle complete/idle. Acceptance recording and publication preparation only; no Git staging, commit, merge, push or next milestone authorized.",
+    "goal": "Owner accepted bounded M1 foundations October 26, 2026 after both blocking corrections and verification. Lifecycle complete/idle; consequential acceptance and persistence remain M2. No M2 start or Git publication authorized.",
     "predecessor": {
-      "id": "i3-continuing-gameplay-integrity-v1"
+      "id": "m2-m1-integrated-player-input-v1"
     },
     "platform": {
-      "provider_requests": "forbidden",
       "official_interpreter": ".\\.venv\\Scripts\\python.exe",
-      "save_version": 2
+      "save_version": 2,
+      "provider_requests": "forbidden"
     },
     "scope": [
-      "Interpret supported inspection objectives, targets, methods, intent and constraints using legitimate situated suppliers; no interpretation outcome authority.",
-      "Reuse existing finite adjudication, F05, coherent acceptance, undertaking/request identities, interruption and version-2 restoration; preserve version-1 and I2 boundaries.",
-      "No general language, new mechanics, legacy mutating dispatch, migration, live providers or Git staging/commit/merge/push."
+      "World local spatial relations, stable objects and compatible attachments; shared PC/NPC capabilities, access and readiness; actual 2024 climbing and separate fall responsibility. Establish versioned persistence compatibility and common-runtime integration path before incompatible writes. No M2, combat, swimming, jumping, migrations, live providers or Git publication."
     ],
     "verification": [
-      "Owner accepts 293 passing unittest cases, 13 affected regression entry points, two scripted smoke circumstances and successful interactive smoke. Reuse accepted gameplay evidence while verifying unchanged six implementation files, exact 15-path scope, lifecycle, documentation, UTF-8, whitespace, baseline, empty index and preservation. No live providers or unrelated gameplay reruns."
+      "Syntax, focused offline rule/world/character variations, structural integration boundaries, affected regressions, compatibility and targeted architecture review; lifecycle validation and documentation reconciliation."
     ]
   }
 }

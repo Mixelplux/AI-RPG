@@ -16,6 +16,19 @@ Conceptual ownership does not select storage, require new runtime modules, or
 authorize implementation. The framework and World Simulation baseline remain
 unchanged apart from manifest navigation and relationship-map integration.
 
+## Physical Traversal M1 — owner accepted October 26, 2026
+
+`engine/character_rules.py` supplies shared sparse PC/NPC movement, Strength,
+Athletics training, relevant conditions/traits, readiness and legitimate route
+access. Physical possession/attachments/position are read from World, never copied
+into Character equipment state. Unknown effects remain unresolved. New-domain
+resources are premises only; no M1 gameplay resource or save mutation is enabled.
+The owner's October 26 accepted clarification is represented by general physical
+capability: movement allowance, coordinated movement and action economy are distinct.
+Stunned leaves Speed intact but prevents deliberate coordination; Incapacitated
+prevents Actions, Bonus Actions and Reactions. Technique requirements remain with
+Resolution. See [M1 handoff](../../physical_traversal_m1_handoff.md).
+
 ## Purpose
 
 Owner-accepted implementation, October 22, 2026: [Information-Grounded Adjudication V1](../../information_grounded_adjudication_v1_handoff.md)

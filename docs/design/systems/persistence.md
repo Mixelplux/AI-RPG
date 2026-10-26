@@ -16,6 +16,14 @@ This living responsibility model follows the [manifest framework](README.md).
 It authorizes no runtime changes, new storage model, migration or next package.
 The six protected manifests retain their responsibility boundaries.
 
+## Physical Traversal M1 — owner-accepted compatibility boundary (October 26, 2026)
+
+M1 adds no save writer, migration or version transition. New domain views and
+provisional mechanical results are not serialized as accepted campaign truth.
+Existing v1/v2 behavior remains intact. The [M1 persistence design](../../physical_traversal_m1_design.md#persistence-and-compatibility-established-before-writes)
+requires opt-in versioned integration, complete validation and coherent atomic
+publication before future writes; missing legacy traversal facts are never guessed.
+
 ## Opt-in I3 owner-accepted implementation — October 24, 2026
 
 The owner-authorized [I3-M1 implementation](../../i3_m1_handoff.md) adds complete

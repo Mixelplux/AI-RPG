@@ -13,6 +13,15 @@ This is a living model under the [shared documentation rule](README.md).
 Accepted design and provisional decomposition do not claim generalized runtime
 support or authorize implementation.
 
+## Physical Traversal M1 — owner accepted October 26, 2026
+
+`engine/physical_world.py` supplies validated immutable local position/link/surface,
+physical-instance and simultaneous relationship views. World owns time and causal
+records; unavailable material inputs and unresolved bindings block the affected
+read. Exclusive possession conflicts and dangling physical references reject.
+This is a domain foundation, not accepted traversal mutation, global geometry or
+new campaign persistence. See [M1 handoff](../../physical_traversal_m1_handoff.md).
+
 ## Purpose
 
 Maintain authoritative external reality: what is true now and how that truth can

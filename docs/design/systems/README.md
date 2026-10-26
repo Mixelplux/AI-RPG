@@ -86,6 +86,11 @@ The manifests' Partial implementation classifications and shared doctrines remai
 unchanged. Proposed traversal implementation and sequencing require separate
 authorization; this incorporation selects no package or lifecycle transition.
 
+The separately authorized [Physical Traversal M1 implementation handoff](../../physical_traversal_m1_handoff.md)
+records owner acceptance of bounded World/Character/rule foundations on October 26, 2026. Common
+assessment is exercised; consequential integration and new-domain persistence
+remain M2. M1 is closed; M2 is not staged or started.
+
 ## Shared doctrines
 
 Current bounded implementation evidence: [damaged-gate F01–F05 integration](../../f01_f05_gate_integration_v1.md),
