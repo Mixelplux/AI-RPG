@@ -98,6 +98,26 @@ Detailed playable scenarios and their integration milestone remain deferred in
 [DF-009](../../deferred_findings.md#df-009--bounded-f01f05-playable-scenario-evaluation).
 No content format, scenario framework or runtime change is selected here.
 
+### Region Pack authoring and composition — accepted design
+
+[Region Pack Authoring & Composition Design V1](../region-pack-authoring-and-composition-v1.md)
+records owner-accepted RPA-01–RPA-13; its documentation incorporation remains a
+candidate for owner review. Packs are coherent information domains with shared
+stable identities, compatible accumulation and explicitly legitimate scoped
+exceptions. Sibling packs do not directly depend on one another. Authored setting
+information, mechanical definitions and persistent campaign information retain
+distinct responsibilities; legitimate campaign changes do not rewrite reusable
+foundations or reset to authored defaults.
+
+Authoring and comprehensive content validation belong to a standalone tool,
+tentatively World Forge. AI RPG consumes approved compiled packs and retains
+runtime integrity checks, applicable composition/retrieval, domain-owned
+interpretation and acceptance, persistence/restoration and safe presentation.
+Authoring approval does not waive runtime gameplay validation. This adds no
+runtime authority or implemented format; World Forge design/development, production
+packs and revision-reconciliation mechanisms remain deferred. Existing bounded
+implementation evidence and Partial classification below are unchanged.
+
 ## Current model
 
 Three **Provisional** conceptual responsibilities are sufficient. They are not

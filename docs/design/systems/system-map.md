@@ -40,6 +40,24 @@ These bounded implementations preserve the conceptual owners and Partial system
 classifications; [Option C research](../../architecture_comprehension_review.md)
 does not replace accepted sequential dispatch.
 
+## Region Pack authoring and composition — accepted design boundary
+
+[Region Pack Authoring & Composition Design V1](../region-pack-authoring-and-composition-v1.md)
+records accepted RPA-01–RPA-13 in a documentation candidate for owner review.
+Standalone World Forge owns authoring and comprehensive content validation;
+AI RPG consumes approved compiled packs through agreed information contracts,
+identifiers and compatibility requirements. Shared deployment is not required.
+
+Within AI RPG, Scenario & Authored Content supplies coherent foundations and
+supported declarations; Information Foundation retrieves applicable information;
+owning gameplay domains determine dependencies, interpret mechanics and validate
+consequences. World/Character/Actor owners retain their accepted meaning,
+Persistence retains storage/restoration and compatibility, and F01/F05 retain
+safe expression and player control. Campaign changes govern affected current
+facts without rewriting reusable packs. Approved content does not waive runtime
+gameplay validation. No ninth gameplay authority, World Forge implementation,
+new save model or completed general composition/retrieval capability is implied.
+
 ## Information-grounded adjudication — accepted bounded implementation
 
 The [October 22, 2026 handoff](../../information_grounded_adjudication_v1_handoff.md)

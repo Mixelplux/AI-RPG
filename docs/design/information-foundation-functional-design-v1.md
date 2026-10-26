@@ -223,6 +223,19 @@ Pack boundaries follow meaningful informational depth, not arbitrary atomization
 
 Pack creation, schemas, validation tools, packaging formats and storage choices remain deferred.
 
+### Related accepted authoring and composition design
+
+[Region Pack Authoring & Composition Design V1](region-pack-authoring-and-composition-v1.md)
+specializes these requirements through accepted RPA-01–RPA-13; incorporation is a
+documentation candidate for owner review. It covers coherent domains and stable
+subjects, sibling-independent composition, explicit scoped exceptions, selective
+retrieval, progressive specification, campaign compatibility and provenance.
+Standalone World Forge owns authoring and comprehensive content validation;
+AI RPG retains runtime validation and the existing gameplay authorities.
+D1–D16, their qualifications and accepted R1–R4 remain unchanged. The deferrals
+above continue to apply to pack creation and implementation mechanisms; the
+related design selects no schema, storage, migration or World Forge architecture.
+
 ## Functional authority contracts
 
 The Information Foundation supports existing conceptual responsibilities.

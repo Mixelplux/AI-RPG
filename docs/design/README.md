@@ -15,6 +15,13 @@ Existing sources remain at their original paths:
 
 ## Accepted design records
 
+- [Region Pack Authoring & Composition Design V1](region-pack-authoring-and-composition-v1.md) —
+  owner-accepted RPA-01–RPA-13; documentation candidate for owner review.
+  Covers coherent information domains, stable identity, scoped exceptions,
+  progressive specification, campaign compatibility and standalone World Forge
+  authoring. AI RPG retains runtime validation and existing gameplay authority;
+  no implementation or World Forge development is authorized.
+
 - [Integrated Gameplay Architecture V1](integrated-gameplay-architecture-v1.md) —
   owner-accepted IG-01–IG-18 and IG-20–IG-23; IG-19 is not accepted. Canonical
   consolidation proposed for owner review, covering situated coordination,
