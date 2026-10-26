@@ -1,3 +1,4 @@
+#requires -Version 7.0
 # Readiness is offline by default. Optional tasks require their own owner authority.
 [CmdletBinding()]
 param(

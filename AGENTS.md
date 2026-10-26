@@ -38,6 +38,8 @@ Do not routinely read the full ADR ledger, roadmap, architecture history, or dup
 ## System Constraints
 
 - Work from the repository root.
+- Use PowerShell 7+ via explicit pwsh.exe -NoProfile for Windows automation;
+  Windows PowerShell 5.1 is unsupported. See WORKFLOW.md for environment checks.
 - Never run an unbounded recursive search from the repository root.
 - Use `.\.venv\Scripts\python.exe` for project Python commands; do not substitute another interpreter.
 - Before editing, verify repository root, branch, full HEAD, and working-tree status.

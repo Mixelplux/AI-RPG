@@ -1,7 +1,11 @@
+#requires -Version 7.0
 [CmdletBinding()]
 param(
     [Parameter()]
-    [string]$ProjectRoot = (Split-Path -Parent $PSScriptRoot)
+    [string]$ProjectRoot = (Split-Path -Parent $PSScriptRoot),
+
+    [ValidateSet('Pretty', 'Compact', 'LegacyWhitespace')]
+    [string]$JsonLayout = 'Pretty'
 )
 
 Set-StrictMode -Version Latest
@@ -59,7 +63,14 @@ function New-JsonFixture {
         }
     }
 
-    return $record | ConvertTo-Json -Depth 10
+    if ($JsonLayout -eq 'Compact') {
+        return $record | ConvertTo-Json -Depth 10 -Compress
+    }
+    $json = $record | ConvertTo-Json -Depth 10
+    if ($JsonLayout -eq 'LegacyWhitespace') {
+        return $json.Replace('": ', '":  ')
+    }
+    return $json
 }
 
 function New-Fixture {
@@ -77,20 +88,34 @@ function New-Fixture {
     return $fixtureRoot
 }
 
-function Replace-FixtureText {
+function Set-FixtureJsonValue {
     param(
         [Parameter(Mandatory = $true)][string]$Root,
-        [Parameter(Mandatory = $true)][string]$RelativePath,
-        [Parameter(Mandatory = $true)][string]$OldValue,
-        [Parameter(Mandatory = $true)][string]$NewValue
+        [Parameter(Mandatory = $true)][string]$PropertyPath,
+        [Parameter(Mandatory = $true)][string]$ExpectedJson,
+        [Parameter(Mandatory = $true)][string]$ValueJson
     )
 
-    $path = Join-Path $Root $RelativePath
-    $text = [IO.File]::ReadAllText($path)
-    if (-not $text.Contains($OldValue)) {
-        throw "Fixture mutation target not found in ${RelativePath}: $OldValue"
+    $path = Join-Path $Root 'docs/current_sprint.json'
+    $record = [IO.File]::ReadAllText($path) | ConvertFrom-Json -AsHashtable
+    $target = $record
+    $parts = $PropertyPath.Split('.')
+    for ($index = 0; $index -lt $parts.Length - 1; $index++) {
+        if (-not ($target -is [System.Collections.IDictionary]) -or -not $target.Contains($parts[$index])) {
+            throw "Fixture mutation path not found: $PropertyPath"
+        }
+        $target = $target[$parts[$index]]
     }
-    [IO.File]::WriteAllText($path, $text.Replace($OldValue, $NewValue), [Text.UTF8Encoding]::new($false))
+    $property = $parts[-1]
+    if (-not ($target -is [System.Collections.IDictionary]) -or -not $target.Contains($property)) {
+        throw "Fixture mutation target not found: $PropertyPath"
+    }
+    $expected = ConvertFrom-Json -InputObject $ExpectedJson -NoEnumerate
+    if (($target[$property] | ConvertTo-Json -Depth 10 -Compress) -cne ($expected | ConvertTo-Json -Depth 10 -Compress)) {
+        throw "Unexpected fixture mutation source value: $PropertyPath"
+    }
+    $target[$property] = ConvertFrom-Json -InputObject $ValueJson -NoEnumerate
+    [IO.File]::WriteAllText($path, ($record | ConvertTo-Json -Depth 10), [Text.UTF8Encoding]::new($false))
 }
 
 function Add-FixtureSprintProperty {
@@ -150,7 +175,7 @@ try {
     Assert-Accepted -Name 'active record with explanatory Markdown' -FixtureRoot (New-Fixture -Name 'active' -Mode active)
 
     $fixture = New-Fixture -Name 'elevated-risk-level' -Mode active
-    Replace-FixtureText $fixture 'docs/current_sprint.json' '"risk_level": "routine"' '"risk_level": "elevated"'
+    Set-FixtureJsonValue $fixture 'sprint.risk_level' '"routine"' '"elevated"'
     Assert-Accepted -Name 'elevated risk level' -FixtureRoot $fixture
 
     $fixture = New-Fixture -Name 'integer-save-version' -Mode complete
@@ -158,20 +183,20 @@ try {
 
     foreach ($supportedVersion in @(2, 3)) {
         $fixture = New-Fixture -Name "supported-save-version-$supportedVersion" -Mode active
-        Replace-FixtureText $fixture 'docs/current_sprint.json' '"save_version": 1' ('"save_version": ' + $supportedVersion)
+        Set-FixtureJsonValue $fixture 'sprint.platform.save_version' '1' ([string]$supportedVersion)
         Assert-Accepted -Name "supported save version $supportedVersion" -FixtureRoot $fixture
     }
 
     $fixture = New-Fixture -Name 'active-sprint-mismatch' -Mode active
-    Replace-FixtureText $fixture 'docs/current_sprint.json' '"active_sprint": "10.75"' '"active_sprint":  "10.76"'
+    Set-FixtureJsonValue $fixture 'active_sprint' '"10.75"' '"10.76"'
     Assert-Rejected 'active sprint mismatch' $fixture "active_sprint mismatch: active_sprint is '10.76'; sprint.id is '10.75'."
 
     $fixture = New-Fixture -Name 'unexpected-next-sprint' -Mode complete
-    Replace-FixtureText $fixture 'docs/current_sprint.json' '"next_sprint": null' '"next_sprint":  "10.75"'
+    Set-FixtureJsonValue $fixture 'next_sprint' 'null' '"10.75"'
     Assert-Rejected 'unexpected next sprint' $fixture "next_sprint must remain null until separately authorized; found '10.75'."
 
     $fixture = New-Fixture -Name 'unsafe-save-version' -Mode complete
-    Replace-FixtureText $fixture 'docs/current_sprint.json' '"save_version": 1' '"save_version":  4'
+    Set-FixtureJsonValue $fixture 'sprint.platform.save_version' '1' '4'
     Assert-Rejected 'unsafe save version' $fixture "sprint.platform.save_version must be integer 1, 2 or 3; found '4'."
 
     foreach ($invalidSaveVersion in @(
@@ -181,11 +206,11 @@ try {
         @{ Name = 'boolean save version'; Value = 'true' }
     )) {
         $fixture = New-Fixture -Name ($invalidSaveVersion.Name -replace ' ', '-') -Mode complete
-        Replace-FixtureText $fixture 'docs/current_sprint.json' '"save_version": 1' ('"save_version":  ' + $invalidSaveVersion.Value)
+        Set-FixtureJsonValue $fixture 'sprint.platform.save_version' '1' $invalidSaveVersion.Value
         Assert-Rejected $invalidSaveVersion.Name $fixture 'sprint.platform.save_version must be integer 1, 2 or 3;'
     }
     $fixture = New-Fixture -Name 'unsupported-risk-level' -Mode complete
-    Replace-FixtureText $fixture 'docs/current_sprint.json' '"risk_level": "routine"' '"risk_level":  "unclassified"'
+    Set-FixtureJsonValue $fixture 'sprint.risk_level' '"routine"' '"unclassified"'
     Assert-Rejected 'unsupported risk level' $fixture "sprint.risk_level must be 'routine', 'elevated', or 'critical'; found 'unclassified'."
 
     $fixture = New-Fixture -Name 'ephemeral-candidate-field' -Mode complete

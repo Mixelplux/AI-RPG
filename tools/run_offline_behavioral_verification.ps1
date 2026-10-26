@@ -1,3 +1,4 @@
+#requires -Version 7.0
 [CmdletBinding()]
 param(
     [Parameter()]
@@ -156,38 +157,8 @@ function Set-ChildEnvironmentOverrides {
         [Parameter(Mandatory = $true)][hashtable]$Overrides
     )
 
-    $keys = @($Overrides.Keys)
-    if ($keys.Count -eq 0) {
-        return
-    }
-
-    $firstKey = [string]$keys[0]
-    $firstValue = [string]$Overrides.Item($firstKey)
-    $firstApplied = $false
-    try {
-        $StartInfo.EnvironmentVariables.set_Item($firstKey, $firstValue)
-        $firstApplied = $true
-    }
-    catch {
-        $knownLazyInitializationFailure = $_.Exception.Message -match (
-            'null-valued expression|Cannot index into a null array|Item has already been added'
-        )
-        if (-not $knownLazyInitializationFailure) {
-            throw
-        }
-    }
-
-    if (-not $firstApplied) {
-        # Windows PowerShell 5.1 can fail the first legacy collection access
-        # while materializing a case-insensitive parent environment that has
-        # case-variant keys. The failed access initializes the maintained
-        # EnvironmentVariables collection; one bounded retry then succeeds.
-        $StartInfo.EnvironmentVariables.set_Item($firstKey, $firstValue)
-    }
-
-    foreach ($key in @($keys | Select-Object -Skip 1)) {
-        $overrideValue = [string]$Overrides.Item($key)
-        $StartInfo.EnvironmentVariables.set_Item([string]$key, $overrideValue)
+    foreach ($key in $Overrides.Keys) {
+        $StartInfo.Environment[[string]$key] = [string]$Overrides[$key]
     }
 }
 
@@ -451,7 +422,7 @@ function Invoke-RunnerSelfTest {
         $root
     )
     $fixtureResult = Invoke-NativeProcess $fixtureCommand $root $childEnvironment
-    Assert-SelfTest ($fixtureResult.ExitCode -eq 0 -and $fixtureResult.Stdout -match 'Project-record fixture summary: 23 passed') 'expected negative fixtures do not leak failure'
+    Assert-SelfTest ($fixtureResult.ExitCode -eq 0 -and $fixtureResult.Stdout -match 'Project-record fixture summary: 16 passed') 'expected negative fixtures do not leak failure'
 
     $script:firstFailureResult = $null
     $firstFailureOutput = & {

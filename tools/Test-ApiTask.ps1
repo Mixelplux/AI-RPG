@@ -1,3 +1,4 @@
+#requires -Version 7.0
 # Offline launcher integration: a synthetic DPAPI credential, never the real store.
 [CmdletBinding()]
 param()

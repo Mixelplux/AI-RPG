@@ -81,7 +81,12 @@ the official interpreter or workspace root.
 records.
 
 **Rules:** Use only `./.venv/Scripts/python.exe` as the official interpreter.
-Correct the workspace context and rerun the focused preflight; do not recreate
+Use PowerShell 7+ via `pwsh.exe -NoProfile`. In an authorized isolated worktree,
+pass its exact root as both `-RepoRoot` and `-ExpectedRepoRoot` to preflight;
+the worktree-bound GitWorkflowTools profile copy must target that same root.
+Git metadata access failures can surface as a save-publication-boundary failure;
+verify the name-only save diff in the approved execution context and retain the
+validator safeguard. Correct the workspace context and rerun preflight; do not recreate
 the environment, change permissions, run as Administrator, or substitute a
 different Python executable. Apply the known Windows fallback below if its
 trigger matches. Otherwise stop when required preflight remains unresolved;

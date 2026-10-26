@@ -8,6 +8,69 @@ Use credible consequence and recovery difficulty to choose rigor; Routine is
 the default. `docs/engineering_posture.md` defines the three risk levels and
 architectural safeguards that apply to all work.
 
+## Windows Automation Environment
+
+Supported Windows development, verification and publication automation requires
+PowerShell 7+ (Core), invoked explicitly as `pwsh.exe -NoProfile`. The verified
+baseline is installed PowerShell 7.6.5; prefer the 7.6 LTS line. Do not install or
+upgrade a working environment merely to meet a preferred patch version.
+Windows PowerShell 5.1 is unsupported; mandatory preflight fails on it, and other
+repository PowerShell entry points require version 7 before executing.
+No demonstrated repository legacy exception requires 5.1.
+
+Confirm shell selection with
+`pwsh.exe -NoProfile -Command '$PSVersionTable.PSVersion.ToString()'`.
+Codex commands must select `pwsh.exe` explicitly where shell selection matters;
+the repository VS Code terminal profile also selects it without loading a user
+profile. Do not alter system shell defaults or user profiles.
+
+From the intended repository/worktree root, use the existing official Windows
+Python environment at `.\.venv\Scripts\python.exe` and run:
+
+```powershell
+pwsh.exe -NoProfile -File .\tools\preflight.ps1 -RepoRoot . -ExpectedRepoRoot (Get-Location).Path
+pwsh.exe -NoProfile -File .\tools\validate_project_records.ps1 -ProjectRoot .
+pwsh.exe -NoProfile -File .\tools\test_powershell_workflow.ps1 -ProjectRoot .
+pwsh.exe -NoProfile -File .\tools\run_offline_behavioral_verification.ps1 -ProjectRoot .
+```
+
+The workflow regression covers all 16 lifecycle fixtures in formatted, compact
+and legacy-style JSON whitespace. Mutations operate on exact JSON properties
+and check their expected source values; lifecycle validation and the intended
+negative assertions remain unchanged. These checks make no live provider calls.
+
+The shared `Profiles\AINarrativeRPG.psd1` is AI RPG specific. Its mandatory
+preflight and lifecycle commands use `pwsh.exe`; other projects' profiles and
+shared scripts are unchanged. Its default repository is the original
+`D:\AI RPG` checkout: do not run stage-all, verification or publication against
+that dirty checkout when the candidate is in another worktree.
+
+For an isolated candidate, use the established worktree-bound profile-copy
+procedure: preserve the shared profile and create a new ignored copy under that
+worktree's `.artifacts/`. Change only the copy's `RepositoryPath` to the exact
+candidate root and add `-ExpectedRepoRoot "<candidate root>"` to its preflight
+command, retaining every original check, argument and protected-branch value.
+Invoke the shared state and standalone verification tools with that explicit
+copy via `pwsh.exe -NoProfile -File`. Do not repoint the shared profile, drop
+checks or replace GitWorkflowTools.
+
+Any owner-required independent verification must identify the same candidate
+worktree, exact HEAD, empty index, file scope, shell version, lifecycle and offline
+regressions, shared-profile scope and repository-mutation detection. Report
+whether verification used a separate fresh process or an independent reviewer;
+a process check does not substitute for an explicitly required reviewer.
+An uncommitted handoff cannot satisfy committed-candidate evidence-export
+preconditions; do not invoke candidate or merge tools without Git authorization.
+
+If `pwsh.exe` is unavailable or resolves to an unexpected version, correct shell
+selection before proceeding; do not fall back to `powershell.exe`. A linked
+worktree can expose its files while sandbox access to Git metadata fails,
+producing `must be run in a work tree`, `Permission denied`, or the validator's
+`Could not verify the player-save publication boundary`. Confirm root/HEAD and
+the name-only `git diff --name-only HEAD -- saves` in the intended worktree using
+the approved execution context. Preserve the save check and existing ACLs and
+environment. See `docs/conditional_procedures.md` for environment recovery.
+
 ## Verify and Define Scope
 
 Before editing, verify repository root, branch, full HEAD, and working-tree

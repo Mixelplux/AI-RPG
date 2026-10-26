@@ -1,4 +1,8 @@
 {
+    "terminal.integrated.defaultProfile.windows": "PowerShell 7",
+    "terminal.integrated.profiles.windows": {
+        "PowerShell 7": { "path": "pwsh.exe", "args": ["-NoProfile"] }
+    },
     "python.analysis.typeCheckingMode": "basic",
     "editor.formatOnSave": true,
     "editor.rulers": [

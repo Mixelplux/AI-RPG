@@ -1,4 +1,4 @@
-﻿[CmdletBinding()]
+[CmdletBinding()]
 param(
     [Parameter()]
     [string]$RepoRoot,
@@ -141,11 +141,9 @@ else {
 if ($PSVersionTable.PSVersion.Major -ge 7) {
     Add-Check -Name "powershell-version" -Status "PASS" -Detail $PSVersionTable.PSVersion.ToString()
 }
-elseif ($PSVersionTable.PSVersion.Major -ge 5) {
-    Add-Check -Name "powershell-version" -Status "WARN" -Detail "$($PSVersionTable.PSVersion) is supported for bootstrap checks; PowerShell 7+ is preferred."
-}
+
 else {
-    Add-Check -Name "powershell-version" -Status "FAIL" -Detail "$($PSVersionTable.PSVersion) is unsupported."
+    Add-Check -Name "powershell-version" -Status "FAIL" -Detail "$($PSVersionTable.PSVersion) is unsupported. Run mandatory verification with pwsh.exe (PowerShell 7+); Windows PowerShell 5.1 is not supported."
 }
 
 foreach ($commandName in @("ConvertFrom-Json", "Compress-Archive")) {
