@@ -3,7 +3,7 @@
 None means a material established input is unavailable, never a default fact.
 These views are not an additional saved campaign or a global spatial model.
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from engine.information_adjudication import Unresolved
 
@@ -79,6 +79,31 @@ class FallOccurrence:
 
 
 @dataclass(frozen=True)
+class TautProtection:
+    rope: str
+    harness: str
+    anchor: str
+    position: str
+    taut: bool | None
+    load_bearing: bool | None
+    basis: str
+
+
+@dataclass(frozen=True)
+class ClimbCircumstances:
+    id: str  # stable reference for the exact established risk commitment
+    route: str
+    footing: str | None  # load_bearing or grip_dependent during this check
+    landing: str | None
+    drop_feet: int | None
+    landing_medium: str | None
+    protection: TautProtection | str | None  # explicit 'none', never inferred
+    assistance: str | None
+    basis: str
+    unresolved_bindings: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
 class PhysicalFrame:
     revision: str
     at_seconds: int
@@ -91,6 +116,7 @@ class PhysicalFrame:
     relationships: tuple[PhysicalRelation, ...] = ()
     history: tuple[CausalRecord, ...] = ()
     falls: tuple[FallOccurrence, ...] = ()
+    climb_circumstances: tuple[ClimbCircumstances, ...] = ()
 
 
 class WorldPhysics:
@@ -105,7 +131,7 @@ class WorldPhysics:
         groups = ((frame.places, Place), (frame.surfaces, Surface),
                   (frame.links, TraversalLink), (frame.objects, PhysicalObject),
                   (frame.relationships, PhysicalRelation), (frame.history, CausalRecord),
-                  (frame.falls, FallOccurrence))
+                  (frame.falls, FallOccurrence), (frame.climb_circumstances, ClimbCircumstances))
         if any(type(items) is not tuple or any(type(i) is not cls for i in items)
                for items, cls in groups):
             raise ValueError('typed immutable physical records required')
@@ -169,7 +195,75 @@ class WorldPhysics:
                     or fall.distance_feet is not None and not natural(fall.distance_feet)
                     or fall.landing_medium not in {None, 'solid', 'liquid'}):
                 raise ValueError('fall occurrence')
+        routes = {r.id: r for r in frame.links}
+        if len({x.route for x in frame.climb_circumstances}) != len(frame.climb_circumstances):
+            raise ValueError('unique route circumstances')
+        for x in frame.climb_circumstances:
+            if (x.route not in routes or not reference(x.basis)
+                    or x.footing not in {None, 'load_bearing', 'grip_dependent'}
+                    or x.landing is not None and x.landing not in places
+                    or x.drop_feet is not None and not natural(x.drop_feet)
+                    or x.landing_medium not in {None, 'solid', 'liquid'}
+                    or x.assistance is not None and not reference(x.assistance)
+                    or type(x.unresolved_bindings) is not tuple
+                    or not all(reference(v) for v in x.unresolved_bindings)):
+                raise ValueError('climb circumstance premises')
+            protection = x.protection
+            if protection is not None and protection != 'none':
+                if (type(protection) is not TautProtection
+                        or len({protection.rope, protection.harness, protection.anchor}) != 3
+                        or not {protection.rope, protection.harness, protection.anchor}.issubset(objects)
+                        or protection.position not in places or not reference(protection.basis)
+                        or any(v is not None and type(v) is not bool for v in
+                               (protection.taut, protection.load_bearing))):
+                    raise ValueError('physical protection premises')
+                # This supported configuration has a local fixed anchor and a
+                # worn harness. The rope may legitimately span several places;
+                # attachment endpoints do not define its exclusive location.
+                positions = dict(frame.positions)
+                for edge in frame.relationships:
+                    if edge.object == protection.anchor:
+                        place = (edge.target if edge.kind in {'located', 'secured'} and edge.target in places
+                                 else positions.get(edge.target) if edge.kind in {'held', 'carried'} else None)
+                        if place is not None and place != protection.position:
+                            raise ValueError('contradictory protection anchor disposition')
+                wearers = {edge.target for edge in frame.relationships
+                           if edge.object == protection.harness and edge.kind == 'attached'
+                           and edge.target in frame.creatures}
+                known_places = {positions[actor] for actor in wearers if actor in positions}
+                known_places.update(edge.target if edge.kind == 'located' else positions.get(edge.target)
+                                    for edge in frame.relationships if edge.object == protection.harness
+                                    and edge.kind in {'located', 'held', 'carried'})
+                known_places.discard(None)
+                if len(known_places) > 1:
+                    raise ValueError('contradictory protection harness disposition')
         self.frame = frame
+
+    def require_new_identities(self, proposed):
+        """Reserve no state; prove all prospective branch IDs are available."""
+        existing = set(self.frame.creatures)
+        for records in (self.frame.places, self.frame.surfaces, self.frame.links,
+                        self.frame.objects, self.frame.history, self.frame.falls,
+                        self.frame.climb_circumstances):
+            existing.update(record.id for record in records)
+        if len(set(proposed)) != len(proposed) or existing.intersection(proposed):
+            raise Unresolved('validation', 'world_identity_conflict')
+
+    def relocate_worn_protection(self, creature, position, relationships):
+        """Keep an explicitly located worn harness coherent with its wearer."""
+        worn = {edge.object for edge in relationships
+                if edge.kind == 'attached' and edge.target == creature}
+        harnesses = {x.protection.harness for x in self.frame.climb_circumstances
+                     if type(x.protection) is TautProtection} & worn
+        return tuple(replace(edge, target=position) if edge.object in harnesses and edge.kind == 'located'
+                     else edge for edge in relationships)
+
+    def validate_protected_arrival(self, creature, position):
+        """Prove the success branch preserves this supported protection setup."""
+        positions = tuple((actor, position if actor == creature else place)
+                          for actor, place in self.frame.positions)
+        relationships = self.relocate_worn_protection(creature, position, self.frame.relationships)
+        WorldPhysics(replace(self.frame, positions=positions, relationships=relationships))
 
     def climb_inputs(self, creature, link_id, means=()):
         link = next((l for l in self.frame.links if l.id == link_id), None)
@@ -205,3 +299,54 @@ class WorldPhysics:
         if fall is None or fall.distance_feet is None or fall.landing_medium is None:
             raise Unresolved('retrieval', 'fall_unavailable')
         return fall
+
+    def failure_inputs(self, creature, route):
+        """Establish all supported failure branches before an uncertain attempt."""
+        x = next((x for x in self.frame.climb_circumstances if x.route == route), None)
+        if (x is None or x.unresolved_bindings or x.footing is None
+                or x.protection is None or x.assistance is None):
+            raise Unresolved('retrieval', 'failure_circumstances_unavailable')
+        if x.assistance != 'none':
+            raise Unresolved('rules', 'assistance_not_supported')
+        link = next(l for l in self.frame.links if l.id == route)
+        if x.footing == 'load_bearing':
+            if x.protection != 'none':
+                raise Unresolved('rules', 'unsupported_combined_support')
+            return x
+        if (x.landing is None or x.drop_feet is None or x.landing_medium is None):
+            raise Unresolved('retrieval', 'fall_geometry_unavailable')
+        if (x.drop_feet == 0 or x.landing == link.origin
+                or next(p.locality for p in self.frame.places if p.id == x.landing)
+                   != next(p.locality for p in self.frame.places if p.id == link.origin)):
+            raise Unresolved('validation', 'fall_geometry_incoherent')
+        if type(x.protection) is TautProtection:
+            p = x.protection
+            objects = {o.id: o for o in self.frame.objects}
+            edges = {(e.object, e.kind, e.target) for e in self.frame.relationships}
+            if (p.taut is not True or p.load_bearing is not True or p.position != link.origin
+                    or any(objects[o].intact is not True for o in (p.rope, p.harness, p.anchor))
+                    or not {(p.anchor, 'secured', p.position), (p.rope, 'secured', p.anchor),
+                            (p.rope, 'attached', p.harness), (p.harness, 'attached', creature)}.issubset(edges)):
+                raise Unresolved('validation', 'protection_not_established')
+        return x
+
+    def failed_climb(self, request, circumstances):
+        """World-owned physical disposition, after separately validated loss of grip."""
+        link = next(l for l in self.frame.links if l.id == request.route)
+        if circumstances.footing == 'load_bearing':
+            return 'supported_no_progress', link.origin, None
+        if type(circumstances.protection) is TautProtection:
+            return 'grip_lost_protected', circumstances.protection.position, None
+        fall = FallOccurrence(request.attempt + ':fall', request.creature, link.origin,
+                              circumstances.landing, circumstances.drop_feet,
+                              circumstances.landing_medium, request.attempt)
+        return 'fell', fall.landing, fall
+
+    def drop_held(self, creature, position):
+        """Unconscious creature drops held objects; independent attachments survive."""
+        held = {e.object for e in self.frame.relationships if e.kind == 'held' and e.target == creature}
+        edges = tuple(e for e in self.frame.relationships
+                      if not (e.object in held and e.target == creature and e.kind in {'held', 'carried'}))
+        attached = {e.object for e in edges if e.kind in {'attached', 'secured'}}
+        return edges + tuple(PhysicalRelation(o, 'located', position, 'unconscious:drop')
+                             for o in sorted(held - attached))

@@ -963,7 +963,8 @@ fixtures remain versioned. No save migration or Git publication is authorized.
 
 ## ADR-063 — Opt-in core-domain campaign aggregate
 
-Status: M2-1 implementation candidate, October 26, 2026; owner review pending.
+Status: owner-accepted M2-1 foundation, October 26, 2026; published baseline.
+The bounded M2-2a extension below is owner accepted; its Git publication remains separate.
 Implements the owner's authorized acceptance/persistence foundation under CD-04/09
 and IG-21, preserving existing semantic authorities and ADR-062 compatibility.
 
@@ -992,8 +993,8 @@ traversal state is unsupported and no migration occurs.
 V3 JSON rejects duplicate keys at every depth, including conflicting envelope
 versions in either order; legacy v1/v2 key-decoding behavior is preserved.
 
-The current producer/validator and finite result vocabulary support deterministic
-full-link climbing only. The acceptance protocol is root/identity based: additional
+At the M2-1 foundation, the producer/validator and finite result vocabulary support
+deterministic full-link climbing only. The acceptance protocol is root/identity based: additional
 methods and owner contributions extend the supported vocabulary and domain
 validation, without introducing a different publication contract. Multi-increment
 interruption and hazardous consequence adjudication remain subsequent M2 work.
@@ -1002,3 +1003,19 @@ Single-threaded session execution is assumed; cross-process coordination is abse
 Tuple scans, complete snapshots and reconstruction cost remain bounded scaling
 limits. Selective dependencies and stable references permit future indexing;
 generalization and large-campaign performance are not yet demonstrated.
+
+
+### ADR-063 implementation extension — M2-2a, October 26, 2026
+
+Owner accepted the corrected bounded implementation October 26, 2026; Git publication
+remains separately unauthorized. The root/publication and
+ownership decision is unchanged. Envelope v3 adds opt-in domain schema 2; schema 1
+keeps its prior deterministic meaning and an explicit finite legacy-default decoder.
+World-grounded circumstances and contextual Resolution stakes precede recorded
+checks. World accepts falls/position/relationships; Character accepts injury and
+minimum zero-HP state. Pure mechanical evaluation over recorded dice replaces any
+historical call to the sampling resolver. Coherent reconstructed meaning is
+validated before adoption; no cryptographic source authentication is claimed.
+This is the authorized finite vocabulary extension anticipated by ADR-063, not a
+new persistence/transaction framework or migration. Subsequent death-save gameplay,
+slack catches and M2-2b remain deferred. See [model](physical_traversal_m2_2a_design.md).

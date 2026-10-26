@@ -10,18 +10,18 @@
   "active_sprint": null,
   "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "physical-traversal-v1a-m2-1"
+    "id": "physical-traversal-v1a-m2-2a"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "physical-traversal-v1a-m2-1",
-    "title": "Physical Traversal Core V1a \u2014 M2-1 Authoritative Acceptance Foundation",
+    "id": "physical-traversal-v1a-m2-2a",
+    "title": "Physical Traversal Core V1a \u2014 M2-2a Consequential Uncertain Climbing and Falling",
     "type": "capability-package",
     "status": "complete",
     "risk_level": "elevated",
-    "goal": "Owner accepted bounded M2-1 October 26, 2026 after integrity corrections and verification. Lifecycle complete/idle; overall Physical Traversal V1a remains incomplete. Prepare accepted working diff for separately authorized Git publication; no M2-2.",
+    "goal": "Owner accepted bounded M2-2a October 26, 2026 after all three P2 corrections and successful verification. Lifecycle complete/idle; overall Physical Traversal V1a remains incomplete. Accepted 24-file working diff prepared for separately authorized Git publication; no M2-2b.",
     "predecessor": {
-      "id": "physical-traversal-v1a-m1"
+      "id": "physical-traversal-v1a-m2-1"
     },
     "platform": {
       "official_interpreter": ".\\.venv\\Scripts\\python.exe",
@@ -29,10 +29,10 @@
       "provider_requests": "forbidden"
     },
     "scope": [
-      "Authoritative World/Character/Action acceptance, F05 and safe receipts, accepted retry identity, opt-in versioned persistence with unchanged v1/v2 behavior. No hazardous consequence integration, interrupted activities, live providers or Git publication."
+      "Consequential uncertain climbing, pre-resolution grounded failure disposition, actual solid-ground falls, minimum Character injury/zero-HP consequences; common root, F01/F05, recorded randomness, versioned compatibility. No M2-2b, other movement methods, combat, narration, providers or Git publication."
     ],
     "verification": [
-      "Syntax, focused offline rule/world/character variations, structural integration boundaries, affected regressions, compatibility and targeted architecture review; lifecycle validation and documentation reconciliation."
+      "Syntax; focused rules/World/Character variation; coherent acceptance and retries; safe receipts/F05; v1/v2/v3 compatibility and corrupt restore isolation; affected regressions; lifecycle/documentation/preservation checks."
     ]
   }
 }

@@ -53,7 +53,7 @@ class ConsequentialTraversalDomain:
             targets=(Target(r.route, (r.route,), 'climb', ('climb',)),), means=r.means)
 
     def assess(self, undertaking, context):
-        from engine.domain_campaign import prepare, prior, scope_for
+        from engine.domain_campaign import inspect, prior, scope_for
         scope_for(self.runtime.campaign, self.command, execution=False)
         old = prior(self.runtime.campaign, self.command)
         if old is None:
@@ -62,9 +62,9 @@ class ConsequentialTraversalDomain:
                 # before any execution proposal is prepared.
                 from engine.activity_control import decide_activity_control
                 if decide_activity_control(self.scope.authorization, self.scope.checkpoint).status == 'continue':
-                    self.runtime.prepare_increment(self.command)
+                    inspect(self.runtime.campaign, self.command)
             else:
-                prepare(self.runtime.campaign, self.command, execution=False)
+                inspect(self.runtime.campaign, self.command, execution=False)
         checkpoint = self.scope.checkpoint
         from dataclasses import replace
         # Exact owner-recorded answers apply only to their established choice keys.

@@ -1,31 +1,28 @@
-# Physical Traversal Core V1a — M2-1 acceptance closure
+# Physical Traversal Core V1a — M2-2a accepted and closed
 
-Owner accepted the bounded M2-1 implementation October 26, 2026 after all three
-integrity corrections and successful verification. Elevated risk. M2-1 is complete
-and closed; this does not complete the overall Physical Traversal V1a effort.
+Owner accepted M2-2a on October 26, 2026 after correction and verification of all
+three independent-review P2 findings. Elevated risk. Overall Physical Traversal
+V1a remains incomplete; this closes only the bounded M2-2a milestone.
 
-The sole machine lifecycle authority, `docs/current_sprint.json`, records
-`complete`, no active sprint or package, latest completed
-`physical-traversal-v1a-m2-1`, and `next_sprint` null. M2-2 is not authorized,
-selected or staged.
+Accepted scope: consequential uncertain climbing with pre-resolution grounding,
+physically justified failure/falls, immediate Character injury and zero-HP semantics,
+common coherent acceptance, F01/F05, recorded randomness and compatible persistence.
+The corrected World identity, protection-disposition and damage-at-zero invariants
+are preserved. CD-06/PT-D6/F05 meaningful-activity requirements remain binding;
+ordinary climbing requires no unnecessary equipment or physical micro-modeling.
 
-Acceptance covers deterministic consequential climbing between established
-positions; coherent World/Character/Action acceptance; named dependencies;
-F05 control and safe receipts; exact typed retries; strict validation; and opt-in
-v3 persistence preserving v1/v2 compatibility without migration. Uncertain climbing,
-hazardous failure/falls, injury, interruptions/resumption, partial-link traversal
-and broader playable integration remain future work. The P3 growing-history
-reconstruction/scalability concern remains documented for later assessment.
+Lifecycle is complete/idle: no active package or sprint, latest completed
+`physical-traversal-v1a-m2-2a`, and `next_sprint` null. JSON remains the sole machine
+lifecycle authority. M2-2b is not selected, staged or authorized.
 
-Accepted verification remains 331 tests and 13 additional offline gameplay scripts,
-plus lifecycle, syntax, documentation and scope checks. Closure changes four
-documentation/lifecycle files only, within the original 25-file inventory; no
-executable content changes or gameplay test reruns are required for this closure.
-See [the handoff](physical_traversal_m2_1_handoff.md) for evidence and exact files.
+The accepted implementation and closure records remain an unstaged, uncommitted
+24-file working diff on `codex/physical-traversal-v1a-m2-2a`, based on published
+`62058d3fbed65b01827802c789cbc86a3bd05a42`. Git staging, commit, merge and push
+require separate authorization; publication itself has not occurred.
 
-Branch: `codex/physical-traversal-v1a-m2-1`. HEAD/published parent:
-`4399e57bfcaf604b83c7079da63c0a62024d6f8c`. The accepted changes remain unstaged
-and uncommitted, with an empty index. Publication preparation stops before staging,
-commit, merge or push; separate publication authorization is required. Original
-dirty checkout, owner saves, ignored environments, shared tooling and unrelated
-worktrees remain preserved. No live providers or M2-2 work were invoked.
+The [accepted implementation model](physical_traversal_m2_2a_design.md) and
+[handoff/publication-readiness report](physical_traversal_m2_2a_handoff.md) record the
+exact inventory, preserved 383-test/11-script evidence and closure checks. Interruption/
+resumption, additional protection arrangements, unsupported fall/mitigation mechanics,
+subsequent death-save gameplay, cross-method generalization and reconstruction/scaling
+limits remain deferred. No next milestone begins automatically.

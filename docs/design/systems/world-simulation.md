@@ -22,9 +22,28 @@ read. Exclusive possession conflicts and dangling physical references reject.
 This is a domain foundation, not accepted traversal mutation, global geometry or
 new campaign persistence. See [M1 handoff](../../physical_traversal_m1_handoff.md).
 
+## Physical Traversal M2-2a — owner accepted October 26, 2026
+
+World now supplies pre-check support/exposure, a pre-established landing/drop,
+verified absence of protection or an intact taut rope/harness/secured-anchor system,
+assistance and unresolved material bindings. World derives physical disposition
+from the separately established objective/grip result and preserves actual fall
+occurrence, final position, time and held-object drops. It invents no supports after
+a roll. The same Campaign root accepts dependent Character and Action effects.
+Generated fall/causal IDs must be free across the complete World identity namespace
+before sampling. Contradictory local anchor/worn harness dispositions reject, including
+on restore; explicit worn-harness locations follow accepted movement. These role-specific
+checks permit extended rope connections across places and add no universal attachment
+location rule. This is one protection configuration; ordinary climbing needs no gear
+model unless its circumstances require one. Slack catches, general physics and
+interruption/resumption remain unsupported.
+See [model](../../physical_traversal_m2_2a_design.md) and
+[handoff](../../physical_traversal_m2_2a_handoff.md). Owner accepted the bounded milestone October 26, 2026;
+Git publication remains separate and overall system status remains Partial.
+
 ## Purpose
 
-M2-1 implementation candidate, owner review pending: the opt-in common Runtime
+Published M2-1 foundation (historical milestone coverage): the opt-in common Runtime
 aggregate now accepts deterministic full-link position changes, elapsed seconds
 and causal records together with dependent Character expenditure and attempt
 recognition. Objects/relationships retain World identity through v3 save/load.

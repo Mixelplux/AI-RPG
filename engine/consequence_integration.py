@@ -206,10 +206,14 @@ class Reads:
 
 class Runtime:
     """Engine-owned simulation aggregate; coordinators/domains hold no truth."""
-    def __init__(self, config):
+    def __init__(self, config, *, draw=None):
         from engine.domain_campaign import Campaign, validate_campaign
         self.domain_mode = type(config) is Campaign
         if self.domain_mode:
+            from random import SystemRandom
+            if draw is not None and not callable(draw):
+                raise ValueError('controlled die supplier required')
+            self.traversal_draw = draw if draw is not None else lambda sides: SystemRandom().randint(1, sides)
             validate_campaign(config)
             self.campaign = config
             self.running = False
@@ -281,7 +285,7 @@ class Runtime:
         if not self.domain_mode:
             raise ValueError('Explicit domain campaign required')
         old = prior(self.campaign, command)
-        return Proposal(self.campaign, old) if old is not None else prepare(self.campaign, command)
+        return Proposal(self.campaign, old) if old is not None else prepare(self.campaign, command, draw=self.traversal_draw)
 
     def accept_increment(self, proposal):
         from engine.domain_campaign import accept

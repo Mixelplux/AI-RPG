@@ -42,9 +42,46 @@ immutable starting frame, including when suppliers reuse mutable view wrappers.
 M2 must ground actual consequences for exposed, protected and near-ground failures;
 provisional objective failure neither asserts safety nor automatically causes falling.
 
+## Physical Traversal M2-2a — owner accepted October 26, 2026
+
+World supplies fixed support/exposure, landing geometry, assistance and verified
+physical protection before an uncertain attempt. Resolution validates explicit
+contextual check stakes and failed-effort commitment, then records d20/d6 draws.
+World distinguishes supported no progress, grip loss held by a taut system, and
+an actual fall. Character owns HP/temporary HP, Prone, Unconscious, immediate death
+and the minimum immediate zero-HP state. World drops held objects while preserving
+independent attachments. No universal secondary fall-chance rule is introduced.
+Generated causal/fall IDs are checked against the complete World identity namespace
+before sampling. The supported local anchor/worn harness configuration rejects
+contradictory dispositions; explicit harness locations follow accepted movement,
+and extended rope connections remain permitted. Damage taken at zero HP uses the
+2024 damage-at-zero threshold independently of temporary-HP absorption.
+
+Ordinary climbing remains mechanical without equipment or protection detail unless
+consequential circumstances require it. TautProtection is one supported arrangement,
+not the definition of all protected climbing. Other arrangements can extend the
+owning World/Character/Resolution contributions, finite codec and safe projection
+without changing the common acceptance unit or root-publication semantics.
+
+These contributions extend the same common root and final publication check.
+Assessment is read-only; all possible failure branches and F05 risk commitments
+must be supported before sampling. Technical rejection publishes nothing. Safe
+receipts expose accepted felt effects, without hidden causes, internal landing
+geometry or facts arising after loss of awareness. Exact retries reuse the receipt.
+
+Opt-in domain schema 2 under envelope v3 persists these semantics. Schema 1 retains
+its historical deterministic meaning, including a finite explicit legacy-default
+decode for previously saved bytes. Historical validation recomputes mechanics from
+recorded rolls and owner premises without invoking resolution or randomness.
+Whole-state comparison precedes adoption; v1/v2 and atomic file writes are preserved.
+See [the model](physical_traversal_m2_2a_design.md) and
+[handoff](physical_traversal_m2_2a_handoff.md) for accepted scope, closure and publication readiness.
+M2-2a is complete/idle; overall Physical Traversal V1a remains incomplete. Git
+publication and M2-2b remain separately unauthorized; documented limitations remain.
+
 ## Tech Stack
 
-M2-1 implementation candidate, owner review pending: the common consequential
+M2-1 is the published accepted foundation. The common consequential
 `Runtime` also accepts an explicit `domain_campaign.Campaign` root, created through
 `GameSession.start_domains`. This mode has no legacy GameEngine world alongside
 it. `domain_campaign` prepares and validates domain-owned consequences; Runtime
@@ -58,9 +95,9 @@ Version 3 stores this opt-in aggregate through a finite codec; v1/v2 retain thei
 existing routes and JSON decoding behavior. V3 rejects duplicate JSON keys,
 including nested records. Pure complete-aggregate validation precedes restore adoption;
 the existing atomic writer preserves earlier files on pre-replacement failure.
-Only deterministic full-link climbing is consequential in this milestone. Checks,
-falls, partial-link positions, interruptions and CLI integration remain unsupported
-here. See [M2-1 model](physical_traversal_m2_1_design.md) and
+That baseline supports deterministic full-link climbing. The M2-2a working
+implementation above extends its accepted-unit vocabulary; partial-link positions,
+interruptions and CLI integration remain deferred. See [M2-1 model](physical_traversal_m2_1_design.md) and
 [ADR-063](decisions.md#adr-063--opt-in-core-domain-campaign-aggregate).
 
 - Python 3.13

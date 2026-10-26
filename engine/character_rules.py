@@ -12,6 +12,17 @@ class StrengthTrait:
 
 
 @dataclass(frozen=True)
+class Vitality:
+    maximum_hp: int
+    temporary_hp: int = 0
+    zero_hp_rule: str = 'death_saves'  # same explicit treatment for PCs and NPCs
+    dead: bool = False
+    stable: bool = False
+    death_successes: int = 0
+    death_failures: int = 0
+
+
+@dataclass(frozen=True)
 class CreatureRules:
     id: str
     speed: int | None
@@ -27,6 +38,7 @@ class CreatureRules:
     hit_points: int | None = None
     movement_spent: int | None = None  # accepted turn expenditure; missing is not zero
     unresolved_rules: tuple[str, ...] = ()
+    vitality: Vitality | None = None
 
 
 @dataclass(frozen=True)
@@ -64,6 +76,21 @@ class CharacterRules:
                     or not reference(t.definition) or type(t.advantage) is not bool for t in c.traits)
                     or len({t.definition for t in c.traits}) != len(c.traits)):
                 raise ValueError('scoped Strength traits')
+            v = c.vitality
+            if v is not None:
+                if (type(v) is not Vitality or not natural(v.maximum_hp) or v.maximum_hp == 0
+                        or not natural(v.temporary_hp) or type(v.dead) is not bool or type(v.stable) is not bool
+                        or v.zero_hp_rule not in {'death_saves', 'instant_death'}
+                        or not natural(v.death_successes) or v.death_successes > 2
+                        or not natural(v.death_failures) or v.death_failures > 3
+                        or c.hit_points is None or c.hit_points > v.maximum_hp
+                        or v.dead and (c.hit_points != 0 or v.stable)
+                        or v.stable and (c.hit_points != 0 or v.death_successes or v.death_failures)
+                        or c.hit_points > 0 and (v.dead or v.stable or v.death_successes or v.death_failures)
+                        or v.death_failures == 3 and not v.dead
+                        or c.hit_points == 0 and not v.dead and v.zero_hp_rule == 'instant_death'
+                        or c.hit_points == 0 and not v.dead and not {'unconscious', 'incapacitated', 'prone'}.issubset(c.conditions)):
+                    raise ValueError('coherent Character vitality required')
         self.revision, self.creatures = revision, creatures
 
     def creature(self, creature):
@@ -76,7 +103,7 @@ class CharacterRules:
         c = self.creature(creature)
         if c.unresolved_rules:
             raise Unresolved('retrieval', 'creature_rule_effect_unavailable')
-        supported = {'poisoned', 'grappled', 'restrained', 'incapacitated', 'paralyzed', 'stunned', 'unconscious'}
+        supported = {'poisoned', 'grappled', 'restrained', 'incapacitated', 'paralyzed', 'stunned', 'unconscious', 'prone'}
         if not set(c.conditions).issubset(supported):
             raise Unresolved('rules', 'unsupported_condition')
         return c
@@ -86,7 +113,7 @@ class CharacterRules:
         if require_speed and c.speed is None or require_climb_speed and c.climb_speed is None:
             raise Unresolved('retrieval', 'creature_rules_unavailable')
         conditions = set(c.conditions)
-        dead = c.exhaustion == 6
+        dead = c.exhaustion == 6 or c.vitality is not None and c.vitality.dead
         immobile = dead or bool(conditions & {'grappled', 'restrained', 'paralyzed', 'unconscious'})
         speed = None if c.speed is None else 0 if immobile else max(0, c.speed - 5 * c.exhaustion)
         climb_speed = None if c.climb_speed is None else 0 if immobile else max(0, c.climb_speed - 5 * c.exhaustion)
@@ -97,6 +124,8 @@ class CharacterRules:
 
     def climb_inputs(self, creature, means=(), *, require_check=True, use_climb_speed=False):
         c = self._physical_profile(creature)
+        if 'prone' in c.conditions or c.vitality is not None and c.hit_points == 0:
+            raise Unresolved('eligibility', 'ordinary_climb_not_available')
         required = (c.climb_speed if use_climb_speed else c.speed, c.movement_spent)
         if require_check:
             required += (c.strength, c.proficiency_bonus, c.athletics_rank)
@@ -108,3 +137,44 @@ class CharacterRules:
 
     def knows_route(self, creature, route):
         return route in self.creature(creature).known_routes
+
+    def injury_inputs(self, creature):
+        c = self._physical_profile(creature)
+        if c.hit_points is None or c.vitality is None:
+            raise Unresolved('retrieval', 'injury_premises_unavailable')
+        if c.vitality.dead or c.exhaustion == 6:
+            raise Unresolved('rules', 'dead_creature_injury_unsupported')
+        return c
+
+    def apply_fall_damage(self, creature, damage):
+        """Character-owned immediate injury. No death-save turn or recovery executor."""
+        from dataclasses import replace
+        c = self.injury_inputs(creature)
+        if not natural(damage):
+            raise ValueError('fall damage')
+        v = c.vitality
+        absorbed = min(v.temporary_hp, damage)
+        remaining = damage - absorbed
+        hp = max(0, c.hit_points - remaining)
+        v = replace(v, temporary_hp=v.temporary_hp - absorbed)
+        conditions = list(c.conditions)
+        if damage and 'prone' not in conditions:
+            conditions.append('prone')
+        if damage and hp == 0:
+            if c.hit_points == 0:
+                v = replace(v, stable=False, death_successes=0 if v.stable else v.death_successes,
+                            death_failures=(0 if v.stable else v.death_failures) + 1)
+            # Damage taken at zero HP is distinct from the overflow that
+            # reduced positive HP to zero. Temporary HP buffer HP loss, not
+            # damage taken for the already-zero death threshold.
+            lethal_amount = damage if c.hit_points == 0 else remaining - c.hit_points
+            dead = (v.zero_hp_rule == 'instant_death'
+                    or lethal_amount >= v.maximum_hp or v.death_failures >= 3)
+            v = replace(v, dead=dead)
+            if not dead:
+                for condition in ('unconscious', 'incapacitated', 'prone'):
+                    if condition not in conditions:
+                        conditions.append(condition)
+        result = replace(c, hit_points=hp, vitality=v, conditions=tuple(conditions))
+        CharacterRules('injury:validated', (result,))
+        return result

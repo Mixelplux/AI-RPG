@@ -1,0 +1,804 @@
+{
+  "save_version": 3,
+  "domain_campaign": {
+    "record": "Campaign",
+    "fields": {
+      "id": "campaign",
+      "actor": "creature",
+      "origin": {
+        "record": "Domains",
+        "fields": {
+          "world": {
+            "record": "PhysicalFrame",
+            "fields": {
+              "revision": "world:initial",
+              "at_seconds": 17,
+              "places": {
+                "tuple": [
+                  {
+                    "record": "Place",
+                    "fields": {
+                      "id": "base",
+                      "locality": "local"
+                    }
+                  },
+                  {
+                    "record": "Place",
+                    "fields": {
+                      "id": "middle",
+                      "locality": "local"
+                    }
+                  },
+                  {
+                    "record": "Place",
+                    "fields": {
+                      "id": "end",
+                      "locality": "local"
+                    }
+                  }
+                ]
+              },
+              "creatures": {
+                "tuple": [
+                  "creature"
+                ]
+              },
+              "positions": {
+                "tuple": [
+                  {
+                    "tuple": [
+                      "creature",
+                      "base"
+                    ]
+                  }
+                ]
+              },
+              "surfaces": {
+                "tuple": [
+                  {
+                    "record": "Surface",
+                    "fields": {
+                      "id": "surface",
+                      "climbable": true,
+                      "slippery": false,
+                      "few_handholds": false,
+                      "difficult": false,
+                      "basis": "hidden:material-basis",
+                      "unresolved_bindings": {
+                        "tuple": []
+                      }
+                    }
+                  }
+                ]
+              },
+              "links": {
+                "tuple": [
+                  {
+                    "record": "TraversalLink",
+                    "fields": {
+                      "id": "first",
+                      "origin": "base",
+                      "destination": "middle",
+                      "surface": "surface",
+                      "distance_feet": 5,
+                      "blocked": false,
+                      "basis": "authored:relation"
+                    }
+                  },
+                  {
+                    "record": "TraversalLink",
+                    "fields": {
+                      "id": "next",
+                      "origin": "middle",
+                      "destination": "end",
+                      "surface": "surface",
+                      "distance_feet": 5,
+                      "blocked": false,
+                      "basis": "authored:relation"
+                    }
+                  },
+                  {
+                    "record": "TraversalLink",
+                    "fields": {
+                      "id": "return",
+                      "origin": "middle",
+                      "destination": "base",
+                      "surface": "surface",
+                      "distance_feet": 5,
+                      "blocked": false,
+                      "basis": "authored:relation"
+                    }
+                  }
+                ]
+              },
+              "objects": {
+                "tuple": [
+                  {
+                    "record": "PhysicalObject",
+                    "fields": {
+                      "id": "rope",
+                      "definition": "rope-definition",
+                      "intact": true
+                    }
+                  },
+                  {
+                    "record": "PhysicalObject",
+                    "fields": {
+                      "id": "anchor",
+                      "definition": "anchor-definition",
+                      "intact": true
+                    }
+                  }
+                ]
+              },
+              "relationships": {
+                "tuple": [
+                  {
+                    "record": "PhysicalRelation",
+                    "fields": {
+                      "object": "rope",
+                      "kind": "carried",
+                      "target": "creature",
+                      "basis": "established"
+                    }
+                  },
+                  {
+                    "record": "PhysicalRelation",
+                    "fields": {
+                      "object": "rope",
+                      "kind": "attached",
+                      "target": "anchor",
+                      "basis": "established"
+                    }
+                  },
+                  {
+                    "record": "PhysicalRelation",
+                    "fields": {
+                      "object": "anchor",
+                      "kind": "located",
+                      "target": "base",
+                      "basis": "established"
+                    }
+                  }
+                ]
+              },
+              "history": {
+                "tuple": []
+              },
+              "falls": {
+                "tuple": []
+              }
+            }
+          },
+          "character_revision": "character:initial",
+          "characters": {
+            "tuple": [
+              {
+                "record": "CreatureRules",
+                "fields": {
+                  "id": "creature",
+                  "speed": 60,
+                  "climb_speed": 0,
+                  "strength": null,
+                  "proficiency_bonus": null,
+                  "athletics_rank": null,
+                  "conditions": {
+                    "tuple": []
+                  },
+                  "exhaustion": 0,
+                  "traits": {
+                    "tuple": []
+                  },
+                  "ready_equipment": {
+                    "tuple": [
+                      "rope"
+                    ]
+                  },
+                  "known_routes": {
+                    "tuple": [
+                      "first",
+                      "next",
+                      "return"
+                    ]
+                  },
+                  "hit_points": 0,
+                  "movement_spent": 0,
+                  "unresolved_rules": {
+                    "tuple": []
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "current": {
+        "record": "Domains",
+        "fields": {
+          "world": {
+            "record": "PhysicalFrame",
+            "fields": {
+              "revision": "campaign:world:1",
+              "at_seconds": 28,
+              "places": {
+                "tuple": [
+                  {
+                    "record": "Place",
+                    "fields": {
+                      "id": "base",
+                      "locality": "local"
+                    }
+                  },
+                  {
+                    "record": "Place",
+                    "fields": {
+                      "id": "middle",
+                      "locality": "local"
+                    }
+                  },
+                  {
+                    "record": "Place",
+                    "fields": {
+                      "id": "end",
+                      "locality": "local"
+                    }
+                  }
+                ]
+              },
+              "creatures": {
+                "tuple": [
+                  "creature"
+                ]
+              },
+              "positions": {
+                "tuple": [
+                  {
+                    "tuple": [
+                      "creature",
+                      "middle"
+                    ]
+                  }
+                ]
+              },
+              "surfaces": {
+                "tuple": [
+                  {
+                    "record": "Surface",
+                    "fields": {
+                      "id": "surface",
+                      "climbable": true,
+                      "slippery": false,
+                      "few_handholds": false,
+                      "difficult": false,
+                      "basis": "hidden:material-basis",
+                      "unresolved_bindings": {
+                        "tuple": []
+                      }
+                    }
+                  }
+                ]
+              },
+              "links": {
+                "tuple": [
+                  {
+                    "record": "TraversalLink",
+                    "fields": {
+                      "id": "first",
+                      "origin": "base",
+                      "destination": "middle",
+                      "surface": "surface",
+                      "distance_feet": 5,
+                      "blocked": false,
+                      "basis": "authored:relation"
+                    }
+                  },
+                  {
+                    "record": "TraversalLink",
+                    "fields": {
+                      "id": "next",
+                      "origin": "middle",
+                      "destination": "end",
+                      "surface": "surface",
+                      "distance_feet": 5,
+                      "blocked": false,
+                      "basis": "authored:relation"
+                    }
+                  },
+                  {
+                    "record": "TraversalLink",
+                    "fields": {
+                      "id": "return",
+                      "origin": "middle",
+                      "destination": "base",
+                      "surface": "surface",
+                      "distance_feet": 5,
+                      "blocked": false,
+                      "basis": "authored:relation"
+                    }
+                  }
+                ]
+              },
+              "objects": {
+                "tuple": [
+                  {
+                    "record": "PhysicalObject",
+                    "fields": {
+                      "id": "rope",
+                      "definition": "rope-definition",
+                      "intact": true
+                    }
+                  },
+                  {
+                    "record": "PhysicalObject",
+                    "fields": {
+                      "id": "anchor",
+                      "definition": "anchor-definition",
+                      "intact": true
+                    }
+                  }
+                ]
+              },
+              "relationships": {
+                "tuple": [
+                  {
+                    "record": "PhysicalRelation",
+                    "fields": {
+                      "object": "rope",
+                      "kind": "carried",
+                      "target": "creature",
+                      "basis": "established"
+                    }
+                  },
+                  {
+                    "record": "PhysicalRelation",
+                    "fields": {
+                      "object": "rope",
+                      "kind": "attached",
+                      "target": "anchor",
+                      "basis": "established"
+                    }
+                  },
+                  {
+                    "record": "PhysicalRelation",
+                    "fields": {
+                      "object": "anchor",
+                      "kind": "located",
+                      "target": "base",
+                      "basis": "established"
+                    }
+                  }
+                ]
+              },
+              "history": {
+                "tuple": [
+                  {
+                    "record": "CausalRecord",
+                    "fields": {
+                      "id": "campaign:accepted:1",
+                      "at_seconds": 28,
+                      "subjects": {
+                        "tuple": [
+                          "creature",
+                          "first"
+                        ]
+                      },
+                      "cause": "attempt:one"
+                    }
+                  }
+                ]
+              },
+              "falls": {
+                "tuple": []
+              }
+            }
+          },
+          "character_revision": "campaign:character:1",
+          "characters": {
+            "tuple": [
+              {
+                "record": "CreatureRules",
+                "fields": {
+                  "id": "creature",
+                  "speed": 60,
+                  "climb_speed": 0,
+                  "strength": null,
+                  "proficiency_bonus": null,
+                  "athletics_rank": null,
+                  "conditions": {
+                    "tuple": []
+                  },
+                  "exhaustion": 0,
+                  "traits": {
+                    "tuple": []
+                  },
+                  "ready_equipment": {
+                    "tuple": [
+                      "rope"
+                    ]
+                  },
+                  "known_routes": {
+                    "tuple": [
+                      "first",
+                      "next",
+                      "return"
+                    ]
+                  },
+                  "hit_points": 0,
+                  "movement_spent": 10,
+                  "unresolved_rules": {
+                    "tuple": []
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "activities": {
+        "tuple": [
+          {
+            "record": "ActivityScope",
+            "fields": {
+              "id": "activity:first",
+              "actor": "creature",
+              "target": "first",
+              "authorization": {
+                "record": "ActivityAuthorization",
+                "fields": {
+                  "purpose": "activity:first",
+                  "method": "climb",
+                  "intent": "commit",
+                  "constraints": {
+                    "tuple": []
+                  },
+                  "answered_choices": {
+                    "tuple": []
+                  }
+                }
+              },
+              "checkpoint": {
+                "record": "ActivityCheckpoint",
+                "fields": {
+                  "purpose": "activity:first",
+                  "method": "climb",
+                  "blocked": false,
+                  "missing_means": {
+                    "tuple": []
+                  },
+                  "conflicting_constraints": {
+                    "tuple": []
+                  },
+                  "complete": false,
+                  "resolution_ref": null,
+                  "restart_required": false,
+                  "developments": {
+                    "tuple": []
+                  }
+                }
+              },
+              "duration_seconds": 11,
+              "time_basis": "World contextual duration for this increment",
+              "ruling": {
+                "record": "ClimbRuling",
+                "fields": {
+                  "require_check": false,
+                  "basis": "stable ordinary climb"
+                }
+              }
+            }
+          },
+          {
+            "record": "ActivityScope",
+            "fields": {
+              "id": "activity:next",
+              "actor": "creature",
+              "target": "next",
+              "authorization": {
+                "record": "ActivityAuthorization",
+                "fields": {
+                  "purpose": "activity:next",
+                  "method": "climb",
+                  "intent": "commit",
+                  "constraints": {
+                    "tuple": []
+                  },
+                  "answered_choices": {
+                    "tuple": []
+                  }
+                }
+              },
+              "checkpoint": {
+                "record": "ActivityCheckpoint",
+                "fields": {
+                  "purpose": "activity:next",
+                  "method": "climb",
+                  "blocked": false,
+                  "missing_means": {
+                    "tuple": []
+                  },
+                  "conflicting_constraints": {
+                    "tuple": []
+                  },
+                  "complete": false,
+                  "resolution_ref": null,
+                  "restart_required": false,
+                  "developments": {
+                    "tuple": []
+                  }
+                }
+              },
+              "duration_seconds": 11,
+              "time_basis": "World contextual duration for this increment",
+              "ruling": {
+                "record": "ClimbRuling",
+                "fields": {
+                  "require_check": false,
+                  "basis": "stable ordinary climb"
+                }
+              }
+            }
+          },
+          {
+            "record": "ActivityScope",
+            "fields": {
+              "id": "activity:return",
+              "actor": "creature",
+              "target": "return",
+              "authorization": {
+                "record": "ActivityAuthorization",
+                "fields": {
+                  "purpose": "activity:return",
+                  "method": "climb",
+                  "intent": "commit",
+                  "constraints": {
+                    "tuple": []
+                  },
+                  "answered_choices": {
+                    "tuple": []
+                  }
+                }
+              },
+              "checkpoint": {
+                "record": "ActivityCheckpoint",
+                "fields": {
+                  "purpose": "activity:return",
+                  "method": "climb",
+                  "blocked": false,
+                  "missing_means": {
+                    "tuple": []
+                  },
+                  "conflicting_constraints": {
+                    "tuple": []
+                  },
+                  "complete": false,
+                  "resolution_ref": null,
+                  "restart_required": false,
+                  "developments": {
+                    "tuple": []
+                  }
+                }
+              },
+              "duration_seconds": 11,
+              "time_basis": "World contextual duration for this increment",
+              "ruling": {
+                "record": "ClimbRuling",
+                "fields": {
+                  "require_check": false,
+                  "basis": "stable ordinary climb"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "accepted": {
+        "tuple": [
+          {
+            "record": "AcceptedUnit",
+            "fields": {
+              "command": {
+                "record": "Increment",
+                "fields": {
+                  "activity": "activity:first",
+                  "request": {
+                    "record": "ClimbRequest",
+                    "fields": {
+                      "attempt": "attempt:one",
+                      "creature": "creature",
+                      "route": "first",
+                      "distance_feet": 5,
+                      "use_climb_speed": false,
+                      "means": {
+                        "tuple": [
+                          "rope"
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "result": {
+                "record": "ClimbResult",
+                "fields": {
+                  "assessment": {
+                    "record": "ClimbAssessment",
+                    "fields": {
+                      "request": {
+                        "record": "ClimbRequest",
+                        "fields": {
+                          "attempt": "attempt:one",
+                          "creature": "creature",
+                          "route": "first",
+                          "distance_feet": 5,
+                          "use_climb_speed": false,
+                          "means": {
+                            "tuple": [
+                              "rope"
+                            ]
+                          }
+                        }
+                      },
+                      "ruling": {
+                        "record": "ClimbRuling",
+                        "fields": {
+                          "require_check": false,
+                          "basis": "stable ordinary climb"
+                        }
+                      },
+                      "status": "deterministic",
+                      "reason": null,
+                      "movement_cost": 10,
+                      "speed": 60,
+                      "modifier": 0,
+                      "advantage": 0,
+                      "dc": null,
+                      "dependencies": {
+                        "record": "ClimbDependencies",
+                        "fields": {
+                          "world_revision": "world:initial",
+                          "at_seconds": 17,
+                          "character_revision": "character:initial",
+                          "link": {
+                            "record": "TraversalLink",
+                            "fields": {
+                              "id": "first",
+                              "origin": "base",
+                              "destination": "middle",
+                              "surface": "surface",
+                              "distance_feet": 5,
+                              "blocked": false,
+                              "basis": "authored:relation"
+                            }
+                          },
+                          "surface": {
+                            "record": "Surface",
+                            "fields": {
+                              "id": "surface",
+                              "climbable": true,
+                              "slippery": false,
+                              "few_handholds": false,
+                              "difficult": false,
+                              "basis": "hidden:material-basis",
+                              "unresolved_bindings": {
+                                "tuple": []
+                              }
+                            }
+                          },
+                          "equipment": {
+                            "tuple": [
+                              {
+                                "tuple": [
+                                  {
+                                    "record": "PhysicalObject",
+                                    "fields": {
+                                      "id": "rope",
+                                      "definition": "rope-definition",
+                                      "intact": true
+                                    }
+                                  },
+                                  {
+                                    "tuple": [
+                                      {
+                                        "record": "PhysicalRelation",
+                                        "fields": {
+                                          "object": "rope",
+                                          "kind": "carried",
+                                          "target": "creature",
+                                          "basis": "established"
+                                        }
+                                      },
+                                      {
+                                        "record": "PhysicalRelation",
+                                        "fields": {
+                                          "object": "rope",
+                                          "kind": "attached",
+                                          "target": "anchor",
+                                          "basis": "established"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          "character": {
+                            "record": "CreatureRules",
+                            "fields": {
+                              "id": "creature",
+                              "speed": 60,
+                              "climb_speed": null,
+                              "strength": null,
+                              "proficiency_bonus": null,
+                              "athletics_rank": null,
+                              "conditions": {
+                                "tuple": []
+                              },
+                              "exhaustion": 0,
+                              "traits": {
+                                "tuple": []
+                              },
+                              "ready_equipment": {
+                                "tuple": [
+                                  "rope"
+                                ]
+                              },
+                              "known_routes": {
+                                "tuple": [
+                                  "first",
+                                  "next",
+                                  "return"
+                                ]
+                              },
+                              "hit_points": null,
+                              "movement_spent": 0,
+                              "unresolved_rules": {
+                                "tuple": []
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "success": true,
+                  "rolls": {
+                    "tuple": []
+                  },
+                  "total": null,
+                  "destination": "middle",
+                  "disposition": "progress"
+                }
+              },
+              "duration_seconds": 11,
+              "receipt": {
+                "record": "AcceptedStep",
+                "fields": {
+                  "ref": "attempt:one",
+                  "public_refs": {
+                    "tuple": [
+                      "movement"
+                    ]
+                  },
+                  "outcome": "complete",
+                  "accessible": {
+                    "tuple": [
+                      {
+                        "tuple": [
+                          "movement",
+                          "You climb 5 feet to the chosen destination. 11 seconds pass; 10 feet of movement are spent."
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "revision": 1,
+      "schema": 1
+    }
+  }
+}

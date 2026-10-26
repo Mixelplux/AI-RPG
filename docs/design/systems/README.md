@@ -16,6 +16,17 @@ new implementation or override [workflow](../../../WORKFLOW.md) and lifecycle.
 Only genuine contractual rules, such as simulation authority and fail-closed
 provider behavior, should be presented as contracts.
 
+## M2-2a owner-accepted implementation — October 26, 2026
+
+[Consequential uncertain climbing and falling](../../physical_traversal_m2_2a_handoff.md)
+extends the published M2-1 common aggregate across World, Character, Resolution and
+Persistence. The [bounded model](../../physical_traversal_m2_2a_design.md) records
+pre-check grounding, explicit effort, immediate injury and schema compatibility.
+The owner accepted the corrected bounded implementation October 26, 2026. M2-2a
+is complete/idle; Git publication remains separate and the systems remain Partial.
+Ordinary climbing remains mechanical without unnecessary equipment detail; the
+documented meaningful-activity requirements and deferred capabilities are preserved.
+
 ## Navigation and status vocabulary
 
 - [Responsibility hierarchy and information flow](system-map.md)
@@ -90,10 +101,11 @@ The separately authorized [Physical Traversal M1 implementation handoff](../../p
 records owner acceptance of bounded World/Character/rule foundations on October 26, 2026. Common
 assessment is exercised; consequential integration and new-domain persistence
 remain M2. M1 is closed. The separately owner-authorized
-[M2-1 foundation](../../physical_traversal_m2_1_design.md) is now an implementation
-candidate pending review: coherent domain acceptance and opt-in v3 persistence,
-with deterministic full-link climbs only. Overall systems remain Partial;
-hazardous failure, interruption and owner-playable integration remain later M2 work.
+[M2-1 foundation](../../physical_traversal_m2_1_design.md) is published: coherent
+domain acceptance and opt-in v3 persistence with deterministic full-link climbs.
+The accepted M2-2a extension above adds bounded hazardous failure and immediate
+injury; interruption/resumption and broader playable integration remain deferred.
+Overall systems remain Partial; no next package is selected.
 
 ## Shared doctrines
 

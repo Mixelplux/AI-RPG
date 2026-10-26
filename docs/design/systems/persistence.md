@@ -67,9 +67,23 @@ retry recognition needs no current situational lookup. New continuation still
 requires fresh domain participation and F05 authorization. Default version-1 and
 legacy I2 save boundaries are unchanged; no migration is provided.
 
+## Physical Traversal M2-2a — owner accepted October 26, 2026
+
+Envelope v3 gains opt-in domain schema 2 for grounded uncertain climb/fall and
+injury meaning. Schema 1 retains its deterministic historical contract; the finite
+decoder fills only explicitly named newly added default fields for old schema-1
+records. Schema 2 requires complete field sets. Recorded dice, dependencies,
+consequences and safe receipts validate by pure historical reconstruction before
+adoption, with no reroll or duplicate damage. Versions 1/2, duplicate-key rejection
+and atomic writes retain their existing contracts. No migration or authenticity
+proof against coherently rewritten save contents is claimed.
+See [model](../../physical_traversal_m2_2a_design.md) and
+[handoff](../../physical_traversal_m2_2a_handoff.md). Owner accepted the bounded milestone October 26, 2026;
+Git publication remains separate and overall system status remains Partial.
+
 ## Purpose
 
-M2-1 implementation candidate, owner review pending: version 3 explicitly stores
+Published M2-1 foundation (historical milestone coverage): version 3 explicitly stores
 new-domain campaigns without legacy GameEngine structures. Domain schema 1
 preserves identities, physical relations, capabilities, costs/time, F05 scope and
 accepted recognition. Finite decoding and complete pure reconstruction validate
@@ -78,7 +92,7 @@ is reused. Unsupported non-null checkpoint resolution references reject before
 adoption. V3 rejects duplicate JSON keys at every depth; v1/v2 key-decoding behavior
 is preserved. Versions 1/2 retain existing behavior with no migration or guessed
 traversal facts. Pending proposals/coordinators are not saved. Full snapshots and
-linear reconstruction are bounded scaling limits. [Model](../../physical_traversal_m2_1_design.md).
+growing-history reconstruction are bounded scaling limits. [Model](../../physical_traversal_m2_1_design.md).
 
 Preserve supported accepted campaign meaning across explicit save/load and
 process boundaries. Own its stored representation, restoration and compatibility

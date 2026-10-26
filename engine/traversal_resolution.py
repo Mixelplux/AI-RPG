@@ -7,7 +7,7 @@ from dataclasses import dataclass, replace
 
 from engine.information_adjudication import Unresolved
 from engine.physical_world import natural, reference
-from engine.physical_world import TraversalLink, Surface, PhysicalObject, PhysicalRelation
+from engine.physical_world import TraversalLink, Surface, PhysicalObject, PhysicalRelation, FallOccurrence
 from engine.character_rules import CreatureRules
 
 
@@ -38,6 +38,8 @@ def validate_climb_request(request):
 class ClimbRuling:
     require_check: bool
     basis: str  # trusted contextual ruling, not player/model text
+    failure_mode: str | None = None  # contextual stakes: no_progress or loss_of_grip
+    failure_movement_cost: int | None = None  # explicit scoped commitment, not a universal failure tax
 
 
 @dataclass(frozen=True)
@@ -77,6 +79,15 @@ class ClimbResult:
 
 
 @dataclass(frozen=True)
+class FallDependencies:
+    world_revision: str
+    at_seconds: int
+    character_revision: str
+    occurrence: FallOccurrence
+    character: CreatureRules
+
+
+@dataclass(frozen=True)
 class FallResult:
     occurrence: str
     creature: str
@@ -84,7 +95,7 @@ class FallResult:
     rolls: tuple[int, ...]
     bludgeoning_damage: int
     prone: bool
-    dependencies: tuple
+    dependencies: FallDependencies
 
 
 def die(draw, sides):
@@ -92,6 +103,46 @@ def die(draw, sides):
     if type(value) is not int or not 1 <= value <= sides:
         raise Unresolved('resolution', 'invalid_die')
     return value
+
+
+def recorded_dice(rolls, count, sides):
+    if (type(rolls) is not tuple or len(rolls) != count
+            or any(type(v) is not int or not 1 <= v <= sides for v in rolls)):
+        raise Unresolved('validation', 'invalid_recorded_dice')
+
+
+def climb_result(assessment, rolls):
+    """Pure historical result validation; never a replaying random callback."""
+    if assessment.status not in {'deterministic', 'check'}:
+        raise Unresolved('eligibility', assessment.reason or 'unsupported_assessment')
+    count = (2 if assessment.advantage else 1) if assessment.status == 'check' else 0
+    recorded_dice(rolls, count, 20)
+    total = None
+    success = True
+    if count:
+        total = (min(rolls) if assessment.advantage < 0 else max(rolls)) + assessment.modifier
+        success = total >= assessment.dc
+    link = assessment.dependencies.link
+    destination = link.destination if success and assessment.request.distance_feet == link.distance_feet else None
+    return ClimbResult(assessment, success, rolls, total, destination,
+                       'progress' if success else 'objective_not_achieved')
+
+
+def fall_result(dependencies, rolls):
+    """Mechanical contribution for an actual World-established solid-ground fall."""
+    fall, c = dependencies.occurrence, dependencies.character
+    if fall.distance_feet is None or fall.landing_medium is None:
+        raise Unresolved('retrieval', 'fall_unavailable')
+    if fall.landing_medium != 'solid':
+        raise Unresolved('rules', 'liquid_landing_requires_reaction_rules')
+    if c.unresolved_rules:
+        raise Unresolved('retrieval', 'creature_rule_effect_unavailable')
+    if set(c.conditions) - {'poisoned', 'grappled', 'restrained', 'incapacitated',
+                            'paralyzed', 'stunned', 'unconscious', 'prone'}:
+        raise Unresolved('rules', 'unsupported_fall_condition')
+    recorded_dice(rolls, min(20, fall.distance_feet // 10), 6)
+    damage = sum(rolls)
+    return FallResult(fall.id, fall.creature, fall.landing, rolls, damage, damage > 0, dependencies)
 
 
 class TraversalResolution:
@@ -118,7 +169,7 @@ class TraversalResolution:
             require_speed=not request.use_climb_speed, require_climb_speed=request.use_climb_speed)
         # Deliberate omission of unrelated campaign state. Both domain revisions
         # and actually used records must still be valid at the acceptance seam.
-        selected = replace(c, hit_points=None)
+        selected = replace(c, hit_points=None, vitality=None)
         selected = (replace(selected, speed=None) if request.use_climb_speed
                     else replace(selected, climb_speed=None))
         if not ruling.require_check:
@@ -158,19 +209,12 @@ class TraversalResolution:
             raise Unresolved('validation', 'stale_traversal_assessment')
         if assessment.status == 'unavailable':
             raise Unresolved('eligibility', assessment.reason)
-        rolls, total, success = (), None, True
+        rolls = ()
         if assessment.status == 'check':
             rolls = tuple(die(draw, 20) for _ in range(2 if assessment.advantage else 1))
-            selected = min(rolls) if assessment.advantage < 0 else max(rolls)
-            total = selected + assessment.modifier
-            success = total >= assessment.dc
         if self.assess(assessment.request, assessment.ruling) != assessment:
             raise Unresolved('validation', 'stale_traversal_assessment')
-        # The origin/destination relation only proves arrival for the full extent.
-        link = assessment.dependencies.link
-        destination = link.destination if success and assessment.request.distance_feet == link.distance_feet else None
-        return ClimbResult(assessment, success, rolls, total, destination,
-                           'progress' if success else 'objective_not_achieved')
+        return climb_result(assessment, rolls)
 
     def resolve_fall(self, occurrence, draw):
         world, characters = self.world(), self.characters()
@@ -183,15 +227,13 @@ class TraversalResolution:
         if fall.landing_medium != 'solid':
             raise Unresolved('rules', 'liquid_landing_requires_reaction_rules')
         if set(c.conditions) - {'poisoned', 'grappled', 'restrained', 'incapacitated',
-                                'paralyzed', 'stunned', 'unconscious'}:
+                                'paralyzed', 'stunned', 'unconscious', 'prone'}:
             raise Unresolved('rules', 'unsupported_fall_condition')
-        deps = (frame.revision, frame.at_seconds, character_revision, fall, c)
+        deps = FallDependencies(frame.revision, frame.at_seconds, character_revision, fall, c)
         rolls = tuple(die(draw, 6) for _ in range(min(20, fall.distance_feet // 10)))
-        # Do not apply HP, death, landing position or Prone here. This is a single
-        # mechanical contribution to the later coherent acceptance unit.
-        damage = sum(rolls)
+        result = fall_result(deps, rolls)
         current_world, current_characters = self.world(), self.characters()
         if (current_world.frame != frame or current_characters.revision != character_revision
                 or current_characters.creature(fall.creature) != c):
             raise Unresolved('validation', 'stale_fall_assessment')
-        return FallResult(fall.id, fall.creature, fall.landing, rolls, damage, damage > 0, deps)
+        return result

@@ -153,7 +153,7 @@ def load_game(save_path: str, *, campaign_draw=None, require_campaign=False) -> 
         from engine.domain_persistence import restore
         from engine.game_session import GameSession
         try:
-            return GameSession.start_domains(restore(save_data))
+            return GameSession.start_domains(restore(save_data), draw=campaign_draw)
         except Exception:
             raise ValueError('Domain campaign restoration failed validation') from None
     if save_data["save_version"] == CAMPAIGN_SAVE_VERSION:

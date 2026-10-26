@@ -39,9 +39,24 @@ capability instead of imposing a Stunned Speed restriction. Fall sampling valida
 against a captured immutable frame. Grounded exposed/protected/near-ground failure
 consequences remain required M2 validation. See [M1 handoff](../../physical_traversal_m1_handoff.md).
 
+## Physical Traversal M2-2a — owner accepted October 26, 2026
+
+A supported uncertain climb requires fixed World circumstances and an explicit
+contextual ruling for failed progress versus failure to maintain grip, plus the
+failed-attempt movement commitment. Resolution records controlled check and fall
+rolls; World and Character validate their consequences in the existing acceptance
+unit. World validates generated identities and the supported protection branches
+before sampling, so a known invalid failure cannot selectively discard an unfavorable
+roll. Read-only assessment never draws. Pure recorded-result evaluation validates
+history without invoking resolution, drawing or publishing again. There is no
+universal fall-chance rule, automatic safe failure or natural-1/20 check override.
+See [model](../../physical_traversal_m2_2a_design.md) and
+[handoff](../../physical_traversal_m2_2a_handoff.md). Owner accepted the bounded milestone October 26, 2026;
+Git publication remains separate and overall system status remains Partial.
+
 ## Purpose
 
-M2-1 implementation candidate, owner review pending: the common Runtime's opt-in
+Published M2-1 foundation (historical milestone coverage): the common Runtime's opt-in
 domain aggregate accepts deterministic M1 climbing increments through the existing
 Coordinator/F05 interface. Named premises, dependent effects and independently
 validated safe receipts precede publication. Exact accepted retry recognition

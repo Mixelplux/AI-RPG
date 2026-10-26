@@ -509,9 +509,24 @@ or fall contributions only; no M1 authoritative effects or new-domain persistenc
 These seams do not introduce another coordinator or outcome authority. See the
 [M1 handoff](../../physical_traversal_m1_handoff.md); overall systems remain Partial.
 
-M2-1 implementation candidate, owner review pending: World and Character owner
+Published M2-1 foundation: World and Character owner
 views → Action's named dependencies and provisional increment → common Runtime
 root validation/publication → safe accepted receipt → existing Coordinator.
 Persistence stores that same opt-in root in version 3; no legacy world or second
 traversal store accompanies it. Domain contributions retain their semantic
 ownership. See [M2-1 model](../../physical_traversal_m2_1_design.md).
+
+
+## Physical Traversal M2-2a — owner accepted October 26, 2026
+
+World fixed support/exposure/actual protection -> Resolution contextual check stakes
+and explicit effort -> controlled mechanical result -> World final position/fall
+and Character injury -> the existing common acceptance/root publication -> safe
+receipt. World also accepts drops required by Character unconsciousness. Persistence
+retains the same root with schema-2 consequence vocabulary and validates historical
+rolls without sampling. F05 risk commitments precede execution; F01 receives only
+accessible effects. No semantic owner or second publication authority is added.
+See [model](../../physical_traversal_m2_2a_design.md) and
+[handoff](../../physical_traversal_m2_2a_handoff.md). M2-2a is accepted and closed;
+Git publication remains separate. Overall systems remain Partial; meaningful-activity
+requirements and deferred interruption/resumption/generalization remain unchanged.

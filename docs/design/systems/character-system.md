@@ -29,9 +29,23 @@ Stunned leaves Speed intact but prevents deliberate coordination; Incapacitated
 prevents Actions, Bonus Actions and Reactions. Technique requirements remain with
 Resolution. See [M1 handoff](../../physical_traversal_m1_handoff.md).
 
+## Physical Traversal M2-2a — owner accepted October 26, 2026
+
+Character owns an optional explicit vitality profile, current HP, temporary HP,
+Prone, Unconscious/Incapacitated, immediate death, stability and immediate damage-at-
+zero counters. It supplies protection readiness separately from World attachments.
+Zero-HP/dead/Prone ordinary climbing is unavailable in schema 2. Schema 1 preserves
+historical sparse meaning. No death-save turn, recovery, combat or general sheet
+executor is added. Temporary HP absorb HP loss first; positive-HP massive damage
+uses overflow, while damage taken at zero HP uses the actual damage-at-zero death
+threshold and immediate failure accounting. World owns physical dropped-item relationships.
+See [model](../../physical_traversal_m2_2a_design.md) and
+[handoff](../../physical_traversal_m2_2a_handoff.md). Owner accepted the bounded milestone October 26, 2026;
+Git publication remains separate and overall system status remains Partial.
+
 ## Purpose
 
-M2-1 implementation candidate, owner review pending: Character movement spent is
+Published M2-1 foundation (historical milestone coverage): Character movement spent is
 accepted in the same common Runtime root as World position/time. Deterministic
 movement requires only the selected speed, conditions, relevant means/access and
 expenditure; unavailable Strength/Athletics or an unused speed do not block it.
