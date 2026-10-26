@@ -9,7 +9,8 @@ $ErrorActionPreference = 'Stop'
 
 $root = (Resolve-Path -LiteralPath $ProjectRoot).Path
 $validator = Join-Path $root 'tools\validate_project_records.ps1'
-$tempRoot = Join-Path ([IO.Path]::GetTempPath()) ('project-record-fixtures-' + [guid]::NewGuid().ToString('N'))
+$artifactRoot = [IO.Path]::GetFullPath((Join-Path $root '.artifacts'))
+$tempRoot = Join-Path $artifactRoot ('project-record-fixtures-' + [guid]::NewGuid().ToString('N'))
 $script:Passed = 0
 
 function Write-FixtureFile {
@@ -155,6 +156,12 @@ try {
     $fixture = New-Fixture -Name 'integer-save-version' -Mode complete
     Assert-Accepted -Name 'integer save version' -FixtureRoot $fixture
 
+    foreach ($supportedVersion in @(2, 3)) {
+        $fixture = New-Fixture -Name "supported-save-version-$supportedVersion" -Mode active
+        Replace-FixtureText $fixture 'docs/current_sprint.json' '"save_version": 1' ('"save_version": ' + $supportedVersion)
+        Assert-Accepted -Name "supported save version $supportedVersion" -FixtureRoot $fixture
+    }
+
     $fixture = New-Fixture -Name 'active-sprint-mismatch' -Mode active
     Replace-FixtureText $fixture 'docs/current_sprint.json' '"active_sprint": "10.75"' '"active_sprint":  "10.76"'
     Assert-Rejected 'active sprint mismatch' $fixture "active_sprint mismatch: active_sprint is '10.76'; sprint.id is '10.75'."
@@ -164,8 +171,8 @@ try {
     Assert-Rejected 'unexpected next sprint' $fixture "next_sprint must remain null until separately authorized; found '10.75'."
 
     $fixture = New-Fixture -Name 'unsafe-save-version' -Mode complete
-    Replace-FixtureText $fixture 'docs/current_sprint.json' '"save_version": 1' '"save_version":  2'
-    Assert-Rejected 'unsafe save version' $fixture "sprint.platform.save_version must be exactly integer 1; found '2'."
+    Replace-FixtureText $fixture 'docs/current_sprint.json' '"save_version": 1' '"save_version":  4'
+    Assert-Rejected 'unsafe save version' $fixture "sprint.platform.save_version must be integer 1, 2 or 3; found '4'."
 
     foreach ($invalidSaveVersion in @(
         @{ Name = 'string save version'; Value = '"1"' },
@@ -175,7 +182,7 @@ try {
     )) {
         $fixture = New-Fixture -Name ($invalidSaveVersion.Name -replace ' ', '-') -Mode complete
         Replace-FixtureText $fixture 'docs/current_sprint.json' '"save_version": 1' ('"save_version":  ' + $invalidSaveVersion.Value)
-        Assert-Rejected $invalidSaveVersion.Name $fixture 'sprint.platform.save_version must be exactly integer 1;'
+        Assert-Rejected $invalidSaveVersion.Name $fixture 'sprint.platform.save_version must be integer 1, 2 or 3;'
     }
     $fixture = New-Fixture -Name 'unsupported-risk-level' -Mode complete
     Replace-FixtureText $fixture 'docs/current_sprint.json' '"risk_level": "routine"' '"risk_level":  "unclassified"'
@@ -193,7 +200,11 @@ try {
 }
 finally {
     if (Test-Path -LiteralPath $tempRoot) {
-        Remove-Item -LiteralPath $tempRoot -Recurse -Force
+        $resolvedFixtureRoot = (Resolve-Path -LiteralPath $tempRoot).Path
+        if (-not $resolvedFixtureRoot.StartsWith($artifactRoot + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) {
+            throw 'Fixture cleanup escaped the generated artifact root.'
+        }
+        Remove-Item -LiteralPath $resolvedFixtureRoot -Recurse -Force
     }
 }
 

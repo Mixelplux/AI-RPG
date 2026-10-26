@@ -36,8 +36,8 @@ class PhysicalCapability:
     Coordination follows the owner's October 26, 2026 clarification, distinct
     from the 2024 condition's movement allowance and action-economy effects.
     """
-    speed: int
-    climb_speed: int
+    speed: int | None
+    climb_speed: int | None
     coordinated_movement: bool
     actions: bool
     bonus_actions: bool
@@ -81,24 +81,26 @@ class CharacterRules:
             raise Unresolved('rules', 'unsupported_condition')
         return c
 
-    def physical_capability(self, creature):
+    def physical_capability(self, creature, *, require_speed=True, require_climb_speed=True):
         c = self._physical_profile(creature)
-        if c.speed is None or c.climb_speed is None:
+        if require_speed and c.speed is None or require_climb_speed and c.climb_speed is None:
             raise Unresolved('retrieval', 'creature_rules_unavailable')
         conditions = set(c.conditions)
         dead = c.exhaustion == 6
         immobile = dead or bool(conditions & {'grappled', 'restrained', 'paralyzed', 'unconscious'})
-        speed = 0 if immobile else max(0, c.speed - 5 * c.exhaustion)
-        climb_speed = 0 if immobile else max(0, c.climb_speed - 5 * c.exhaustion)
+        speed = None if c.speed is None else 0 if immobile else max(0, c.speed - 5 * c.exhaustion)
+        climb_speed = None if c.climb_speed is None else 0 if immobile else max(0, c.climb_speed - 5 * c.exhaustion)
         coordinated = not (dead or conditions & {'stunned', 'paralyzed', 'unconscious'})
         incapacitated = dead or bool(conditions & {'incapacitated', 'stunned', 'paralyzed', 'unconscious'})
         return PhysicalCapability(speed, climb_speed, coordinated,
                                   not incapacitated, not incapacitated, not incapacitated)
 
-    def climb_inputs(self, creature, means=()):
+    def climb_inputs(self, creature, means=(), *, require_check=True, use_climb_speed=False):
         c = self._physical_profile(creature)
-        if any(v is None for v in (c.speed, c.climb_speed, c.strength, c.proficiency_bonus,
-                                    c.athletics_rank, c.movement_spent)):
+        required = (c.climb_speed if use_climb_speed else c.speed, c.movement_spent)
+        if require_check:
+            required += (c.strength, c.proficiency_bonus, c.athletics_rank)
+        if any(v is None for v in required):
             raise Unresolved('retrieval', 'creature_rules_unavailable')
         if not set(means).issubset(c.ready_equipment):
             raise Unresolved('eligibility', 'equipment_not_ready')

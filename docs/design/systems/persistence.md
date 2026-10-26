@@ -69,6 +69,17 @@ legacy I2 save boundaries are unchanged; no migration is provided.
 
 ## Purpose
 
+M2-1 implementation candidate, owner review pending: version 3 explicitly stores
+new-domain campaigns without legacy GameEngine structures. Domain schema 1
+preserves identities, physical relations, capabilities, costs/time, F05 scope and
+accepted recognition. Finite decoding and complete pure reconstruction validate
+references and consequential meaning before adoption. The existing atomic writer
+is reused. Unsupported non-null checkpoint resolution references reject before
+adoption. V3 rejects duplicate JSON keys at every depth; v1/v2 key-decoding behavior
+is preserved. Versions 1/2 retain existing behavior with no migration or guessed
+traversal facts. Pending proposals/coordinators are not saved. Full snapshots and
+linear reconstruction are bounded scaling limits. [Model](../../physical_traversal_m2_1_design.md).
+
 Preserve supported accepted campaign meaning across explicit save/load and
 process boundaries. Own its stored representation, restoration and compatibility
 handling, handing coherent state back to the systems that give it meaning.

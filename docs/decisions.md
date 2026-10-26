@@ -960,3 +960,45 @@ Waiting retains duration-or-condition intent and accepted progress; a general
 event-wait executor, scheduler and retrospective simulation remain deferred.
 Player saves are local game data, excluded from publication; intentional tracked
 fixtures remain versioned. No save migration or Git publication is authorized.
+
+## ADR-063 — Opt-in core-domain campaign aggregate
+
+Status: M2-1 implementation candidate, October 26, 2026; owner review pending.
+Implements the owner's authorized acceptance/persistence foundation under CD-04/09
+and IG-21, preserving existing semantic authorities and ADR-062 compatibility.
+
+The existing consequential Runtime has mutually exclusive representation modes.
+New-domain campaigns use one immutable aggregate containing World physical truth,
+Character capability/resources, F05 scope/checkpoints and accepted units. They do
+not require legacy GameEngine structures or maintain a parallel traversal store.
+The same Coordinator handles control and the Runtime handles publication.
+Domain preparation/validation is pure; final current-root comparison and a single
+root replacement publish all dependent changes. Receipt structure, access and
+supported meaning are independently validated before publication. Exact accepted
+attempt identity returns its saved receipt; changed meaning under that identity
+rejects. Unaccepted/stale proposals publish nothing.
+Request structure and exact types are checked before identity matching. M2-1
+does not implement separate checkpoint resolution reuse; non-null checkpoint
+resolution references explicitly reject, even when they name an accepted unit.
+
+An explicit version-3 envelope and domain schema 1 persist initial validation
+premises, current domains, scoped authorization and accepted causal units.
+Initial premises are historical evidence, never a second current truth authority.
+Finite supported records reject executable/unknown content. Whole-aggregate
+reference, mechanics, cost, time and receipt checks precede adoption. No new
+randomness or gameplay is executed during restoration. Writes reuse the existing
+same-directory flush/fsync/atomic replacement. Versions 1/2 are unchanged; missing
+traversal state is unsupported and no migration occurs.
+V3 JSON rejects duplicate keys at every depth, including conflicting envelope
+versions in either order; legacy v1/v2 key-decoding behavior is preserved.
+
+The current producer/validator and finite result vocabulary support deterministic
+full-link climbing only. The acceptance protocol is root/identity based: additional
+methods and owner contributions extend the supported vocabulary and domain
+validation, without introducing a different publication contract. Multi-increment
+interruption and hazardous consequence adjudication remain subsequent M2 work.
+No general transaction framework, universal scheduler or event-sourcing engine.
+Single-threaded session execution is assumed; cross-process coordination is absent.
+Tuple scans, complete snapshots and reconstruction cost remain bounded scaling
+limits. Selective dependencies and stable references permit future indexing;
+generalization and large-campaign performance are not yet demonstrated.

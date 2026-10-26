@@ -24,6 +24,14 @@ new campaign persistence. See [M1 handoff](../../physical_traversal_m1_handoff.m
 
 ## Purpose
 
+M2-1 implementation candidate, owner review pending: the opt-in common Runtime
+aggregate now accepts deterministic full-link position changes, elapsed seconds
+and causal records together with dependent Character expenditure and attempt
+recognition. Objects/relationships retain World identity through v3 save/load.
+Validated immutable PhysicalFrame is current truth for this mode; initial frames
+are historical validation evidence. Hazardous consequences and partial-link
+positions are not accepted yet. [Model](../../physical_traversal_m2_1_design.md).
+
 Maintain authoritative external reality: what is true now and how that truth can
 legitimately change.
 

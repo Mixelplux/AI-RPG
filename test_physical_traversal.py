@@ -242,8 +242,9 @@ class TraversalTests(unittest.TestCase):
                     self.assess()
 
     def test_missing_character_facts_fail_closed(self):
+        self.difficult()
         original = self.profile
-        for key in ('speed', 'climb_speed', 'strength', 'proficiency_bonus', 'athletics_rank', 'movement_spent'):
+        for key in ('speed', 'strength', 'proficiency_bonus', 'athletics_rank', 'movement_spent'):
             with self.subTest(key=key):
                 self.profile = replace(original, **{key: None})
                 with self.assertRaises(Unresolved):
@@ -280,7 +281,7 @@ class TraversalTests(unittest.TestCase):
                 if change == 'surface':
                     self.surface(difficult=True)
                 elif change == 'character':
-                    self.profile = replace(self.profile, strength=16)
+                    self.profile = replace(self.profile, movement_spent=16)
                 else:
                     self.frame = replace(self.frame, at_seconds=41)
                 with self.assertRaises(Unresolved):
@@ -336,7 +337,7 @@ class TraversalTests(unittest.TestCase):
     def test_rope_preserves_identity_and_multiple_relationships(self):
         self.gear()
         a = self.assess(means=('rope:1',))
-        obj, relations = a.dependencies[5][0]
+        obj, relations = a.dependencies.equipment[0]
         self.assertEqual(obj.id, 'rope:1')
         self.assertEqual({r.kind for r in relations}, {'held', 'secured', 'attached'})
         # Dropping handling cannot erase established attachments or retain use.

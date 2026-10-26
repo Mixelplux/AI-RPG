@@ -1,30 +1,26 @@
-# Physical Traversal Core V1a — M1 accepted and closed
+# Physical Traversal Core V1a — M2-1 accepted and closed
 
-Owner accepted M1 on October 26, 2026 following correction and verification of
-both blocking defects. Risk: Elevated. Accepted implementation baseline:
-`85ec1811315686f9ea6691235078bf10c25265fc`; the accepted M1 changes remain an
-uncommitted working diff on `codex/physical-traversal-v1a-m1`.
+Owner accepted M2-1 on October 26, 2026 after integrity corrections and verification.
+Risk: Elevated. Published parent: `4399e57bfcaf604b83c7079da63c0a62024d6f8c`.
+The accepted implementation remains an uncommitted working diff on
+`codex/physical-traversal-v1a-m2-1`; Git publication requires separate authorization.
 
-M1 establishes reusable World Simulation, Character System and Action & Resolution
-foundations under CD-01–CD-09 and PT-D1–PT-D9, including common I1/F05 assessment
-and offline rule validation. Acceptance covers the bounded foundations and their
-documented limitations; playable consequential traversal and new-domain save
-integration remain M2. See the [M1 handoff](physical_traversal_m1_handoff.md),
-[implementation model](physical_traversal_m1_design.md) and
-[canonical traversal design](design/physical-traversal-domain-design-v1.md).
+Accepted scope: deterministic consequential climbing between established meaningful
+positions, coherent World/Character/Action acceptance, named dependencies, F05
+control, player-safe receipts, strict exact retries, validation and opt-in v3
+persistence with unchanged v1/v2 compatibility and no migration.
 
-Lifecycle is complete/idle: no active sprint or capability package, latest
-completed sprint `physical-traversal-v1a-m1`, and no next sprint selected.
-`docs/current_sprint.json` remains the sole machine lifecycle authority.
-M2 is neither staged nor started and requires separate owner authorization.
+M2-1 is complete; the overall Physical Traversal V1a effort is not complete.
+Uncertain climbing, hazardous failures/falls, injury, interruptions/resumption,
+partial-link traversal and broader playable integration remain future work.
+The P3 growing-history reconstruction/scalability concern remains for later assessment.
 
-Preserved for M2: narrow unnecessarily broad Character dependencies; evaluate
-named dependency records instead of positional tuples. The accepted realistic
-climbing-failure/falling-risk matrix, common consequential acceptance,
-continuation and versioned persistence validation requirements remain binding
-deferred requirements, not implemented M1 behavior.
+Lifecycle is complete/idle: no active package or sprint, latest completed
+`physical-traversal-v1a-m2-1`, and `next_sprint` null. JSON remains the sole machine
+lifecycle authority. M2-2 is neither selected, staged nor authorized.
 
-No mechanics, persistence model, save version or migration changes follow from
-closure. Swimming, jumping, combat, autonomous NPC planning, World Forge and live
-providers remain outside scope. Git staging, commit, merge and push require
-separate publication authorization; acceptance grants none of those actions.
+See [the model](physical_traversal_m2_1_design.md) for implementation semantics and
+[the accepted handoff](physical_traversal_m2_1_handoff.md) for evidence, exact
+25-file inventory and publication readiness. No staging, commit, merge or push is
+authorized. Original dirty checkout, saves, environments and unrelated worktrees
+remain preserved.

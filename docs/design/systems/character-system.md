@@ -31,6 +31,13 @@ Resolution. See [M1 handoff](../../physical_traversal_m1_handoff.md).
 
 ## Purpose
 
+M2-1 implementation candidate, owner review pending: Character movement spent is
+accepted in the same common Runtime root as World position/time. Deterministic
+movement requires only the selected speed, conditions, relevant means/access and
+expenditure; unavailable Strength/Athletics or an unused speed do not block it.
+Named dependency records replace the climb assessment's positional tuple.
+Physical truth remains World-owned. [Model](../../physical_traversal_m2_1_design.md).
+
 Owner-accepted implementation, October 22, 2026: [Information-Grounded Adjudication V1](../../information_grounded_adjudication_v1_handoff.md)
 retrieves supplied objective capability and checks available explicitly chosen
 means before attempts. V1a character grants supply retained knowledge/reports/

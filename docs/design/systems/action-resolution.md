@@ -41,6 +41,18 @@ consequences remain required M2 validation. See [M1 handoff](../../physical_trav
 
 ## Purpose
 
+M2-1 implementation candidate, owner review pending: the common Runtime's opt-in
+domain aggregate accepts deterministic M1 climbing increments through the existing
+Coordinator/F05 interface. Named premises, dependent effects and independently
+validated safe receipts precede publication. Exact accepted retry recognition
+follows strict request-type validation and precedes current-position reads.
+Non-null checkpoint resolution references reject: separate checkpoint reuse is
+unsupported in M2-1; accepted-command retries use the accepted-unit history.
+A distinct attempt needs current eligibility and
+authorization. Check-bearing/partial-link execution stops before sampling;
+objective failure never implies a safe accepted disposition. Existing M1 uncertain
+checks/falls remain provisional. [Model](../../physical_traversal_m2_1_design.md).
+
 Owner-accepted implementation, October 22, 2026: [Information-Grounded Adjudication V1](../../information_grounded_adjudication_v1_handoff.md)
 combines supplied authorization, actual means/capability and V1a-retrieved hidden
 bindings through one finite evaluator and existing d6 policy. Offline proposals

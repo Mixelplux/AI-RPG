@@ -10,26 +10,26 @@
   "active_sprint": null,
   "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "physical-traversal-v1a-m1"
+    "id": "physical-traversal-v1a-m2-1"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "physical-traversal-v1a-m1",
-    "title": "Physical Traversal Core V1a \u2014 M1 Core Domain Foundations",
+    "id": "physical-traversal-v1a-m2-1",
+    "title": "Physical Traversal Core V1a \u2014 M2-1 Authoritative Acceptance Foundation",
     "type": "capability-package",
     "status": "complete",
     "risk_level": "elevated",
-    "goal": "Owner accepted bounded M1 foundations October 26, 2026 after both blocking corrections and verification. Lifecycle complete/idle; consequential acceptance and persistence remain M2. No M2 start or Git publication authorized.",
+    "goal": "Owner accepted bounded M2-1 October 26, 2026 after integrity corrections and verification. Lifecycle complete/idle; overall Physical Traversal V1a remains incomplete. Prepare accepted working diff for separately authorized Git publication; no M2-2.",
     "predecessor": {
-      "id": "m2-m1-integrated-player-input-v1"
+      "id": "physical-traversal-v1a-m1"
     },
     "platform": {
       "official_interpreter": ".\\.venv\\Scripts\\python.exe",
-      "save_version": 2,
+      "save_version": 3,
       "provider_requests": "forbidden"
     },
     "scope": [
-      "World local spatial relations, stable objects and compatible attachments; shared PC/NPC capabilities, access and readiness; actual 2024 climbing and separate fall responsibility. Establish versioned persistence compatibility and common-runtime integration path before incompatible writes. No M2, combat, swimming, jumping, migrations, live providers or Git publication."
+      "Authoritative World/Character/Action acceptance, F05 and safe receipts, accepted retry identity, opt-in versioned persistence with unchanged v1/v2 behavior. No hazardous consequence integration, interrupted activities, live providers or Git publication."
     ],
     "verification": [
       "Syntax, focused offline rule/world/character variations, structural integration boundaries, affected regressions, compatibility and targeted architecture review; lifecycle validation and documentation reconciliation."

@@ -89,7 +89,11 @@ authorization; this incorporation selects no package or lifecycle transition.
 The separately authorized [Physical Traversal M1 implementation handoff](../../physical_traversal_m1_handoff.md)
 records owner acceptance of bounded World/Character/rule foundations on October 26, 2026. Common
 assessment is exercised; consequential integration and new-domain persistence
-remain M2. M1 is closed; M2 is not staged or started.
+remain M2. M1 is closed. The separately owner-authorized
+[M2-1 foundation](../../physical_traversal_m2_1_design.md) is now an implementation
+candidate pending review: coherent domain acceptance and opt-in v3 persistence,
+with deterministic full-link climbs only. Overall systems remain Partial;
+hazardous failure, interruption and owner-playable integration remain later M2 work.
 
 ## Shared doctrines
 

@@ -12,6 +12,7 @@ from engine import west_road_market_theft
 
 SAVE_VERSION = 1
 CAMPAIGN_SAVE_VERSION = 2
+DOMAIN_SAVE_VERSION = 3
 
 
 def build_save_data(engine: GameEngine) -> Dict[str, Any]:
@@ -22,6 +23,10 @@ def build_save_data(engine: GameEngine) -> Dict[str, Any]:
     Scene Snapshots, perception, and narration are derived and are not saved.
     """
 
+    from engine.consequence_integration import Runtime
+    if type(engine) is Runtime and engine.domain_mode:
+        from engine.domain_persistence import export
+        return export(engine.campaign)
     runtime = engine._consequences
     if runtime is not None and runtime.campaign is not None:
         from engine.campaign_continuity import export
@@ -45,15 +50,17 @@ def save_game(engine: GameEngine, save_path: str) -> None:
     path = Path(save_path)
     path.parent.mkdir(parents=True, exist_ok=True)
 
-    if save_data["save_version"] == CAMPAIGN_SAVE_VERSION:
-        runtime = engine._consequences
-        runtime.note("persistence", reason="capture")
+    if save_data["save_version"] in (CAMPAIGN_SAVE_VERSION, DOMAIN_SAVE_VERSION):
+        runtime = engine._consequences if save_data['save_version'] == CAMPAIGN_SAVE_VERSION else None
+        if runtime is not None:
+            runtime.note("persistence", reason="capture")
         try:
             # Encoding must complete before opening any destination or temporary file.
             encoded = json.dumps(save_data, indent=2, allow_nan=False)
             atomic_write(path, encoded)
         except Exception:
-            runtime.note("persistence", reason="write_failed")
+            if runtime is not None:
+                runtime.note("persistence", reason="write_failed")
             raise
         return
     with path.open("w", encoding="utf-8") as file:
@@ -63,8 +70,30 @@ def save_game(engine: GameEngine, save_path: str) -> None:
 def load_save_data(save_path: str) -> Dict[str, Any]:
     path = Path(save_path)
 
+    duplicate_keys = False
+    last_object_pairs = ()
+
+    def decode_object(pairs):
+        nonlocal duplicate_keys, last_object_pairs
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                duplicate_keys = True
+            result[key] = value
+        # JSON objects are decoded bottom-up: for an object envelope the last
+        # callback carries every top-level version entry, before key collapse.
+        last_object_pairs = pairs
+        return result
+
     with path.open("r", encoding="utf-8") as file:
-        loaded_data = json.load(file)
+        loaded_data = json.load(file, object_pairs_hook=decode_object)
+
+    if (type(loaded_data) is dict and duplicate_keys
+            and any(key == 'save_version' and type(value) is int and value == DOMAIN_SAVE_VERSION
+                    for key, value in last_object_pairs)):
+        # Reject duplicates anywhere in v3, including a version hidden by a
+        # later duplicate. Preserve the existing v1/v2 last-key-wins behavior.
+        raise ValueError('Duplicate JSON keys in version-3 save')
 
     save_data = deepcopy(loaded_data)
 
@@ -72,7 +101,7 @@ def load_save_data(save_path: str) -> Dict[str, Any]:
         raise ValueError("Invalid save envelope")
     if type(save_data.get("save_version")) is not int:
         raise ValueError("Invalid save version")
-    if save_data.get("save_version") == CAMPAIGN_SAVE_VERSION:
+    if save_data.get("save_version") in (CAMPAIGN_SAVE_VERSION, DOMAIN_SAVE_VERSION):
         return save_data  # Strict complete validation in isolated reconstruction.
     if isinstance(save_data.get("world_state"), dict) and "continuing_gameplay" in save_data["world_state"]:
         raise ValueError("Version-2 campaign cannot be downgraded")
@@ -118,6 +147,15 @@ def load_save_data(save_path: str) -> Dict[str, Any]:
 
 def load_game(save_path: str, *, campaign_draw=None, require_campaign=False) -> GameEngine:
     save_data = load_save_data(save_path)
+    if save_data['save_version'] == DOMAIN_SAVE_VERSION:
+        if require_campaign:
+            raise ValueError('Version-3 domains are not a version-2 I3 campaign')
+        from engine.domain_persistence import restore
+        from engine.game_session import GameSession
+        try:
+            return GameSession.start_domains(restore(save_data))
+        except Exception:
+            raise ValueError('Domain campaign restoration failed validation') from None
     if save_data["save_version"] == CAMPAIGN_SAVE_VERSION:
         from engine.campaign_continuity import restore
         try:

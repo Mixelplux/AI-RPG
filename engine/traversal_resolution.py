@@ -3,10 +3,12 @@
 The common acceptance owner must bind a result to an authorized attempt and
 publish dependent World/Character effects together. Sampling is not acceptance.
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from engine.information_adjudication import Unresolved
 from engine.physical_world import natural, reference
+from engine.physical_world import TraversalLink, Surface, PhysicalObject, PhysicalRelation
+from engine.character_rules import CreatureRules
 
 
 @dataclass(frozen=True)
@@ -19,10 +21,34 @@ class ClimbRequest:
     means: tuple[str, ...] = ()
 
 
+def validate_climb_request(request):
+    """Check exact request types without reading present physical premises."""
+    if (type(request) is not ClimbRequest
+            or not all(type(v) is str and reference(v) for v in
+                       (request.attempt, request.creature, request.route))
+            or not natural(request.distance_feet) or request.distance_feet == 0
+            or type(request.use_climb_speed) is not bool
+            or type(request.means) is not tuple
+            or not all(type(v) is str and reference(v) for v in request.means)
+            or len(set(request.means)) != len(request.means)):
+        raise ValueError('explicit typed climb request required')
+
+
 @dataclass(frozen=True)
 class ClimbRuling:
     require_check: bool
     basis: str  # trusted contextual ruling, not player/model text
+
+
+@dataclass(frozen=True)
+class ClimbDependencies:
+    world_revision: str
+    at_seconds: int
+    character_revision: str
+    link: TraversalLink
+    surface: Surface
+    equipment: tuple[tuple[PhysicalObject, tuple[PhysicalRelation, ...]], ...]
+    character: CreatureRules
 
 
 @dataclass(frozen=True)
@@ -36,7 +62,7 @@ class ClimbAssessment:
     modifier: int
     advantage: int  # -1 disadvantage, 0 normal/cancelled, +1 advantage
     dc: int | None
-    dependencies: tuple
+    dependencies: ClimbDependencies
 
 
 @dataclass(frozen=True)
@@ -73,29 +99,33 @@ class TraversalResolution:
 
     Assessments discover dependencies in the owning domains. Reassessment rejects
     changed material premises before sampling. Results remain unaccepted and are
-    intentionally absent from existing save codecs; M2 owns atomic integration.
+    absent from the v1/v2 codecs. The opt-in domain campaign validates and accepts
+    supported consequences; this rules module never publishes campaign state.
     """
     def __init__(self, world, characters):
         self.world, self.characters = world, characters
 
     def assess(self, request, ruling):
-        if (type(request) is not ClimbRequest or not all(reference(v) for v in
-                (request.attempt, request.creature, request.route))
-                or not natural(request.distance_feet) or request.distance_feet == 0
-                or type(request.use_climb_speed) is not bool
-                or type(request.means) is not tuple or not all(reference(v) for v in request.means)
-                or len(set(request.means)) != len(request.means)
-                or type(ruling) is not ClimbRuling or type(ruling.require_check) is not bool
+        validate_climb_request(request)
+        if (type(ruling) is not ClimbRuling or type(ruling.require_check) is not bool
                 or not reference(ruling.basis)):
             raise ValueError('explicit traversal scope and contextual ruling required')
         world, characters = self.world(), self.characters()
         link, surface, equipment = world.climb_inputs(request.creature, request.route, request.means)
-        c = characters.climb_inputs(request.creature, request.means)
-        capability = characters.physical_capability(request.creature)
+        c = characters.climb_inputs(request.creature, request.means,
+            require_check=ruling.require_check, use_climb_speed=request.use_climb_speed)
+        capability = characters.physical_capability(request.creature,
+            require_speed=not request.use_climb_speed, require_climb_speed=request.use_climb_speed)
         # Deliberate omission of unrelated campaign state. Both domain revisions
         # and actually used records must still be valid at the acceptance seam.
-        deps = (world.frame.revision, world.frame.at_seconds, characters.revision,
-                link, surface, equipment, c)
+        selected = replace(c, hit_points=None)
+        selected = (replace(selected, speed=None) if request.use_climb_speed
+                    else replace(selected, climb_speed=None))
+        if not ruling.require_check:
+            selected = replace(selected, strength=None, proficiency_bonus=None,
+                               athletics_rank=None, traits=())
+        deps = ClimbDependencies(world.frame.revision, world.frame.at_seconds,
+                                 characters.revision, link, surface, equipment, selected)
         if ruling.require_check and not (surface.slippery or surface.few_handholds):
             raise Unresolved('rules', 'check_without_supported_circumstance')
         speed = capability.climb_speed if request.use_climb_speed else capability.speed
@@ -112,8 +142,10 @@ class TraversalResolution:
             # The technique requires physical coordination even without a check.
             # Character owns this general capacity, not a climb-specific condition.
             reason = 'coordinated_movement_unavailable'
-        modifier = (c.strength - 10) // 2 + c.proficiency_bonus * c.athletics_rank - 2 * c.exhaustion
-        advantage = int(any(t.advantage for t in c.traits)) - int('poisoned' in c.conditions)
+        modifier = ((c.strength - 10) // 2 + c.proficiency_bonus * c.athletics_rank
+                    - 2 * c.exhaustion) if ruling.require_check else 0
+        advantage = (int(any(t.advantage for t in c.traits))
+                     - int('poisoned' in c.conditions)) if ruling.require_check else 0
         return ClimbAssessment(request, ruling, 'unavailable' if reason else
             'check' if ruling.require_check else 'deterministic', reason, cost,
             speed, modifier, advantage, 15 if ruling.require_check else None, deps)
@@ -135,7 +167,7 @@ class TraversalResolution:
         if self.assess(assessment.request, assessment.ruling) != assessment:
             raise Unresolved('validation', 'stale_traversal_assessment')
         # The origin/destination relation only proves arrival for the full extent.
-        link = assessment.dependencies[3]
+        link = assessment.dependencies.link
         destination = link.destination if success and assessment.request.distance_feet == link.distance_feet else None
         return ClimbResult(assessment, success, rolls, total, destination,
                            'progress' if success else 'objective_not_achieved')

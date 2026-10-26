@@ -1,47 +1,31 @@
-# Physical Traversal Core V1a — M1 Core Domain Foundations
+# Physical Traversal Core V1a — M2-1 acceptance closure
 
-## Acceptance and lifecycle closure
+Owner accepted the bounded M2-1 implementation October 26, 2026 after all three
+integrity corrections and successful verification. Elevated risk. M2-1 is complete
+and closed; this does not complete the overall Physical Traversal V1a effort.
 
-Owner formally accepted M1 on October 26, 2026 after both blocking defects were
-corrected and verified. No known blocking defects remain. M1 is complete and
-closed using the existing JSON terminal state `complete`; lifecycle is idle.
-`active_sprint`, `active_capability_package` and `next_sprint` are null;
-`latest_completed_sprint.id` is `physical-traversal-v1a-m1`.
-JSON remains the sole machine lifecycle authority. No M2 is selected, staged or
-started; further implementation requires separate owner authorization.
+The sole machine lifecycle authority, `docs/current_sprint.json`, records
+`complete`, no active sprint or package, latest completed
+`physical-traversal-v1a-m2-1`, and `next_sprint` null. M2-2 is not authorized,
+selected or staged.
 
-## Accepted boundary and evidence
+Acceptance covers deterministic consequential climbing between established
+positions; coherent World/Character/Action acceptance; named dependencies;
+F05 control and safe receipts; exact typed retries; strict validation; and opt-in
+v3 persistence preserving v1/v2 compatibility without migration. Uncertain climbing,
+hazardous failure/falls, injury, interruptions/resumption, partial-link traversal
+and broader playable integration remain future work. The P3 growing-history
+reconstruction/scalability concern remains documented for later assessment.
 
-Risk: Elevated. Baseline: `85ec1811315686f9ea6691235078bf10c25265fc`.
-Branch: `codex/physical-traversal-v1a-m1`.
-Accepted: reusable local World position/surfaces/physical objects, shared PC/NPC
-Character facts, actual 2024 climbing resolution, separate World-established fall
-contributions and common assessment interfaces. Results remain provisional;
-consequential publication and new-domain persistence are M2 obligations.
+Accepted verification remains 331 tests and 13 additional offline gameplay scripts,
+plus lifecycle, syntax, documentation and scope checks. Closure changes four
+documentation/lifecycle files only, within the original 25-file inventory; no
+executable content changes or gameplay test reruns are required for this closure.
+See [the handoff](physical_traversal_m2_1_handoff.md) for evidence and exact files.
 
-Accepted evidence: 54 focused traversal tests, 246 affected regression tests,
-offline legacy save/load, syntax, whitespace, documentation and lifecycle checks
-passed after corrections. See the [handoff](physical_traversal_m1_handoff.md) for
-defect evidence, verification limits, documentation reconciliation and exact
-publication inventory. Closure changes records only; accepted mechanics remain
-unchanged and gameplay tests need not be repeated for these wording changes.
-
-The two P3 observations remain deferred to M2: narrow unnecessarily broad
-Character dependencies and evaluate named dependency records instead of positional
-tuples. Preserve the accepted exposed/unsecured, properly protected and near-ground
-failure matrix through consequential acceptance, continuation and persistence;
-see the [required M2 validation](physical_traversal_m1_design.md#required-m2-validation-not-implementation-in-m1).
-
-## Git and environment disposition
-
-All 17 M1 publication paths remain uncommitted; index empty. Owner acceptance
-does not authorize staging, commit, merge or push. Publication preparation stops
-before those actions. Original dirty checkout, saves, shared tooling and unrelated
-worktrees are preserved. No providers are invoked.
-
-The ignored worktree-local `.venv` junction continues to expose the approved
-`D:\AI RPG\.venv`; no environment recreation or package installation.
-Prepublication preflight uses this isolated root for both `RepoRoot` and
-`ExpectedRepoRoot`. Shared workflow tools and their canonical profile remain
-unchanged; that profile targets the original checkout, so isolated checks use
-explicit worktree paths.
+Branch: `codex/physical-traversal-v1a-m2-1`. HEAD/published parent:
+`4399e57bfcaf604b83c7079da63c0a62024d6f8c`. The accepted changes remain unstaged
+and uncommitted, with an empty index. Publication preparation stops before staging,
+commit, merge or push; separate publication authorization is required. Original
+dirty checkout, owner saves, ignored environments, shared tooling and unrelated
+worktrees remain preserved. No live providers or M2-2 work were invoked.

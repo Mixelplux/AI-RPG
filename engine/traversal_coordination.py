@@ -31,3 +31,53 @@ class TraversalDomain:
 
     def execute(self, undertaking, step, context):
         raise Unresolved('acceptance', 'm2_consequential_integration_required')
+
+
+class ConsequentialTraversalDomain:
+    """M2 adapter to the same Coordinator; no state or publication authority."""
+    def __init__(self, runtime, command):
+        from engine.domain_campaign import scope_for
+        self.runtime, self.command = runtime, command
+        self.scope = scope_for(runtime.campaign, command, execution=False)
+
+    def interpretation(self):
+        from engine.gameplay_coordination import Interpretation
+        a = self.scope.authorization
+        return Interpretation('climb', 'Climb the chosen route', self.scope.target,
+                              a.method, a.intent, a.constraints)
+
+    def context(self):
+        from engine.gameplay_coordination import SituatedContext, Target
+        root, r = self.runtime.campaign, self.command.request
+        return SituatedContext(str(root.revision), dict(root.current.world.positions)[r.creature],
+            targets=(Target(r.route, (r.route,), 'climb', ('climb',)),), means=r.means)
+
+    def assess(self, undertaking, context):
+        from engine.domain_campaign import prepare, prior, scope_for
+        scope_for(self.runtime.campaign, self.command, execution=False)
+        old = prior(self.runtime.campaign, self.command)
+        if old is None:
+            if self.scope.authorization.intent == 'commit':
+                # A blocked or choice-bearing scope must reach the F05 decision
+                # before any execution proposal is prepared.
+                from engine.activity_control import decide_activity_control
+                if decide_activity_control(self.scope.authorization, self.scope.checkpoint).status == 'continue':
+                    self.runtime.prepare_increment(self.command)
+            else:
+                prepare(self.runtime.campaign, self.command, execution=False)
+        checkpoint = self.scope.checkpoint
+        from dataclasses import replace
+        # Exact owner-recorded answers apply only to their established choice keys.
+        answered = self.scope.authorization.answered_choices
+        checkpoint = replace(checkpoint, purpose=undertaking.ref, complete=old is not None,
+            developments=tuple(d for d in checkpoint.developments if d.choice_key not in answered))
+        return DomainStep(self.command.request.attempt, checkpoint,
+            ('world_simulation', 'character_system', 'action_resolution'),
+            required_means=self.command.request.means)
+
+    def execute(self, undertaking, step, context):
+        if (undertaking.activity, undertaking.target, undertaking.method, undertaking.constraints) != (
+                'climb', self.scope.target, 'climb', self.scope.authorization.constraints):
+            raise Unresolved('authorization', 'request_mismatch')
+        proposal = self.runtime.prepare_increment(self.command)
+        return self.runtime.accept_increment(proposal)

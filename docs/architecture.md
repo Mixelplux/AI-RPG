@@ -44,10 +44,29 @@ provisional objective failure neither asserts safety nor automatically causes fa
 
 ## Tech Stack
 
+M2-1 implementation candidate, owner review pending: the common consequential
+`Runtime` also accepts an explicit `domain_campaign.Campaign` root, created through
+`GameSession.start_domains`. This mode has no legacy GameEngine world alongside
+it. `domain_campaign` prepares and validates domain-owned consequences; Runtime
+publishes one root containing World/Character state, scoped authorization and
+accepted-unit recognition. The existing Coordinator/F05 adapter manages typed
+climb input. All required receipt checks precede publication.
+Request types are checked before retry recognition. Separate checkpoint result
+reuse is unsupported: non-null resolution references reject before adoption or execution.
+
+Version 3 stores this opt-in aggregate through a finite codec; v1/v2 retain their
+existing routes and JSON decoding behavior. V3 rejects duplicate JSON keys,
+including nested records. Pure complete-aggregate validation precedes restore adoption;
+the existing atomic writer preserves earlier files on pre-replacement failure.
+Only deterministic full-link climbing is consequential in this milestone. Checks,
+falls, partial-link positions, interruptions and CLI integration remain unsupported
+here. See [M2-1 model](physical_traversal_m2_1_design.md) and
+[ADR-063](decisions.md#adr-063--opt-in-core-domain-campaign-aggregate).
+
 - Python 3.13
 - CLI gameplay interface
 - JSON Region Packs for authored world content
-- Default version-1 World State saves; explicit opt-in version-2 consequential campaigns
+- Default version-1 World State saves; opt-in version-2 and version-3 campaigns
 - OpenAI Responses narration preview behind provider-neutral engine boundaries
 
 ## Directory Map

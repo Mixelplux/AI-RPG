@@ -207,6 +207,15 @@ class Reads:
 class Runtime:
     """Engine-owned simulation aggregate; coordinators/domains hold no truth."""
     def __init__(self, config):
+        from engine.domain_campaign import Campaign, validate_campaign
+        self.domain_mode = type(config) is Campaign
+        if self.domain_mode:
+            validate_campaign(config)
+            self.campaign = config
+            self.running = False
+            self.trace = []
+            self.diagnostic = None
+            return
         if type(config) is not Config or not callable(config.information):
             raise ValueError('Explicit I2 configuration required')
         # Reuse finite method/inventory validation without executing an attempt.
@@ -263,7 +272,45 @@ class Runtime:
 
     @property
     def state(self):
+        if self.domain_mode:
+            return self.campaign.current
         return deepcopy(self._state)
+
+    def prepare_increment(self, command):
+        from engine.domain_campaign import Proposal, prepare, prior
+        if not self.domain_mode:
+            raise ValueError('Explicit domain campaign required')
+        old = prior(self.campaign, command)
+        return Proposal(self.campaign, old) if old is not None else prepare(self.campaign, command)
+
+    def accept_increment(self, proposal):
+        from engine.domain_campaign import accept
+        if not self.domain_mode:
+            raise ValueError('Explicit domain campaign required')
+        return accept(self, proposal)
+
+    def process_increment(self, command):
+        """Typed owner input through the common Coordinator/F05, no language model."""
+        from engine.domain_campaign import prior
+        from engine.gameplay_coordination import Coordinator, CoordinationDecision
+        from engine.traversal_coordination import ConsequentialTraversalDomain
+        if not self.domain_mode:
+            raise ValueError('Explicit domain campaign required')
+        try:
+            old = prior(self.campaign, command)
+            if old is not None:
+                receipt = old.receipt
+                return CoordinationDecision('accepted', dict(receipt.accessible)['movement'], results=(receipt,))
+            domain = ConsequentialTraversalDomain(self, command)
+            return Coordinator(domain.context, domain).process(interpretation=domain.interpretation())
+        except Exception:
+            return CoordinationDecision('unresolved', 'The activity is unavailable. No fictional outcome is asserted.', 'domain')
+
+    def restore_domains(self, candidate):
+        from engine.domain_campaign import restore_into
+        if not self.domain_mode:
+            raise ValueError('Explicit domain campaign required')
+        restore_into(self, candidate)
 
     def information(self):
         if self.campaign is not None:

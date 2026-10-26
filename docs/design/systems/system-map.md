@@ -508,3 +508,10 @@ public reference. Action results → future common acceptance: provisional movem
 or fall contributions only; no M1 authoritative effects or new-domain persistence.
 These seams do not introduce another coordinator or outcome authority. See the
 [M1 handoff](../../physical_traversal_m1_handoff.md); overall systems remain Partial.
+
+M2-1 implementation candidate, owner review pending: World and Character owner
+views → Action's named dependencies and provisional increment → common Runtime
+root validation/publication → safe accepted receipt → existing Coordinator.
+Persistence stores that same opt-in root in version 3; no legacy world or second
+traversal store accompanies it. Domain contributions retain their semantic
+ownership. See [M2-1 model](../../physical_traversal_m2_1_design.md).
