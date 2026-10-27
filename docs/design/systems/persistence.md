@@ -81,6 +81,23 @@ See [model](../../physical_traversal_m2_2a_design.md) and
 [handoff](../../physical_traversal_m2_2a_handoff.md). Owner accepted the bounded milestone October 26, 2026;
 Git publication remains separate and overall system status remains Partial.
 
+## Physical Traversal M2-2b — owner accepted October 27, 2026
+
+Envelope v3/domain schema 3 explicitly opts into activity stages, original objective
+and restrictions, run recognition, situated responses, access-qualified notices,
+internal choice occurrence/stage contexts and ordered owner-fact/control updates.
+Reconstruction independently checks each context against the historically applicable
+climbing risk and rule stakes before adopting any root; identical notice text cannot
+legitimize a mismatched historical answer. Schemas 1/2 retain their historical meanings;
+only explicitly named default additions decode from old bytes. New-schema missing
+fields, stale/dangling checkpoint references, forged history and incoherent final
+state reject. Pure complete reconstruction precedes live adoption without sampling;
+failed restore/write preserves the live root/previous save. V1/v2 and existing
+atomic file writes are unchanged; no migration or new storage technology is added.
+See [model](../../physical_traversal_m2_2b_design.md) and
+[handoff](../../physical_traversal_m2_2b_handoff.md). This uncommitted bounded
+implementation was owner accepted October 27, 2026. Git publication remains separately unauthorized; overall classification stays Partial.
+
 ## Purpose
 
 Published M2-1 foundation (historical milestone coverage): version 3 explicitly stores

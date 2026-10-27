@@ -50,30 +50,42 @@ class ConsequentialTraversalDomain:
         from engine.gameplay_coordination import SituatedContext, Target
         root, r = self.runtime.campaign, self.command.request
         return SituatedContext(str(root.revision), dict(root.current.world.positions)[r.creature],
-            targets=(Target(r.route, (r.route,), 'climb', ('climb',)),), means=r.means)
+            targets=(Target(r.route, (r.route,), 'climb', ('climb',)),), means=r.means,
+            accessible=self.scope.notices)
 
     def assess(self, undertaking, context):
         from engine.domain_campaign import inspect, prior, scope_for
-        scope_for(self.runtime.campaign, self.command, execution=False)
+        from engine.activity_control import decide_activity_control
         old = prior(self.runtime.campaign, self.command)
+        if old is None:
+            self.scope = scope_for(self.runtime.campaign, self.command, execution=False)
+        unavailable = False
         if old is None:
             if self.scope.authorization.intent == 'commit':
                 # A blocked or choice-bearing scope must reach the F05 decision
                 # before any execution proposal is prepared.
-                from engine.activity_control import decide_activity_control
                 if decide_activity_control(self.scope.authorization, self.scope.checkpoint).status == 'continue':
-                    inspect(self.runtime.campaign, self.command)
+                    try:
+                        inspect(self.runtime.campaign, self.command)
+                    except Unresolved as error:
+                        if self.runtime.campaign.schema == 3 and error.stage in {'eligibility', 'authorization'}:
+                            unavailable = True
+                        else:
+                            raise
             else:
                 inspect(self.runtime.campaign, self.command, execution=False)
         checkpoint = self.scope.checkpoint
         from dataclasses import replace
         # Exact owner-recorded answers apply only to their established choice keys.
         answered = self.scope.authorization.answered_choices
-        checkpoint = replace(checkpoint, purpose=undertaking.ref, complete=old is not None,
+        checkpoint = replace(checkpoint, purpose=undertaking.ref, complete=checkpoint.complete or old is not None,
+            blocked=checkpoint.blocked or unavailable,
             developments=tuple(d for d in checkpoint.developments if d.choice_key not in answered))
         return DomainStep(self.command.request.attempt, checkpoint,
             ('world_simulation', 'character_system', 'action_resolution'),
-            required_means=self.command.request.means)
+            required_means=self.command.request.means, supported_constraints=self.scope.supported_constraints,
+            public_refs=tuple(key for key, _ in self.scope.notices if key not in answered),
+            choices=tuple((key, key) for key, _ in self.scope.notices if key not in answered))
 
     def execute(self, undertaking, step, context):
         if (undertaking.activity, undertaking.target, undertaking.method, undertaking.constraints) != (

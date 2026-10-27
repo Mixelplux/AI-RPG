@@ -54,6 +54,22 @@ See [model](../../physical_traversal_m2_2a_design.md) and
 [handoff](../../physical_traversal_m2_2a_handoff.md). Owner accepted the bounded milestone October 26, 2026;
 Git publication remains separate and overall system status remains Partial.
 
+## Physical Traversal M2-2b — owner accepted October 27, 2026
+
+One retained undertaking can advance over multiple meaningful established links.
+Each increment applies current domain premises and the scoped contextual ruling;
+previously accepted mechanics/receipts are reused without new dice or costs.
+A failed attempt may permit a distinct legitimate new attempt, but a new identity
+does not waive eligibility or F05. Internal choice contexts retain the establishing
+owner occurrence, declared meaningful stages and reconstructed climbing risk/rule
+stakes. Changed contextual stakes can be supplied before the next resolution; a
+materially changed scoped decision needs a fresh identity and appropriate answer.
+Unchanged choices survive unrelated World revisions. Checkpoint result references remain unsupported; accepted
+increment identity is validated during execution and historical reconstruction.
+See [model](../../physical_traversal_m2_2b_design.md) and
+[handoff](../../physical_traversal_m2_2b_handoff.md). This uncommitted bounded
+implementation was owner accepted October 27, 2026. Git publication remains separately unauthorized; overall classification stays Partial.
+
 ## Purpose
 
 Published M2-1 foundation (historical milestone coverage): the common Runtime's opt-in

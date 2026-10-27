@@ -76,8 +76,43 @@ recorded rolls and owner premises without invoking resolution or randomness.
 Whole-state comparison precedes adoption; v1/v2 and atomic file writes are preserved.
 See [the model](physical_traversal_m2_2a_design.md) and
 [handoff](physical_traversal_m2_2a_handoff.md) for accepted scope, closure and publication readiness.
-M2-2a is complete/idle; overall Physical Traversal V1a remains incomplete. Git
-publication and M2-2b remain separately unauthorized; documented limitations remain.
+M2-2a was accepted and published before the current baseline. The separately
+authorized M2-2b implementation below was owner accepted October 27, 2026; broader
+limitations remain.
+
+## Physical Traversal M2-2b — owner accepted October 27, 2026
+
+`domain_activity.py` adds bounded continuity within the existing Campaign/Runtime.
+One immutable objective/method/restriction scope may cover several established
+World links. Each accepted increment preserves actual position, time, Character
+expenditure, mechanics and consequences; progression derives from accepted units,
+not percentages or descriptive narration. Ordinary execution continues until an
+F05 boundary, unavailable prerequisite, failed attempt or completion.
+
+World/Character suppliers contribute typed changed facts and access-qualified
+checkpoint notices through the same coherent root publication. Schema-3 recognizable
+decisions require unique response keys and complete access-qualified notices.
+Internal `ChoiceContext` records bind each keyed decision to its establishing
+owner occurrence and explicit existing stage occurrences. Pure history validation
+binds the relevant remaining-stage climbing circumstances and rule stakes too;
+notice-text equality is never proof of unchanged consequential meaning. A stable
+occurrence may span stages, survive unrelated World changes and retain its answer.
+A different occurrence, expanded scope or changed scoped risk/stakes requires a new
+key and appropriate fresh response. Completed-stage facts do not revoke remaining
+permission. Original bare answers retain only established original mechanical-risk
+scope. Explicit situated responses retain original restrictions and bind to the
+current revision and accessible notice. Context/risk provenance remains internal;
+only access-qualified notices cross the presentation boundary. Current owner
+inputs and rules are reassessed before each new increment; historical receipts precede owner reads
+on exact retries. No checkpoint result references are supported in any schema.
+
+Envelope v3/domain schema 3 opts into continuity and ordered fact/control changes.
+Schemas 1/2 keep their historical meanings through finite default decoding; v1/v2
+remain unchanged. Pure historical reconstruction validates every increment/update
+and the final aggregate before adoption, without randomness or repeated effects.
+The [model](physical_traversal_m2_2b_design.md) and [handoff](physical_traversal_m2_2b_handoff.md)
+state supported interfaces and limits. Implementation was owner accepted October 27, 2026 and remains uncommitted; Git publication requires separate authorization; no CLI/narrator, other traversal method or general simulation
+is added. Overall systems remain Partial.
 
 ## Tech Stack
 
@@ -95,9 +130,9 @@ Version 3 stores this opt-in aggregate through a finite codec; v1/v2 retain thei
 existing routes and JSON decoding behavior. V3 rejects duplicate JSON keys,
 including nested records. Pure complete-aggregate validation precedes restore adoption;
 the existing atomic writer preserves earlier files on pre-replacement failure.
-That baseline supports deterministic full-link climbing. The M2-2a working
-implementation above extends its accepted-unit vocabulary; partial-link positions,
-interruptions and CLI integration remain deferred. See [M2-1 model](physical_traversal_m2_1_design.md) and
+That baseline supports deterministic full-link climbing. Published M2-2a adds
+uncertain consequences; M2-2b adds activity continuity across meaningful established
+links. Arbitrary positions inside a link and CLI integration remain deferred. See [M2-1 model](physical_traversal_m2_1_design.md) and
 [ADR-063](decisions.md#adr-063--opt-in-core-domain-campaign-aggregate).
 
 - Python 3.13

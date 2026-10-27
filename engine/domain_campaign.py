@@ -7,6 +7,7 @@ from dataclasses import dataclass, replace
 
 from engine.activity_control import ActivityAuthorization, ActivityCheckpoint, decide_activity_control
 from engine.character_rules import CharacterRules, CreatureRules
+from engine.domain_activity import ActivityStage, ActivityRun, ActivityUpdate, ActivityResponse, ChoiceContext
 from engine.gameplay_coordination import AcceptedStep, SituatedContext, validate_context
 from engine.information_adjudication import Unresolved
 from engine.physical_world import PhysicalFrame, WorldPhysics, CausalRecord, FallOccurrence, TautProtection, natural, reference
@@ -33,12 +34,18 @@ class ActivityScope:
     duration_seconds: int
     time_basis: str
     ruling: ClimbRuling
+    objective: str | None = None
+    continuations: tuple[ActivityStage, ...] = ()
+    supported_constraints: tuple[str, ...] = ()
+    notices: tuple[tuple[str, str], ...] = ()
+    choice_contexts: tuple[ChoiceContext, ...] = ()
 
 
 @dataclass(frozen=True)
 class Increment:
     activity: str
     request: ClimbRequest
+    run: ActivityRun | None = None
 
 
 @dataclass(frozen=True)
@@ -65,7 +72,7 @@ class Campaign:
     origin: Domains
     current: Domains
     activities: tuple[ActivityScope, ...]
-    accepted: tuple[AcceptedUnit, ...] = ()
+    accepted: tuple[AcceptedUnit | ActivityUpdate | ActivityResponse, ...] = ()
     revision: int = 0
     schema: int = 1
 
@@ -73,7 +80,7 @@ class Campaign:
 @dataclass(frozen=True)
 class Proposal:
     base: Campaign
-    unit: AcceptedUnit
+    unit: AcceptedUnit | ActivityUpdate | ActivityResponse
 
 
 def owners(domains):
@@ -101,6 +108,12 @@ def validate_increment(command):
             or not reference(command.activity)):
         raise ValueError('explicit increment required')
     validate_climb_request(command.request)
+    if command.run is not None:
+        from engine.domain_activity import validate_run
+        validate_run(command.run)
+        if command.run.activity != command.activity or (command.run.means, command.run.use_climb_speed) != (
+                command.request.means, command.request.use_climb_speed):
+            raise ValueError('run and increment association')
 
 
 def validate_resolution_reference(checkpoint):
@@ -112,17 +125,27 @@ def validate_resolution_reference(checkpoint):
 
 def scope_for(campaign, command, *, execution=True):
     validate_increment(command)
-    scope = next((a for a in campaign.activities if a.id == command.activity), None)
+    from engine.domain_activity import effective_scope
+    scope = effective_scope(campaign, command.activity)
     r = command.request
     if scope is None or (scope.actor, scope.target, scope.authorization.method) != (r.creature, r.route, 'climb'):
         raise Unresolved('authorization', 'activity_scope')
     if r.creature != campaign.actor:
         raise Unresolved('authorization', 'controlling_actor')
     # No constraints are silently claimed as supported by this bounded method.
-    if scope.authorization.constraints:
+    if (scope.authorization.constraints and (campaign.schema != 3 or
+            not set(scope.authorization.constraints).issubset(scope.supported_constraints))):
         raise Unresolved('authorization', 'unsupported_constraints')
     validate_resolution_reference(scope.checkpoint)
     control = decide_activity_control(scope.authorization, scope.checkpoint)
+    if command.run is not None:
+        from engine.domain_activity import successful_units
+        index = len(successful_units(campaign, command.activity))
+        if (campaign.schema != 3 or command.request.attempt != f'{command.run.id}:stage:{index}'):
+            raise ValueError('run stage identity')
+        if any(type(u) is AcceptedUnit and u.command.run is not None
+               and u.command.run.id == command.run.id and u.command.run != command.run for u in campaign.accepted):
+            raise Unresolved('acceptance', 'identity_conflict')
     if execution and control.status != 'continue':
         raise Unresolved('authorization', 'return_control')
     return scope
@@ -130,8 +153,10 @@ def scope_for(campaign, command, *, execution=True):
 
 def prior(campaign, command):
     validate_increment(command)
+    if any(type(a) is not AcceptedUnit and a.id == command.request.attempt for a in campaign.accepted):
+        raise Unresolved('acceptance', 'identity_conflict')
     accepted = next((a for a in campaign.accepted
-                     if a.command.request.attempt == command.request.attempt), None)
+                     if type(a) is AcceptedUnit and a.command.request.attempt == command.request.attempt), None)
     if accepted is not None and accepted.command != command:
         raise Unresolved('acceptance', 'identity_conflict')
     return accepted
@@ -144,7 +169,8 @@ def movement_charge(result):
 
 def movement_meaning(command, result, duration, consequence=None):
     if consequence is None or consequence.kind == 'arrived':
-        effect = f'You climb {command.request.distance_feet} feet to the chosen destination.'
+        destination = 'the next established position' if command.run is not None else 'the chosen destination'
+        effect = f'You climb {command.request.distance_feet} feet to {destination}.'
     elif consequence.kind == 'supported_no_progress':
         effect = 'You do not make progress; you remain on the existing footing.'
     elif consequence.kind == 'grip_lost_protected':
@@ -189,7 +215,7 @@ def inspect(campaign, command, *, execution=True):
     r = command.request
     if not characters.knows_route(r.creature, r.route):
         raise Unresolved('access', 'route_not_legitimately_known')
-    if campaign.schema == 2 and characters.creature(r.creature).hit_points == 0:
+    if campaign.schema >= 2 and characters.creature(r.creature).hit_points == 0:
         raise Unresolved('eligibility', 'ordinary_climb_not_available')
     resolution = TraversalResolution(lambda: world, lambda: characters)
     assessment = resolution.assess(r, scope.ruling)
@@ -200,7 +226,7 @@ def inspect(campaign, command, *, execution=True):
     circumstances = None
     proposed_ids = [f'{campaign.id}:accepted:{campaign.revision + 1}']
     if scope.ruling.require_check:
-        if campaign.schema != 2:
+        if campaign.schema < 2:
             raise Unresolved('resolution', 'consequence_adjudication_required')
         circumstances = world.failure_inputs(r.creature, r.route)
         expected = 'no_progress' if circumstances.footing == 'load_bearing' else 'loss_of_grip'
@@ -210,7 +236,10 @@ def inspect(campaign, command, *, execution=True):
                 or scope.ruling.failure_movement_cost > assessment.movement_cost):
             raise Unresolved('rules', 'failure_expenditure_unestablished')
         if circumstances.footing == 'grip_dependent':
-            if circumstances.id not in scope.authorization.answered_choices and execution:
+            hidden_boundary = campaign.schema == 3 and any(
+                d.choice_key == circumstances.id and (not d.perceived or not d.opportunity_to_respond)
+                for d in scope.checkpoint.developments)
+            if circumstances.id not in scope.authorization.answered_choices and execution and not hidden_boundary:
                 raise Unresolved('authorization', 'unanswered_fall_risk')
             if type(circumstances.protection) is TautProtection:
                 p = circumstances.protection
@@ -281,6 +310,11 @@ def validate_unit(campaign, unit):
 
 def apply_unit(campaign, unit):
     """Pure owner validation and composition. Never publish or sample randomness."""
+    if type(unit) in (ActivityUpdate, ActivityResponse):
+        from engine.domain_activity import apply_update
+        if event_prior(campaign, unit) is not None:
+            raise ValueError('unique activity change required')
+        return apply_update(campaign, unit)
     if type(unit) is not AcceptedUnit or prior(campaign, unit.command) is not None:
         raise ValueError('unique consequential unit required')
     validate_unit(campaign, unit)
@@ -321,10 +355,14 @@ def validate_campaign(campaign):
     # equality and mutable values smuggled into nominally frozen records.
     unpack(pack(campaign))
     if (type(campaign) is not Campaign or not reference(campaign.id)
-            or not reference(campaign.actor) or type(campaign.schema) is not int or campaign.schema not in {1, 2}
+            or not reference(campaign.actor) or type(campaign.schema) is not int or campaign.schema not in {1, 2, 3}
             or not natural(campaign.revision) or type(campaign.activities) is not tuple
             or type(campaign.accepted) is not tuple):
         raise ValueError('domain campaign envelope')
+    if campaign.schema < 3:
+        if (any(a.objective is not None or a.continuations or a.supported_constraints or a.notices or a.choice_contexts for a in campaign.activities)
+                or any(type(u) is not AcceptedUnit or u.command.run is not None for u in campaign.accepted)):
+            raise ValueError('continuity requires domain schema 3')
     if campaign.schema == 1:
         if (any(d.world.climb_circumstances or any(c.vitality is not None for c in d.characters)
                 for d in (campaign.origin, campaign.current))
@@ -353,10 +391,37 @@ def validate_campaign(campaign):
             raise ValueError('activity ownership, timing and references')
         decide_activity_control(a.authorization, a.checkpoint)
         validate_resolution_reference(a.checkpoint)
+        if campaign.schema == 3:
+            from engine.domain_activity import stages, validate_notices
+            validate_notices(a.checkpoint, a.notices)
+            if not reference(a.objective):
+                raise ValueError('original objective required')
+            if (type(a.supported_constraints) is not tuple
+                    or not all(type(c) is str and reference(c) for c in a.supported_constraints)
+                    or len(set(a.supported_constraints)) != len(a.supported_constraints)):
+                raise ValueError('explicit restriction support required')
+            routes = {l.id: l for l in campaign.origin.world.links}
+            previous = None
+            for stage in stages(a):
+                if (type(stage) is not ActivityStage or stage.route not in routes
+                        or not natural(stage.duration_seconds) or not stage.duration_seconds
+                        or not reference(stage.time_basis) or type(stage.ruling) is not ClimbRuling
+                        or type(stage.ruling.require_check) is not bool or not reference(stage.ruling.basis)
+                        or stage.ruling.failure_mode not in {None, 'no_progress', 'loss_of_grip'}
+                        or stage.ruling.failure_movement_cost is not None
+                           and not natural(stage.ruling.failure_movement_cost)):
+                    raise ValueError('meaningful activity stage')
+                link = routes[stage.route]
+                if previous is not None and previous.destination != link.origin:
+                    raise ValueError('continuous established path required')
+                previous = link
         ids.append(a.id)
     if len(set(ids)) != len(ids):
         raise ValueError('activity identity')
     rebuilt = replace(campaign, current=campaign.origin, accepted=(), revision=0)
+    if campaign.schema == 3:
+        from engine.domain_activity import validate_choice_history
+        validate_choice_history(rebuilt)
     for unit in campaign.accepted:
         rebuilt = apply_unit(rebuilt, unit)
     if rebuilt != campaign:
@@ -375,16 +440,17 @@ def accept(runtime, proposal):
         from engine.domain_persistence import pack, unpack
         unpack(pack(proposal.unit))
         root = runtime.campaign
-        old = prior(root, proposal.unit.command)
+        old = (prior(root, proposal.unit.command) if type(proposal.unit) is AcceptedUnit
+               else event_prior(root, proposal.unit))
         if old is not None:
             if proposal.unit != old:
                 raise Unresolved('acceptance', 'identity_conflict')
-            return old.receipt
+            return old.receipt if type(old) is AcceptedUnit else None
         if root is not proposal.base:
             raise Unresolved('acceptance', 'stale_premises')
         candidate = apply_unit(root, proposal.unit)
         validate_campaign(candidate)
-        receipt = proposal.unit.receipt
+        receipt = proposal.unit.receipt if type(proposal.unit) is AcceptedUnit else None
         if runtime.campaign is not root:
             raise Unresolved('acceptance', 'stale_premises')
         runtime.campaign = candidate
@@ -401,3 +467,26 @@ def restore_into(runtime, candidate):
     if runtime.campaign is not root:
         raise Unresolved('persistence', 'stale_premises')
     runtime.campaign = candidate
+
+
+def event_prior(campaign, event):
+    if type(event) not in (ActivityUpdate, ActivityResponse):
+        raise ValueError('typed activity change required')
+    if not reference(event.id):
+        raise ValueError('activity change identity')
+    for unit in campaign.accepted:
+        identity = unit.command.request.attempt if type(unit) is AcceptedUnit else unit.id
+        if identity == event.id:
+            if unit != event:
+                raise Unresolved('acceptance', 'identity_conflict')
+            return unit
+    return None
+
+
+def prepare_activity_change(campaign, event):
+    from engine.domain_persistence import pack, unpack
+    unpack(pack(event))
+    old = event_prior(campaign, event)
+    if old is None:
+        apply_unit(campaign, event)
+    return Proposal(campaign, event)

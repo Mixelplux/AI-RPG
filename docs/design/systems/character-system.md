@@ -43,6 +43,18 @@ See [model](../../physical_traversal_m2_2a_design.md) and
 [handoff](../../physical_traversal_m2_2a_handoff.md). Owner accepted the bounded milestone October 26, 2026;
 Git publication remains separate and overall system status remains Partial.
 
+## Physical Traversal M2-2b — owner accepted October 27, 2026
+
+Every continuation rechecks current capacity, conditions, equipment readiness and
+legitimate access against retained method/restrictions. Supplier capability/access
+changes cannot overwrite accepted movement expenditure, HP or vitality. Perceptible
+choice notices require an established access and response opportunity; hidden
+World developments acquire no automatic character knowledge. Character remains
+the owner of mechanical creature effects; no new character simulation is added.
+See [model](../../physical_traversal_m2_2b_design.md) and
+[handoff](../../physical_traversal_m2_2b_handoff.md). This uncommitted bounded
+implementation was owner accepted October 27, 2026. Git publication remains separately unauthorized; overall classification stays Partial.
+
 ## Purpose
 
 Published M2-1 foundation (historical milestone coverage): Character movement spent is

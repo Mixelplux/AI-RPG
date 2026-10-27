@@ -27,6 +27,15 @@ is complete/idle; Git publication remains separate and the systems remain Partia
 Ordinary climbing remains mechanical without unnecessary equipment detail; the
 documented meaningful-activity requirements and deferred capabilities are preserved.
 
+## M2-2b owner accepted — October 27, 2026
+
+[Meaningful activity continuity](../../physical_traversal_m2_2b_handoff.md) retains
+one objective and its restrictions across accepted climbing increments, changed
+owner facts, F05 interruptions, situated responses and save/load. It reuses the
+same common root, existing mechanics and atomic writer. New opt-in domain schema 3
+preserves schemas 1/2 and envelope v1/v2/v3 meanings. No checkpoint result reference
+bypass, new traversal method or general simulator is added. Owner accepted October 27, 2026; all systems remain Partial and publication is unauthorized.
+
 ## Navigation and status vocabulary
 
 - [Responsibility hierarchy and information flow](system-map.md)

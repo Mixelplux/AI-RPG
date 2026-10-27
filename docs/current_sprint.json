@@ -10,18 +10,18 @@
   "active_sprint": null,
   "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "physical-traversal-v1a-m2-2a"
+    "id": "physical-traversal-v1a-m2-2b"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "physical-traversal-v1a-m2-2a",
-    "title": "Physical Traversal Core V1a \u2014 M2-2a Consequential Uncertain Climbing and Falling",
+    "id": "physical-traversal-v1a-m2-2b",
+    "title": "Physical Traversal Core V1a \u2014 M2-2b Meaningful Progress, Interruption and Resumption",
     "type": "capability-package",
     "status": "complete",
     "risk_level": "elevated",
-    "goal": "Owner accepted bounded M2-2a October 26, 2026 after all three P2 corrections and successful verification. Lifecycle complete/idle; overall Physical Traversal V1a remains incomplete. Accepted 24-file working diff prepared for separately authorized Git publication; no M2-2b.",
+    "goal": "Owner accepted M2-2b October 27, 2026, including F05 choice-context binding and P2 completeness corrections; lifecycle closed. Accepted 18-file uncommitted handoff against 6568309717edfd376c8ccc0ac21e6f9c73b73c78 prepared for separate Git publication authorization. No next milestone selected.",
     "predecessor": {
-      "id": "physical-traversal-v1a-m2-1"
+      "id": "physical-traversal-v1a-m2-2a"
     },
     "platform": {
       "official_interpreter": ".\\.venv\\Scripts\\python.exe",
@@ -29,10 +29,10 @@
       "provider_requests": "forbidden"
     },
     "scope": [
-      "Consequential uncertain climbing, pre-resolution grounded failure disposition, actual solid-ground falls, minimum Character injury/zero-HP consequences; common root, F01/F05, recorded randomness, versioned compatibility. No M2-2b, other movement methods, combat, narration, providers or Git publication."
+      "Meaningful climbing increments, F05 interruption and resumption, fresh World/Character conditions, restrictions, accepted identity and compatible persistence through the common Runtime. No other traversal methods, general autonomy/simulation, providers or Git publication."
     ],
     "verification": [
-      "Syntax; focused rules/World/Character variation; coherent acceptance and retries; safe receipts/F05; v1/v2/v3 compatibility and corrupt restore isolation; affected regressions; lifecycle/documentation/preservation checks."
+      "Syntax/static; structural and continuing-play continuity tests; accepted M2-2a and affected-system regressions; v1/v2/v3 compatibility and corrupt-restore isolation; PowerShell 7 workflow, lifecycle and worktree-bound shared verification."
     ]
   }
 }

@@ -41,6 +41,19 @@ See [model](../../physical_traversal_m2_2a_design.md) and
 [handoff](../../physical_traversal_m2_2a_handoff.md). Owner accepted the bounded milestone October 26, 2026;
 Git publication remains separate and overall system status remains Partial.
 
+## Physical Traversal M2-2b — owner accepted October 27, 2026
+
+World retains positions, physical relationships, seconds and causal ordering across
+meaningful climbing increments. Trusted upstream suppliers may submit changed
+existing surface/link/object/relationship/circumstance facts, accepted through the
+same common root. They cannot replace route endpoints or supply predetermined
+resolution outcomes. Changed exact risks need stable historical identity; stale
+proposals reject without physical/time effects. No general environment simulator,
+new protection mechanics or arbitrary intra-link position model is added.
+See [model](../../physical_traversal_m2_2b_design.md) and
+[handoff](../../physical_traversal_m2_2b_handoff.md). This uncommitted bounded
+implementation was owner accepted October 27, 2026. Git publication remains separately unauthorized; overall classification stays Partial.
+
 ## Purpose
 
 Published M2-1 foundation (historical milestone coverage): the opt-in common Runtime

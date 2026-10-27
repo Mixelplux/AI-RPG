@@ -530,3 +530,21 @@ See [model](../../physical_traversal_m2_2a_design.md) and
 [handoff](../../physical_traversal_m2_2a_handoff.md). M2-2a is accepted and closed;
 Git publication remains separate. Overall systems remain Partial; meaningful-activity
 requirements and deferred interruption/resumption/generalization remain unchanged.
+
+
+## Physical Traversal M2-2b — owner accepted October 27, 2026
+
+Retained objective/method/restrictions -> current World/Character fact discovery ->
+existing Resolution and F05 -> coherent accepted increment -> next established
+position. Joint access-qualified developments -> F05 boundary -> situated player
+response -> fresh owner reassessment. Neither coordination nor narration gains
+outcome authority. Accepted progress, costs, mechanical evidence and changes remain
+in the same Campaign root. Exact retries return the stored receipt; a genuine new
+attempt still needs current authorization and eligibility.
+
+Persistence schema 3 -> finite complete historical validation of increments and
+owner-fact/control changes -> final root adoption. Schema 1/2 and v1/v2 readers
+retain their meanings; non-null checkpoint result references still reject.
+See [model](../../physical_traversal_m2_2b_design.md) and
+[handoff](../../physical_traversal_m2_2b_handoff.md). Owner accepted October 27, 2026; Git publication remains separately unauthorized;
+no general environment/actor simulation, extra traversal method or CLI is claimed.

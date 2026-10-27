@@ -310,6 +310,28 @@ class Runtime:
         except Exception:
             return CoordinationDecision('unresolved', 'The activity is unavailable. No fictional outcome is asserted.', 'domain')
 
+    def prepare_activity_change(self, event):
+        from engine.domain_campaign import prepare_activity_change
+        if not self.domain_mode:
+            raise ValueError('Explicit domain campaign required')
+        return prepare_activity_change(self.campaign, event)
+
+    def advance_activity(self, run, *, refresh=None):
+        from engine.domain_activity import advance, ActivityOutcome
+        try:
+            return advance(self, run, refresh)
+        except Exception:
+            # A later supplier/technical failure must retain earlier independently
+            # accepted increments in the safe handoff as well as the live root.
+            from engine.domain_campaign import AcceptedUnit
+            from engine.domain_activity import ActivityRun
+            receipts = tuple(u.receipt for u in self.campaign.accepted
+                if type(u) is AcceptedUnit and type(run) is ActivityRun and u.command.run == run
+            ) if self.domain_mode else ()
+            meaning = [dict(r.accessible)['movement'] for r in receipts]
+            return ActivityOutcome('unresolved', ' '.join(meaning + [
+                'Further execution is unresolved. Accepted results remain in effect.']), receipts)
+
     def restore_domains(self, candidate):
         from engine.domain_campaign import restore_into
         if not self.domain_mode:
