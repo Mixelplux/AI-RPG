@@ -31,7 +31,9 @@ candidate as provisional alongside the older alternatives.
 
 ## Evidence inspected and implications
 
-- `C:/tmp/AI-RPG-Sprint-10.82-Live-20261008-01a118fb/evaluation_report.md`:
+- `D:/AI-RPG-Archive/2026-10-22-housekeeping/files/C/tmp/AI-RPG-Sprint-10.82-Live-20261008-01a118fb/evaluation_report.md`
+  (originally `C:/tmp/AI-RPG-Sprint-10.82-Live-20261008-01a118fb/evaluation_report.md`;
+  archived October 22; location corrected October 27 without changing findings):
   21 structurally valid outputs with unchanged state nevertheless included one
   critical and eight additional significant fidelity violations. Guard reports
   became observation; uncertain watcher positions became fact. Deterministic

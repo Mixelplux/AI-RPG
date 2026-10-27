@@ -1,9 +1,16 @@
 # Cross-Domain Coupling Correction V1 — implementation handoff
 
-October 27, 2026. Owner-authorized implementation; owner acceptance pending.
-Publication, staging, commits, merge and push are not authorized.
+October 27, 2026. The owner accepted R1–R6 and the implementation was published
+at `c2ea0ab344d0e21d3e38c6c6424268576a2c4846`, with sole parent
+`6d4216eff053b4a08d667e457ea8be787c695eeb`. The package is complete and lifecycle
+is idle. No next package or milestone is selected.
 
-## Repository and authority
+The implementation-stage sections below retain their original scope, authority,
+verification and limitations. Their baseline, uncommitted-state and pending-review
+statements describe those historical stages. They do not describe current main.
+See the final closure section for publication and records reconciliation.
+
+## Repository and authority at implementation handoff
 
 - Published `origin/main` and local accepted baseline:
   `6d4216eff053b4a08d667e457ea8be787c695eeb` (read-only remote verification).
@@ -255,7 +262,7 @@ independence, not full non-climbing gameplay or general NPC/rules support.
 No live provider or experiential owner smoke was run. CLI integration and new
 movement methods remain outside this package.
 
-## Exact changed-file inventory
+## Exact implementation changed-file inventory (historical handoff)
 
 30 files: 21 modified tracked files and 9 new files. No staged changes.
 The three older test modules now explicitly exercise historical contracts; their
@@ -295,7 +302,7 @@ publication is shared.
 - `test_cross_domain_coupling.py`
 - `test_domain_acceptance.py`
 
-## Lifecycle and Git disposition
+## Lifecycle and Git disposition at implementation handoff
 
 Implementation R1–R6 is submitted for owner review as an uncommitted working diff.
 `docs/current_sprint.json` remains `active` for this package pending owner
@@ -304,3 +311,36 @@ disposition; `latest_completed_sprint` remains Physical Traversal M2-2b and
 HEAD is the accepted baseline and the Git index is empty. No publication candidate,
 commit, merge or push was created. The isolated worktree remains available for
 review; the original dirty checkout and owner save are preserved.
+
+## Accepted publication and lifecycle closure — October 27, 2026
+
+Published implementation: `c2ea0ab344d0e21d3e38c6c6424268576a2c4846`;
+parent: `6d4216eff053b4a08d667e457ea8be787c695eeb`;
+tree: `ba7c47efd7dd05312e88acc4cb7f15b2888a4a5c`.
+All 30 published paths and blobs match the corrected accepted-content manifest.
+The publication correction removed only authorized trailing EOF whitespace in
+`engine/historical_campaign.py` and `engine/historical_persistence.py`.
+The other 28 accepted files were unchanged.
+
+Retained corrected-candidate evidence: 162 focused/historical tests; 77 offline
+commands including all 75 behavioral scripts; 29 PowerShell workflow checks;
+21 clean preflight checks; 8 lifecycle/record checks; committed-content and
+shared-workflow verification. Evidence and the corrected manifest remain at
+`D:\AI RPG\.artifacts\cross-domain-coupling-correction-v1\.artifacts\r6-whitespace-correction-20261027`.
+The earlier R6 evidence and all deferred limitations above remain applicable.
+
+Owner-authorized Cleanup Phase 1 reconciles the three current lifecycle records
+and this handoff with acceptance/publication: status complete, active identifiers
+null, latest completed this package and next sprint null. The Sprint 10.82 closure
+and F01 evidence citation now identify the verified archive location while keeping
+the historical findings and rejected-implementation decision unchanged.
+
+No runtime architecture, system manifests, relationship map, ADR, accepted design,
+doctrine, deferred findings or roadmap change is needed: this records completion
+and corrects evidence locations without changing implementation, contracts, save
+compatibility, accepted limitations or sequencing. No gameplay code or tests change.
+Phase 1 preservation evidence is outside every worktree at
+`D:\AI-RPG-Archive\2026-10-27-cleanup-phase1`; its manifest maps originals to
+verified recovery files and existing byte-identical archive assets. Existing
+worktrees and owner saves remain unchanged. The documentation candidate is not
+merged or pushed by this task; that publication requires separate authorization.

@@ -1,5 +1,9 @@
 # Sprint 10.82 — Bounded AI Narrative Realization V1
 
+This is the historical October 8 closure record. Its lifecycle, baseline and
+next-activity statements describe that closure, not the current project state.
+Current lifecycle is recorded in `docs/current_sprint.json`.
+
 ## Final status
 
 Closed October 8, 2026 by owner authorization as an unsuccessful narrator
@@ -42,12 +46,19 @@ commit is required by the workflow and none is authorized or made.
 
 ## Preserved evidence and next activity
 
-Evidence remains outside the repository, unchanged, at
+Evidence originally resided at
 `C:\tmp\AI-RPG-Sprint-10.82-Live-20261008-01a118fb`.
-`evaluation_report.md`, the 21 sample records, `summary.json`, and `ledger.json`
-preserve exact inputs, outputs, complete presentations, assessments and the
-critical stop. See `docs/sprint_10_82_handoff.md` for historical implementation
-and offline-verification context, superseded by this closure decision.
+October 22 housekeeping moved it to
+`D:\AI-RPG-Archive\2026-10-22-housekeeping\files\C\tmp\AI-RPG-Sprint-10.82-Live-20261008-01a118fb`;
+the original directory retains `ARCHIVED.md`. The archive inventory maps the
+original paths. `evaluation_report.md`, all 21 sample records, `summary.json`
+and `ledger.json` remain present. This location correction changes no findings
+or acceptance decision.
+
+The uncommitted historical `docs/sprint_10_82_handoff.md` remains in the original
+checkout and is recoverably copied at
+`D:\AI-RPG-Archive\2026-10-27-cleanup-phase1\files\D\AI RPG\docs\sprint_10_82_handoff.md`.
+Its implementation/offline-verification context is superseded by this closure.
 
 The next activity is a research-informed narrative architecture review, pending
 separate owner authorization. No new capability package or implementation sprint

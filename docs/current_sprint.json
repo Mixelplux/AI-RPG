@@ -7,19 +7,19 @@
     "markdown_role": "explanatory_records",
     "yaml_required": false
   },
-  "active_sprint": "cross-domain-coupling-correction-v1",
-  "active_capability_package": "cross-domain-coupling-correction-v1",
+  "active_sprint": null,
+  "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "physical-traversal-v1a-m2-2b"
+    "id": "cross-domain-coupling-correction-v1"
   },
   "next_sprint": null,
   "sprint": {
     "id": "cross-domain-coupling-correction-v1",
     "title": "Cross-Domain Coupling Correction V1",
     "type": "capability-package",
-    "status": "active",
+    "status": "complete",
     "risk_level": "elevated",
-    "goal": "R1-R6 implementation complete; uncommitted handoff awaiting owner review and acceptance. R6 corrects prepublication receipt validation, independent climbing receipt meaning and complete choice-history validation. Common schema-4 direction, historical schemas 1-3 and save envelope V3 are retained. Publication and next-package selection remain unauthorized.",
+    "goal": "R1-R6 accepted and published October 27, 2026 at c2ea0ab344d0e21d3e38c6c6424268576a2c4846; package complete and lifecycle idle. R6 corrects prepublication receipt validation, independent climbing receipt meaning and complete choice-history validation. Common schema 4, historical schemas 1-3 and save envelope V3 are retained. No next package or sprint is selected.",
     "predecessor": {
       "id": "physical-traversal-v1a-m2-2b"
     },
