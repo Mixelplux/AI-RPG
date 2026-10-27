@@ -9,7 +9,7 @@ from unittest.mock import patch
 
 from engine.activity_control import ActivityDevelopment
 from engine.character_rules import CharacterRules, StrengthTrait, Vitality
-from engine.domain_campaign import validate_campaign
+from engine.historical_campaign import validate_campaign
 from engine.domain_persistence import export, pack, restore, LEGACY_DEFAULTS
 from engine.game_session import GameSession
 from engine.information_adjudication import Unresolved
@@ -325,7 +325,7 @@ class ConsequentialClimbingTests(unittest.TestCase):
     def test_exact_retry_without_owner_reads_or_draws(self):
         r, draw, first = self.run_attempt(campaign(hp=5), (1, 3, 4))
         before = r.campaign
-        with patch('engine.domain_campaign.owners', side_effect=AssertionError('owner read')):
+        with patch('engine.historical_campaign.owners', side_effect=AssertionError('owner read')):
             self.assertEqual(r.process_increment(command()).results, first.results)
             proposal = r.prepare_increment(command())
             self.assertEqual(r.accept_increment(proposal), first.results[0])
@@ -358,7 +358,7 @@ class ConsequentialClimbingTests(unittest.TestCase):
         def draw(sides):
             r.restore_domains(changed)
             return next(values)
-        r.traversal_draw = draw
+        r.domain_draw = draw
         self.assertEqual(r.process_increment(command()).status, 'unresolved')
         self.assertIs(r.campaign, changed)
         self.assertFalse(r.campaign.accepted)
@@ -393,7 +393,7 @@ class ConsequentialClimbingTests(unittest.TestCase):
             self.assertIs(r.campaign, before)
         r = GameSession.start_domains(campaign(), draw=Dice(1, 3, 4))
         before = r.campaign
-        with patch('engine.domain_campaign.safe_receipt', return_value=None):
+        with patch('engine.historical_campaign.safe_receipt', return_value=None):
             self.assertEqual(r.process_increment(command()).status, 'unresolved')
         self.assertIs(r.campaign, before)
 
@@ -488,12 +488,12 @@ class ConsequentialClimbingTests(unittest.TestCase):
         def validation(candidate):
             r.campaign = changed
             return original(candidate)
-        with patch('engine.domain_campaign.validate_campaign', side_effect=validation):
+        with patch('engine.historical_campaign.validate_campaign', side_effect=validation):
             with self.assertRaises(Unresolved):
                 r.accept_increment(p)
         self.assertIs(r.campaign, changed)
         r.campaign = root
-        with patch('engine.domain_campaign.validate_campaign', side_effect=validation):
+        with patch('engine.historical_campaign.validate_campaign', side_effect=validation):
             with self.assertRaises(Unresolved):
                 r.restore_domains(root)
         self.assertIs(r.campaign, changed)

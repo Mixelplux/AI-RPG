@@ -8,7 +8,7 @@ from unittest.mock import patch
 
 from engine.activity_control import ActivityAuthorization, ActivityCheckpoint, ActivityDevelopment
 from engine.character_rules import CreatureRules
-from engine.domain_campaign import ActivityScope, Campaign, Domains, Increment, validate_campaign
+from engine.historical_campaign import ActivityScope, Campaign, Domains, Increment, validate_campaign
 from engine.domain_persistence import export, pack, restore
 from engine.game_session import GameSession
 from engine.information_adjudication import Unresolved
@@ -100,7 +100,7 @@ class AcceptanceTests(unittest.TestCase):
         for bad in (replace(good, ref='bad'), replace(good, public_refs=('unknown',)),
                     replace(good, accessible=(('movement', 'hidden basis'),)),
                     replace(good, outcome='invalid')):
-            with patch('engine.domain_campaign.safe_receipt', return_value=bad):
+            with patch('engine.historical_campaign.safe_receipt', return_value=bad):
                 self.assertEqual(self.runtime.process_increment(self.command).status, 'unresolved')
             self.assertIs(self.runtime.campaign, self.root)
 
@@ -141,7 +141,7 @@ class AcceptanceTests(unittest.TestCase):
         first = self.runtime.accept_increment(proposal)
         root = self.runtime.campaign
         self.assertEqual(self.runtime.accept_increment(proposal), first)
-        with patch('engine.domain_campaign.owners', side_effect=AssertionError('retry must not retrieve')):
+        with patch('engine.historical_campaign.owners', side_effect=AssertionError('retry must not retrieve')):
             result = self.runtime.process_increment(self.command)
         self.assertEqual(result.results, (first,))
         self.assertIs(self.runtime.campaign, root)
@@ -169,7 +169,7 @@ class AcceptanceTests(unittest.TestCase):
         )]
         commands = [replace(self.command, request=r) for r in requests]
         commands.append(replace(self.command, activity=Text(self.command.activity)))
-        with patch('engine.domain_campaign.owners', side_effect=AssertionError('retry must not retrieve')):
+        with patch('engine.historical_campaign.owners', side_effect=AssertionError('retry must not retrieve')):
             for changed in commands:
                 with self.subTest(command=changed):
                     self.assertEqual(self.runtime.process_increment(changed).status, 'unresolved')
@@ -191,11 +191,11 @@ class AcceptanceTests(unittest.TestCase):
         self.assertIs(self.runtime.campaign, self.root)
 
     def test_execution_rejects_unsupported_resolution_reuse_before_domain_reads(self):
-        from engine.domain_campaign import prepare
+        from engine.historical_campaign import prepare
         a = self.root.activities[0]
         bad = replace(a, checkpoint=replace(a.checkpoint, resolution_ref='attempt:never-accepted'))
         candidate = replace(self.root, activities=(bad,) + self.root.activities[1:])
-        with patch('engine.domain_campaign.owners', side_effect=AssertionError('must reject before reads')):
+        with patch('engine.historical_campaign.owners', side_effect=AssertionError('must reject before reads')):
             with self.assertRaisesRegex(ValueError, 'checkpoint resolution references are unsupported'):
                 prepare(candidate, self.command)
         self.assertIs(self.runtime.campaign, self.root)

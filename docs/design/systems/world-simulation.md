@@ -1,5 +1,11 @@
 # World Simulation — Design Manifest
 
+## Cross-Domain Coupling Correction V1 — implementation awaiting acceptance
+
+World-owned physical truth, identity, time, relationships and closure are unchanged. Schema-4 common acceptance publishes the joint aggregate after owner validation; climbing_domain composes physical movement/fall effects using existing World mechanics. A non-movement contract fixture uses the same root and persistence boundary. No new geometry or simulation capability is claimed.
+
+See the [implementation handoff](../../cross_domain_coupling_v1_handoff.md).
+
 ## Status
 
 - Overall: **Partial** — bounded authoritative state and causal transitions exist.

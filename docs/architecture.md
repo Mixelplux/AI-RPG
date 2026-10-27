@@ -18,6 +18,31 @@ the runtime flow and storage boundaries described here.
 
 Do not add sprint history, full schemas, test inventories, or implementation walkthroughs here.
 
+## Cross-Domain Coupling Correction V1 — implementation awaiting acceptance
+
+The schema-4 common campaign/activity boundary now uses scoped identity,
+authorization, meaningful target stages, inert owner payload/evidence, validated
+progression and character-safe receipts. `domain_dispatch` reuses Coordinator/F05;
+`domain_owners` selects installed semantic owners without mechanical verb branches.
+`climbing_domain` composes existing World/Character/Resolution climbing mechanics.
+Common acceptance and continuity do not interpret distance, climbing costs,
+falling, injury or climbing risk stakes. Owners declare the relevant decision
+premises; common history preserves occurrence, scope, restrictions and answers,
+checking those premises after every accepted increment during acceptance and
+restoration. Climbing independently checks receipt meaning against validated
+evidence and character access limits. Common acceptance enforces the applicable
+Coordinator receipt contract, including unique public references, before publication.
+One captured-root check/publication remains authoritative across all effects.
+
+Envelope V3 retains schemas 1–3 through explicit historical evaluators and a finite
+schema-specific codec; they share Runtime and the common publication boundary.
+New schema 4 is opt-in, with no migration or rewriting of historical saves. An
+independent non-movement mechanical fixture exercises the same common runtime,
+continuity and disk paths; it adds no gameplay subsystem. See the
+[implementation handoff](cross_domain_coupling_v1_handoff.md) for evidence and
+limits. Owner acceptance and all Git publication remain separate. Historical
+milestone descriptions below retain their original version-specific scope.
+
 ## Physical Traversal Core V1a — owner-accepted M1 foundations
 
 Owner accepted M1 foundations October 26, 2026 after blocking corrections. World-owned local
@@ -82,7 +107,7 @@ limitations remain.
 
 ## Physical Traversal M2-2b — owner accepted October 27, 2026
 
-`domain_activity.py` adds bounded continuity within the existing Campaign/Runtime.
+The historical schema-3 activity contract adds bounded continuity within the existing Campaign/Runtime.
 One immutable objective/method/restriction scope may cover several established
 World links. Each accepted increment preserves actual position, time, Character
 expenditure, mechanics and consequences; progression derives from accepted units,

@@ -8,9 +8,9 @@ from pathlib import Path
 from unittest.mock import patch
 
 from engine.activity_control import ActivityCheckpoint, ActivityDevelopment
-from engine.domain_activity import (ActivityRun, ActivityStage, ActivityUpdate,
+from engine.historical_activity import (ActivityRun, ActivityStage, ActivityUpdate,
     ActivityResponse, ChoiceContext, effective_scope, successful_units)
-from engine.domain_campaign import Increment, AcceptedUnit, validate_campaign
+from engine.historical_campaign import Increment, AcceptedUnit, validate_campaign
 from engine.domain_persistence import export, pack, restore, CONTINUITY_DEFAULTS
 from engine.game_session import GameSession
 from engine.information_adjudication import Unresolved
@@ -425,7 +425,7 @@ class ContinuityTests(unittest.TestCase):
         receipt=runtime.accept_increment(runtime.prepare_increment(command))
         root=runtime.campaign
         # A failed expression layer cannot erase acceptance or trigger new dice.
-        with patch('engine.domain_campaign.owners',side_effect=AssertionError('no owner reread on retry')):
+        with patch('engine.historical_campaign.owners',side_effect=AssertionError('no owner reread on retry')):
             result=runtime.process_increment(command)
         self.assertEqual(result.results,(receipt,))
         self.assertIs(runtime.campaign,root)
@@ -463,7 +463,7 @@ class F05IntegrityTests(unittest.TestCase):
             choice_contexts=(ChoiceContext(key, 'bad:repurposed-original', (1,)),))
         self.assert_rejects(runtime, event)
         # Even a forged proposal bypassing preparation must fail before publication.
-        from engine.domain_campaign import Proposal
+        from engine.historical_campaign import Proposal
         with self.assertRaises(ValueError):
             runtime.accept_increment(Proposal(before, event))
         outcome = runtime.advance_activity(run(), refresh=lambda *_: event)
@@ -673,9 +673,9 @@ class AuthorizationContextTests(unittest.TestCase):
     answer = ContinuityTests.answer
 
     def reject_without_effect(self, runtime, event):
-        from engine.domain_campaign import Proposal
+        from engine.historical_campaign import Proposal
         root = runtime.campaign
-        draws, pending = list(runtime.traversal_draw.sides), list(runtime.traversal_draw.values)
+        draws, pending = list(runtime.domain_draw.sides), list(runtime.domain_draw.values)
         with patch('engine.traversal_resolution.TraversalResolution.resolve', side_effect=AssertionError('no resolution')):
             for operation in (lambda: runtime.prepare_activity_change(event),
                               lambda: runtime.accept_increment(Proposal(root, event))):
@@ -685,8 +685,8 @@ class AuthorizationContextTests(unittest.TestCase):
             result = runtime.advance_activity(run('run:invalid-context'), refresh=lambda *_: event)
         self.assertEqual(result.status, 'unresolved')
         self.assertIs(runtime.campaign, root)
-        self.assertEqual(runtime.traversal_draw.sides, draws)
-        self.assertEqual(runtime.traversal_draw.values, pending)
+        self.assertEqual(runtime.domain_draw.sides, draws)
+        self.assertEqual(runtime.domain_draw.values, pending)
 
     def upper_risk(self, runtime):
         scope = effective_scope(runtime.campaign, ACTIVITY)
@@ -748,7 +748,7 @@ class AuthorizationContextTests(unittest.TestCase):
                 self.reject_without_effect(runtime, ActivityUpdate('world:upper-observer', ACTIVITY,
                     'World a different witness can now observe the upper section',
                     checkpoint=original.checkpoint, notices=original.notices, choice_contexts=(context,)))
-        self.assertEqual(runtime.traversal_draw.sides, [20])
+        self.assertEqual(runtime.domain_draw.sides, [20])
         self.assertEqual(runtime.state.world.at_seconds, 28)
 
     def test_new_occurrence_in_same_stage_cannot_reuse_answered_identity(self):
@@ -774,11 +774,11 @@ class AuthorizationContextTests(unittest.TestCase):
         self.assertIn('choice:observer', effective_scope(runtime.campaign, ACTIVITY).authorization.answered_choices)
         self.assertEqual(runtime.advance_activity(run('run:unchanged-observer')).status, 'complete')
         self.assertEqual(runtime.campaign.accepted[1], first)
-        self.assertEqual(runtime.traversal_draw.sides, [20, 20])
+        self.assertEqual(runtime.domain_draw.sides, [20, 20])
         final = runtime.campaign
         self.assertEqual(runtime.process_increment(command).status, 'accepted')
         self.assertIs(runtime.campaign, final)
-        self.assertEqual(runtime.traversal_draw.sides, [20, 20])
+        self.assertEqual(runtime.domain_draw.sides, [20, 20])
 
     def test_unrelated_world_changes_and_elapsed_time_do_not_revoke_answer(self):
         runtime = self.interrupted(root=foundation(uncertain=True, protected=True), dice=Dice(20, 20))
@@ -789,9 +789,9 @@ class AuthorizationContextTests(unittest.TestCase):
         change(runtime, ActivityUpdate('world:unrelated', ACTIVITY, 'World later lower-route change',
             circumstances=(risk,), elapsed_seconds=5))
         self.assertIn('risk:recognized', effective_scope(runtime.campaign, ACTIVITY).authorization.answered_choices)
-        self.assertEqual(runtime.traversal_draw.sides, [20])
+        self.assertEqual(runtime.domain_draw.sides, [20])
         self.assertEqual(runtime.advance_activity(run()).status, 'complete')
-        self.assertEqual(runtime.traversal_draw.sides, [20, 20])
+        self.assertEqual(runtime.domain_draw.sides, [20, 20])
         self.assertEqual(runtime.state.world.at_seconds, 52)
 
     def test_completed_route_change_does_not_revoke_spanning_occurrence(self):
@@ -803,7 +803,7 @@ class AuthorizationContextTests(unittest.TestCase):
             choice_contexts=original.choice_contexts))
         self.assertIn('choice:observer', effective_scope(runtime.campaign, ACTIVITY).authorization.answered_choices)
         self.assertEqual(runtime.advance_activity(run('run:spanning')).status, 'complete')
-        self.assertEqual(runtime.traversal_draw.sides, [20, 20])
+        self.assertEqual(runtime.domain_draw.sides, [20, 20])
 
     def test_expired_lower_answer_cannot_authorize_new_upper_risk_without_checkpoint(self):
         for preauthorized in (False, True):
@@ -817,7 +817,7 @@ class AuthorizationContextTests(unittest.TestCase):
             self.assertNotIn(key, effective_scope(root, ACTIVITY).authorization.answered_choices)
             self.assertEqual(runtime.advance_activity(run('run:expired')).status, 'control')
             self.assertIs(runtime.campaign, root)
-            self.assertEqual(runtime.traversal_draw.sides, [20])
+            self.assertEqual(runtime.domain_draw.sides, [20])
 
     def test_fresh_upper_risk_with_identical_notice_needs_own_answer_after_restore(self):
         runtime = self.interrupted(root=foundation(uncertain=True, protected=True), dice=Dice(20, 20))
@@ -837,10 +837,10 @@ class AuthorizationContextTests(unittest.TestCase):
         root = runtime.campaign
         self.assertEqual(runtime.advance_activity(run()).status, 'control')
         self.assertIs(runtime.campaign, root)
-        self.assertEqual(runtime.traversal_draw.sides, [20])
+        self.assertEqual(runtime.domain_draw.sides, [20])
         self.answer(runtime, (key,), 'response:fresh-upper')
         self.assertEqual(runtime.advance_activity(run()).status, 'complete')
-        self.assertEqual(runtime.traversal_draw.sides, [20, 20])
+        self.assertEqual(runtime.domain_draw.sides, [20, 20])
 
     def test_missing_duplicate_unknown_and_mismatched_contexts_reject(self):
         runtime = self.interrupted(root=foundation(uncertain=True, protected=True), dice=Dice(20))
@@ -910,10 +910,10 @@ class AuthorizationContextTests(unittest.TestCase):
         self.assertEqual(outcome.status, 'complete')
         self.assertNotIn('hidden:', outcome.message)
         self.assertNotIn('upper support', outcome.message)
-        self.assertEqual(runtime.traversal_draw.sides, [20, 20])
+        self.assertEqual(runtime.domain_draw.sides, [20, 20])
 
     def test_coherent_mismatched_history_rejects_live_restore_decoder_and_file_load(self):
-        from engine.domain_activity import apply_update
+        from engine.historical_activity import apply_update
         runtime = self.interrupted(root=foundation(uncertain=True, protected=True), dice=Dice(20))
         self.answer(runtime)
         root = runtime.campaign
@@ -929,7 +929,7 @@ class AuthorizationContextTests(unittest.TestCase):
                 # Construct exactly the coherent history the old identity check
                 # allowed. Prove rejection is the context invariant, not a stale
                 # final snapshot or a malformed record that would fail anyway.
-                with patch('engine.domain_activity.validate_choice_history', return_value=None):
+                with patch('engine.historical_activity.validate_choice_history', return_value=None):
                     bad = apply_update(root, changed)
                     self.assertEqual(validate_campaign(bad), bad)
                 envelope = {'save_version': 3, 'domain_campaign': pack(bad)}
@@ -941,7 +941,7 @@ class AuthorizationContextTests(unittest.TestCase):
                         with self.assertRaises(ValueError):
                             operation()
                         self.assertIs(runtime.campaign, root)
-                        self.assertEqual(runtime.traversal_draw.sides, [20])
+                        self.assertEqual(runtime.domain_draw.sides, [20])
                 self.assertEqual(good_path.read_bytes(), saved)
                 self.assertEqual(bad_path.read_bytes(), bad_bytes)
         finally:
@@ -988,7 +988,7 @@ class ContinuityPersistenceTests(unittest.TestCase):
             with patch('engine.traversal_resolution.TraversalResolution.resolve',side_effect=AssertionError('no reroll')):
                 restored=load_game(str(self.path))
                 self.assertEqual(restored.campaign,saved)
-            restored.traversal_draw=dice
+            restored.domain_draw=dice
             if interrupted:
                 self.assertEqual(restored.advance_activity(run()).status,'control')
                 self.answer(restored)

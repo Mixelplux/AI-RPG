@@ -1,5 +1,11 @@
 # Character System — Design Manifest
 
+## Cross-Domain Coupling Correction V1 — implementation awaiting acceptance
+
+Character capability, access, resource expenditure, injury and vitality semantics remain unchanged. Schema-4 owner contributions compose Character effects with World effects before common publication. Common continuity retains authorization and asks the owner for decision premises rather than requiring climbing statistics. An independent fixture runs with movement attributes unavailable; it adds no character gameplay rules.
+
+See the [implementation handoff](../../cross_domain_coupling_v1_handoff.md).
+
 ## Status
 
 - Overall: **Partial** — authoritative competence and selective information

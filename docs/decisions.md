@@ -1019,3 +1019,19 @@ validated before adoption; no cryptographic source authentication is claimed.
 This is the authorized finite vocabulary extension anticipated by ADR-063, not a
 new persistence/transaction framework or migration. Subsequent death-save gameplay,
 slack catches and M2-2b remain deferred. See [model](physical_traversal_m2_2a_design.md).
+
+### ADR-063 implementation reconciliation — Cross-Domain Coupling Correction V1
+
+October 27, 2026, owner-authorized implementation; acceptance pending. The
+single-root publication and semantic ownership decisions remain unchanged.
+Schema 4 replaces climbing-shaped common records with scoped authorization,
+meaningful target stages, inert owner payload/evidence and safe receipts.
+Climbing rules, physical/character effect composition and risk-stakes validation
+are domain-owned; common continuity binds identity/scope and owner-declared
+premises. A mechanically independent contract fixture uses the same Runtime,
+acceptance, continuity and disk boundaries without adding gameplay. Historical
+schemas 1–3 remain explicitly versioned and share common publication. Envelope V3,
+V1/V2 routes and atomic writes are unchanged; no owner saves are migrated.
+See [implementation handoff](cross_domain_coupling_v1_handoff.md). This reconciles
+implementation with existing CD/IG/PT authority and adds no doctrine or publication
+authorization.

@@ -1,5 +1,17 @@
 # Persistence — Design Manifest
 
+## Cross-Domain Coupling Correction V1 — implementation awaiting acceptance
+
+Envelope V3 now also supports opt-in campaign schema 4: common activity/command/result records carry inert owner payloads and validated evidence. The finite codec chooses the schema before interpreting records. Historical schemas 1–3 retain their original definitions, defaults, reconstruction and unfinished-activity behavior in explicit historical modules, sharing the same Runtime publication boundary. No migration or owner-save rewriting occurs. Safe restoration, duplicate-key rejection and the existing atomic writer are preserved. Installed trusted owner code is never persisted; unsupported owners fail closed.
+
+R6 reconstruction validates owner-declared decision premises through every accepted
+increment, including intermediate changes in completed histories. Matching a receipt
+producer's text alone is insufficient: climbing independently validates supported
+meaning and character access against checked evidence. These integrity corrections
+change neither the save envelope nor historical schemas 1–3.
+
+See the [implementation handoff](../../cross_domain_coupling_v1_handoff.md).
+
 ## Status
 
 - Overall: **Partial** — supported campaign state, copied-load normalization and

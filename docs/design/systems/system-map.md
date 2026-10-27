@@ -40,6 +40,12 @@ These bounded implementations preserve the conceptual owners and Partial system
 classifications; [Option C research](../../architecture_comprehension_review.md)
 does not replace accepted sequential dispatch.
 
+## Cross-Domain Coupling Correction V1 — implementation awaiting acceptance
+
+Schema-4 common coordination/acceptance/continuity now carries identity, authorization, meaningful stages, owner payload/evidence and safe receipts. Climbing supplies mechanical and risk-stakes validation through its owning adapter; the coordinator acquires no outcome authority. World/Character state and one Runtime publication boundary are retained. An independent non-movement mechanical fixture validates these relationships through the same persistence paths. Historical schemas retain version-specific semantics; no new subsystem, movement method or authority is introduced.
+
+See the [implementation handoff](../../cross_domain_coupling_v1_handoff.md).
+
 ## Region Pack authoring and composition — accepted design boundary
 
 [Region Pack Authoring & Composition Design V1](../region-pack-authoring-and-composition-v1.md)

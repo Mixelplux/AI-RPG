@@ -8,13 +8,14 @@ class GameSession:
     """Creates engine instances for new, loaded, and reset sessions."""
 
     @staticmethod
-    def start_domains(campaign, *, draw=None):
+    def start_domains(campaign, *, draw=None, domain_handlers=()):
         """Explicit new-domain campaign; no legacy state or automatic migration."""
         from engine.domain_campaign import Campaign
+        from engine.historical_campaign import Campaign as HistoricalCampaign
         from engine.consequence_integration import Runtime
-        if type(campaign) is not Campaign:
+        if type(campaign) not in (Campaign, HistoricalCampaign):
             raise ValueError('Explicit domain campaign required')
-        return Runtime(campaign, draw=draw)
+        return Runtime(campaign, draw=draw, domain_handlers=domain_handlers)
 
     @staticmethod
     def start_new(
@@ -29,10 +30,11 @@ class GameSession:
         )
 
     @staticmethod
-    def load(save_path: str, *, campaign_draw=None, require_campaign=False) -> "GameEngine":
+    def load(save_path: str, *, campaign_draw=None, require_campaign=False, domain_handlers=()) -> "GameEngine":
         from engine.save_system import load_game
 
-        return load_game(save_path, campaign_draw=campaign_draw, require_campaign=require_campaign)
+        return load_game(save_path, campaign_draw=campaign_draw, require_campaign=require_campaign,
+                         domain_handlers=domain_handlers)
 
     @staticmethod
     def reset(region_path: str) -> "GameEngine":

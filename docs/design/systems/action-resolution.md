@@ -1,5 +1,18 @@
 # Action & Resolution — Design Manifest
 
+## Cross-Domain Coupling Correction V1 — implementation awaiting acceptance
+
+Climbing mechanics and their World/Character composition now live behind the schema-4 owner boundary in climbing_domain. Common acceptance, dispatch and activity progression carry inert owner evidence and validated progression rather than ClimbRequest/ClimbRuling or fall logic. Existing traversal_resolution mechanics remain unchanged. The independent mechanical fixture exercises the same acceptance path without traversal rules; it is not a gameplay subsystem.
+
+R6 checks the complete accepted sequence against owner-declared decision premises;
+an effect that changes a remaining stage's material premises rejects before root
+publication. Unchanged premises retain their answers across unrelated revisions.
+Climbing independently validates receipt meaning, grounding and access restrictions
+against checked evidence, including the existing loss-of-awareness boundary.
+Common receipt checks include unique public references before publication.
+
+See the [implementation handoff](../../cross_domain_coupling_v1_handoff.md).
+
 ## Status
 
 - Overall: **Partial** — bounded deterministic operations and persistent

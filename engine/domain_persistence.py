@@ -1,28 +1,21 @@
-"""Finite version-3 opt-in codec. No executable values or legacy conversion."""
+"""Finite envelope-v3 codec with explicit campaign-schema interpretation."""
 from dataclasses import fields
 from typing import get_type_hints
 
-from engine.domain_activity import ActivityStage, ActivityRun, ActivityUpdate, ActivityResponse, ChoiceContext
-from engine.activity_control import ActivityAuthorization, ActivityCheckpoint, ActivityDevelopment
+from engine import historical_persistence as historical
 from engine.campaign_records import _matches
-from engine.character_rules import CreatureRules, StrengthTrait, Vitality
-from engine.domain_campaign import Domains, ActivityScope, Increment, AcceptedUnit, Campaign, TraversalConsequence, validate_campaign
-from engine.gameplay_coordination import AcceptedStep
-from engine.physical_world import (
-    Place, Surface, TraversalLink, PhysicalObject, PhysicalRelation, CausalRecord, FallOccurrence, PhysicalFrame,
-    TautProtection, ClimbCircumstances,
-)
-from engine.traversal_resolution import ClimbRequest, ClimbRuling, ClimbDependencies, ClimbAssessment, ClimbResult, FallDependencies, FallResult
+from engine import domain_campaign as common
+from engine.climbing_domain import ClimbPlan, ClimbOptions, ClimbUpdate, TraversalConsequence
 
-
-RECORDS = {c.__name__: c for c in (
-    ActivityStage, ActivityRun, ActivityUpdate, ActivityResponse, ChoiceContext,
-    ActivityAuthorization, ActivityCheckpoint, ActivityDevelopment, CreatureRules, StrengthTrait,
-    Domains, ActivityScope, Increment, AcceptedUnit, Campaign, AcceptedStep,
-    Place, Surface, TraversalLink, PhysicalObject, PhysicalRelation, CausalRecord, FallOccurrence,
-    PhysicalFrame, ClimbRequest, ClimbRuling, ClimbDependencies, ClimbAssessment, ClimbResult,
-    Vitality, TautProtection, ClimbCircumstances, TraversalConsequence, FallDependencies, FallResult,
-)}
+LEGACY_DEFAULTS = historical.LEGACY_DEFAULTS
+CONTINUITY_DEFAULTS = historical.CONTINUITY_DEFAULTS
+_HISTORICAL_COMMON = {'Campaign', 'ActivityScope', 'Increment', 'AcceptedUnit', 'ActivityStage',
+    'ActivityRun', 'ActivityUpdate', 'ActivityResponse', 'ChoiceContext', 'TraversalConsequence'}
+RECORDS = {k: v for k, v in historical.RECORDS.items() if k not in _HISTORICAL_COMMON}
+RECORDS.update({c.__name__: c for c in (
+    common.Campaign, common.ActivityScope, common.Increment, common.AcceptedUnit,
+    common.ActivityStage, common.ActivityRun, common.ActivityUpdate, common.ActivityResponse,
+    common.ChoiceContext, ClimbPlan, ClimbOptions, ClimbUpdate, TraversalConsequence)})
 
 
 def pack(value):
@@ -31,68 +24,49 @@ def pack(value):
     if type(value) is tuple:
         return {'tuple': [pack(v) for v in value]}
     if type(value) in RECORDS.values():
-        return {'record': type(value).__name__,
-                'fields': {f.name: pack(getattr(value, f.name)) for f in fields(value)}}
-    raise ValueError('Unsupported domain record')
+        return {'record': type(value).__name__, 'fields': {f.name: pack(getattr(value, f.name)) for f in fields(value)}}
+    return historical.pack(value)
 
 
-# Explicit default additions preserve historical schema-1/2 meanings.
-LEGACY_DEFAULTS = {
-    'CreatureRules': {'vitality': None},
-    'PhysicalFrame': {'climb_circumstances': ()},
-    'ClimbRuling': {'failure_mode': None, 'failure_movement_cost': None},
-    'AcceptedUnit': {'consequence': None},
-}
-
-
-CONTINUITY_DEFAULTS = {
-    'ActivityScope': {'objective': None, 'continuations': (), 'supported_constraints': (), 'notices': (), 'choice_contexts': ()},
-    'Increment': {'run': None},
-}
-
-
-def unpack(value, *, legacy=False, continuity_legacy=False):
+def unpack(value, *, schema=None, legacy=False, continuity_legacy=False):
+    if schema is None and type(value) is dict and value.get('record') == 'Campaign':
+        schema = value.get('fields', {}).get('schema')
+    if schema in {1, 2, 3}:
+        return historical.unpack(value, legacy=legacy or schema == 1,
+                                 continuity_legacy=continuity_legacy or schema in {1, 2})
+    if schema not in {None, 4}:
+        raise ValueError('unsupported campaign schema')
     if type(value) in (str, int, bool, type(None)):
         return value
     if type(value) is not dict:
-        raise ValueError('Invalid domain encoding')
+        raise ValueError('invalid domain encoding')
     if set(value) == {'tuple'} and type(value['tuple']) is list:
-        return tuple(unpack(v, legacy=legacy, continuity_legacy=continuity_legacy) for v in value['tuple'])
+        return tuple(unpack(v, schema=4) for v in value['tuple'])
     if set(value) != {'record', 'fields'} or type(value['record']) is not str:
-        raise ValueError('Invalid domain record')
+        raise ValueError('invalid domain record')
     cls = RECORDS.get(value['record'])
-    if cls is None or type(value['fields']) is not dict:
-        raise ValueError('Unknown domain record')
-    names = {f.name for f in fields(cls)}
-    missing = names - set(value['fields'])
-    defaults = dict(LEGACY_DEFAULTS.get(cls.__name__, {})) if legacy else {}
-    if continuity_legacy:
-        defaults.update(CONTINUITY_DEFAULTS.get(cls.__name__, {}))
-    if set(value['fields']) - names or not missing.issubset(defaults):
-        raise ValueError('Unknown or incomplete domain record')
-    args = {n: unpack(v, legacy=legacy, continuity_legacy=continuity_legacy) for n, v in value['fields'].items()}
-    args.update({n: defaults[n] for n in missing})
+    if cls is None or type(value['fields']) is not dict or set(value['fields']) != {f.name for f in fields(cls)}:
+        raise ValueError('unknown or incomplete domain record')
+    args = {n: unpack(v, schema=4) for n, v in value['fields'].items()}
     hints = get_type_hints(cls)
     if any(not _matches(v, hints[n]) for n, v in args.items()):
-        raise ValueError('Invalid domain field type')
+        raise ValueError('invalid domain field type')
     return cls(**args)
 
 
-def export(campaign):
-    validate_campaign(campaign)
+def export(campaign, *, handlers=()):
+    common.validate_campaign(campaign, handlers=handlers)
     return {'save_version': 3, 'domain_campaign': pack(campaign)}
 
 
-def restore(envelope):
+def restore(envelope, *, handlers=()):
     if (type(envelope) is not dict or set(envelope) != {'save_version', 'domain_campaign'}
             or type(envelope['save_version']) is not int or envelope['save_version'] != 3):
-        raise ValueError('Unsupported domain envelope')
-    encoded = envelope['domain_campaign']
-    legacy = (type(encoded) is dict and encoded.get('record') == 'Campaign'
-              and type(encoded.get('fields')) is dict
-              and type(encoded['fields'].get('schema')) is int and encoded['fields']['schema'] == 1)
-    continuity_legacy = (type(encoded) is dict and encoded.get('record') == 'Campaign'
-                         and type(encoded.get('fields')) is dict
-                         and type(encoded['fields'].get('schema')) is int
-                         and encoded['fields']['schema'] in {1, 2})
-    return validate_campaign(unpack(encoded, legacy=legacy, continuity_legacy=continuity_legacy))
+        raise ValueError('unsupported domain envelope')
+    value = envelope['domain_campaign']
+    if type(value) is not dict or value.get('record') != 'Campaign' or type(value.get('fields')) is not dict:
+        raise ValueError('campaign encoding required')
+    schema = value['fields'].get('schema')
+    if type(schema) is not int or schema not in {1, 2, 3, 4}:
+        raise ValueError('unsupported campaign schema')
+    return common.validate_campaign(unpack(value, schema=schema), handlers=handlers)

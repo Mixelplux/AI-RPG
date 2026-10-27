@@ -26,7 +26,7 @@ def build_save_data(engine: GameEngine) -> Dict[str, Any]:
     from engine.consequence_integration import Runtime
     if type(engine) is Runtime and engine.domain_mode:
         from engine.domain_persistence import export
-        return export(engine.campaign)
+        return export(engine.campaign, handlers=engine.domain_handlers)
     runtime = engine._consequences
     if runtime is not None and runtime.campaign is not None:
         from engine.campaign_continuity import export
@@ -145,7 +145,7 @@ def load_save_data(save_path: str) -> Dict[str, Any]:
     return save_data
 
 
-def load_game(save_path: str, *, campaign_draw=None, require_campaign=False) -> GameEngine:
+def load_game(save_path: str, *, campaign_draw=None, require_campaign=False, domain_handlers=()) -> GameEngine:
     save_data = load_save_data(save_path)
     if save_data['save_version'] == DOMAIN_SAVE_VERSION:
         if require_campaign:
@@ -153,7 +153,8 @@ def load_game(save_path: str, *, campaign_draw=None, require_campaign=False) -> 
         from engine.domain_persistence import restore
         from engine.game_session import GameSession
         try:
-            return GameSession.start_domains(restore(save_data), draw=campaign_draw)
+            return GameSession.start_domains(restore(save_data, handlers=domain_handlers),
+                                             draw=campaign_draw, domain_handlers=domain_handlers)
         except Exception:
             raise ValueError('Domain campaign restoration failed validation') from None
     if save_data["save_version"] == CAMPAIGN_SAVE_VERSION:

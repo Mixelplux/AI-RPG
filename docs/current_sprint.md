@@ -1,30 +1,21 @@
-# Physical Traversal Core V1a — M2-2b owner accepted
+# Cross-Domain Coupling Correction V1 — R1–R6
 
-Owner accepted M2-2b October 27, 2026, including the final F05 choice-context
-binding and P2 completeness corrections. Elevated risk. Implementation was
-authorized October 26 against baseline
-6568309717edfd376c8ccc0ac21e6f9c73b73c78, including the published PowerShell 7
-workflow.
+Implementation and verification handoff; owner acceptance pending. One active
+Elevated package on `codex/cross-domain-coupling-correction-v1` in the isolated
+worktree `D:\AI RPG\.artifacts\cross-domain-coupling-correction-v1`.
+HEAD remains the published accepted baseline
+`6d4216eff053b4a08d667e457ea8be787c695eeb`; index remains empty.
 
-M2-2b is complete. Lifecycle is idle: active package and sprint are null,
-latest completed is M2-2b, and next_sprint is null. JSON remains the sole
-machine lifecycle authority. No subsequent package or milestone is selected.
+R1 common records/schema 4, R2 climbing integration, R3 historical compatibility,
+R4 independent contract fixture and R5 architectural/regression verification are
+implemented. R6 corrects the three confirmed independent-review findings:
+prepublication receipt contract checks, independent climbing receipt validation
+and owner-declared choice premises across the complete accepted history.
+See the [handoff](cross_domain_coupling_v1_handoff.md) for final
+verification, exact inventory and remaining risks. This records implementation
+completion, not owner acceptance or publication readiness.
 
-Accepted scope: meaningful climbing progress, F05 interruption and resumption,
-changed-circumstance validation, restriction enforcement and compatible persistence
-through the common Runtime. Published PT/CD/F01/F05 contracts, meaningful activity
-granularity, accepted-result recognition and no free rerolls remain binding.
-Save envelopes v1/v2/v3 and published domain schemas 1/2 retain their meanings.
-
-The [model](physical_traversal_m2_2b_design.md) and
-[handoff](physical_traversal_m2_2b_handoff.md) retain the exact 18-file inventory,
-implementation evidence and limitations. Accepted evidence: 449 affected tests
-passed, 44 independent rejection assertions, 38 historical corruption rejections,
-and final independent review found no blockers. Prior gameplay evidence is retained
-because executable content is unchanged during acceptance closure.
-
-Cross-method generalization, supplier completeness, broader perception and
-reconstruction scaling remain explicit limitations; overall systems remain Partial.
-Acceptance does not authorize Git publication. The candidate remains unstaged and
-uncommitted, prepared for separate publication authorization. No staging, commit,
-merge, push, live provider or next milestone is authorized by this closure.
+Original dirty checkout, owner saves, unrelated worktrees and shared tooling
+are preserved. No Git staging, commit, publication candidate, merge, push,
+live provider or subsequent package is authorized. Lifecycle JSON remains
+active pending owner disposition, with `next_sprint` null.

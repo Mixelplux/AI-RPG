@@ -36,7 +36,7 @@ class TraversalDomain:
 class ConsequentialTraversalDomain:
     """M2 adapter to the same Coordinator; no state or publication authority."""
     def __init__(self, runtime, command):
-        from engine.domain_campaign import scope_for
+        from engine.historical_campaign import scope_for
         self.runtime, self.command = runtime, command
         self.scope = scope_for(runtime.campaign, command, execution=False)
 
@@ -54,7 +54,7 @@ class ConsequentialTraversalDomain:
             accessible=self.scope.notices)
 
     def assess(self, undertaking, context):
-        from engine.domain_campaign import inspect, prior, scope_for
+        from engine.historical_campaign import inspect, prior, scope_for
         from engine.activity_control import decide_activity_control
         old = prior(self.runtime.campaign, self.command)
         if old is None:

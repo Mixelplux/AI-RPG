@@ -7,21 +7,21 @@
     "markdown_role": "explanatory_records",
     "yaml_required": false
   },
-  "active_sprint": null,
-  "active_capability_package": null,
+  "active_sprint": "cross-domain-coupling-correction-v1",
+  "active_capability_package": "cross-domain-coupling-correction-v1",
   "latest_completed_sprint": {
     "id": "physical-traversal-v1a-m2-2b"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "physical-traversal-v1a-m2-2b",
-    "title": "Physical Traversal Core V1a \u2014 M2-2b Meaningful Progress, Interruption and Resumption",
+    "id": "cross-domain-coupling-correction-v1",
+    "title": "Cross-Domain Coupling Correction V1",
     "type": "capability-package",
-    "status": "complete",
+    "status": "active",
     "risk_level": "elevated",
-    "goal": "Owner accepted M2-2b October 27, 2026, including F05 choice-context binding and P2 completeness corrections; lifecycle closed. Accepted 18-file uncommitted handoff against 6568309717edfd376c8ccc0ac21e6f9c73b73c78 prepared for separate Git publication authorization. No next milestone selected.",
+    "goal": "R1-R6 implementation complete; uncommitted handoff awaiting owner review and acceptance. R6 corrects prepublication receipt validation, independent climbing receipt meaning and complete choice-history validation. Common schema-4 direction, historical schemas 1-3 and save envelope V3 are retained. Publication and next-package selection remain unauthorized.",
     "predecessor": {
-      "id": "physical-traversal-v1a-m2-2a"
+      "id": "physical-traversal-v1a-m2-2b"
     },
     "platform": {
       "official_interpreter": ".\\.venv\\Scripts\\python.exe",
@@ -29,10 +29,10 @@
       "provider_requests": "forbidden"
     },
     "scope": [
-      "Meaningful climbing increments, F05 interruption and resumption, fresh World/Character conditions, restrictions, accepted identity and compatible persistence through the common Runtime. No other traversal methods, general autonomy/simulation, providers or Git publication."
+      "Common campaign acceptance, activity continuity, runtime dispatch and persistence; preserve climbing semantics and schemas 1-3. No additional movement, framework, owner-save rewrite, envelope change or publication."
     ],
     "verification": [
-      "Syntax/static; structural and continuing-play continuity tests; accepted M2-2a and affected-system regressions; v1/v2/v3 compatibility and corrupt-restore isolation; PowerShell 7 workflow, lifecycle and worktree-bound shared verification."
+      "Syntax/static; climbing parity; independent non-climbing acceptance/continuity/persistence; historical compatibility and corruption rejection; affected regressions; worktree-bound PowerShell 7 verification."
     ]
   }
 }

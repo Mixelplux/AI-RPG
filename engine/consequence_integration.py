@@ -206,15 +206,19 @@ class Reads:
 
 class Runtime:
     """Engine-owned simulation aggregate; coordinators/domains hold no truth."""
-    def __init__(self, config, *, draw=None):
+    def __init__(self, config, *, draw=None, domain_handlers=()):
         from engine.domain_campaign import Campaign, validate_campaign
-        self.domain_mode = type(config) is Campaign
+        from engine.historical_campaign import Campaign as HistoricalCampaign
+        self.domain_mode = type(config) in (Campaign, HistoricalCampaign)
         if self.domain_mode:
             from random import SystemRandom
             if draw is not None and not callable(draw):
                 raise ValueError('controlled die supplier required')
-            self.traversal_draw = draw if draw is not None else lambda sides: SystemRandom().randint(1, sides)
-            validate_campaign(config)
+            self.domain_draw = draw if draw is not None else lambda sides: SystemRandom().randint(1, sides)
+            if type(domain_handlers) is not tuple:
+                raise ValueError('explicit trusted domain handlers required')
+            self.domain_handlers = domain_handlers
+            validate_campaign(config, handlers=domain_handlers)
             self.campaign = config
             self.running = False
             self.trace = []
@@ -281,11 +285,14 @@ class Runtime:
         return deepcopy(self._state)
 
     def prepare_increment(self, command):
-        from engine.domain_campaign import Proposal, prepare, prior
+        from engine.domain_campaign import Campaign, model
         if not self.domain_mode:
             raise ValueError('Explicit domain campaign required')
-        old = prior(self.campaign, command)
-        return Proposal(self.campaign, old) if old is not None else prepare(self.campaign, command, draw=self.traversal_draw)
+        backend = model(self.campaign)
+        old = backend.prior(self.campaign, command)
+        kwargs = {'handlers': self.domain_handlers} if backend.Campaign is Campaign else {}
+        return backend.Proposal(self.campaign, old) if old is not None else backend.prepare(
+            self.campaign, command, draw=self.domain_draw, **kwargs)
 
     def accept_increment(self, proposal):
         from engine.domain_campaign import accept
@@ -295,40 +302,58 @@ class Runtime:
 
     def process_increment(self, command):
         """Typed owner input through the common Coordinator/F05, no language model."""
-        from engine.domain_campaign import prior
+        from engine.domain_campaign import Campaign, model, receipt_message
         from engine.gameplay_coordination import Coordinator, CoordinationDecision
-        from engine.traversal_coordination import ConsequentialTraversalDomain
         if not self.domain_mode:
             raise ValueError('Explicit domain campaign required')
         try:
-            old = prior(self.campaign, command)
+            backend = model(self.campaign)
+            old = backend.prior(self.campaign, command)
             if old is not None:
                 receipt = old.receipt
-                return CoordinationDecision('accepted', dict(receipt.accessible)['movement'], results=(receipt,))
-            domain = ConsequentialTraversalDomain(self, command)
+                return CoordinationDecision('accepted', receipt_message(receipt), results=(receipt,))
+            if backend.Campaign is Campaign:
+                from engine.domain_dispatch import CoordinatedDomain
+                domain = CoordinatedDomain(self, command)
+            else:
+                domain = backend.coordination_adapter(self, command)
             return Coordinator(domain.context, domain).process(interpretation=domain.interpretation())
         except Exception:
             return CoordinationDecision('unresolved', 'The activity is unavailable. No fictional outcome is asserted.', 'domain')
 
     def prepare_activity_change(self, event):
-        from engine.domain_campaign import prepare_activity_change
+        from engine.domain_campaign import Campaign, model
         if not self.domain_mode:
             raise ValueError('Explicit domain campaign required')
-        return prepare_activity_change(self.campaign, event)
+        backend = model(self.campaign)
+        kwargs = {'handlers': self.domain_handlers} if backend.Campaign is Campaign else {}
+        return backend.prepare_activity_change(self.campaign, event, **kwargs)
 
     def advance_activity(self, run, *, refresh=None):
-        from engine.domain_activity import advance, ActivityOutcome
+        from engine.domain_activity import ActivityOutcome
+        from engine.domain_campaign import Campaign, model, receipt_message
+        backend = model(self.campaign) if self.domain_mode else None
         try:
+            if backend is None:
+                raise ValueError('Explicit domain campaign required')
+            if backend.Campaign is Campaign:
+                from engine.domain_activity import advance
+            else:
+                from engine.historical_activity import advance
             return advance(self, run, refresh)
         except Exception:
             # A later supplier/technical failure must retain earlier independently
             # accepted increments in the safe handoff as well as the live root.
-            from engine.domain_campaign import AcceptedUnit
-            from engine.domain_activity import ActivityRun
+            if backend is None:
+                return ActivityOutcome('unresolved', 'An explicit domain campaign is required.')
+            if backend.Campaign is Campaign:
+                from engine.domain_campaign import ActivityRun
+            else:
+                from engine.historical_activity import ActivityRun
             receipts = tuple(u.receipt for u in self.campaign.accepted
-                if type(u) is AcceptedUnit and type(run) is ActivityRun and u.command.run == run
+                if type(u) is backend.AcceptedUnit and type(run) is ActivityRun and u.command.run == run
             ) if self.domain_mode else ()
-            meaning = [dict(r.accessible)['movement'] for r in receipts]
+            meaning = [receipt_message(r) for r in receipts]
             return ActivityOutcome('unresolved', ' '.join(meaning + [
                 'Further execution is unresolved. Accepted results remain in effect.']), receipts)
 

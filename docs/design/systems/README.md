@@ -16,6 +16,12 @@ new implementation or override [workflow](../../../WORKFLOW.md) and lifecycle.
 Only genuine contractual rules, such as simulation authority and fail-closed
 provider behavior, should be presented as contracts.
 
+## Cross-Domain Coupling Correction V1 — implementation awaiting acceptance
+
+The common campaign, acceptance, continuity and runtime dispatch have been selectively replaced for schema 4. Climbing mechanical interpretation resides in its owner adapter; an independent non-movement contract fixture exercises the actual shared paths. Envelope V3 and historical schemas 1–3 retain their meanings. This is an uncommitted implementation awaiting owner acceptance; overall system classifications remain Partial.
+
+See the [implementation handoff](../../cross_domain_coupling_v1_handoff.md).
+
 ## M2-2a owner-accepted implementation — October 26, 2026
 
 [Consequential uncertain climbing and falling](../../physical_traversal_m2_2a_handoff.md)
