@@ -306,7 +306,7 @@ choices and one-hour costs are intentional aids, not a mandate to hide all mecha
 
 ## Current implementation
 
-Watchhouse M1, owner accepted October 29, 2026; unpublished, deterministically expresses accepted
+Watchhouse M1, owner accepted and published October 29, 2026 at `014c1b84efbedef742e0cc23d737c4ef2d0020ec`, deterministically expresses accepted
 custodian claims with attribution, observations with access, and interpretations
 with uncertainty. Its safe projection excludes the authored hidden departure
 fact and does not invent a culprit. No provider is involved. Historical receipts

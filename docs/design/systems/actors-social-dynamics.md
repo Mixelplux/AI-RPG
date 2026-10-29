@@ -224,7 +224,7 @@ filter or believable-dialogue guarantee is implemented.
 
 ## Current implementation
 
-Watchhouse M1 adds a bounded owner-accepted implementation (October 29, 2026; unpublished): one custodian's
+Watchhouse M1 adds a bounded owner-accepted implementation (published October 29, 2026 at `014c1b84efbedef742e0cc23d737c4ef2d0020ec`): one custodian's
 public account, supervision permission and refusal follow explicit knowledge
 limits, duty and chosen approach. Willing/unwilling outcomes require no roll;
 hesitant Influence uses applicable 2024 checks. Permission and failed-urging

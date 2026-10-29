@@ -40,7 +40,7 @@ These bounded implementations preserve the conceptual owners and Partial system
 classifications; [Option C research](../../architecture_comprehension_review.md)
 does not replace accepted sequential dispatch.
 
-## Watchhouse M1 — owner-accepted implementation (October 29, 2026; unpublished)
+## Watchhouse M1 — owner-accepted implementation (published October 29, 2026 at `014c1b84efbedef742e0cc23d737c4ef2d0020ec`)
 
 Player Presentation's bounded language adapter selects an explicit Watchhouse
 scope; Coordinator/F05 assesses it before the installed owner runs. The owner

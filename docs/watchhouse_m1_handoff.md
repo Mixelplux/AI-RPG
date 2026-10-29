@@ -4,19 +4,23 @@
 
 Owner separately authorized M1 implementation October 28, 2026 after staging.
 Owner accepted M1 October 29, 2026 and authorized staging and committing this
-exact implementation. It is accepted but unpublished; merge, push, publication
-and provider calls remain unauthorized. Lifecycle is idle using the existing
-complete state: latest completed is `watchhouse-records-v1-m1`, active
-sprint/package and next sprint are null. Broader Watchhouse V1 is not complete.
-No M2 is staged.
+exact implementation. At acceptance, merge and push were not yet authorized.
+The owner separately authorized strict fast-forward merge and normal push on
+October 29, 2026; the implementation was published at
+`014c1b84efbedef742e0cc23d737c4ef2d0020ec`. Provider calls remain unauthorized.
+Lifecycle is idle using the existing complete state: latest completed is
+`watchhouse-records-v1-m1`, active sprint/package and next sprint are null.
+Broader Watchhouse V1 is not complete. No M2 is staged.
 
-Accepted baseline (candidate's exact parent):
+Published implementation: `014c1b84efbedef742e0cc23d737c4ef2d0020ec`.
+Exact parent and pre-publication main baseline:
 `a5649fa191b2f1d989491d18b5d1e9bb5cd86c58`.
 
 Branch: `codex/watchhouse-records-v1-m1-stage-20261028`.
 Worktree: `C:\Users\Richard\.codex\worktrees\watchhouse-records-v1-m1-stage-20261028\AI RPG`.
-The original `D:\AI RPG` dirty checkout and its index are preserved. The candidate
-commit is authorized; push, merge, publication and model/provider requests are not.
+The original `D:\AI RPG` dirty checkout and its index are preserved. At initial
+handoff, only the candidate commit was authorized; subsequent publication
+authorization is recorded above. Model/provider requests remain unauthorized.
 
 The external Design handoff was unavailable during staging; the owner's bounded
 scope, accepted foundational Design and existing ownership contracts govern.
@@ -49,18 +53,20 @@ owning-domain checks and common acceptance. Existing forged-result tests retain
 the proof that the interpreter cannot authoritatively choose an outcome.
 No new framework, action schema, phrase pattern or production interface was needed.
 
-Final correction verification: 25 Watchhouse tests, 21 cross-domain compatibility/
-recovery regressions, legacy save/load, 8 lifecycle checks and 29 PowerShell
-workflow checks passed. Worktree-bound GitWorkflowTools verification passed
-(20 preflight passes and the expected dirty-working-tree warning). Logs use
-`.artifacts/watchhouse-final-*`; the unrelated full suite was not rerun.
-Only the Watchhouse owner, focused tests and package/sprint/handoff records
-changed for these corrections. Architecture/manifests and accepted Design need
-no further edits: existing interfaces and ownership are unchanged; only the
-M1 acceptance boundary was clarified. Both indexes remain empty; original
-checkout and save boundaries are preserved. No API/provider calls or Git
-publication occurred. Owner accepted M1 October 29, 2026; actual LLM understanding/narration quality
-remain unverified.
+Final correction verification, before publication: 25 Watchhouse tests, 21
+cross-domain compatibility/recovery regressions, legacy save/load, 8 lifecycle
+checks and 29 PowerShell workflow checks passed. Worktree-bound GitWorkflowTools
+verification passed (20 preflight passes and the expected dirty-working-tree
+warning). Logs use `.artifacts/watchhouse-final-*`; the unrelated full suite was
+not rerun. Only the Watchhouse owner, focused tests and package/sprint/handoff
+records changed for these corrections. Architecture/manifests and accepted
+Design needed no further edits at that point: existing interfaces and ownership
+were unchanged; only the M1 acceptance boundary was clarified. Both indexes were
+empty; original checkout and save boundaries were preserved. No API/provider
+calls occurred. Git publication had not yet happened at final-correction
+verification; it was separately authorized and completed afterward on October
+29, 2026 at `014c1b84efbedef742e0cc23d737c4ef2d0020ec`. Actual LLM
+understanding and AI narration quality remain unverified.
 
 The owner accepted the corrected permission/intimidation behavior October 29,
 2026. Scripted smoke is not evidence for AI language or narration quality.

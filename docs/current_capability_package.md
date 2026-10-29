@@ -5,8 +5,11 @@
 Owner selected and staged this capability package October 28, 2026, then
 separately authorized implementation of M1 — Authorized Inquiry, NPC Influence
 and Evidence. Owner accepted M1 October 29, 2026 and authorized Git staging
-and committing its exact implementation. It remains unpublished; push, merge,
-publication and live-provider activity remain unauthorized.
+and committing its exact implementation. The owner separately authorized
+strict fast-forward merge and normal push on October 29, 2026; the accepted
+implementation was published at
+`014c1b84efbedef742e0cc23d737c4ef2d0020ec`. Live-provider activity remains
+unauthorized.
 
 The package tests one single-player investigation involving one grounded
 custodian, one persistent dispatch ledger, legitimate NPC knowledge and
@@ -87,6 +90,7 @@ Do not stage another milestone automatically.
 Staging is complete; subsequent owner authorization opened bounded M1
 implementation. The [M1 handoff](watchhouse_m1_handoff.md) records behavior,
 verification, documentation reconciliation, known limits and owner smoke steps.
-Runtime architecture and affected system manifests describe the submitted
-implementation as owner accepted October 29, 2026 and unpublished. M1 is
-complete; no later milestone is opened by its acceptance.
+Runtime architecture and affected system manifests describe the implementation
+as owner accepted and published October 29, 2026 at
+`014c1b84efbedef742e0cc23d737c4ef2d0020ec`. M1 is complete; no later
+milestone is opened by its acceptance.

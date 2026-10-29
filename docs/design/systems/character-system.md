@@ -297,7 +297,7 @@ persistent informational record.
 
 ## Current implementation
 
-Watchhouse M1, owner accepted October 29, 2026; unpublished, supplies explicit scoped Charisma,
+Watchhouse M1, owner accepted and published October 29, 2026 at `014c1b84efbedef742e0cc23d737c4ef2d0020ec`, supplies explicit scoped Charisma,
 Wisdom, Intelligence and skill ranks through inert owner declarations. Its
 Character rules module computes applicable skill/exhaustion modifiers without
 borrowing Strength/climbing inputs. Accepted safe receipts retain legitimate

@@ -290,7 +290,7 @@ explicit bounded serialization. This is not a universal character-access model
 
 ## Current implementation
 
-Watchhouse M1 adds a separate, versioned local scenario owner accepted October 29, 2026; unpublished: one
+Watchhouse M1 adds a separate, versioned local scenario, owner accepted and published October 29, 2026 at `014c1b84efbedef742e0cc23d737c4ef2d0020ec`: one
 custodian, one desk ledger, explicit duty/knowledge premises and bounded evidence.
 Its Mara is scoped to this independent campaign, not a mutation of the ordinary
 Region Pack's actor. Existing inert owner payloads hold explicit Character/NPC

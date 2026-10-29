@@ -2,13 +2,15 @@
 
 ## Status and authority
 
-Owner accepted M1 on October 29, 2026 after final corrections. The accepted
-implementation is unpublished; Git staging and committing are authorized, but
-merge, push, publication and provider calls are not. JSON records M1 complete:
-active sprint/package are null, latest completed is `watchhouse-records-v1-m1`
-and `next_sprint` is null. Broader Watchhouse V1 is not complete; no M2 is staged.
-
-Baseline: `a5649fa191b2f1d989491d18b5d1e9bb5cd86c58` on accepted main.
+Owner accepted M1 on October 29, 2026 after final corrections. Git staging and
+committing were authorized at acceptance. The owner separately authorized the
+official strict fast-forward merge and normal push on October 29, 2026; the
+accepted implementation was published at
+`014c1b84efbedef742e0cc23d737c4ef2d0020ec`. Provider calls remain unauthorized.
+JSON records M1 complete: active sprint/package are null, latest completed is
+`watchhouse-records-v1-m1` and `next_sprint` is null. Broader Watchhouse V1 is
+not complete; no M2 is staged.
+Pre-publication main baseline: `a5649fa191b2f1d989491d18b5d1e9bb5cd86c58`.
 Feature branch: `codex/watchhouse-records-v1-m1-stage-20261028`.
 The original dirty checkout and its unaccepted experiment are outside this
 worktree and remain preserved. Prior R1–R6 acceptance/publication and historical
@@ -73,7 +75,8 @@ following and its verification and documentation reconciliation are complete:
 
 These are acceptance criteria. Verification evidence and implemented limits are
 recorded in the [M1 handoff](watchhouse_m1_handoff.md); owner acceptance
-was granted October 29, 2026; implementation remains unpublished.
+was granted October 29, 2026; implementation was published October 29, 2026 at
+`014c1b84efbedef742e0cc23d737c4ef2d0020ec`.
 
 Owner clarified the M1 boundary October 29, 2026; foundational F05/F01 Design is
 unchanged. Deterministic gameplay and the existing interpreted-intention seam
@@ -87,7 +90,8 @@ and verified against the installed package's SHA-256 pin.
 `test_narration_source.py` passed with outbound connections disabled; no download
 was needed. Required affected-system checks are passed. The earlier interrupted
 full-suite run remains supplementary, not a new acceptance gate.
-M1 is owner accepted October 29, 2026; implementation remains unpublished. See the handoff.
+M1 is owner accepted October 29, 2026; implementation was published October 29, 2026 at
+`014c1b84efbedef742e0cc23d737c4ef2d0020ec`. See the handoff.
 
 ## Risk and hard boundaries
 
@@ -112,6 +116,9 @@ Implementation uses the same official Python environment and worktree-bound
 GitWorkflowTools profile. Current checks and player smoke instructions are in
 the [handoff](watchhouse_m1_handoff.md).
 
-Git staging and committing the accepted implementation are authorized. Merge,
-push, publication and live-provider calls are not. M1 is complete; broader V1
-remains deferred, and no later milestone is staged.
+Git staging and committing were authorized at acceptance. The owner separately
+authorized strict fast-forward merge and normal push on October 29, 2026,
+publishing the accepted implementation at
+`014c1b84efbedef742e0cc23d737c4ef2d0020ec`. Live-provider calls remain
+unauthorized. M1 is complete; broader V1 remains deferred, and no later
+milestone is staged.

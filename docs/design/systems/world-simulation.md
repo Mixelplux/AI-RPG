@@ -248,7 +248,7 @@ sewer, and wilderness traversal do not inherently need exhaustive tiles/nodes.
 
 ## Current implementation
 
-Watchhouse M1, owner accepted October 29, 2026; unpublished, grounds custody in an existing physical
+Watchhouse M1, owner accepted and published October 29, 2026 at `014c1b84efbedef742e0cc23d737c4ef2d0020ec`, grounds custody in an existing physical
 object at the custodian's desk. Its accepted interactions advance World time and
 causal history through the same common root as social permission and safe
 findings. Removing the ledger is refused; no movement or object-transfer system

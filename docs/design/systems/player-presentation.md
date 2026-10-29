@@ -438,7 +438,7 @@ The separate `play_watchhouse.py` M1 entry point uses bounded full-utterance
 natural-language patterns. Inquiry, unclear methods, compound instructions and
 unowned commitments cannot silently execute. Access-qualified pending choices
 remain visible. Save/load operates on this explicit Runtime; ordinary play and
-the legacy owner save remain unchanged. M1 is owner accepted October 29, 2026; unpublished; see
+the legacy owner save remain unchanged. M1 was owner accepted and published October 29, 2026 at `014c1b84efbedef742e0cc23d737c4ef2d0020ec`; see
 [handoff](../../watchhouse_m1_handoff.md) for supported examples and limits.
 
 | Capability | Classification and evidenced limit |

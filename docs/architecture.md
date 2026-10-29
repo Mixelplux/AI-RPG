@@ -18,7 +18,7 @@ the runtime flow and storage boundaries described here.
 
 Do not add sprint history, full schemas, test inventories, or implementation walkthroughs here.
 
-## Watchhouse Records M1 — owner accepted October 29, 2026; unpublished
+## Watchhouse Records M1 — owner accepted and published October 29, 2026
 
 `play_watchhouse.py` opens a separate schema-4 Runtime through `engine.watchhouse`.
 Full-utterance, bounded natural-language interpretation preserves inquiry and
@@ -35,7 +35,7 @@ declarations use existing inert scope payloads. Envelope V3 and schema 4 are
 unchanged, as are historical schemas 1–3 and V1/V2 routes. Receipt/evidence
 reconstruction and atomic disk replacement reuse the existing paths. No provider
 or general social/spell system is added; ordinary `play_game.py` is unchanged.
-M1 is owner accepted October 29, 2026; implementation is unpublished. See [handoff](watchhouse_m1_handoff.md).
+M1 was owner accepted and published October 29, 2026 at `014c1b84efbedef742e0cc23d737c4ef2d0020ec`. See [handoff](watchhouse_m1_handoff.md).
 
 ## Cross-Domain Coupling Correction V1 — implementation awaiting acceptance
 

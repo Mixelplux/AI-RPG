@@ -459,7 +459,7 @@ the intended final action abstraction.
 
 ## Current implementation
 
-Watchhouse M1, owner accepted October 29, 2026; unpublished, adds bounded Influence and accessible
+Watchhouse M1, owner accepted and published October 29, 2026 at `014c1b84efbedef742e0cc23d737c4ef2d0020ec`, adds bounded Influence and accessible
 ledger Search/Study. Its owner combines explicit Character/NPC premises and
 recorded d20 evidence; pure reconstruction validates meaning before common
 acceptance. No social roll grants impossible knowledge or unauthorized access.
