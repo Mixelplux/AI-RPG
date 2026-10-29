@@ -437,6 +437,12 @@ This is a presentation/diagnostics limit, not authority to accept invalid state.
 
 ## Current implementation
 
+Watchhouse M1 uses existing schema-4 inert scope/evidence tuples and accepted
+receipts under envelope V3. Social permission, refusal timing and Character
+findings derive from validated history; no second mutable store, new schema,
+codec field or migration exists. Existing reconstruction, retry recognition,
+atomic replacement and historical routes remain. This implementation is owner accepted October 29, 2026; unpublished. See [M1 handoff](../../watchhouse_m1_handoff.md).
+
 ### Disk durability
 
 `save_game` builds/validates the payload before opening the destination, creates

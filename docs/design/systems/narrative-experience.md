@@ -306,6 +306,12 @@ choices and one-hour costs are intentional aids, not a mandate to hide all mecha
 
 ## Current implementation
 
+Watchhouse M1, owner accepted October 29, 2026; unpublished, deterministically expresses accepted
+custodian claims with attribution, observations with access, and interpretations
+with uncertainty. Its safe projection excludes the authored hidden departure
+fact and does not invent a culprit. No provider is involved. Historical receipts
+are explicitly past when recalled. See [M1 handoff](../../watchhouse_m1_handoff.md).
+
 | Capability | Classification and evidenced limit |
 |---|---|
 | Deterministic scenes and results | **Implemented, bounded:** `scene_narrator` composes authored description, weather, presence, routes and opportunities. GameEngine adds West-Road circumstances, choices and competence outcomes; CLI prints authored replies, discoveries and command messages. Not all output passes through the provider. |

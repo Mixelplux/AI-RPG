@@ -459,6 +459,13 @@ the intended final action abstraction.
 
 ## Current implementation
 
+Watchhouse M1, owner accepted October 29, 2026; unpublished, adds bounded Influence and accessible
+ledger Search/Study. Its owner combines explicit Character/NPC premises and
+recorded d20 evidence; pure reconstruction validates meaning before common
+acceptance. No social roll grants impossible knowledge or unauthorized access.
+Existing Coordinator/F05 controls commitment and new player choices. No universal
+social/action engine is introduced. See [M1 handoff](../../watchhouse_m1_handoff.md).
+
 Information Resolution Core V1a implements accepted read-only binding-constraint retrieval by
 subject, action and fictional time, including hidden constraints. Conditions,
 exclusions and effects are returned intact for an owning adjudicator; no general

@@ -290,6 +290,13 @@ explicit bounded serialization. This is not a universal character-access model
 
 ## Current implementation
 
+Watchhouse M1 adds a separate, versioned local scenario owner accepted October 29, 2026; unpublished: one
+custodian, one desk ledger, explicit duty/knowledge premises and bounded evidence.
+Its Mara is scoped to this independent campaign, not a mutation of the ordinary
+Region Pack's actor. Existing inert owner payloads hold explicit Character/NPC
+declarations; installed v1 owner code retains the fixed authored ledger meaning.
+No Region Pack format or catalog changes. See [handoff](../../watchhouse_m1_handoff.md).
+
 Information Resolution Core V1a implements accepted composition of in-memory authored
 foundations with stable identities and supported scalar canonical-conflict checks.
 Reference definitions are distinct from supplied instances. This local handoff is

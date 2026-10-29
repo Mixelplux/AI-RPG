@@ -224,6 +224,13 @@ filter or believable-dialogue guarantee is implemented.
 
 ## Current implementation
 
+Watchhouse M1 adds a bounded owner-accepted implementation (October 29, 2026; unpublished): one custodian's
+public account, supervision permission and refusal follow explicit knowledge
+limits, duty and chosen approach. Willing/unwilling outcomes require no roll;
+hesitant Influence uses applicable 2024 checks. Permission and failed-urging
+timing derive from accepted units. This is no general goal, relationship or
+faction system. See [M1 handoff](../../watchhouse_m1_handoff.md).
+
 | Capability | Classification and evidenced limit |
 |---|---|
 | Actor identity/location | **Implemented, bounded:** authored static IDs, sparse overrides, scene-based targeting and durable movement history. Explicit, conversation-resolution, and elapsed-time relocation mechanisms exist; movement effects do not establish freely selected travel intentions. |

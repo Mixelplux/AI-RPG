@@ -18,6 +18,25 @@ the runtime flow and storage boundaries described here.
 
 Do not add sprint history, full schemas, test inventories, or implementation walkthroughs here.
 
+## Watchhouse Records M1 — owner accepted October 29, 2026; unpublished
+
+`play_watchhouse.py` opens a separate schema-4 Runtime through `engine.watchhouse`.
+Full-utterance, bounded natural-language interpretation preserves inquiry and
+returns control for unclear/compound methods. `watchhouse_domain` composes one
+custodian's duty-grounded Influence responses, legitimate ledger access and
+Search/Study findings; `watchhouse_rules` owns explicit scoped Character skill
+inputs and pure 2024 checks. No legacy climbing statistics or gate mechanics
+govern these actions. Existing Coordinator/F05 and common acceptance publish one
+root with time, causal history, accepted evidence and Character-safe receipts.
+
+Permission, refusal timing and findings derive from validated accepted units;
+there is no parallel mutable social store. Versioned scenario and Character
+declarations use existing inert scope payloads. Envelope V3 and schema 4 are
+unchanged, as are historical schemas 1–3 and V1/V2 routes. Receipt/evidence
+reconstruction and atomic disk replacement reuse the existing paths. No provider
+or general social/spell system is added; ordinary `play_game.py` is unchanged.
+M1 is owner accepted October 29, 2026; implementation is unpublished. See [handoff](watchhouse_m1_handoff.md).
+
 ## Cross-Domain Coupling Correction V1 — implementation awaiting acceptance
 
 The schema-4 common campaign/activity boundary now uses scoped identity,

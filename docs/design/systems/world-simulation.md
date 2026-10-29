@@ -248,6 +248,12 @@ sewer, and wilderness traversal do not inherently need exhaustive tiles/nodes.
 
 ## Current implementation
 
+Watchhouse M1, owner accepted October 29, 2026; unpublished, grounds custody in an existing physical
+object at the custodian's desk. Its accepted interactions advance World time and
+causal history through the same common root as social permission and safe
+findings. Removing the ledger is refused; no movement or object-transfer system
+is added. See [M1 handoff](../../watchhouse_m1_handoff.md).
+
 Owner-accepted October 22, 2026: [Information-Grounded Adjudication V1](../../information_grounded_adjudication_v1_handoff.md)
 owns accepted external consequences in a disposable session following the existing
 candidate pattern. Costs/time, ended bindings, retained commitments and meaningful

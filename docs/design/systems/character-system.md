@@ -297,6 +297,13 @@ persistent informational record.
 
 ## Current implementation
 
+Watchhouse M1, owner accepted October 29, 2026; unpublished, supplies explicit scoped Charisma,
+Wisdom, Intelligence and skill ranks through inert owner declarations. Its
+Character rules module computes applicable skill/exhaustion modifiers without
+borrowing Strength/climbing inputs. Accepted safe receipts retain legitimate
+claims and findings; they never grant hidden objective knowledge. Other ongoing
+effects fail closed. See [M1 handoff](../../watchhouse_m1_handoff.md).
+
 Information Resolution Core V1a adds accepted read-only character views gated by
 supplied Character System grants, including access basis and time bounds. These
 fixtures do not implement general access derivation, familiarity, retention or

@@ -40,6 +40,17 @@ These bounded implementations preserve the conceptual owners and Partial system
 classifications; [Option C research](../../architecture_comprehension_review.md)
 does not replace accepted sequential dispatch.
 
+## Watchhouse M1 — owner-accepted implementation (October 29, 2026; unpublished)
+
+Player Presentation's bounded language adapter selects an explicit Watchhouse
+scope; Coordinator/F05 assesses it before the installed owner runs. The owner
+combines NPC duty/knowledge, Character skills and Resolution's recorded checks,
+then contributes World time/history and a safe result to common acceptance.
+Permission and Character findings derive from validated accepted evidence. The
+existing V3/schema-4 disk path reconstructs the same meaning without randomness.
+This scenario adds no general faction, spell or social infrastructure. Ordinary
+play and historical saves retain their paths. See [M1 handoff](../../watchhouse_m1_handoff.md).
+
 ## Cross-Domain Coupling Correction V1 — implementation awaiting acceptance
 
 Schema-4 common coordination/acceptance/continuity now carries identity, authorization, meaningful stages, owner payload/evidence and safe receipts. Climbing supplies mechanical and risk-stakes validation through its owning adapter; the coordinator acquires no outcome authority. World/Character state and one Runtime publication boundary are retained. An independent non-movement mechanical fixture validates these relationships through the same persistence paths. Historical schemas retain version-specific semantics; no new subsystem, movement method or authority is introduced.

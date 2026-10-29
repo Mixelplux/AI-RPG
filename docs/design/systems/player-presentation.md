@@ -434,6 +434,13 @@ without inventing such a program.
 
 ## Current implementation
 
+The separate `play_watchhouse.py` M1 entry point uses bounded full-utterance
+natural-language patterns. Inquiry, unclear methods, compound instructions and
+unowned commitments cannot silently execute. Access-qualified pending choices
+remain visible. Save/load operates on this explicit Runtime; ordinary play and
+the legacy owner save remain unchanged. M1 is owner accepted October 29, 2026; unpublished; see
+[handoff](../../watchhouse_m1_handoff.md) for supported examples and limits.
+
 | Capability | Classification and evidenced limit |
 |---|---|
 | Input/routing | **Partial:** exact CLI controls, keyword kernel, aliases/target matching and explicit scenario bypasses work. Generic action acceptance and descriptive focus do not supply general executable intent. |
