@@ -1,96 +1,27 @@
-# Watchhouse Records V1 — Social, Information, Magic and Continuity
+# Player Intent Interpretation V1
 
-## Selection and authority
+Owner accepted the Design and authorized bounded implementation October 30, 2026.
+Baseline: `870d1080e67c2f943d12a7bd74952d26ed56b5d2`.
+The supplied Accepted Design → Implementation Handoff governs this package;
+[the contract](design/player-intent-interpretation-v1.md) records its semantics
+and the exact serialization chosen within the authorized implementation scope.
 
-Owner selected and staged this capability package October 28, 2026, then
-separately authorized implementation of M1 — Authorized Inquiry, NPC Influence
-and Evidence. Owner accepted M1 October 29, 2026 and authorized Git staging
-and committing its exact implementation. The owner separately authorized
-strict fast-forward merge and normal push on October 29, 2026; the accepted
-implementation was published at
-`014c1b84efbedef742e0cc23d737c4ef2d0020ec`. Live-provider activity remains
-unauthorized.
+Implement only the model-independent interpretation contract, trusted validation,
+replaceable invocation and minimal existing Coordinator handoff, with safe
+clarification/failure and protection against automatic chaining. Interpret meaning;
+F05/Coordinator authorize; domains adjudicate and accept consequences.
 
-The package tests one single-player investigation involving one grounded
-custodian, one persistent dispatch ledger, legitimate NPC knowledge and
-motivations, applicable D&D 2024 rules, player-owned methods, consequential
-acceptance and recovery. Only M1 is staged; this package description does not
-stage or authorize later milestones.
+Risk: **Elevated**, because this input boundary can lead to cross-domain
+consequential gameplay. Preserve the common acceptance/recovery boundary,
+envelope V3, schema 4, historical schemas 1–3 and V1/V2 behavior. No migrations,
+new mechanics, narration, model experiments, permanent model choice or owner-save
+changes. Hosted/local providers remain replaceable; no live calls are authorized.
 
-The [Design handoff](https://chatgpt.com/library?file_id=libfile_e920bdc122448191b13a801a0d5f8f17&account_id=personal)
-could not be accessed during staging. Scope is taken from the owner's bounded
-handoff and clean-baseline staging instructions, not a claimed reading of that
-document.
+Only this single implementation milestone is staged. JSON is the sole lifecycle
+authority. Stop at a locally verified, uncommitted implementation handoff for owner
+review; acceptance, Git staging/commit/publication and any subsequent package
+require separate authorization.
 
-## Baseline and lifecycle
-
-Accepted main baseline: `a5649fa191b2f1d989491d18b5d1e9bb5cd86c58`.
-The preceding Cross-Domain Coupling Correction V1 package is complete; its
-[handoff](cross_domain_coupling_v1_handoff.md) preserves accepted R1–R6 behavior,
-compatibility requirements and historical verification.
-
-`docs/current_sprint.json` is the sole machine lifecycle authority. M1 is
-complete and owner accepted October 29, 2026; active sprint/package are null,
-latest completed is `watchhouse-records-v1-m1`, and `next_sprint` remains null.
-Broader Watchhouse V1 is incomplete: Charm Person, expiry and later developments
-remain deferred. No M2 is selected or staged.
-
-## M1 scope and ownership
-
-- Verify a safe interpreted-intention interface distinguishing inquiry/preparation
-  from authorized commitment under [F05](design/f05-authorized-activities-and-player-control.md),
-  retaining target, approach, prerequisites, actor decisions and clarification.
-  Per the owner's October 29 decision, actual LLM language understanding is
-  outside M1 acceptance. Genuine contextual language interpretation remains a
-  required early API integration objective before substantial additional-domain
-  expansion; foundational Design is unchanged. AI narration quality is unverified.
-- Ground one custodian's willingness in legitimate knowledge, beliefs,
-  motivations, duties and circumstances; apply D&D 2024 Influence as applicable,
-  including willing, hesitant and unwilling outcomes.
-- Support limited Search/Study, where applicable, of legitimately accessible
-  dispatch-ledger evidence. Access and discovery are consequential facts.
-- Keep objective truth, NPC beliefs/claims, reports, inference, character
-  knowledge, hidden information and unspecified information distinct.
-- Accept authorized consequences coherently through the appropriate gameplay
-  domain; preserve meaningful results, retry recognition, recovery and
-  save/load continuity with character-safe natural-language presentation.
-
-Relevant responsibilities are Player Presentation, Action & Resolution,
-Actors & Social Dynamics, World Simulation, Character System, Narrative
-Experience, Scenario & Authored Content and Persistence, bounded to this
-investigation. Preserve accepted foundational Design, including F01, F05 and
-Information Foundation, and existing simulation/domain ownership. Provider
-language has no simulation authority. Legacy climbing, gate scenarios and
-independent contract test fixtures do not define the new gameplay mechanics.
-
-## Risk, compatibility and exclusions
-
-**Elevated** under [engineering posture](engineering_posture.md), because
-accepted social/information consequences cross domains and persist. Future
-implementation verification adds affected-system regressions, targeted
-ownership review, compatibility and recovery checks to focused tests and
-owner smoke. This staging does not select a new persistence or ownership model.
-
-Preserve save envelope V3, common campaign schema 4, finite historical schemas
-1–3 and their original meanings/defaults, and unchanged V1/V2 save behavior.
-Keep atomic publication, fail-closed validation, historical reconstruction,
-corruption rejection and no-reroll/exact-retry guarantees. No migration,
-save-version change, historical reinterpretation or owner-save rewriting is
-authorized. Stop for owner resolution if M1 would require such a change.
-
-Defer Charm Person, ongoing condition/effect expiry and bounded later NPC or
-faction developments to separately authorized subsequent milestones.
-Exclude combat, general stealth, tactical movement, companion control, full
-spell catalogs, broad rule coverage, faction simulation, universal social,
-action or effect engines, generic frameworks and broad refactoring.
-Do not stage another milestone automatically.
-
-## Implementation handoff
-
-Staging is complete; subsequent owner authorization opened bounded M1
-implementation. The [M1 handoff](watchhouse_m1_handoff.md) records behavior,
-verification, documentation reconciliation, known limits and owner smoke steps.
-Runtime architecture and affected system manifests describe the implementation
-as owner accepted and published October 29, 2026 at
-`014c1b84efbedef742e0cc23d737c4ef2d0020ec`. M1 is complete; no later
-milestone is opened by its acceptance.
+Implementation is locally verified and ready for owner review; see the
+[handoff](player_intent_interpretation_v1_handoff.md). No acceptance, lifecycle
+closure, publication or later milestone is implied by readiness.

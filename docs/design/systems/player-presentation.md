@@ -26,6 +26,19 @@ Implementation reconciliation: October 12, 2026 at published baseline
 [material handling correction](../../contextual_action_structural_correction.md).
 The initial review metadata above is historical.
 
+## Player Intent Interpretation V1 — implementation candidate, October 30, 2026
+
+The explicit `GameEngine.process_player_intent` / Coordinator V1 seam accepts a
+replaceable provider with player-safe supplied context. Strict meaning-only
+validation precedes a trusted installed capability binding. Commitment and
+expressed restrictions survive the handoff; material ambiguity and multiple
+intentions return control, and technical rejection has no fictional consequence
+or fallback interpreter. No general language binder, production model or changed
+CLI route is claimed. Existing F05/domain acceptance retains authority and
+continuity. See [contract](../player-intent-interpretation-v1.md) and
+[handoff](../../player_intent_interpretation_v1_handoff.md). Partial classification
+remains; language fidelity is unqualified and implementation awaits acceptance.
+
 ## Bounded I1-M1 integration — owner accepted
 
 October 23, 2026: [I1-M1](../../i1_m1_handoff.md) adds a bounded coordination

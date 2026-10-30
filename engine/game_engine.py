@@ -272,6 +272,15 @@ class GameEngine:
                                               resume=resume, answers=answers)
         return decision.player_result() if decision is not None else None
 
+    def process_player_intent(self, player_input, *, provider):
+        """Explicit V1 seam; provider and owning-domain binder must be installed.
+
+        No fallback to a keyword/legacy route after claimed input fails. This
+        does not install a production model or add narration/provider calls to
+        process_command. Domain execution retains its existing acceptance path.
+        """
+        return self._coordination.process_intent(player_input, provider=provider).player_result()
+
     def process_contextual_action(self, player_input=None, *, frame=None):
         if (player_input is None) == (frame is None):
             raise ValueError("Supply exactly one input or handling frame.")

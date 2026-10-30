@@ -18,6 +18,25 @@ the runtime flow and storage boundaries described here.
 
 Do not add sprint history, full schemas, test inventories, or implementation walkthroughs here.
 
+## Player Intent Interpretation V1 — implementation candidate
+
+`engine.player_intent` validates bounded model-independent JSON and preserves
+meaning in immutable canonical form. Explicit `Coordinator.decide_intent` /
+`process_intent` and `GameEngine.process_player_intent` accept a replaceable
+provider callable. Only supplied accessible context reaches it. The trusted
+owning capability's `bind_intent` receives validated meaning, original input and
+trusted context, binding supported meaning to existing internal identifiers.
+No general language binder or production model is installed for legacy routes.
+
+The existing Coordinator/F05, domain assessment, single-use permission and
+consequential acceptance retain execution authority. Conditions and stop
+boundaries remain distinct session-local fields, requiring explicit owner
+support. Multiple intentions and material ambiguity return control; invalid
+output never falls through to another interpreter. No state, persistence, save
+version, domain mechanics or narration path changes. Ordinary CLI routes remain
+bounded deterministic harnesses. See [contract](design/player-intent-interpretation-v1.md)
+and [implementation handoff](player_intent_interpretation_v1_handoff.md).
+
 ## Watchhouse Records M1 — owner accepted and published October 29, 2026
 
 `play_watchhouse.py` opens a separate schema-4 Runtime through `engine.watchhouse`.

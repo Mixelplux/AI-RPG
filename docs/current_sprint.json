@@ -7,21 +7,21 @@
     "markdown_role": "explanatory_records",
     "yaml_required": false
   },
-  "active_sprint": null,
-  "active_capability_package": null,
+  "active_sprint": "player-intent-interpretation-v1",
+  "active_capability_package": "player-intent-interpretation-v1",
   "latest_completed_sprint": {
     "id": "watchhouse-records-v1-m1"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "watchhouse-records-v1-m1",
-    "title": "Watchhouse Records V1 — M1: Authorized Inquiry, NPC Influence and Evidence",
+    "id": "player-intent-interpretation-v1",
+    "title": "Player Intent Interpretation V1",
     "type": "capability-package",
-    "status": "complete",
+    "status": "active",
     "risk_level": "elevated",
-    "goal": "M1 owner accepted and published October 29, 2026 at 014c1b84efbedef742e0cc23d737c4ef2d0020ec; deterministic gameplay and the safe interpreted-intention interface demonstrated. Broader Watchhouse V1 capabilities remain deferred; lifecycle idle, next_sprint null.",
+    "goal": "Implement the owner-accepted October 30 interpretation contract and authority-preserving Coordinator handoff; local review only.",
     "predecessor": {
-      "id": "cross-domain-coupling-correction-v1"
+      "id": "watchhouse-records-v1-m1"
     },
     "platform": {
       "official_interpreter": ".\\.venv\\Scripts\\python.exe",
@@ -29,15 +29,11 @@
       "provider_requests": "forbidden"
     },
     "scope": [
-      "Owner accepted M1 October 29, 2026 and authorized staging/committing its exact implementation. The owner separately authorized strict fast-forward merge and normal push on October 29, 2026; the exact implementation was published at 014c1b84efbedef742e0cc23d737c4ef2d0020ec. Provider calls remain unauthorized. No M2 or next milestone is staged.",
-      "Owner-adjusted M1 boundary October 29: verify safe controlled interpreted intentions through existing F05/domain interfaces, preserving inquiry versus undertaking, target, approach, prerequisites, actor decisions, clarification and authoritative acceptance. Actual LLM understanding and AI narration quality remain unverified. Contextual language understanding remains required for early API integration before substantial additional-domain expansion; foundational Design is unchanged. One grounded custodian, applicable 2024 Influence and accessible Search/Study remain in scope.",
-      "Separate established truth, NPC beliefs/claims, reports, inference, character knowledge, hidden and unspecified information. Domain-owned coherent consequential acceptance, recognized retries, recovery, save/load continuity and player-safe natural-language presentation.",
-      "Preserve accepted foundational Design, existing ownership, V3 envelope, common schema 4, historical schemas 1-3 and unchanged V1/V2 save behavior. No migration, save-version change, historical reinterpretation or owner-save rewrite. Legacy climbing/gate fixtures do not define new mechanics.",
-      "Defer Charm Person, ongoing condition/effect expiry and later NPC/faction developments. Exclude combat, general stealth, tactical movement, companion control, full spell catalogs, broad rule coverage, faction simulation, universal social/action/effect engines, generic frameworks and broad refactoring. No subsequent milestone is staged."
+      "Model-independent V1 interpretation, strict validation, replaceable invocation, trusted Coordinator handoff, clarification and technical failure containment. Preserve F05, domain ownership, acceptance, continuity, envelope V3/schema 4 and historical saves.",
+      "No gameplay mechanics, narration integration, persistence changes, inference experiments, permanent model selection, Git staging/committing/publication or subsequent package."
     ],
     "verification": [
-      "Clean accepted baseline checks passed before staging. Run official PowerShell 7 lifecycle validator, workflow regression and worktree-bound GitWorkflowTools verification; review implementation scope/diff and preserve original checkout and the original checkout index; candidate index is emptied by its authorized commit.",
-      "Demonstrate the six gameplay completion criteria in docs/current_sprint.md with focused offline tests, affected-system regressions, targeted ownership review, explicit compatibility/corruption/recovery checks, owner smoke and documentation reconciliation. Current evidence and limits are in docs/watchhouse_m1_handoff.md; owner acceptance was granted October 29, 2026; implementation was published at 014c1b84efbedef742e0cc23d737c4ef2d0020ec."
+      "Syntax checks, focused structural and semantic-boundary fixtures, cross-domain acceptance/retry/recovery/compatibility regressions, lifecycle validation, maintained GitWorkflowTools checks and diff review. All provider calls forbidden."
     ]
   }
 }

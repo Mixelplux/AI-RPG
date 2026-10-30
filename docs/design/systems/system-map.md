@@ -40,6 +40,19 @@ These bounded implementations preserve the conceptual owners and Partial system
 classifications; [Option C research](../../architecture_comprehension_review.md)
 does not replace accepted sequential dispatch.
 
+## Player Intent Interpretation V1 — implementation candidate, October 30, 2026
+
+Player-safe supplied context and exact player input reach a replaceable
+interpretation callable. Strict V1 validation hands meaning, original input and
+trusted context to the existing Coordinator and an installed owning capability
+binder. Candidate domain labels acquire no routing or adjudication authority.
+F05, owning-domain assessment and common acceptance retain their existing roles.
+Multiple intentions/ambiguity return control; conditions and stopping boundaries
+need explicit owner support. No general language binder, production model,
+mechanics, narration or persistence architecture is added. See
+[contract](../player-intent-interpretation-v1.md) and
+[handoff](../../player_intent_interpretation_v1_handoff.md).
+
 ## Watchhouse M1 — owner-accepted implementation (published October 29, 2026 at `014c1b84efbedef742e0cc23d737c4ef2d0020ec`)
 
 Player Presentation's bounded language adapter selects an explicit Watchhouse

@@ -15,6 +15,11 @@ Existing sources remain at their original paths:
 
 ## Accepted design records
 
+- [Player Intent Interpretation V1](player-intent-interpretation-v1.md) — owner
+  accepted October 30, 2026. Meaning-only model-independent contract and trusted
+  Coordinator handoff; implementation candidate awaits acceptance. Exact wire
+  choices and bounded integration limits are recorded separately from semantics.
+
 - [Region Pack Authoring & Composition Design V1](region-pack-authoring-and-composition-v1.md) —
   owner-accepted RPA-01–RPA-13; documentation candidate for owner review.
   Covers coherent information domains, stable identity, scoped exceptions,

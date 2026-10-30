@@ -38,6 +38,8 @@ class Interpretation:
     constraints: tuple[str, ...] = ()
     independent: tuple[str, ...] = ()
     ambiguous: bool = False
+    conditions: tuple[str, ...] = ()
+    stop_at: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -50,6 +52,8 @@ class Undertaking:
     constraints: tuple[str, ...] = ()
     answered_choices: tuple[str, ...] = ()
     accepted_steps: tuple[str, ...] = ()
+    conditions: tuple[str, ...] = ()
+    stop_at: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -78,6 +82,10 @@ class DomainStep:
     supported_constraints: tuple[str, ...] = ()
     boundary: str = "clarification"  # clarification of instruction, or natural decision point
     response_phrases: tuple[tuple[str, str], ...] = ()  # supported phrase -> choice key
+    # Owners establish these predicates and implement these stopping boundaries;
+    # the Coordinator never evaluates natural-language conditions itself.
+    satisfied_conditions: tuple[str, ...] = ()
+    supported_stops: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -214,7 +222,69 @@ class Coordinator:
     def _result(status, message, failure=None, **fields):
         return CoordinationDecision(status, message, failure, **fields)
 
-    def decide(self, *, text=None, interpretation=None, resume=False, answers=()):
+    def decide_intent(self, player_input, *, provider):
+        """V1 input through one replaceable provider and a trusted owner binder.
+
+        provider(request) returns untrusted JSON text. domain.bind_intent(handoff)
+        is a read-only capability binding, returning existing Interpretation IDs;
+        it receives the full validated meaning, original input and trusted context.
+        It is not a second general-purpose language interpreter. The owner must
+        reject unsupported meaning/methods; no verb or candidate-domain dispatch
+        is inferred here. Existing callers can continue using decide/process.
+        """
+        from engine.player_intent import IntentHandoff, InvalidInterpretation, normalize, request_for
+        self._pending = None
+        try:
+            context = self._context()
+        except Exception:
+            return self._result("unresolved", "The current situation is unavailable. No activity was executed.", "context")
+        try:
+            request = request_for(player_input, context)
+        except (ValueError, TypeError):
+            return self._result("unresolved", "That input could not be interpreted. No activity was executed.", "interpretation")
+        try:
+            raw = provider(request)
+        except Exception:
+            return self._result("unresolved", "Interpretation is unavailable. No activity was executed.", "technical")
+        try:
+            validated = normalize(raw, context_ids=tuple(ref for ref, _ in request.context),
+                                   player_input=player_input)
+        except InvalidInterpretation:
+            return self._result("unresolved", "That interpretation is invalid. No activity was executed.", "interpretation")
+        value = validated.to_dict()
+        if value["ambiguities"]:
+            return self._result("clarification", "Clarify the intended activity, target or method. No activity was executed.")
+        if len(value["intentions"]) != 1:
+            return self._result("clarification", "Choose one immediate undertaking. No activities have been executed or queued.")
+        intention = value["intentions"][0]
+        if intention["mode"] == "statement":
+            return self._result("statement", "No activity was executed.")
+        handoff = IntentHandoff(validated, player_input, context)
+        try:
+            if self._context() != context:
+                return self._result("unresolved", "Circumstances changed. Reassess before continuing.", "context")
+            binder = getattr(self.domain, "bind_intent", None)
+            if binder is None:
+                return self._result("unresolved", "No gameplay capability can bind this meaning here.", "routing")
+            proposal = binder(handoff)
+            if proposal is None:
+                return self._result("unresolved", "That meaning is not supported by the current gameplay capability.", "routing")
+            if not isinstance(proposal, Interpretation):
+                raise ValueError("binding")
+            # Executable commitment is still subject to current F05/domain checks.
+            # No binder may promote an inquiry or read-only preparation to commit,
+            # discard stated boundaries, or add restrictions from mere omissions.
+            intent = ("inquiry" if intention["mode"] == "inquiry" else
+                      "prepare" if intention["commitment"] == "none" else "commit")
+            proposal = replace(proposal, objective=intention.get("goal", intention["activity"]),
+                               intent=intent, constraints=tuple(intention.get("constraints", ())),
+                               conditions=tuple(intention.get("conditions", ())),
+                               stop_at=tuple(intention.get("stop_at", ())))
+        except Exception:
+            return self._result("unresolved", "The gameplay binding is unavailable. No activity was executed.", "technical")
+        return self.decide(interpretation=proposal, expected_context=context)
+
+    def decide(self, *, text=None, interpretation=None, resume=False, answers=(), expected_context=None):
         self._pending = None
         if (type(resume) is not bool or not _refs(answers) or len(answers) > 1
                 or answers and not resume or resume and (text is not None or interpretation is not None)):
@@ -223,6 +293,8 @@ class Coordinator:
             context = self._context()
         except Exception:
             return self._result("unresolved", "The current situation is unavailable. No activity was executed.", "context")
+        if expected_context is not None and context != expected_context:
+            return self._result("unresolved", "Circumstances changed. Reassess before continuing.", "context")
         if text is not None and interpretation is None and not resume and isinstance(text, str):
             phrase = text.strip().casefold().rstrip(".")
             responses = dict(self._responses)
@@ -261,6 +333,7 @@ class Coordinator:
                         or not _text(proposal.objective) or proposal.intent not in {"inquiry", "prepare", "commit"}
                         or type(proposal.ambiguous) is not bool or not _refs(proposal.constraints)
                         or not _refs(proposal.independent) or proposal.target is not None and not _text(proposal.target)
+                        or not _refs(proposal.conditions) or not _refs(proposal.stop_at)
                         or proposal.method is not None and not _text(proposal.method)):
                     raise ValueError("interpretation")
             except Exception:
@@ -280,14 +353,17 @@ class Coordinator:
                 return self._result("unresolved", "That method is not available for this activity.", "authorization")
             self._serial += 1
             undertaking = Undertaking(str(self._serial), proposal.activity, proposal.objective,
-                                      proposal.target, method, proposal.constraints)
+                                      proposal.target, method, proposal.constraints,
+                                      conditions=proposal.conditions, stop_at=proposal.stop_at)
             previous = self.undertaking
             if previous and (previous.activity, previous.target) == (undertaking.activity, undertaking.target):
                 undertaking = replace(undertaking, ref=previous.ref,
                                       constraints=tuple(dict.fromkeys(previous.constraints + undertaking.constraints)),
                                       answered_choices=previous.answered_choices if previous.method == undertaking.method
                                       and context == self._answered_context else (),
-                                      accepted_steps=previous.accepted_steps)
+                                      accepted_steps=previous.accepted_steps,
+                                      conditions=tuple(dict.fromkeys(previous.conditions + undertaking.conditions)),
+                                      stop_at=tuple(dict.fromkeys(previous.stop_at + undertaking.stop_at)))
             intent = proposal.intent
         current_targets = [t for t in context.targets
                            if (t.activity, t.ref) == (undertaking.activity, undertaking.target)]
@@ -302,6 +378,10 @@ class Coordinator:
             self._validate_step(step, context)
             if not set(undertaking.constraints).issubset(step.supported_constraints):
                 return self._result("unresolved", "The gameplay capability cannot honor those constraints.", "authorization")
+            if intent == "commit" and not set(undertaking.conditions).issubset(step.satisfied_conditions):
+                return self._result("unresolved", "The activity's conditions are not established. No activity was executed.", "authorization")
+            if not set(undertaking.stop_at).issubset(step.supported_stops):
+                return self._result("unresolved", "The gameplay capability cannot honor those stopping boundaries.", "authorization")
             authorization = ActivityAuthorization(undertaking.ref, undertaking.method, intent,
                                                  undertaking.constraints, undertaking.answered_choices)
             missing = tuple(dict.fromkeys(step.checkpoint.missing_means + tuple(
@@ -342,6 +422,7 @@ class Coordinator:
                 or not _refs(step.responsibilities) or not step.responsibilities
                 or not _refs(step.required_means) or not _refs(step.public_refs)
                 or not _refs(step.supported_constraints)
+                or not _refs(step.satisfied_conditions) or not _refs(step.supported_stops)
                 or step.boundary not in {"clarification", "decision"}
                 or not isinstance(step.response_phrases, tuple)
                 or any(not isinstance(p, tuple) or len(p) != 2 or not all(_text(v) for v in p)
@@ -392,7 +473,12 @@ class Coordinator:
                             responsibilities=decision.responsibilities, undertaking=self.undertaking, results=(receipt,))
 
     def process(self, **request):
-        decision = self.decide(**request)
+        return self._progress(self.decide(**request))
+
+    def process_intent(self, player_input, *, provider):
+        return self._progress(self.decide_intent(player_input, provider=provider))
+
+    def _progress(self, decision):
         results, messages, responsibilities = (), [], ()
         # Bounded synchronous progression of this undertaking only. No queued tasks,
         # speculative future steps or new independent authorization. Each step has
