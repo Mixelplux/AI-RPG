@@ -7,19 +7,19 @@
     "markdown_role": "explanatory_records",
     "yaml_required": false
   },
-  "active_sprint": "player-intent-interpretation-v1",
-  "active_capability_package": "player-intent-interpretation-v1",
+  "active_sprint": null,
+  "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "watchhouse-records-v1-m1"
+    "id": "player-intent-interpretation-v1"
   },
   "next_sprint": null,
   "sprint": {
     "id": "player-intent-interpretation-v1",
     "title": "Player Intent Interpretation V1",
     "type": "capability-package",
-    "status": "active",
+    "status": "complete",
     "risk_level": "elevated",
-    "goal": "Implement the owner-accepted October 30 interpretation contract and authority-preserving Coordinator handoff; local review only.",
+    "goal": "Owner accepted Player Intent Interpretation V1 and authorized its exact candidate publication October 30, 2026. Implementation publication complete; lifecycle complete/idle. Owner separately authorized publication of these lifecycle closure records.",
     "predecessor": {
       "id": "watchhouse-records-v1-m1"
     },
@@ -30,7 +30,7 @@
     },
     "scope": [
       "Model-independent V1 interpretation, strict validation, replaceable invocation, trusted Coordinator handoff, clarification and technical failure containment. Preserve F05, domain ownership, acceptance, continuity, envelope V3/schema 4 and historical saves.",
-      "No gameplay mechanics, narration integration, persistence changes, inference experiments, permanent model selection, Git staging/committing/publication or subsequent package."
+      "Exact accepted implementation published through the authorized strict fast-forward workflow. Separate owner-authorized lifecycle reconciliation changes only the three current package/sprint records. No gameplay mechanics, narration integration, persistence changes, inference experiments, permanent model selection or subsequent package."
     ],
     "verification": [
       "Syntax checks, focused structural and semantic-boundary fixtures, cross-domain acceptance/retry/recovery/compatibility regressions, lifecycle validation, maintained GitWorkflowTools checks and diff review. All provider calls forbidden."

@@ -17,11 +17,20 @@ envelope V3, schema 4, historical schemas 1–3 and V1/V2 behavior. No migration
 new mechanics, narration, model experiments, permanent model choice or owner-save
 changes. Hosted/local providers remain replaceable; no live calls are authorized.
 
-Only this single implementation milestone is staged. JSON is the sole lifecycle
-authority. Stop at a locally verified, uncommitted implementation handoff for owner
-review; acceptance, Git staging/commit/publication and any subsequent package
-require separate authorization.
+Owner accepted the implementation and separately authorized publication October
+30, 2026. The official strict fast-forward merge and normal push published exact
+candidate `e4b0d0fef719bad15763087e911847a7cbb3f8a0`, with the baseline above as
+its single parent and exactly 14 changed files. Local `main`, `origin/main` and
+GitHub `main` agreed at implementation publication. No implementation content changed.
 
-Implementation is locally verified and ready for owner review; see the
-[handoff](player_intent_interpretation_v1_handoff.md). No acceptance, lifecycle
-closure, publication or later milestone is implied by readiness.
+Lifecycle is complete/idle: active sprint/package and `next_sprint` are null;
+latest completed is `player-intent-interpretation-v1`. JSON is the sole machine
+authority. The owner separately authorized publication of these three current
+package/sprint closure records on October 30, 2026 to reconcile `main` with the
+completed milestone. This documentation-only correction preserves the accepted
+implementation. No subsequent package is opened.
+
+The [handoff](player_intent_interpretation_v1_handoff.md) remains the historical
+implementation-review snapshot. Its earlier authority/status wording is superseded
+by this owner-authorized publication and closure; its behavior and reliability
+limits remain applicable. See [current sprint](current_sprint.md) for verification.
