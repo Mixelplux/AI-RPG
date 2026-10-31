@@ -7,19 +7,19 @@
     "markdown_role": "explanatory_records",
     "yaml_required": false
   },
-  "active_sprint": "player-intent-runtime-integration-v1",
-  "active_capability_package": "player-intent-runtime-integration-v1",
+  "active_sprint": null,
+  "active_capability_package": null,
   "latest_completed_sprint": {
-    "id": "player-intent-interpretation-v1"
+    "id": "player-intent-runtime-integration-v1"
   },
   "next_sprint": null,
   "sprint": {
     "id": "player-intent-runtime-integration-v1",
     "title": "Player Intent Runtime Integration V1",
     "type": "capability-package",
-    "status": "active",
+    "status": "complete",
     "risk_level": "elevated",
-    "goal": "Owner-accepted bounded experimental Watchhouse intent integration after one successful live end-to-end report test. Verify the current candidate and prepare an uncommitted review handoff pending separate Git COMMIT authorization; keep lifecycle active pending publication. General model reliability and production provider selection remain unqualified.",
+    "goal": "Complete and publish the owner-accepted bounded experimental Watchhouse intent integration; reconcile this lifecycle to complete/idle without selecting a subsequent package. General model reliability and production-provider qualification remain unestablished.",
     "predecessor": {
       "id": "player-intent-interpretation-v1"
     },
@@ -29,13 +29,13 @@
       "provider_requests": "forbidden"
     },
     "scope": [
-      "Elevated: minimum local provider adapter, Watchhouse-owned capability binding and explicit opt-in runtime path. Common V1, Coordinator/F05, domain ownership, acceptance and persistence remain authoritative.",
-      "Current continuation: owner-accepted bounded experimental implementation; final offline verification, documentation reconciliation and uncommitted candidate preparation review authorized. A candidate commit requires separate Git COMMIT authorization under WORKFLOW.md. No further provider calls or live gameplay tests. No contract changes, new mechanics, general semantic framework, save changes, training, permanent model choice, merge, push or publication. Luna remains provisional for development testing; owner saves remain untouched."
+      "Elevated: explicit opt-in localhost provider adapter and finite Watchhouse-owned intent binding. Existing Interpretation V1 validation, Coordinator/F05, domain ownership, acceptance and persistence remain authoritative.",
+      "Published exact accepted candidate 6f87851581725d3e00aac78c745a299905fa9f49 by strict fast-forward from 5a370711c7d52a1af46ff064c50a786f37f89e62. No gameplay, architecture, contract, persistence, save-version or owner-save changes in lifecycle closure. No model-reliability or production-provider claim."
     ],
     "verification": [
-      "Offline simulated-provider/transport tests, semantic-boundary fixtures, Watchhouse integration, accepted costs/retry/recovery/save compatibility, affected regressions, lifecycle/workflow and maintained mutation-protected verification.",
-      "Replay retained six-case evidence where descriptive fields exist, plus controlled account, general examination, no-promise, commitment, target, method, condition and stop fixtures. Separate structural validity, binding compatibility and actual authorization; rejected requests preserve campaign state.",
-      "Historical local smoke, frozen Luna comparison, stopped live attempt and prior 79-script offline run are preserved. Corrected role-aware assessment and Watchhouse binding passed focused integration and affected cross-domain regressions offline. One separately authorized live retry passed interpretation, V1 validation, trusted binding, Coordinator, domain acceptance and receipt-derived presentation for one case. Final current-candidate offline runner, maintained verification, lifecycle and Git checks passed. Implementation is owner accepted; exact commit awaits separate Git authorization; lifecycle remains active pending publication, next_sprint null and main unchanged."
+      "The published candidate passed the final offline runner: 81 commands, including 79 behavioral scripts; live-provider smoke was excluded. No model calls or gameplay tests were performed for lifecycle closure.",
+      "Publication verification confirmed local main, origin/main and GitHub main at 6f87851581725d3e00aac78c745a299905fa9f49; the published tree and exact twelve-file inventory match the accepted candidate. Maintained verification and clean-worktree checks passed.",
+      "Lifecycle closure verification: current-sprint validation, PowerShell workflow regression, maintained mutation-protected verification and documentation/Git diff review passed. Historical evidence and unrelated worktrees remain preserved; owner saves and pre-existing original-checkout changes are untouched."
     ]
   }
 }
