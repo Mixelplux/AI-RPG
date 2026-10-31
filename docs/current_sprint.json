@@ -7,21 +7,21 @@
     "markdown_role": "explanatory_records",
     "yaml_required": false
   },
-  "active_sprint": null,
-  "active_capability_package": null,
+  "active_sprint": "player-intent-runtime-integration-v1",
+  "active_capability_package": "player-intent-runtime-integration-v1",
   "latest_completed_sprint": {
     "id": "player-intent-interpretation-v1"
   },
   "next_sprint": null,
   "sprint": {
-    "id": "player-intent-interpretation-v1",
-    "title": "Player Intent Interpretation V1",
+    "id": "player-intent-runtime-integration-v1",
+    "title": "Player Intent Runtime Integration V1",
     "type": "capability-package",
-    "status": "complete",
+    "status": "active",
     "risk_level": "elevated",
-    "goal": "Owner accepted Player Intent Interpretation V1 and authorized its exact candidate publication October 30, 2026. Implementation publication complete; lifecycle complete/idle. Owner separately authorized publication of these lifecycle closure records.",
+    "goal": "Owner-accepted bounded experimental Watchhouse intent integration after one successful live end-to-end report test. Verify the current candidate and prepare an uncommitted review handoff pending separate Git COMMIT authorization; keep lifecycle active pending publication. General model reliability and production provider selection remain unqualified.",
     "predecessor": {
-      "id": "watchhouse-records-v1-m1"
+      "id": "player-intent-interpretation-v1"
     },
     "platform": {
       "official_interpreter": ".\\.venv\\Scripts\\python.exe",
@@ -29,11 +29,13 @@
       "provider_requests": "forbidden"
     },
     "scope": [
-      "Model-independent V1 interpretation, strict validation, replaceable invocation, trusted Coordinator handoff, clarification and technical failure containment. Preserve F05, domain ownership, acceptance, continuity, envelope V3/schema 4 and historical saves.",
-      "Exact accepted implementation published through the authorized strict fast-forward workflow. Separate owner-authorized lifecycle reconciliation changes only the three current package/sprint records. No gameplay mechanics, narration integration, persistence changes, inference experiments, permanent model selection or subsequent package."
+      "Elevated: minimum local provider adapter, Watchhouse-owned capability binding and explicit opt-in runtime path. Common V1, Coordinator/F05, domain ownership, acceptance and persistence remain authoritative.",
+      "Current continuation: owner-accepted bounded experimental implementation; final offline verification, documentation reconciliation and uncommitted candidate preparation review authorized. A candidate commit requires separate Git COMMIT authorization under WORKFLOW.md. No further provider calls or live gameplay tests. No contract changes, new mechanics, general semantic framework, save changes, training, permanent model choice, merge, push or publication. Luna remains provisional for development testing; owner saves remain untouched."
     ],
     "verification": [
-      "Syntax checks, focused structural and semantic-boundary fixtures, cross-domain acceptance/retry/recovery/compatibility regressions, lifecycle validation, maintained GitWorkflowTools checks and diff review. All provider calls forbidden."
+      "Offline simulated-provider/transport tests, semantic-boundary fixtures, Watchhouse integration, accepted costs/retry/recovery/save compatibility, affected regressions, lifecycle/workflow and maintained mutation-protected verification.",
+      "Replay retained six-case evidence where descriptive fields exist, plus controlled account, general examination, no-promise, commitment, target, method, condition and stop fixtures. Separate structural validity, binding compatibility and actual authorization; rejected requests preserve campaign state.",
+      "Historical local smoke, frozen Luna comparison, stopped live attempt and prior 79-script offline run are preserved. Corrected role-aware assessment and Watchhouse binding passed focused integration and affected cross-domain regressions offline. One separately authorized live retry passed interpretation, V1 validation, trusted binding, Coordinator, domain acceptance and receipt-derived presentation for one case. Final current-candidate offline runner, maintained verification, lifecycle and Git checks passed. Implementation is owner accepted; exact commit awaits separate Git authorization; lifecycle remains active pending publication, next_sprint null and main unchanged."
     ]
   }
 }

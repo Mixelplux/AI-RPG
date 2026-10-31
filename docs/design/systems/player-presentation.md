@@ -447,6 +447,22 @@ without inventing such a program.
 
 ## Current implementation
 
+Owner-accepted, unpublished Runtime Integration V1 candidate adds
+`play_watchhouse.py --local-intent --intent-model qwen3.5-2b`, explicitly opting
+into localhost inference with unchanged V1 validation. The deterministic default,
+save controls and legacy owner-save protection remain. Claimed V1 failures never
+fall through to the deterministic interpreter. Unsupported meaning, general ledger
+examination, restrictions or unimplemented stops return control. No new fictional
+failure is invented on provider/validation error. The corrected Watchhouse binder
+accepts bounded equivalent descriptions and embedded targets/methods; players do
+not need canonical capability labels for those meanings. Unknown descriptions and
+unsupported boundaries return control. No-promise access cannot execute because
+the installed owner cannot enforce that restriction. Offline integration is verified;
+one live Watchhouse report undertaking passed the full authority and presentation
+path. This is an accepted bounded experimental integration; broader model
+reliability, production provider selection and unrestricted gameplay are unqualified. See
+[runtime handoff](../../player_intent_runtime_integration_v1_handoff.md).
+
 The separate `play_watchhouse.py` M1 entry point uses bounded full-utterance
 natural-language patterns. Inquiry, unclear methods, compound instructions and
 unowned commitments cannot silently execute. Access-qualified pending choices

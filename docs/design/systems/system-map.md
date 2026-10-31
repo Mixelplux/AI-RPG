@@ -40,7 +40,19 @@ These bounded implementations preserve the conceptual owners and Partial system
 classifications; [Option C research](../../architecture_comprehension_review.md)
 does not replace accepted sequential dispatch.
 
-## Player Intent Interpretation V1 — implementation candidate, October 30, 2026
+## Player Intent Interpretation V1 — accepted bounded experimental integration, unpublished
+
+Unpublished Runtime Integration V1 adds an explicit local provider → unchanged V1
+validator → Watchhouse-owned finite binder → existing Coordinator/F05 → installed
+Watchhouse owner/acceptance path. Command selection stays in the Watchhouse
+adapter; common infrastructure remains unchanged. Bounded equivalent descriptions
+and embedded targets/methods bind against installed capabilities. Unsupported
+constraints, including no-promise access, cannot execute. Offline integration is
+verified; one live Watchhouse report undertaking passed interpretation, binding,
+Coordinator, domain acceptance and receipt-derived presentation. Owner accepted
+this bounded implementation for candidate preparation. Publication, general model
+reliability and unrestricted gameplay remain pending or unqualified. See
+[runtime handoff](../../player_intent_runtime_integration_v1_handoff.md).
 
 Player-safe supplied context and exact player input reach a replaceable
 interpretation callable. Strict V1 validation hands meaning, original input and

@@ -18,7 +18,20 @@ the runtime flow and storage boundaries described here.
 
 Do not add sprint history, full schemas, test inventories, or implementation walkthroughs here.
 
-## Player Intent Interpretation V1 — implementation candidate
+## Player Intent Interpretation V1 — accepted bounded experimental integration, unpublished
+
+Owner-accepted Runtime Integration V1 candidate: `local_intent_provider` supplies
+explicit localhost-only transport; `watchhouse_intent` owns finite meaning/target/
+method binding and delegates selected commands to existing `CoordinatedDomain`.
+The Watchhouse CLI has an explicit opt-in route; its deterministic default remains.
+No Watchhouse logic was added to common coordination, acceptance or persistence.
+The corrected adapter recognizes bounded equivalent complete descriptions, grounds
+targets/methods embedded in an activity, and rejects unmatched consequential wording.
+Constraints/conditions/stops still require owner support; no-promise access cannot
+execute. Offline integration and one live Watchhouse report undertaking succeeded.
+The implementation awaits publication; general model reliability, production
+provider selection and unrestricted gameplay are not qualified.
+See [runtime handoff](player_intent_runtime_integration_v1_handoff.md).
 
 `engine.player_intent` validates bounded model-independent JSON and preserves
 meaning in immutable canonical form. Explicit `Coordinator.decide_intent` /
