@@ -163,9 +163,12 @@ and does not change lifecycle or acceptance authority.
 
 Continue using `D:\Codex Tools\GitWorkflowTools` with
 `Profiles\AINarrativeRPG.psd1`; do not invent a replacement Git workflow.
-Use its state tool near task start, run focused checks directly, and use its
-verification, candidate, evidence, and merge operations when applicable and
-authorized. Profile checks are mechanical invariants, not a requirement for
+Use its state tool near task start and run focused checks directly. Use
+`-RepositoryPath` to select the checkout or isolated worktree when it differs
+from the profile path. Candidate preparation passes the selection into
+verification. Use its verification, candidate, evidence, and merge operations
+when applicable and authorized. Profile checks are mechanical invariants, not
+a requirement for
 repository-wide gameplay testing. Do not modify shared tools for a package.
 
 An uncommitted working diff is a valid implementation handoff when commits
